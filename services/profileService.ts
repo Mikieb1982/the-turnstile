@@ -36,7 +36,8 @@ export const updateProfile = async (id: string, profile: Profile): Promise<Profi
 };
 
 export const deleteProfile = async (id: string): Promise<void> => {
-    await fetch(`api/profiles/${id}`, {
+    const response = await fetch(`api/profiles/${id}`, {
         method: 'DELETE',
     });
+    await handleResponse(response);
 };
