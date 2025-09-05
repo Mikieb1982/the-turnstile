@@ -1,5 +1,4 @@
 {
-// ... existing code ...
   "name": "the-scrum-book",
   "homepage": "https://mikieb1982.github.io/The-Scrum-Book",
   "private": true,
@@ -24,3 +23,5 @@
     "vite": "^6.2.0"
   }
 }
+
+
