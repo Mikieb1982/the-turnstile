@@ -96,7 +96,6 @@ const App: React.FC = () => {
       case 'UPCOMING':
         return <MatchList 
                   matches={matches}
-                  setMatches={setMatches}
                   attendedMatchIds={attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch} 
                   onUnattend={removeAttendedMatch}
@@ -134,7 +133,6 @@ const App: React.FC = () => {
       default:
         return <MatchList 
                   matches={matches} 
-                  setMatches={setMatches}
                   attendedMatchIds={attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch}
                   onUnattend={removeAttendedMatch}
