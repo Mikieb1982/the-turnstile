@@ -15,7 +15,7 @@ export const AboutView: React.FC = () => {
     return (
         <div className="bg-surface p-6 md:p-8 rounded-md shadow-card text-text">
             <div className="flex items-center gap-4 mb-6 border-b border-border pb-4">
-                <img src="/images/logo.png" alt="The Scrum Book Logo" className="w-10 h-10"/>
+                <img src="images/logo.png" alt="The Scrum Book Logo" className="w-10 h-10"/>
                 <h1 className="text-3xl md:text-4xl font-bold text-text-strong">App Features</h1>
             </div>
 

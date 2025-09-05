@@ -151,7 +151,7 @@ const App: React.FC = () => {
       <MobileNav currentView={view} setView={setView} />
       <footer className="hidden md:block text-center py-6 text-text-subtle border-t border-border mt-8">
         <div className="flex justify-center items-center gap-2">
-            <img src="/images/logo.png" alt="The Scrum Book Logo" className="w-5 h-5" />
+            <img src="images/logo.png" alt="The Scrum Book Logo" className="w-5 h-5" />
             <p>Match data provided by <a href="https://www.thesportsdb.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">TheSportsDB.com</a></p>
         </div>
       </footer>
