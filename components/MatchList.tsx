@@ -5,6 +5,7 @@ import { SearchIcon, RefreshIcon } from './Icons';
 
 interface MatchListProps {
   matches: Match[];
+  setMatches: React.Dispatch<React.SetStateAction<Match[]>>;
   attendedMatchIds: string[];
   onAttend: (match: Match) => void;
   onUnattend: (matchId: string) => void;

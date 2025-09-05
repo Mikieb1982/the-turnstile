@@ -181,27 +181,6 @@ export const SparklesIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
-export const LogoIcon: React.FC<IconProps> = (props) => (
-  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <g clipPath="url(#clipCircle)">
-      <path fill="#213959" d="M100 0 A100 100 0 0 0 0 100 H50 A50 50 0 0 1 100 50 V0 Z"/>
-      <path fill="#3d70b2" d="M200 100 A100 100 0 0 0 100 0 V50 A50 50 0 0 1 150 100 H200 Z"/>
-      <path fill="#34675c" d="M100 200 A100 100 0 0 0 200 100 H150 A50 50 0 0 1 100 150 V200 Z"/>
-      <path fill="#6a9f9a" d="M0 100 A100 100 0 0 0 100 200 V150 A50 50 0 0 1 50 100 H0 Z"/>
-    </g>
-    <circle cx="100" cy="100" r="30" fill="white"/>
-    <circle cx="80" cy="80" r="12" fill="#34675c"/>
-    <circle cx="120" cy="80" r="12" fill="#34675c"/>
-    <circle cx="80" cy="120" r="12" fill="#34675c"/>
-    <circle cx="120" cy="120" r="12" fill="#34675c"/>
-    <defs>
-      <clipPath id="clipCircle">
-        <circle cx="100" cy="100" r="100"/>
-      </clipPath>
-    </defs>
-  </svg>
-);
-
 export const BuildingStadiumIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h6M9 11.25h6M9 15.75h6M4.5 21V3m0 18h-1.5m1.5 0h1.5m-1.5 0V3m0 18v-1.5m15-16.5V21m0-18h1.5m-1.5 0h-1.5m1.5 0V3m0 18v1.5" />

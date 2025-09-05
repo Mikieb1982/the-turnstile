@@ -9,7 +9,6 @@ import { StatsView } from './components/StatsView';
 import { GroundsView, LeagueTableView } from './components/LeagueTableView';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorDisplay } from './components/ErrorDisplay';
-import { LogoIcon } from './components/Icons';
 import type { Match, AttendedMatch, User } from './types';
 import { fetchMatches } from './services/theSportsDbService';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -96,6 +95,7 @@ const App: React.FC = () => {
       case 'UPCOMING':
         return <MatchList 
                   matches={matches}
+                  setMatches={setMatches}
                   attendedMatchIds={attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch} 
                   onUnattend={removeAttendedMatch}
@@ -133,6 +133,7 @@ const App: React.FC = () => {
       default:
         return <MatchList 
                   matches={matches} 
+                  setMatches={setMatches}
                   attendedMatchIds={attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch}
                   onUnattend={removeAttendedMatch}
@@ -150,7 +151,7 @@ const App: React.FC = () => {
       <MobileNav currentView={view} setView={setView} />
       <footer className="hidden md:block text-center py-6 text-text-subtle border-t border-border mt-8">
         <div className="flex justify-center items-center gap-2">
-            <LogoIcon className="w-5 h-5" />
+            <img src="/images/logo.png" alt="The Scrum Book Logo" className="w-5 h-5" />
             <p>Match data provided by <a href="https://www.thesportsdb.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">TheSportsDB.com</a></p>
         </div>
       </footer>
