@@ -1,0 +1,49 @@
+# This is a workflow file for GitHub Actions.
+# It tells GitHub how to automatically build and deploy your site.
+
+name: Deploy to GitHub Pages
+
+# Run this workflow every time you push a change to your 'main' branch
+on:
+  push:
+    branches:
+      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a recent, stable version of Node.js
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build the website
+        run: npm run build
+      - name: Upload the build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
