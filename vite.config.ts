@@ -1,13 +1,13 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
+
+// The loadEnv function is no longer needed as we are not loading environment variables.
+// import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    // const env = loadEnv(mode, '.', '');
     return {
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
+      // The 'define' block for setting the API key has been removed.
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
