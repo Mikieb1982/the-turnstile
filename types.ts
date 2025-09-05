@@ -31,16 +31,12 @@ export interface Match {
   };
   homeTeam: Team;
   awayTeam: Team;
-  status: 'SCHEDULED' | 'IN_PROGRESS' | 'FULL-TIME';
+  status: 'SCHEDULED' | 'FULL-TIME';
   startTime: string; // ISO 8601 format
   venue: string;
   scores: {
     home: number;
     away: number;
-  };
-  live?: {
-    minute: number;
-    lastEvent: string;
   };
   stats?: MatchStats;
 }
@@ -99,4 +95,16 @@ export interface TeamInfo {
   titles: string;
   location: string;
   stadium: StadiumInfo;
+}
+
+// New types for multi-profile support
+export interface Profile {
+  user: User;
+  attendedMatches: AttendedMatch[];
+  earnedBadgeIds: string[];
+}
+
+export interface ScrumBookData {
+  profiles: Record<string, Profile>;
+  activeProfileId: string | null;
 }

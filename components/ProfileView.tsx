@@ -5,7 +5,7 @@ import { TeamLogo } from './TeamLogo';
 import { TeamSelectionModal } from './TeamSelectionModal';
 import { AvatarModal } from './AvatarModal';
 import { View } from '../App';
-import { UserCircleIcon, PencilIcon, ListBulletIcon, Squares2X2Icon, ChartBarIcon, TrophyIcon, StarIcon } from './Icons';
+import { UserCircleIcon, PencilIcon, ListBulletIcon, Squares2X2Icon, ChartBarIcon, TrophyIcon, StarIcon, ArrowLeftOnRectangleIcon } from './Icons';
 
 interface ProfileViewProps {
   user: User;
@@ -13,6 +13,7 @@ interface ProfileViewProps {
   setView: (view: View) => void;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
+  onLogout: () => void;
 }
 
 const ProfileLink: React.FC<{ icon: React.ReactNode; label: string; count?: number; onClick: () => void; }> = ({ icon, label, count, onClick }) => (
@@ -30,7 +31,7 @@ const ProfileLink: React.FC<{ icon: React.ReactNode; label: string; count?: numb
 );
 
 
-export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView, attendedMatches, earnedBadgeIds }) => {
+export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView, attendedMatches, earnedBadgeIds, onLogout }) => {
     const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
@@ -56,7 +57,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
     return (
         <div className="space-y-6">
             <div className="bg-surface rounded-xl shadow-card p-6">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-start">
                     <div className="flex items-center gap-4">
                         <div className="relative w-16 h-16">
                            {user.avatarUrl ? (
@@ -79,7 +80,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
                         </div>
                     </div>
 
-                    <div className="text-center">
+                    <div className="flex flex-col items-center">
                         {favoriteTeam ? (
                             <TeamLogo logoUrl={favoriteTeam.logoUrl} teamName={favoriteTeam.name} size="medium" />
                         ) : (
@@ -89,7 +90,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
                         )}
                         <button onClick={() => setIsTeamModalOpen(true)} className="mt-2 text-xs text-primary hover:underline font-semibold flex items-center gap-1 mx-auto">
                             <PencilIcon className="w-3 h-3"/>
-                            Change
+                            Change Team
+                        </button>
+                         <button onClick={onLogout} className="mt-4 flex items-center gap-2 text-sm text-text-subtle hover:text-danger font-semibold transition-colors">
+                            <ArrowLeftOnRectangleIcon className="w-5 h-5"/>
+                            Switch Profile
                         </button>
                     </div>
                 </div>

@@ -10,8 +10,9 @@ import {
     SparklesIcon,
     StarIcon,
     ShieldCheckIcon,
+    Squares2X2Icon,
 } from './components/Icons';
-import { TEAMS } from './services/mockData';
+import { teamIdToVenue } from './services/mockData';
 
 export const allBadges: Badge[] = [
     {
@@ -22,16 +23,16 @@ export const allBadges: Badge[] = [
         category: 'Milestone',
     },
     {
-        id: 'FIVE_MATCHES',
-        name: 'Dedicated Fan',
-        description: 'You have attended 5 matches.',
+        id: 'TEN_GAMES',
+        name: 'Super Fan',
+        description: 'You have attended 10 matches.',
         icon: CheckCircleIcon,
         category: 'Milestone',
     },
     {
-        id: 'THREE_STADIUMS',
-        name: 'Ground Hopper',
-        description: 'You have visited 3 different stadiums.',
+        id: 'FIVE_STADIUMS',
+        name: 'On Tour',
+        description: 'You have visited 5 different stadiums.',
         icon: LocationMarkerIcon,
         category: 'Milestone',
     },
@@ -53,6 +54,13 @@ export const allBadges: Badge[] = [
         id: 'CLUB_COLLECTOR',
         name: 'Club Collector',
         description: 'You have seen all Super League teams play.',
+        icon: Squares2X2Icon,
+        category: 'Milestone',
+    },
+    {
+        id: 'HOME_GROUND',
+        name: 'True Supporter',
+        description: "You attended a match at your favorite team's home ground!",
         icon: ShieldCheckIcon,
         category: 'Milestone',
     },
@@ -108,15 +116,15 @@ export const checkAndAwardBadges = (
         newlyEarned.push('FIRST_MATCH');
     }
     
-    // Check for 'Dedicated Fan'
-    if (attendedMatches.length >= 5 && !earnedBadgeIds.includes('FIVE_MATCHES')) {
-        newlyEarned.push('FIVE_MATCHES');
+    // Check for 'Super Fan'
+    if (attendedMatches.length >= 10 && !earnedBadgeIds.includes('TEN_GAMES')) {
+        newlyEarned.push('TEN_GAMES');
     }
     
-    // Check for 'Ground Hopper'
+    // Check for 'On Tour'
     const uniqueVenues = new Set(attendedMatches.map(am => am.match.venue));
-    if (uniqueVenues.size >= 3 && !earnedBadgeIds.includes('THREE_STADIUMS')) {
-        newlyEarned.push('THREE_STADIUMS');
+    if (uniqueVenues.size >= 5 && !earnedBadgeIds.includes('FIVE_STADIUMS')) {
+        newlyEarned.push('FIVE_STADIUMS');
     }
     
     // Check for 'Derby Day Specialist'
@@ -124,7 +132,13 @@ export const checkAndAwardBadges = (
         newlyEarned.push('DERBY_DAY');
     }
 
-    // --- New Badges ---
+    // Check for 'True Supporter'
+    if (user.favoriteTeamId && !earnedBadgeIds.includes('HOME_GROUND')) {
+        const homeGround = teamIdToVenue[user.favoriteTeamId];
+        if (homeGround && attendedMatches.some(am => am.match.venue === homeGround)) {
+            newlyEarned.push('HOME_GROUND');
+        }
+    }
 
     // Check for 'French Connection' (Catalans' home ground)
     if (attendedMatches.some(am => am.match.venue === 'Stade Gilbert Brutus') && !earnedBadgeIds.includes('FRENCH_TRIP')) {

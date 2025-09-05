@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon } from './Icons';
+import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, RugbyBallIcon } from './Icons';
 import type { View } from '../App';
 
 interface HeaderProps {
@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
     <header className="bg-surface shadow-sm sticky top-0 z-10 border-b border-border">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center gap-3">
-          <img src="/images/logo.png" alt="The Scrum Book Logo" className="w-8 h-8" />
+          <RugbyBallIcon className="w-8 h-8 text-primary" />
           <h1 className="text-xl md:text-2xl font-bold text-text-strong">The Scrum Book</h1>
         </div>
         <div className="flex items-center gap-2 md:gap-4">

@@ -9,42 +9,47 @@ import { StatsView } from './components/StatsView';
 import { GroundsView, LeagueTableView } from './components/LeagueTableView';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorDisplay } from './components/ErrorDisplay';
-import type { Match, AttendedMatch, User } from './types';
-import { fetchMatches } from './services/theSportsDbService';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import type { Match, AttendedMatch, User, Profile } from './types';
+import { fetchMatches } from './services/apiService';
 import { useTheme } from './hooks/useTheme';
 import { allBadges, checkAndAwardBadges } from './badges';
 import { MatchdayView } from './components/MatchdayView';
 import { ProfileView } from './components/ProfileView';
 import { TeamStatsView } from './components/TeamStatsView';
-
-const MATCH_DURATION_MINUTES = 95; // Includes half-time, etc.
+import { LoginView } from './components/LoginView';
+import { RugbyBallIcon } from './components/Icons';
+import { getProfiles, addProfile, deleteProfile, updateProfile } from './services/profileService';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('PROFILE');
   const [theme, toggleTheme] = useTheme();
+
+  const [profiles, setProfiles] = useState<Record<string, Profile>>({});
+  const [activeProfileId, setActiveProfileId] = useLocalStorage<string | null>('activeProfileId', null);
+  
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [attendedMatches, setAttendedMatches] = useLocalStorage<AttendedMatch[]>('attendedMatches', []);
-  const [earnedBadgeIds, setEarnedBadgeIds] = useLocalStorage<string[]>('earnedBadgeIds', []);
-  const [user, setUser] = useLocalStorage<User>('user', { 
-    name: 'Mr Eggchaser',
-    favoriteTeamId: '2' // St Helens
-  });
   const initialLoadStarted = useRef(false);
 
-  const loadMatches = useCallback(async () => {
+  const activeProfile = activeProfileId ? profiles[activeProfileId] : null;
+
+  const loadAppData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const fetchedMatches = await fetchMatches();
+      const [fetchedMatches, fetchedProfiles] = await Promise.all([
+        fetchMatches(),
+        getProfiles()
+      ]);
       setMatches(fetchedMatches);
+      setProfiles(fetchedProfiles);
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch match data from TheSportsDB. Please check your connection and try again.');
+      setError('Failed to fetch initial application data. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -54,91 +59,129 @@ const App: React.FC = () => {
     // Fetch data only once on the initial component mount.
     if (!initialLoadStarted.current) {
         initialLoadStarted.current = true;
-        loadMatches();
+        loadAppData();
     }
-  }, [loadMatches]);
+  }, [loadAppData]);
   
-  useEffect(() => {
-    const updateInterval = setInterval(() => {
-      setMatches(prevMatches => {
-        const now = new Date().getTime();
-        let hasChanged = false;
+  const updateActiveProfile = async (updater: (profile: Profile) => Profile) => {
+    // Safeguard to ensure the active profile data is actually loaded before proceeding.
+    // This prevents runtime errors if an update is triggered before data is ready or after a profile is deleted.
+    if (!activeProfileId || !activeProfile) {
+        console.warn("updateActiveProfile called without a valid active profile. Aborting update.");
+        return;
+    }
 
-        const updatedMatches = prevMatches.map(match => {
-          if (match.status === 'FULL-TIME') {
-            return match;
-          }
-
-          const startTime = new Date(match.startTime).getTime();
-          const minutesElapsed = (now - startTime) / (1000 * 60);
-
-          // Transition to LIVE
-          if (minutesElapsed > 0 && minutesElapsed < MATCH_DURATION_MINUTES) {
-            hasChanged = true;
-            const newMatch: Match = { ...match, status: 'IN_PROGRESS' };
-
-            if (!newMatch.live) {
-              newMatch.live = { minute: 0, lastEvent: 'Kick Off' };
-            }
-
-            newMatch.live.minute = Math.floor(minutesElapsed);
-
-            // Simulate a scoring event with low probability
-            if (Math.random() < 0.08) { 
-              const isHomeScore = Math.random() < 0.5;
-              const scoreType = Math.random() < 0.4 ? 6 : 2; // 40% chance of a try (6), 60% penalty/conversion (2)
-              
-              if (isHomeScore) {
-                newMatch.scores.home += scoreType;
-                newMatch.live.lastEvent = `Score! - ${newMatch.homeTeam.name}`;
-              } else {
-                newMatch.scores.away += scoreType;
-                newMatch.live.lastEvent = `Score! - ${newMatch.awayTeam.name}`;
-              }
-            }
-            return newMatch;
-          } 
-          // Transition to FULL-TIME
-          // FIX: The check `match.status !== 'FULL-TIME'` was redundant due to an earlier check, causing a linting error.
-          // FIX: Explicitly typing the returned object as Match ensures type safety and resolves inference issues.
-          else if (minutesElapsed >= MATCH_DURATION_MINUTES) {
-            hasChanged = true;
-            const finishedMatch: Match = { ...match, status: 'FULL-TIME', live: undefined };
-            return finishedMatch;
-          }
-          
-          return match;
-        });
-
-        return hasChanged ? updatedMatches : prevMatches;
-      });
-    }, 15000); // Poll every 15 seconds
-
-    return () => clearInterval(updateInterval);
-  }, []);
-  
-  const addAttendedMatch = (match: Match) => {
-    if (attendedMatches.some(am => am.match.id === match.id)) return; // Already attended
+    const updatedProfile = updater(activeProfile);
     
+    try {
+        const savedProfile = await updateProfile(activeProfileId, updatedProfile);
+        setProfiles(prev => ({
+            ...prev,
+            [activeProfileId]: savedProfile,
+        }));
+    } catch (e) {
+        console.error("Failed to update profile:", e);
+        setError("There was an error saving your changes. Please try again.");
+    }
+  };
+
+  const addAttendedMatch = (match: Match) => {
+    if (!activeProfile) return;
+    if (activeProfile.attendedMatches.some(am => am.match.id === match.id)) return;
+
     const newAttendedMatch: AttendedMatch = {
         match,
         attendedOn: new Date().toISOString()
     };
     
-    const updatedAttendedMatches = [...attendedMatches, newAttendedMatch];
-    setAttendedMatches(updatedAttendedMatches);
+    updateActiveProfile(profile => {
+        const updatedAttendedMatches = [...profile.attendedMatches, newAttendedMatch];
+        const newlyEarnedBadges = checkAndAwardBadges(updatedAttendedMatches, profile.earnedBadgeIds, profile.user);
+        
+        if (newlyEarnedBadges.length > 0) {
+            console.log("New badges earned:", newlyEarnedBadges);
+        }
 
-    // Check for new badges
-    const newlyEarnedBadges = checkAndAwardBadges(updatedAttendedMatches, earnedBadgeIds, user);
-    if (newlyEarnedBadges.length > 0) {
-        setEarnedBadgeIds(prev => [...prev, ...newlyEarnedBadges]);
-        // In a full app, you might show a notification here
-        console.log("New badges earned:", newlyEarnedBadges);
-    }
+        return {
+            ...profile,
+            attendedMatches: updatedAttendedMatches,
+            earnedBadgeIds: [...profile.earnedBadgeIds, ...newlyEarnedBadges],
+        };
+    });
   };
 
   const removeAttendedMatch = (matchId: string) => {
-    setAttendedMatches(prev => prev.filter(am => am.match.id !== matchId));
+    updateActiveProfile(profile => ({
+        ...profile,
+        attendedMatches: profile.attendedMatches.filter(am => am.match.id !== matchId)
+    }));
+  }
+
+  const setUser = (userOrUpdater: React.SetStateAction<User>) => {
+    updateActiveProfile(profile => ({
+        ...profile,
+        user: userOrUpdater instanceof Function ? userOrUpdater(profile.user) : userOrUpdater,
+    }));
+  };
+
+  const handleSelectProfile = (profileId: string) => {
+    // Defensive check to ensure profile exists before setting it as active.
+    if (profiles[profileId]) {
+      setActiveProfileId(profileId);
+      setView('PROFILE');
+    } else {
+      console.error(`Attempted to select a non-existent profile: ${profileId}`);
+      setError("An error occurred while selecting the profile. Please refresh and try again.");
+    }
+  };
+
+  const handleLogout = () => {
+    setActiveProfileId(null);
+  };
+
+  const handleAddProfile = async (name: string) => {
+    try {
+      const { id, profile } = await addProfile(name);
+      setProfiles(prev => ({ ...prev, [id]: profile }));
+      setActiveProfileId(id);
+      setView('PROFILE');
+    } catch (e) {
+      console.error("Failed to add profile:", e);
+      setError("Could not create the new profile. Please try again.");
+      // Re-throw the error so the calling component knows it failed.
+      throw e;
+    }
+  };
+
+  const handleDeleteProfile = async (profileId: string) => {
+     try {
+        await deleteProfile(profileId);
+        setProfiles(prev => {
+            const newProfiles = { ...prev };
+            delete newProfiles[profileId];
+            return newProfiles;
+        });
+        if (activeProfileId === profileId) {
+            setActiveProfileId(null);
+        }
+     } catch (e) {
+        console.error("Failed to delete profile:", e);
+        setError("Could not delete the profile. Please try again.");
+     }
+  };
+
+  // Logged-out state
+  if (!activeProfileId || !activeProfile) {
+    return (
+        <div className="min-h-screen font-sans bg-surface-alt text-text">
+            <LoginView
+                profiles={profiles}
+                onSelectProfile={handleSelectProfile}
+                onAddProfile={handleAddProfile}
+                onDeleteProfile={handleDeleteProfile}
+            />
+        </div>
+    );
   }
 
   const renderContent = () => {
@@ -149,7 +192,7 @@ const App: React.FC = () => {
       </div>;
     }
     if (error) {
-      return <ErrorDisplay message={error} onRetry={loadMatches} />;
+      return <ErrorDisplay message={error} onRetry={loadAppData} />;
     }
     
     switch (view) {
@@ -157,15 +200,15 @@ const App: React.FC = () => {
         return <MatchList 
                   matches={matches}
                   setMatches={setMatches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
+                  attendedMatchIds={activeProfile.attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch} 
                   onUnattend={removeAttendedMatch}
-                  onRefresh={loadMatches}
+                  onRefresh={loadAppData}
                 />;
       case 'MATCH_DAY':
         return <MatchdayView 
                   matches={matches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
+                  attendedMatchIds={activeProfile.attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch} 
                   onUnattend={removeAttendedMatch}
                 />;
@@ -176,29 +219,30 @@ const App: React.FC = () => {
       case 'GROUNDS':
         return <GroundsView />;
       case 'MY_MATCHES':
-        return <MyMatchesView attendedMatches={attendedMatches} onRemove={removeAttendedMatch} />;
+        return <MyMatchesView attendedMatches={activeProfile.attendedMatches} onRemove={removeAttendedMatch} />;
       case 'STATS':
-        return <StatsView user={user} attendedMatches={attendedMatches} />;
+        return <StatsView user={activeProfile.user} attendedMatches={activeProfile.attendedMatches} />;
       case 'ABOUT':
         return <AboutView />;
       case 'BADGES':
-        return <BadgesView allBadges={allBadges} earnedBadgeIds={earnedBadgeIds} />;
+        return <BadgesView allBadges={allBadges} earnedBadgeIds={activeProfile.earnedBadgeIds} />;
       case 'PROFILE':
         return <ProfileView
-                  user={user}
+                  user={activeProfile.user}
                   setUser={setUser}
                   setView={setView}
-                  attendedMatches={attendedMatches}
-                  earnedBadgeIds={earnedBadgeIds}
+                  attendedMatches={activeProfile.attendedMatches}
+                  earnedBadgeIds={activeProfile.earnedBadgeIds}
+                  onLogout={handleLogout}
                 />;
       default:
         return <MatchList 
                   matches={matches} 
                   setMatches={setMatches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
+                  attendedMatchIds={activeProfile.attendedMatches.map(am => am.match.id)}
                   onAttend={addAttendedMatch}
                   onUnattend={removeAttendedMatch}
-                  onRefresh={loadMatches}
+                  onRefresh={loadAppData}
                 />;
     }
   };
@@ -212,8 +256,8 @@ const App: React.FC = () => {
       <MobileNav currentView={view} setView={setView} />
       <footer className="hidden md:block text-center py-6 text-text-subtle border-t border-border mt-8">
         <div className="flex justify-center items-center gap-2">
-            <img src="/images/logo.png" alt="The Scrum Book Logo" className="w-5 h-5" />
-            <p>Match data provided by <a href="https://www.thesportsdb.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">TheSportsDB.com</a></p>
+            <RugbyBallIcon className="w-5 h-5 text-primary" />
+            <p>Match data provided by mock API</p>
         </div>
       </footer>
     </div>

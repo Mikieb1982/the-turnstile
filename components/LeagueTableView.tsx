@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { LeagueStanding, Venue } from '../types';
-import { fetchLeagueTable } from '../services/theSportsDbService';
+import { fetchLeagueTable } from '../services/apiService';
 import { LoadingSpinner } from './LoadingSpinner';
 import { ErrorDisplay } from './ErrorDisplay';
 import { RefreshIcon, AlertTriangleIcon } from './Icons';

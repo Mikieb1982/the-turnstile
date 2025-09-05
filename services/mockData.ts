@@ -1,3 +1,4 @@
+
 import type { Match, LeagueStanding, Venue } from '../types';
 
 export const TEAMS = {
@@ -34,6 +35,22 @@ const VENUES = {
     stJamesPark: "St James' Park",
 };
 
+export const teamIdToVenue: Record<string, string> = {
+    [TEAMS.wigan.id]: VENUES.dw,
+    [TEAMS.stHelens.id]: VENUES.totallyWicked,
+    [TEAMS.leeds.id]: VENUES.headingley,
+    [TEAMS.warrington.id]: VENUES.halliwellJones,
+    [TEAMS.catalans.id]: VENUES.gilbertBrutus,
+    [TEAMS.huddersfield.id]: VENUES.johnSmiths,
+    [TEAMS.hullKR.id]: VENUES.cravenPark,
+    [TEAMS.hullFC.id]: VENUES.mkm,
+    [TEAMS.salford.id]: VENUES.salfordCommunity,
+    [TEAMS.leigh.id]: VENUES.leighSportsVillage,
+    [TEAMS.castleford.id]: VENUES.mendAHose,
+    [TEAMS.london.id]: VENUES.cherryRed,
+    [TEAMS.wakefield.id]: VENUES.belleVue,
+};
+
 export const ALL_VENUES: Venue[] = [
     { name: VENUES.dw, team: TEAMS.wigan.name, lat: 53.547, lon: -2.651, x: 245, y: 300 },
     { name: VENUES.totallyWicked, team: TEAMS.stHelens.name, lat: 53.453, lon: -2.729, x: 235, y: 310 },
@@ -68,22 +85,6 @@ export const VENUE_LOCATIONS: Record<string, { x: number; y: number; name: strin
     [VENUES.belleVue]: { x: 285, y: 292, name: VENUES.belleVue },
     [VENUES.oldTrafford]: { x: 260, y: 315, name: VENUES.oldTrafford },
     [VENUES.stJamesPark]: { x: 280, y: 150, name: VENUES.stJamesPark },
-};
-
-const teamVenueMapping: Record<string, string> = {
-    [TEAMS.wigan.name]: VENUES.dw,
-    [TEAMS.stHelens.name]: VENUES.totallyWicked,
-    [TEAMS.leeds.name]: VENUES.headingley,
-    [TEAMS.warrington.name]: VENUES.halliwellJones,
-    [TEAMS.catalans.name]: VENUES.gilbertBrutus,
-    [TEAMS.huddersfield.name]: VENUES.johnSmiths,
-    [TEAMS.hullKR.name]: VENUES.cravenPark,
-    [TEAMS.hullFC.name]: VENUES.mkm,
-    [TEAMS.salford.name]: VENUES.salfordCommunity,
-    [TEAMS.leigh.name]: VENUES.leighSportsVillage,
-    [TEAMS.castleford.name]: VENUES.mendAHose,
-    [TEAMS.london.name]: VENUES.cherryRed,
-    [TEAMS.wakefield.name]: VENUES.belleVue,
 };
 
 const createMatch = (id: number, homeTeam: any, awayTeam: any, status: 'SCHEDULED' | 'FULL-TIME', daysOffset: number, homeScore: number, awayScore: number, venue: string): Match => {
@@ -126,21 +127,9 @@ const createMatchOnDate = (id: number, homeTeam: any, awayTeam: any, status: 'SC
     };
 };
 
-const liveMatchDate = new Date();
-liveMatchDate.setMinutes(liveMatchDate.getMinutes() - 25); // Set start time to 25 minutes ago
-
 export const mockMatches: Match[] = [
-    // A "live" match for demonstration
-    {
-        id: 'mock-live-1',
-        competition: { id: '4415', name: 'Betfred Super League' },
-        homeTeam: TEAMS.wigan,
-        awayTeam: TEAMS.stHelens,
-        status: 'SCHEDULED', // The app's polling logic will update this to IN_PROGRESS
-        startTime: liveMatchDate.toISOString(),
-        venue: VENUES.dw,
-        scores: { home: 6, away: 12 },
-    },
+    // Upcoming match
+    createMatch(1, TEAMS.wigan, TEAMS.stHelens, 'SCHEDULED', 1, 0, 0, VENUES.dw),
     // Upcoming matches (next 7 days)
     createMatch(2, TEAMS.leeds, TEAMS.warrington, 'SCHEDULED', 2, 0, 0, VENUES.headingley),
     createMatch(3, TEAMS.catalans, TEAMS.huddersfield, 'SCHEDULED', 3, 0, 0, VENUES.gilbertBrutus),
