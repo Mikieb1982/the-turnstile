@@ -12,9 +12,8 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-// ... existing code ...
-    "react-dom": "^19.1.1",
-    "react": "^19.1.1"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
