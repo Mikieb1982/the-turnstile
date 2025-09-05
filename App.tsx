@@ -18,6 +18,8 @@ import { MatchdayView } from './components/MatchdayView';
 import { ProfileView } from './components/ProfileView';
 import { TeamStatsView } from './components/TeamStatsView';
 
+const MATCH_DURATION_MINUTES = 95; // Includes half-time, etc.
+
 export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS';
 
 const App: React.FC = () => {
@@ -29,7 +31,7 @@ const App: React.FC = () => {
   const [attendedMatches, setAttendedMatches] = useLocalStorage<AttendedMatch[]>('attendedMatches', []);
   const [earnedBadgeIds, setEarnedBadgeIds] = useLocalStorage<string[]>('earnedBadgeIds', []);
   const [user, setUser] = useLocalStorage<User>('user', { 
-    name: 'Daniel Hayes',
+    name: 'Mr Eggchaser',
     favoriteTeamId: '2' // St Helens
   });
   const initialLoadStarted = useRef(false);
@@ -55,6 +57,65 @@ const App: React.FC = () => {
         loadMatches();
     }
   }, [loadMatches]);
+  
+  useEffect(() => {
+    const updateInterval = setInterval(() => {
+      setMatches(prevMatches => {
+        const now = new Date().getTime();
+        let hasChanged = false;
+
+        const updatedMatches = prevMatches.map(match => {
+          if (match.status === 'FULL-TIME') {
+            return match;
+          }
+
+          const startTime = new Date(match.startTime).getTime();
+          const minutesElapsed = (now - startTime) / (1000 * 60);
+
+          // Transition to LIVE
+          if (minutesElapsed > 0 && minutesElapsed < MATCH_DURATION_MINUTES) {
+            hasChanged = true;
+            const newMatch: Match = { ...match, status: 'IN_PROGRESS' };
+
+            if (!newMatch.live) {
+              newMatch.live = { minute: 0, lastEvent: 'Kick Off' };
+            }
+
+            newMatch.live.minute = Math.floor(minutesElapsed);
+
+            // Simulate a scoring event with low probability
+            if (Math.random() < 0.08) { 
+              const isHomeScore = Math.random() < 0.5;
+              const scoreType = Math.random() < 0.4 ? 6 : 2; // 40% chance of a try (6), 60% penalty/conversion (2)
+              
+              if (isHomeScore) {
+                newMatch.scores.home += scoreType;
+                newMatch.live.lastEvent = `Score! - ${newMatch.homeTeam.name}`;
+              } else {
+                newMatch.scores.away += scoreType;
+                newMatch.live.lastEvent = `Score! - ${newMatch.awayTeam.name}`;
+              }
+            }
+            return newMatch;
+          } 
+          // Transition to FULL-TIME
+          // FIX: The check `match.status !== 'FULL-TIME'` was redundant due to an earlier check, causing a linting error.
+          // FIX: Explicitly typing the returned object as Match ensures type safety and resolves inference issues.
+          else if (minutesElapsed >= MATCH_DURATION_MINUTES) {
+            hasChanged = true;
+            const finishedMatch: Match = { ...match, status: 'FULL-TIME', live: undefined };
+            return finishedMatch;
+          }
+          
+          return match;
+        });
+
+        return hasChanged ? updatedMatches : prevMatches;
+      });
+    }, 15000); // Poll every 15 seconds
+
+    return () => clearInterval(updateInterval);
+  }, []);
   
   const addAttendedMatch = (match: Match) => {
     if (attendedMatches.some(am => am.match.id === match.id)) return; // Already attended

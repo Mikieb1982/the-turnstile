@@ -20,7 +20,7 @@
         --clr-text-subtle: #6B7280;  /* Gray 500 */
         --clr-border: #E5E7EB;     /* Gray 200 */
         --clr-surface: #FFFFFF;     /* White */
-        --clr-surface-alt: #F9FAFB; /* Gray 50 */
+        --clr-surface-alt: #E0F2FE; /* Sky 100 */
       }
       html.dark {
         --clr-surface: #0A0E14;
@@ -29,6 +29,10 @@
         --clr-text: #E5E7EB;
         --clr-text-subtle: #9CA3AF;
         --clr-border: #334155;
+      }
+      html:not(.dark) body {
+        background-image: radial-gradient(ellipse at bottom, #D1FAE5 0%, #E0F2FE 70%);
+        background-attachment: fixed;
       }
     </style>
     <script>

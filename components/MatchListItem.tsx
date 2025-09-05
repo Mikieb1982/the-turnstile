@@ -62,6 +62,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
     const time = new Date(match.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     const isFT = match.status === 'FULL-TIME';
     const isScheduled = match.status === 'SCHEDULED';
+    const isLive = match.status === 'IN_PROGRESS';
 
     return (
     <article className="bg-surface rounded-md shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-lg">
@@ -77,11 +78,21 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
                 <div className="text-4xl font-extrabold text-text-strong [font-variant-numeric:tabular-nums]">
                     {match.scores.home} - {match.scores.away}
                 </div>
-                <div className={`inline-flex items-center gap-2 px-2 py-1 mt-1 rounded-md text-xs font-semibold ${
-                    isFT ? 'bg-accent text-text-strong' : 'bg-surface-alt text-text-subtle'
-                }`}>
-                    {isFT ? 'FT' : time}
-                </div>
+                {isLive ? (
+                     <div className="inline-flex items-center gap-2 px-2 py-1 mt-1 rounded-md text-xs font-semibold bg-danger text-white">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        </span>
+                        LIVE {match.live ? `${match.live.minute}'` : ''}
+                    </div>
+                ) : (
+                    <div className={`inline-flex items-center gap-2 px-2 py-1 mt-1 rounded-md text-xs font-semibold ${
+                        isFT ? 'bg-accent text-text-strong' : 'bg-surface-alt text-text-subtle'
+                    }`}>
+                        {isFT ? 'FT' : time}
+                    </div>
+                )}
             </div>
 
             {/* Away Team */}

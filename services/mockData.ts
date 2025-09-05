@@ -126,10 +126,22 @@ const createMatchOnDate = (id: number, homeTeam: any, awayTeam: any, status: 'SC
     };
 };
 
+const liveMatchDate = new Date();
+liveMatchDate.setMinutes(liveMatchDate.getMinutes() - 25); // Set start time to 25 minutes ago
 
 export const mockMatches: Match[] = [
+    // A "live" match for demonstration
+    {
+        id: 'mock-live-1',
+        competition: { id: '4415', name: 'Betfred Super League' },
+        homeTeam: TEAMS.wigan,
+        awayTeam: TEAMS.stHelens,
+        status: 'SCHEDULED', // The app's polling logic will update this to IN_PROGRESS
+        startTime: liveMatchDate.toISOString(),
+        venue: VENUES.dw,
+        scores: { home: 6, away: 12 },
+    },
     // Upcoming matches (next 7 days)
-    createMatch(1, TEAMS.wigan, TEAMS.stHelens, 'SCHEDULED', 1, 0, 0, VENUES.dw), // Derby
     createMatch(2, TEAMS.leeds, TEAMS.warrington, 'SCHEDULED', 2, 0, 0, VENUES.headingley),
     createMatch(3, TEAMS.catalans, TEAMS.huddersfield, 'SCHEDULED', 3, 0, 0, VENUES.gilbertBrutus),
     createMatch(4, TEAMS.hullKR, TEAMS.hullFC, 'SCHEDULED', 4, 0, 0, VENUES.cravenPark), // Derby

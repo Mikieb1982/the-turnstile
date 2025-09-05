@@ -31,7 +31,7 @@ export interface Match {
   };
   homeTeam: Team;
   awayTeam: Team;
-  status: 'SCHEDULED' | 'FULL-TIME';
+  status: 'SCHEDULED' | 'IN_PROGRESS' | 'FULL-TIME';
   startTime: string; // ISO 8601 format
   venue: string;
   scores: {
