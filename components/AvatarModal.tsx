@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { XMarkIcon, ArrowUpTrayIcon, SparklesIcon, UserCircleIcon } from './Icons';
 import { LoadingSpinner } from './LoadingSpinner';
-import { generateAvatar } from '../services/geminiImageService';
+// The geminiImageService is no longer imported as the generation feature is disabled.
+// import { generateAvatar } from '../services/geminiImageService';
 
 interface AvatarModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface AvatarModalProps {
 type Mode = 'upload' | 'generate';
 
 export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSave }) => {
+  // Mode is defaulted to 'upload' as the 'generate' feature is disabled.
   const [mode, setMode] = useState<Mode>('upload');
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string>('');
@@ -33,6 +35,8 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSav
     }
   };
 
+  /*
+  // The AI avatar generation logic is commented out.
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       setError('Please enter a description for your avatar.');
@@ -50,6 +54,7 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSav
       setLoading(false);
     }
   };
+  */
   
   const handleSave = () => {
     if (previewUrl) {
@@ -80,9 +85,10 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSav
           </button>
         </div>
 
+        {/* The "Generate" tab button is commented out to disable the feature. */}
         <div className="flex border-b border-border">
           <TabButton currentMode={mode} targetMode="upload"><ArrowUpTrayIcon className="w-5 h-5"/> Upload</TabButton>
-          <TabButton currentMode={mode} targetMode="generate"><SparklesIcon className="w-5 h-5"/> Generate</TabButton>
+          {/* <TabButton currentMode={mode} targetMode="generate"><SparklesIcon className="w-5 h-5"/> Generate</TabButton> */}
         </div>
 
         <div className="p-6 overflow-y-auto space-y-4">
@@ -107,6 +113,8 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSav
                 </div>
             )}
 
+            {/* The UI for the 'generate' mode is commented out. */}
+            {/*
             {mode === 'generate' && (
                 <div className="space-y-3">
                     <input
@@ -125,6 +133,7 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSav
                     </button>
                 </div>
             )}
+            */}
         </div>
 
         <div className="p-4 bg-surface-alt border-t border-border mt-auto">
