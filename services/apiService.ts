@@ -1,7 +1,5 @@
 import type { Match, LeagueStanding } from "../types";
-
-// Use Vite's BASE_URL so fetch requests work in both dev and production builds.
-export const API_PREFIX = import.meta.env.BASE_URL.replace(/\/$/, '');
+import { API_PREFIX } from "../config";
 
 const handleResponse = async (response: Response) => {
     if (!response.ok) {

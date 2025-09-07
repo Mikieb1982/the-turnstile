@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { worker } from './mocks/browser';
+import { BASE_URL } from './config';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -10,11 +11,10 @@ if (!rootElement) {
 
 // Start the Mock Service Worker
 // Use the app's base URL so the worker script loads correctly in dev and production.
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 worker.start({
   onUnhandledRequest: 'bypass', // Pass through any requests that are not handled by our mock server
   serviceWorker: {
-    url: `${baseUrl}/mockServiceWorker.js`
+    url: `${BASE_URL}/mockServiceWorker.js`
   }
 });
 

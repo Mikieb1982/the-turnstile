@@ -1,5 +1,5 @@
 import type { Profile } from '../types';
-import { API_PREFIX } from './apiService';
+import { API_PREFIX } from '../config';
 
 const handleResponse = async (response: Response) => {
     if (!response.ok) {
