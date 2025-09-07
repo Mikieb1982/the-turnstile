@@ -1,4 +1,5 @@
 import type { Profile } from '../types';
+import { API_PREFIX } from './apiService';
 
 const handleResponse = async (response: Response) => {
     if (!response.ok) {
@@ -13,12 +14,12 @@ const handleResponse = async (response: Response) => {
 };
 
 export const getProfiles = async (): Promise<Record<string, Profile>> => {
-    const response = await fetch(`api/profiles`);
+    const response = await fetch(`${API_PREFIX}/api/profiles`);
     return handleResponse(response);
 };
 
 export const addProfile = async (name: string): Promise<{ id: string, profile: Profile }> => {
-    const response = await fetch(`api/profiles`, {
+    const response = await fetch(`${API_PREFIX}/api/profiles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
@@ -27,7 +28,7 @@ export const addProfile = async (name: string): Promise<{ id: string, profile: P
 };
 
 export const updateProfile = async (id: string, profile: Profile): Promise<Profile> => {
-    const response = await fetch(`api/profiles/${id}`, {
+    const response = await fetch(`${API_PREFIX}/api/profiles/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profile),
@@ -36,7 +37,7 @@ export const updateProfile = async (id: string, profile: Profile): Promise<Profi
 };
 
 export const deleteProfile = async (id: string): Promise<void> => {
-    const response = await fetch(`api/profiles/${id}`, {
+    const response = await fetch(`${API_PREFIX}/api/profiles/${id}`, {
         method: 'DELETE',
     });
     await handleResponse(response);

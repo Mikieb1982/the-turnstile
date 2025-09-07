@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { mockMatches, mockLeagueTable } from '../services/mockData';
 import type { Profile } from '../types';
+import { API_PREFIX } from '../services/apiService';
 
 // In-memory "database" using localStorage
 const getDb = (): { profiles: Record<string, Profile> } => {
@@ -20,25 +21,25 @@ const saveDb = (db: { profiles: Record<string, Profile> }) => {
 
 export const handlers = [
   // Handler for fetching all matches
-  http.get('*/api/matches', () => {
+  http.get(`${API_PREFIX}/api/matches`, () => {
     return HttpResponse.json(mockMatches);
   }),
 
   // Handler for fetching the league table
-  http.get('*/api/league-table', () => {
+  http.get(`${API_PREFIX}/api/league-table`, () => {
     return HttpResponse.json(mockLeagueTable);
   }),
   
   // --- Profile Handlers ---
 
   // Get all profiles
-  http.get('*/api/profiles', () => {
+  http.get(`${API_PREFIX}/api/profiles`, () => {
     const db = getDb();
     return HttpResponse.json(db.profiles);
   }),
 
   // Add a new profile
-  http.post('*/api/profiles', async ({ request }) => {
+  http.post(`${API_PREFIX}/api/profiles`, async ({ request }) => {
     const { name } = await request.json() as { name: string };
     if (!name) {
         return new HttpResponse('Profile name is required', { status: 400 });
@@ -59,7 +60,7 @@ export const handlers = [
   }),
 
   // Update a profile
-  http.put('*/api/profiles/:id', async ({ params, request }) => {
+  http.put(`${API_PREFIX}/api/profiles/:id`, async ({ params, request }) => {
     const { id } = params;
     const updatedProfile = await request.json() as Profile;
     const db = getDb();
@@ -74,7 +75,7 @@ export const handlers = [
   }),
 
   // Delete a profile
-  http.delete('*/api/profiles/:id', ({ params }) => {
+  http.delete(`${API_PREFIX}/api/profiles/:id`, ({ params }) => {
     const { id } = params;
     const db = getDb();
 

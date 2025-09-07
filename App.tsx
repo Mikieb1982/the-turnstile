@@ -29,13 +29,20 @@ const App: React.FC = () => {
 
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
   const [activeProfileId, setActiveProfileId] = useLocalStorage<string | null>('activeProfileId', null);
+  const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
   
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const initialLoadStarted = useRef(false);
 
-  const activeProfile = activeProfileId ? profiles[activeProfileId] : null;
+  useEffect(() => {
+    if (activeProfileId && profiles[activeProfileId]) {
+      setActiveProfile(profiles[activeProfileId]);
+    } else {
+      setActiveProfile(null);
+    }
+  }, [activeProfileId, profiles]);
 
   const loadAppData = useCallback(async () => {
     setLoading(true);
@@ -171,7 +178,7 @@ const App: React.FC = () => {
   };
 
   // Logged-out state
-  if (!activeProfileId || !activeProfile) {
+  if (!activeProfile) {
     return (
         <div className="min-h-screen font-sans bg-surface-alt text-text">
             <LoginView

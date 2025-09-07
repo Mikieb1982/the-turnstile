@@ -1,5 +1,8 @@
 import type { Match, LeagueStanding } from "../types";
 
+// The base path is hardcoded to ensure consistency across environments.
+export const API_PREFIX = '/The-Scrum-Book';
+
 const handleResponse = async (response: Response) => {
     if (!response.ok) {
         const errorText = await response.text();
@@ -12,7 +15,7 @@ const handleResponse = async (response: Response) => {
  * Fetches the upcoming matches from the local API.
  */
 export const fetchMatches = async (): Promise<Match[]> => {
-    const response = await fetch(`api/matches`);
+    const response = await fetch(`${API_PREFIX}/api/matches`);
     return handleResponse(response);
 };
 
@@ -20,6 +23,6 @@ export const fetchMatches = async (): Promise<Match[]> => {
  * Fetches the Super League table from the local API.
  */
 export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
-    const response = await fetch(`api/league-table`);
+    const response = await fetch(`${API_PREFIX}/api/league-table`);
     return handleResponse(response);
 }
