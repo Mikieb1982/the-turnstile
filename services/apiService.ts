@@ -1,4 +1,5 @@
 import type { Match, LeagueStanding } from "../types";
+// API_PREFIX is derived from Vite's BASE_URL and trimmed to avoid trailing slashes.
 import { API_PREFIX } from "../config";
 
 const handleResponse = async (response: Response) => {
