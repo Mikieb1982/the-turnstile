@@ -9,12 +9,11 @@ if (!rootElement) {
 }
 
 // Start the Mock Service Worker
-// When deploying to a sub-path (like GitHub Pages), we need to provide the explicit URL to the worker script.
-// MSW defaults to looking for it at the root, which causes it to fail in this configuration.
+// Use the app's base URL so the worker script loads correctly in dev and production.
 worker.start({
   onUnhandledRequest: 'bypass', // Pass through any requests that are not handled by our mock server
   serviceWorker: {
-    url: '/The-Scrum-Book/mockServiceWorker.js'
+    url: `${import.meta.env.BASE_URL}mockServiceWorker.js`
   }
 });
 
