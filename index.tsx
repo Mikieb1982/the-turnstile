@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { worker } from './mocks/browser';
-import { BASE_URL } from './config';
+import App from './App.tsx';
+import { worker } from './mocks/browser.ts';
+import { BASE_URL } from './config.ts';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -29,3 +29,4 @@ enableMocks().then(() => {
     </React.StrictMode>
   );
 });
+
