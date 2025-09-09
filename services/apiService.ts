@@ -1,5 +1,7 @@
 import type { Match, LeagueStanding } from "../types";
-import { API_PREFIX } from "../config";
+
+// Always resolve API requests from the site root so MSW can intercept them
+export const API_PREFIX = '';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {

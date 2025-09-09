@@ -12,15 +12,20 @@ if (!rootElement) {
 // Ensure no trailing slash on BASE_URL, then append the worker path
 const SW_URL = `${BASE_URL.replace(/\/$/, '')}/mockServiceWorker.js`;
 
-// Start the Mock Service Worker
-worker.start({
-  onUnhandledRequest: 'bypass',
-  serviceWorker: { url: SW_URL },
-});
+async function enableMocks() {
+  if (import.meta.env.MODE === 'development') {
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+      serviceWorker: { url: SW_URL },
+    });
+  }
+}
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+enableMocks().then(() => {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+});
