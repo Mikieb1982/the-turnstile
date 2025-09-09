@@ -1,28 +1,28 @@
 import type { Match, LeagueStanding } from "../types";
-// API_PREFIX is derived from Vite's BASE_URL and trimmed to avoid trailing slashes.
 import { API_PREFIX } from "../config";
 
 const handleResponse = async (response: Response) => {
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorText}`);
-    }
-    return response.json();
-}
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `API Error: ${response.status} ${response.statusText} - ${errorText}`
+    );
+  }
+  return response.json();
+};
 
 /**
  * Fetches the upcoming matches from the local API.
  */
 export const fetchMatches = async (): Promise<Match[]> => {
-    const response = await fetch(`${API_PREFIX}/api/matches`);
-    return handleResponse(response);
+  const response = await fetch(`${API_PREFIX}/api/matches`);
+  return handleResponse(response);
 };
 
 /**
  * Fetches the Super League table from the local API.
  */
 export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
-    const response = await fetch(`${API_PREFIX}/api/league-table`);
-    return handleResponse(response);
+  const response = await fetch(`${API_PREFIX}/api/league-table`);
+  return handleResponse(response);
 };
-
