@@ -1,4 +1,3 @@
-
 import type { Match, LeagueStanding, Venue } from '../types';
 
 export const TEAMS = {
@@ -109,24 +108,6 @@ const createMatch = (id: number, homeTeam: any, awayTeam: any, status: 'SCHEDULE
     };
 };
 
-const createMatchOnDate = (id: number, homeTeam: any, awayTeam: any, status: 'SCHEDULED' | 'FULL-TIME', date: Date, homeScore: number, awayScore: number, venue: string): Match => {
-    return {
-        id: `mock-${id}`,
-        competition: { id: '4415', name: 'Betfred Super League' },
-        homeTeam,
-        awayTeam,
-        status,
-        startTime: date.toISOString(),
-        venue,
-        scores: { home: homeScore, away: awayScore },
-        stats: status === 'FULL-TIME' ? {
-            possession: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            territory: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            tackles: { home: 300 + Math.floor(Math.random() * 50), away: 300 + Math.floor(Math.random() * 50) }
-        } : undefined,
-    };
-};
-
 export const mockMatches: Match[] = [
     // Upcoming match
     createMatch(1, TEAMS.wigan, TEAMS.stHelens, 'SCHEDULED', 1, 0, 0, VENUES.dw),
@@ -155,7 +136,6 @@ export const mockMatches: Match[] = [
     createMatch(18, TEAMS.leigh, TEAMS.stHelens, 'FULL-TIME', -25, 10, 30, VENUES.leighSportsVillage),
 ];
 
-// FIX: Define and export mockLeagueTable to resolve import error in theSportsDbService.ts
 export const mockLeagueTable: LeagueStanding[] = [
     { rank: 1, teamId: TEAMS.wigan.id, teamName: TEAMS.wigan.name, teamLogoUrl: TEAMS.wigan.logoUrl, played: 14, wins: 12, draws: 0, losses: 2, points: 24, form: 'WWWWW' },
     { rank: 2, teamId: TEAMS.stHelens.id, teamName: TEAMS.stHelens.name, teamLogoUrl: TEAMS.stHelens.logoUrl, played: 14, wins: 11, draws: 0, losses: 3, points: 22, form: 'WWLWW' },
@@ -170,3 +150,4 @@ export const mockLeagueTable: LeagueStanding[] = [
     { rank: 11, teamId: TEAMS.hullFC.id, teamName: TEAMS.hullFC.name, teamLogoUrl: TEAMS.hullFC.logoUrl, played: 14, wins: 2, draws: 0, losses: 12, points: 4, form: 'LLLLL' },
     { rank: 12, teamId: TEAMS.london.id, teamName: TEAMS.london.name, teamLogoUrl: TEAMS.london.logoUrl, played: 14, wins: 1, draws: 0, losses: 13, points: 2, form: 'LLLLW' },
 ];
+
