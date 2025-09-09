@@ -1,6 +1,4 @@
-// FIX: Add an explicit import for React types to resolve type conflicts across files.
 import type { FC, SVGProps } from 'react';
-// FIX: Removed circular dependency. The User type is defined in this file and should not be imported from App.tsx.
 
 export interface Team {
   id: string;
@@ -51,7 +49,6 @@ export interface Badge {
     name: string;
     description: string;
     category: 'Milestone' | 'Tournament';
-    // FIX: Use the explicitly imported FC and SVGProps types to match the type definition used in the Icon components.
     icon: FC<SVGProps<SVGSVGElement>>;
 }
 
@@ -108,3 +105,4 @@ export interface ScrumBookData {
   profiles: Record<string, Profile>;
   activeProfileId: string | null;
 }
+
