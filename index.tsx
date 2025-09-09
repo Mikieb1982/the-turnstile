@@ -6,17 +6,19 @@ import { BASE_URL } from './config';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+  throw new Error('Could not find root element to mount to');
 }
 
-// Start the Mock Service Worker before rendering so it can intercept initial requests.
+// Ensure no trailing slash on BASE_URL, then append the worker path
+const SW_URL = `${BASE_URL.replace(/\/$/, '')}/mockServiceWorker.js`;
+
 async function enableMocks() {
-  await worker.start({
-    onUnhandledRequest: 'bypass', // Pass through any requests that are not handled by our mock server
-    serviceWorker: {
-      url: `${BASE_URL}/mockServiceWorker.js`
-    }
-  });
+  if (import.meta.env.MODE === 'development') {
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+      serviceWorker: { url: SW_URL },
+    });
+  }
 }
 
 enableMocks().then(() => {
