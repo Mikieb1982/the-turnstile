@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { mockMatches, mockLeagueTable } from '../services/mockData';
 import type { Profile } from '../types';
-import { API_PREFIX } from '../services/apiService';
+import { API_PREFIX } from '../config';
 
 // In-memory "database" using localStorage
 const getDb = (): { profiles: Record<string, Profile> } => {

@@ -1,7 +1,6 @@
 import type { Match, LeagueStanding } from "../types";
-
-// The base path is hardcoded to ensure consistency across environments.
-export const API_PREFIX = '/The-Scrum-Book';
+// API_PREFIX is derived from Vite's BASE_URL and trimmed to avoid trailing slashes.
+import { API_PREFIX } from "../config";
 
 const handleResponse = async (response: Response) => {
     if (!response.ok) {
@@ -25,4 +24,5 @@ export const fetchMatches = async (): Promise<Match[]> => {
 export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
     const response = await fetch(`${API_PREFIX}/api/league-table`);
     return handleResponse(response);
-}
+};
+
