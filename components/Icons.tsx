@@ -2,10 +2,10 @@ import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement>;
 
-export const RugbyBallIcon: React.FC<IconProps> = (props) => (
+export const LogoIcon: React.FC<IconProps> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M19.12,4.88C15.75,2.12,8.25,2.12,4.88,4.88c-3.37,2.75-3.37,7.25,0,10c3.37,2.75,10.87,2.75,14.24,0 C22.49,12.12,22.49,7.62,19.12,4.88z M12,16.5c-2.48,0-4.5-1.97-4.5-4.41S9.52,7.68,12,7.68s4.5,1.97,4.5,4.41 S14.48,16.5,12,16.5z"/>
-    <path d="M12,8.68c-1.85,0-3.35,1.54-3.35,3.41s1.5,3.41,3.35,3.41s3.35-1.54,3.35-3.41S13.85,8.68,12,8.68z" opacity="0.3"/>
+    <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 4.5c2.48 0 4.5 1.97 4.5 4.41S14.48 15.32 12 15.32 7.5 13.35 7.5 10.91 9.52 6.5 12 6.5z" />
+    <path d="M12 8.5c-1.85 0-3.35 1.54-3.35 3.41s1.5 3.41 3.35 3.41 3.35-1.54 3.35-3.41-1.5-3.41-3.35-3.41z" opacity=".3" />
   </svg>
 );
 
@@ -77,6 +77,15 @@ export const ChartBarIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
+// FIX: Add the missing RugbyBallIcon component, which is used in LoginView.tsx.
+export const RugbyBallIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
+        <path d="M22.2,9.6C21.3,4.1,17,0,12,0S2.7,4.1,1.8,9.6l-0.4,2.4l0.4,2.4c0.9,5.5,5.2,9.6,10.2,9.6s9.3-4.1,10.2-9.6l0.4-2.4 L22.2,9.6z M12,18c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S15.3,18,12,18z"/>
+        <path d="M12,8c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S14.2,8,12,8z" opacity=".3" />
+    </svg>
+);
+
+// FIX: Add all missing icons below
 export const TableCellsIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125h17.25c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h17.25m-17.25 0V4.5c0-.621.504-1.125 1.125-1.125h17.25c.621 0 1.125.504 1.125 1.125v13.875m-17.25 0h17.25M3.375 9h17.25M9 3.375v17.25m6-17.25v17.25" />
@@ -216,3 +225,8 @@ export const ArrowUpTrayIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
+export const ServerIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.816H7.923a3.375 3.375 0 00-3.285 2.816l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3m16.5 0h.008v.008h-.008v-.008zm-3 0h.008v.008h-.008v-.008z" />
+    </svg>
+);

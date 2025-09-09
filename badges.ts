@@ -1,10 +1,8 @@
-
 import type { Badge, AttendedMatch, User } from './types';
 import {
     TrophyIcon,
     CheckCircleIcon,
     LocationMarkerIcon,
-    RugbyBallIcon,
     MapIcon,
     ShareIcon,
     SparklesIcon,
@@ -19,7 +17,7 @@ export const allBadges: Badge[] = [
         id: 'FIRST_MATCH',
         name: 'First Kick-Off',
         description: 'You attended your first Super League match!',
-        icon: RugbyBallIcon,
+        icon: TrophyIcon,
         category: 'Milestone',
     },
     {

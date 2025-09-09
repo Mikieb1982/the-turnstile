@@ -5,11 +5,11 @@ import { TeamLogo } from './TeamLogo';
 import { TeamSelectionModal } from './TeamSelectionModal';
 import { AvatarModal } from './AvatarModal';
 import { View } from '../App';
-import { UserCircleIcon, PencilIcon, ListBulletIcon, Squares2X2Icon, ChartBarIcon, TrophyIcon, StarIcon, ArrowLeftOnRectangleIcon } from './Icons';
+import { UserCircleIcon, PencilIcon, ListBulletIcon, Squares2X2Icon, ChartBarIcon, TrophyIcon, StarIcon, ArrowLeftOnRectangleIcon, ServerIcon } from './Icons';
 
 interface ProfileViewProps {
   user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  setUser: (user: Partial<User>) => void;
   setView: (view: View) => void;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
@@ -45,12 +45,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
     }, [attendedMatches]);
 
     const handleSelectTeam = (teamId: string) => {
-        setUser(prev => ({ ...prev, favoriteTeamId: teamId }));
+        setUser({ favoriteTeamId: teamId });
         setIsTeamModalOpen(false);
     };
 
     const handleSaveAvatar = (avatarUrl: string) => {
-        setUser(prev => ({ ...prev, avatarUrl }));
+        setUser({ avatarUrl });
         setIsAvatarModalOpen(false);
     }
 
@@ -82,7 +82,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
 
                     <div className="flex flex-col items-center">
                         {favoriteTeam ? (
-                            <TeamLogo logoUrl={favoriteTeam.logoUrl} teamName={favoriteTeam.name} size="medium" />
+                            <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} size="medium" />
                         ) : (
                             <div className="w-12 h-12 rounded-full bg-surface-alt border-2 border-dashed border-border flex items-center justify-center">
                                 <StarIcon className="w-6 h-6 text-text-subtle" />
@@ -91,10 +91,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
                         <button onClick={() => setIsTeamModalOpen(true)} className="mt-2 text-xs text-primary hover:underline font-semibold flex items-center gap-1 mx-auto">
                             <PencilIcon className="w-3 h-3"/>
                             Change Team
-                        </button>
-                         <button onClick={onLogout} className="mt-4 flex items-center gap-2 text-sm text-text-subtle hover:text-danger font-semibold transition-colors">
-                            <ArrowLeftOnRectangleIcon className="w-5 h-5"/>
-                            Switch Profile
                         </button>
                     </div>
                 </div>
@@ -126,6 +122,23 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
                 />
             </div>
             
+             <div className="mt-6 border-t border-border pt-6 space-y-4">
+                <ProfileLink
+                    icon={<ServerIcon className="w-6 h-6" />}
+                    label="Admin Tools"
+                    onClick={() => setView('ADMIN')}
+                />
+                <button
+                    onClick={onLogout}
+                    className="flex items-center w-full p-4 bg-surface rounded-md shadow-sm hover:bg-danger/10 transition-colors text-left text-lg"
+                >
+                    <div className="mr-4 text-danger"><ArrowLeftOnRectangleIcon className="w-6 h-6" /></div>
+                    <div className="flex-grow">
+                        <span className="font-semibold text-danger">Logout</span>
+                    </div>
+                </button>
+            </div>
+
             <TeamSelectionModal 
                 isOpen={isTeamModalOpen}
                 onClose={() => setIsTeamModalOpen(false)}
@@ -136,6 +149,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, setUser, setView
                 isOpen={isAvatarModalOpen}
                 onClose={() => setIsAvatarModalOpen(false)}
                 onSave={handleSaveAvatar}
+                currentAvatar={user.avatarUrl}
             />
         </div>
     );

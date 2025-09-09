@@ -4,26 +4,17 @@ import type { Match } from '../types';
 import { CheckCircleIcon, PlusCircleIcon, ClockIcon, LocationMarkerIcon, CalendarPlusIcon, MiniSpinnerIcon } from './Icons';
 import { TeamLogo } from './TeamLogo';
 import { ALL_VENUES } from '../services/mockData';
+import { getDistance } from '../utils/geolocation';
 
 interface MatchListItemProps {
   match: Match;
   isAttended: boolean;
   onAttend: (match: Match) => void;
   onUnattend: (matchId: string) => void;
+  distance?: number;
 }
 
 const CHECKIN_RADIUS_MILES = 1.0;
-
-const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 3959; // Radius of the Earth in miles
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-};
 
 const isToday = (dateString: string): boolean => {
     const today = new Date();
@@ -34,7 +25,7 @@ const isToday = (dateString: string): boolean => {
 };
 
 
-export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended, onAttend, onUnattend }) => {
+export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended, onAttend, onUnattend, distance }) => {
     const [checkinState, setCheckinState] = useState<{
         status: 'idle' | 'checking' | 'error_distance' | 'error_location';
         message: string;
@@ -162,7 +153,8 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-surface-alt focus:ring-primary bg-transparent border border-secondary text-secondary hover:bg-secondary/10"
             >
                 <PlusCircleIcon className="w-4 h-4" />
-                <span>I was there</span>
+                <span className="hidden sm:inline">I was there</span>
+                <span className="sm:hidden">Attend</span>
             </button>
         );
     };
@@ -171,17 +163,23 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
     <article className="bg-surface rounded-md shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-lg">
         <div className="p-4 grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
             {/* Home Team */}
-            <div className="flex items-center gap-3">
-                <TeamLogo logoUrl={match.homeTeam?.logoUrl} teamName={match.homeTeam?.name || 'Home'} size="medium" />
+            <div className="flex items-center gap-3 min-w-0">
+                <TeamLogo teamId={match.homeTeam?.id} teamName={match.homeTeam?.name || 'Home'} size="medium" />
                 <span className="font-semibold text-sm md:text-base text-text-strong truncate">{match.homeTeam?.name || 'Home Team'}</span>
             </div>
 
             {/* Score & Status */}
             <div className="text-center">
-                 <div className="text-4xl font-extrabold text-text-strong [font-variant-numeric:tabular-nums] flex justify-center items-center gap-2">
-                    <span>{match.scores.home}</span>
-                    <span>-</span>
-                    <span>{match.scores.away}</span>
+                <div className="text-4xl font-extrabold text-text-strong [font-variant-numeric:tabular-nums] flex justify-center items-center gap-2 min-h-[40px]">
+                    {isFT ? (
+                        <>
+                            <span>{match.scores.home}</span>
+                            <span>-</span>
+                            <span>{match.scores.away}</span>
+                        </>
+                    ) : (
+                        <span className="text-2xl font-semibold text-text-subtle tracking-wider">VS</span>
+                    )}
                 </div>
                 <div className={`inline-flex items-center gap-2 px-2 py-1 mt-1 rounded-md text-xs font-semibold ${
                     isFT ? 'bg-accent text-text-strong' : 'bg-surface-alt text-text-subtle'
@@ -191,14 +189,14 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
             </div>
 
             {/* Away Team */}
-            <div className="flex items-center gap-3 justify-end">
+            <div className="flex items-center gap-3 justify-end min-w-0">
                 <span className="font-semibold text-sm md:text-base text-text-strong truncate text-right">{match.awayTeam?.name || 'Away Team'}</span>
-                <TeamLogo logoUrl={match.awayTeam?.logoUrl} teamName={match.awayTeam?.name || 'Away'} size="medium" />
+                <TeamLogo teamId={match.awayTeam?.id} teamName={match.awayTeam?.name || 'Away'} size="medium" />
             </div>
         </div>
 
-        <div className="bg-surface-alt px-4 py-2 flex justify-between items-center text-sm border-t border-border">
-            <div className="flex items-center gap-4 text-text-subtle">
+        <div className="bg-surface-alt px-4 py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 text-sm border-t border-border">
+            <div className="flex items-center gap-x-4 gap-y-1 text-text-subtle flex-wrap">
                 <div className="flex items-center gap-1.5">
                     <LocationMarkerIcon className="w-4 h-4" />
                     <span>{match.venue}</span>
@@ -207,9 +205,14 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
                     <ClockIcon className="w-4 h-4" />
                     <span>{new Date(match.startTime).toLocaleDateString()}</span>
                 </div>
+                {distance !== undefined && (
+                    <div className="font-semibold text-primary">
+                        <span>{distance.toFixed(1)} mi away</span>
+                    </div>
+                )}
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end sm:self-auto">
                 {isScheduled && (
                     <button
                         onClick={handleAddToCalendar}
@@ -217,7 +220,8 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
                         aria-label="Add match to calendar"
                     >
                         <CalendarPlusIcon className="w-4 h-4" />
-                        <span>Add to Calendar</span>
+                        <span className="hidden sm:inline">Add to Calendar</span>
+                        <span className="sm:hidden">Calendar</span>
                     </button>
                 )}
                 {renderAttendButton()}

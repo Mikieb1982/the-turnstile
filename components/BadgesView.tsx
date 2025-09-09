@@ -13,18 +13,21 @@ const BadgeCard: React.FC<{ badge: Badge; isEarned: boolean }> = ({ badge, isEar
     return (
         <div 
             key={badge.id}
-            className={`p-4 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 aspect-square ${
+            className={`p-4 rounded-xl flex flex-col items-center text-center transition-all duration-300 ${
                 isEarned ? 'bg-surface shadow-card' : 'bg-surface-alt opacity-60'
             }`}
         >
-            <div className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center mb-3 ${
+            <div className={`flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center mb-3 ${
                 isEarned ? 'bg-accent/20' : 'bg-border/20'
             }`}>
-                <Icon className={`w-8 h-8 ${isEarned ? 'text-accent' : 'text-text-subtle'}`} />
+                <Icon className={`w-7 h-7 ${isEarned ? 'text-accent' : 'text-text-subtle'}`} />
             </div>
-            <h2 className={`font-bold text-sm ${
+            <h2 className={`font-bold text-sm mb-1 ${
                 isEarned ? 'text-text-strong' : 'text-text-subtle'
             }`}>{badge.name}</h2>
+            <p className={`text-xs flex-grow ${isEarned ? 'text-text' : 'text-text-subtle'}`}>
+                {badge.description}
+            </p>
         </div>
     );
 };

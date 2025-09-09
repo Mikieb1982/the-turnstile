@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, RugbyBallIcon } from './Icons';
+import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon } from './Icons';
 import type { View } from '../App';
 
 interface HeaderProps {
@@ -31,13 +31,13 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
     );
   };
 
-  const isProfileActive = ['PROFILE', 'MY_MATCHES', 'STATS', 'BADGES', 'GROUNDS'].includes(currentView);
+  const isProfileActive = ['PROFILE', 'MY_MATCHES', 'STATS', 'BADGES', 'GROUNDS', 'ADMIN'].includes(currentView);
 
   return (
     <header className="bg-surface shadow-sm sticky top-0 z-10 border-b border-border">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center gap-3">
-          <RugbyBallIcon className="w-8 h-8 text-primary" />
+          <LogoIcon className="w-8 h-8 text-primary" />
           <h1 className="text-xl md:text-2xl font-bold text-text-strong">The Scrum Book</h1>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
@@ -54,6 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
                 <span>Profile</span>
               </button>
               <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
+              <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
               <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
               <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
               <NavButton view="TEAM_STATS" label="Teams & Stadiums" icon={<BuildingStadiumIcon className="w-5 h-5" />} />

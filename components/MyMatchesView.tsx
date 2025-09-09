@@ -37,15 +37,23 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
 
                             <div className="flex items-center justify-between gap-2 mb-2">
                                 <div className="flex items-center gap-2 w-2/5 truncate">
-                                    <TeamLogo logoUrl={match.homeTeam?.logoUrl} teamName={match.homeTeam?.name || 'Home Team'} size="small" />
+                                    <TeamLogo teamId={match.homeTeam?.id} teamName={match.homeTeam?.name || 'Home Team'} size="small" />
                                     <span className="font-semibold text-sm">{match.homeTeam?.name || 'Home Team'}</span>
                                 </div>
-                                <div className="font-extrabold text-lg text-primary [font-variant-numeric:tabular-nums]">
-                                    {match.scores.home} - {match.scores.away}
-                                </div>
+                                
+                                {match.status === 'FULL-TIME' ? (
+                                    <div className="font-extrabold text-lg text-primary [font-variant-numeric:tabular-nums]">
+                                        {match.scores.home} - {match.scores.away}
+                                    </div>
+                                ) : (
+                                    <div className="font-semibold text-base text-text-subtle">
+                                        {new Date(match.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
+                                    </div>
+                                )}
+
                                 <div className="flex items-center gap-2 w-2/5 truncate justify-end">
                                     <span className="font-semibold text-sm text-right">{match.awayTeam?.name || 'Away Team'}</span>
-                                    <TeamLogo logoUrl={match.awayTeam?.logoUrl} teamName={match.awayTeam?.name || 'Away Team'} size="small" />
+                                    <TeamLogo teamId={match.awayTeam?.id} teamName={match.awayTeam?.name || 'Away Team'} size="small" />
                                 </div>
                             </div>
 

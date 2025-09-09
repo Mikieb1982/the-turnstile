@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath d='M19.12,4.88C15.75,2.12,8.25,2.12,4.88,4.88c-3.37,2.75-3.37,7.25,0,10c3.37,2.75,10.87,2.75,14.24,0 C22.49,12.12,22.49,7.62,19.12,4.88z M12,16.5c-2.48,0-4.5-1.97-4.5-4.41S9.52,7.68,12,7.68s4.5,1.97,4.5,4.41 S14.48,16.5,12,16.5z' fill='%23EF4444'/%3e%3cpath d='M12,8.68c-1.85,0-3.35,1.54-3.35,3.41s1.5,3.41,3.35,3.41s3.35-1.54,3.35-3.41S13.85,8.68,12,8.68z' opacity='0.3' fill='%23EF4444'/%3e%3c/svg%3e" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23EF4444'%3e%3cpath d='M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 4.5c2.48 0 4.5 1.97 4.5 4.41S14.48 15.32 12 15.32 7.5 13.35 7.5 10.91 9.52 6.5 12 6.5z' /%3e%3cpath d='M12 8.5c-1.85 0-3.35 1.54-3.35 3.41s1.5 3.41 3.35 3.41 3.35-1.54 3.35-3.41-1.5-3.41-3.35-3.41z' opacity='.3' /%3e%3c/svg%3e" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Scrum Book - Your Rugby League Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +21,12 @@
         --clr-border: #E5E7EB;     /* Gray 200 */
         --clr-surface: #FFFFFF;     /* White */
         --clr-surface-alt: #E0F2FE; /* Sky 100 */
+
+        /* Pitch background colors */
+        --pitch-color-1: #4F8A43;
+        --pitch-color-2: #589A4B;
+        --pitch-overlay-light: linear-gradient(to top, rgba(209, 250, 229, 0.8), rgba(224, 242, 254, 0.85));
+        --pitch-overlay-dark: rgba(15, 23, 42, 0.9);
       }
       html.dark {
         --clr-surface: #0A0E14;
@@ -30,9 +36,30 @@
         --clr-text-subtle: #9CA3AF;
         --clr-border: #334155;
       }
-      html:not(.dark) body {
-        background-image: radial-gradient(ellipse at bottom, #D1FAE5 0%, #E0F2FE 70%);
+      body {
+        background-color: var(--pitch-color-1);
+        background-image: 
+          var(--pitch-overlay-light),
+          repeating-linear-gradient(
+            90deg,
+            var(--pitch-color-1) 0,
+            var(--pitch-color-1) 4rem,
+            var(--pitch-color-2) 4rem,
+            var(--pitch-color-2) 8rem
+          );
         background-attachment: fixed;
+      }
+
+      html.dark body {
+        background-image: 
+          linear-gradient(var(--pitch-overlay-dark), var(--pitch-overlay-dark)),
+          repeating-linear-gradient(
+            90deg,
+            var(--pitch-color-1) 0,
+            var(--pitch-color-1) 4rem,
+            var(--pitch-color-2) 4rem,
+            var(--pitch-color-2) 8rem
+          );
       }
     </style>
     <script>
@@ -72,7 +99,7 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script type="importmap">
 {
   "imports": {
@@ -83,12 +110,13 @@
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.2",
     "msw": "https://aistudiocdn.com/msw@^2.4.1",
     "msw/browser": "https://aistudiocdn.com/msw@^2.4.1/browser",
-    "msw/": "https://aistudiocdn.com/msw@^2.11.1/"
+    "msw/": "https://aistudiocdn.com/msw@^2.11.1/",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.2.1/"
   }
 }
 </script>
 </head>
-  <body class="bg-surface-alt text-text">
+  <body class="text-text">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

@@ -1,5 +1,4 @@
-import { setupWorker } from 'msw/browser';
-import { handlers } from './handlers';
-
-// This configures a Service Worker with the given request handlers.
-export const worker = setupWorker(...handlers);
+/**
+ * This file is no longer in use as the application now sources data directly
+ * from local mock files instead of using a mock API.
+ */

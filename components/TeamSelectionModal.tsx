@@ -1,5 +1,5 @@
 import React from 'react';
-import { TEAMS } from '../services/mockData';
+import { TEAMS, TEAM_BRANDING } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
 import { XMarkIcon } from './Icons';
 
@@ -26,20 +26,25 @@ export const TeamSelectionModal: React.FC<TeamSelectionModalProps> = ({ isOpen, 
         </div>
         <div className="p-6 overflow-y-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {allTeams.map(team => (
-              <button 
-                key={team.id}
-                onClick={() => onSelectTeam(team.id)}
-                className={`p-4 flex flex-col items-center gap-2 rounded-md transition-all border-2 ${
-                  currentTeamId === team.id 
-                    ? 'border-primary bg-primary/10' 
-                    : 'border-transparent hover:bg-surface-alt hover:shadow-md'
-                }`}
-              >
-                <TeamLogo logoUrl={team.logoUrl} teamName={team.name} size="medium" />
-                <span className="text-sm font-semibold text-center text-text-strong">{team.name}</span>
-              </button>
-            ))}
+            {allTeams.map(team => {
+              const isSelected = currentTeamId === team.id;
+              const branding = TEAM_BRANDING[team.id];
+              const style = isSelected && branding ? { borderColor: branding.bg, backgroundColor: `${branding.bg}1A` } : {};
+
+              return (
+                <button 
+                  key={team.id}
+                  onClick={() => onSelectTeam(team.id)}
+                  className={`p-4 flex flex-col items-center gap-2 rounded-md transition-all border-2 ${
+                    !isSelected ? 'border-transparent hover:bg-surface-alt hover:shadow-md' : ''
+                  }`}
+                  style={style}
+                >
+                  <TeamLogo teamId={team.id} teamName={team.name} size="medium" />
+                  <span className="text-sm font-semibold text-center text-text-strong">{team.name}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>

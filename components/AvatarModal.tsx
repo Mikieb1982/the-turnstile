@@ -1,15 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { XMarkIcon, ArrowUpTrayIcon, UserCircleIcon } from './Icons';
 
 interface AvatarModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (avatarUrl: string) => void;
+  currentAvatar?: string;
 }
 
-export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSave }) => {
+export const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSave, currentAvatar }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  useEffect(() => {
+    if (isOpen) {
+        setPreviewUrl(currentAvatar || null);
+    }
+  }, [isOpen, currentAvatar]);
 
   if (!isOpen) return null;
 

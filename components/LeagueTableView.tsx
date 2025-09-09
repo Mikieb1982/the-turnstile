@@ -5,7 +5,8 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { ErrorDisplay } from './ErrorDisplay';
 import { RefreshIcon, AlertTriangleIcon } from './Icons';
 import { TeamLogo } from './TeamLogo';
-import { ALL_VENUES } from '../services/mockData';
+import { ALL_VENUES, TEAM_BRANDING } from '../services/mockData';
+import { getDistance } from '../utils/geolocation';
 
 const FormIndicator: React.FC<{ form: string }> = ({ form }) => {
     return (
@@ -89,11 +90,15 @@ export const LeagueTableView: React.FC = () => {
                         </thead>
                         <tbody className="divide-y divide-border">
                             {table.map(standing => (
-                                <tr key={standing.teamId} className="hover:bg-surface-alt even:bg-surface-alt/50 transition-colors">
+                                <tr 
+                                    key={standing.teamId} 
+                                    className="hover:bg-surface-alt even:bg-surface-alt/50 transition-colors"
+                                    style={{ borderLeft: `4px solid ${TEAM_BRANDING[standing.teamId]?.bg || 'transparent'}` }}
+                                >
                                     <td className="px-4 h-12 font-bold text-center text-text-strong">{standing.rank}</td>
                                     <td className="px-4 h-12">
                                         <div className="flex items-center gap-3">
-                                            <TeamLogo logoUrl={standing.teamLogoUrl} teamName={standing.teamName} size="small" />
+                                            <TeamLogo teamId={standing.teamId} teamName={standing.teamName} size="small" />
                                             <span className="font-semibold text-text-strong">{standing.teamName}</span>
                                         </div>
                                     </td>
@@ -116,17 +121,6 @@ export const LeagueTableView: React.FC = () => {
 };
 
 // --- Grounds View Component ---
-
-const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 3959; // Radius of the Earth in miles
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in miles
-};
 
 type LocationState = {
     lat: number;
