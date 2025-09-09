@@ -1,7 +1,5 @@
 import type { Match, LeagueStanding } from "../types";
-
-// Always resolve API requests from the site root so MSW can intercept them
-export const API_PREFIX = '';
+import { API_PREFIX } from '../config';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -28,3 +26,4 @@ export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
   const response = await fetch(`${API_PREFIX}/api/league-table`);
   return handleResponse(response);
 };
+
