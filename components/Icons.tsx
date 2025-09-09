@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement>;
@@ -78,7 +77,6 @@ export const ChartBarIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
-// FIX: Add all missing icons below
 export const TableCellsIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125h17.25c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h17.25m-17.25 0V4.5c0-.621.504-1.125 1.125-1.125h17.25c.621 0 1.125.504 1.125 1.125v13.875m-17.25 0h17.25M3.375 9h17.25M9 3.375v17.25m6-17.25v17.25" />
@@ -217,3 +215,4 @@ export const ArrowUpTrayIcon: React.FC<IconProps> = (props) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
     </svg>
 );
+
