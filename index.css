@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --clr-primary: #EF4444;   /* Red 500 */
+  --clr-secondary: #10B981;  /* Emerald 500 */
+  --clr-accent: #FBBF24;    /* Amber 400 */
+  --clr-danger: #EF4444;     /* Red 500 */
+  --clr-warning: #F59E0B;    /* Amber 500 */
+  --clr-info: #3B82F6;       /* Blue 500 */
+  --clr-success: #22C55E;    /* Green 500 */
+  --clr-text-strong: #111827; /* Gray 900 */
+  --clr-text: #374151;       /* Gray 700 */
+  --clr-text-subtle: #6B7280;  /* Gray 500 */
+  --clr-border: #E5E7EB;     /* Gray 200 */
+  --clr-surface: #FFFFFF;     /* White */
+  --clr-surface-alt: #E0F2FE; /* Sky 100 */
+
+  /* Pitch background colors */
+  --pitch-color-1: #4F8A43;
+  --pitch-color-2: #589A4B;
+  --pitch-overlay-light: linear-gradient(to top, rgba(209, 250, 229, 0.8), rgba(224, 242, 254, 0.85));
+  --pitch-overlay-dark: rgba(15, 23, 42, 0.9);
+}
+
+html.dark {
+  --clr-surface: #0A0E14;
+  --clr-surface-alt: #0F172A;
+  --clr-text-strong: #F9FAFB;
+  --clr-text: #E5E7EB;
+  --clr-text-subtle: #9CA3AF;
+  --clr-border: #334155;
+}
+
+body {
+  background-color: var(--clr-surface);
+}
+
+.app-background {
+  background-color: var(--pitch-color-1);
+  background-image:
+    var(--pitch-overlay-light),
+    repeating-linear-gradient(
+      90deg,
+      var(--pitch-color-1) 0,
+      var(--pitch-color-1) 4rem,
+      var(--pitch-color-2) 4rem,
+      var(--pitch-color-2) 8rem
+    );
+  background-attachment: fixed;
+}
+
+html.dark .app-background {
+  background-image:
+    linear-gradient(var(--pitch-overlay-dark), var(--pitch-overlay-dark)),
+    repeating-linear-gradient(
+      90deg,
+      var(--pitch-color-1) 0,
+      var(--pitch-color-1) 4rem,
+      var(--pitch-color-2) 4rem,
+      var(--pitch-color-2) 8rem
+    );
+}
