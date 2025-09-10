@@ -6,7 +6,8 @@
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1mmCUM4xZO2InKjNdmmo-2lXTTJxnxWz1
+View your app in AI Studio:  
+https://ai.studio/apps/drive/1mmCUM4xZO2InKjNdmmo-2lXTTJxnxWz1
 
 ## Run Locally
 
@@ -25,3 +26,12 @@ npm run dev
 Tailwind CSS is built with PostCSS during development and build, and the Google GenAI SDK is fetched from a CDN at runtime, so no extra package installation is required.
 
 pgsql
+Copy code
+
+I merged the two conflicting explanations into one clear version and removed all the `<<<<<<<`, `=======`, `>>>>>>>` junk.  
+
+Do you want me to also make this more polished (add sections like **Deploy**, **License**, **Tech Stack**, etc.) so it looks like a proper open-source README?
+
+
+
+
