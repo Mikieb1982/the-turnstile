@@ -31,8 +31,9 @@ export const addAttendedMatchToProfile = async (uid: string, attendedMatch: Atte
 
 export const removeAttendedMatchFromProfile = async (uid: string, matchId: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile && userProfile.attendedMatches) {
-        const updatedMatches = userProfile.attendedMatches.filter(am => am.match.id !== matchId);
+    if (userProfile) {
+        const validMatches = (userProfile.attendedMatches || []).filter(am => am && am.match);
+        const updatedMatches = validMatches.filter(am => am.match.id !== matchId);
         await updateUserProfile(uid, { attendedMatches: updatedMatches });
     }
 };
@@ -46,8 +47,9 @@ export const addBadgeToProfile = async (uid: string, badgeIds: string[]): Promis
 
 export const updateAttendedMatchPhotoInProfile = async (uid: string, matchId: string, photoUrl: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile && userProfile.attendedMatches) {
-        const updatedMatches = userProfile.attendedMatches.map(am => {
+    if (userProfile) {
+        const validMatches = (userProfile.attendedMatches || []).filter(am => am && am.match);
+        const updatedMatches = validMatches.map(am => {
             if (am.match.id === matchId) {
                 return { ...am, photoUrl };
             }

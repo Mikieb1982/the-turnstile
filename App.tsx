@@ -21,12 +21,13 @@ import { NearbyMatchesView } from './components/NearbyMatchesView';
 import { DataUploader } from './components/DataUploader';
 import { AIChatView } from './components/AIChatView';
 import { CommunityView } from './components/CommunityView';
+import { LoginPromptView } from './components/LoginPromptView';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('UPCOMING');
   const [theme, toggleTheme] = useTheme();
 
-  const { currentUser, profile, loading: authLoading, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
+  const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
   
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,38 +49,28 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser && profile && !initialLoadStarted.current) {
+    if (!initialLoadStarted.current) {
         initialLoadStarted.current = true;
         loadAppData();
     }
-  }, [currentUser, profile, loadAppData]);
-  
-  if (authLoading) {
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-surface">
-            <LoadingSpinner />
-            <p className="mt-4 text-text-subtle">Connecting to The Scrum Book...</p>
-        </div>
-    );
-  }
+  }, [loadAppData]);
 
-  if (!currentUser || !profile) {
-    return (
-        <div className="container mx-auto p-4 md:p-6 min-h-screen flex items-center justify-center">
-            <ErrorDisplay 
-                message="Could not connect to The Scrum Book. Please check your internet connection and try refreshing the page."
-                onRetry={() => window.location.reload()}
-            />
-        </div>
-    );
-  }
-  
-  const { user, attendedMatches, earnedBadgeIds } = profile;
-
-  const handleSetUser = (updatedUser: Partial<User>) => {
-    updateUser(updatedUser);
+  const handleAttend = (match: Match) => {
+    if (!currentUser) {
+      setView('PROFILE'); // Will be caught by the protected view logic and show the prompt
+    } else {
+      addAttendedMatch(match);
+    }
   };
 
+  const handleUnattend = (matchId: string) => {
+    if (!currentUser) {
+      setView('PROFILE'); // Will be caught by the protected view logic and show the prompt
+    } else {
+      removeAttendedMatch(matchId);
+    }
+  };
+  
   const renderContent = () => {
     if (error) {
       return <ErrorDisplay message={error} onRetry={loadAppData} />;
@@ -90,30 +81,42 @@ const App: React.FC = () => {
         <p className="mt-4 text-text-subtle">Fetching season fixtures...</p>
       </div>;
     }
+
+    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'AI_CHAT', 'ADMIN'];
+    if (!currentUser && protectedViews.includes(view)) {
+      return <LoginPromptView onLogin={login} />;
+    }
     
+    // While authenticating, show a spinner for protected views
+    if (authLoading && protectedViews.includes(view)) {
+      return <div className="flex flex-col items-center justify-center h-64"><LoadingSpinner /><p className="mt-4 text-text-subtle">Connecting...</p></div>;
+    }
+    
+    const attendedMatchIds = profile?.attendedMatches.map(am => am.match.id) || [];
+
     switch (view) {
       case 'UPCOMING':
         return <MatchList 
                   matches={matches}
                   setMatches={setMatches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
-                  onAttend={(match) => addAttendedMatch(match)} 
-                  onUnattend={removeAttendedMatch}
+                  attendedMatchIds={attendedMatchIds}
+                  onAttend={handleAttend} 
+                  onUnattend={handleUnattend}
                   onRefresh={loadAppData}
                 />;
       case 'NEARBY':
         return <NearbyMatchesView
                   matches={matches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
-                  onAttend={(match) => addAttendedMatch(match)}
-                  onUnattend={removeAttendedMatch}
+                  attendedMatchIds={attendedMatchIds}
+                  onAttend={handleAttend}
+                  onUnattend={handleUnattend}
                 />;
       case 'MATCH_DAY':
         return <MatchdayView 
                   matches={matches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
-                  onAttend={(match) => addAttendedMatch(match)} 
-                  onUnattend={removeAttendedMatch}
+                  attendedMatchIds={attendedMatchIds}
+                  onAttend={handleAttend} 
+                  onUnattend={handleUnattend}
                 />;
       case 'LEAGUE_TABLE':
         return <LeagueTableView />;
@@ -121,36 +124,38 @@ const App: React.FC = () => {
         return <TeamStatsView />;
       case 'GROUNDS':
         return <GroundsView />;
-      case 'MY_MATCHES':
-        return <MyMatchesView attendedMatches={attendedMatches} onRemove={removeAttendedMatch} />;
-      case 'STATS':
-        return <StatsView user={user} attendedMatches={attendedMatches} />;
       case 'ABOUT':
         return <AboutView />;
+      
+      // Protected Routes
+      case 'MY_MATCHES':
+        return profile ? <MyMatchesView attendedMatches={profile.attendedMatches} onRemove={handleUnattend} /> : <LoadingSpinner />;
+      case 'STATS':
+        return profile ? <StatsView user={profile.user} attendedMatches={profile.attendedMatches} /> : <LoadingSpinner />;
       case 'BADGES':
-        return <BadgesView allBadges={allBadges} earnedBadgeIds={earnedBadgeIds} />;
+        return profile ? <BadgesView allBadges={allBadges} earnedBadgeIds={profile.earnedBadgeIds} /> : <LoadingSpinner />;
       case 'AI_CHAT':
         return <AIChatView />;
       case 'COMMUNITY':
         return <CommunityView />;
       case 'PROFILE':
-        return <ProfileView
-                  user={user}
-                  setUser={handleSetUser}
+        return profile ? <ProfileView
+                  user={profile.user}
+                  setUser={(updatedUser) => updateUser(updatedUser)}
                   setView={setView}
-                  attendedMatches={attendedMatches}
-                  earnedBadgeIds={earnedBadgeIds}
+                  attendedMatches={profile.attendedMatches}
+                  earnedBadgeIds={profile.earnedBadgeIds}
                   onLogout={logout}
-                />;
+                /> : <LoadingSpinner />;
       case 'ADMIN':
         return <DataUploader />;
       default:
         return <MatchList 
                   matches={matches} 
                   setMatches={setMatches}
-                  attendedMatchIds={attendedMatches.map(am => am.match.id)}
-                  onAttend={(match) => addAttendedMatch(match)}
-                  onUnattend={removeAttendedMatch}
+                  attendedMatchIds={attendedMatchIds}
+                  onAttend={handleAttend}
+                  onUnattend={handleUnattend}
                   onRefresh={loadAppData}
                 />;
     }
@@ -158,11 +163,11 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen font-sans text-text app-background">
-      <Header currentView={view} setView={setView} theme={theme} toggleTheme={toggleTheme} />
+      <Header currentView={view} setView={setView} theme={theme} toggleTheme={toggleTheme} currentUser={currentUser} />
       <main className="container mx-auto p-4 md:p-6 pb-24 md:pb-6">
         {renderContent()}
       </main>
-      <MobileNav currentView={view} setView={setView} />
+      <MobileNav currentView={view} setView={setView} currentUser={currentUser} />
       <footer className="hidden md:block text-center py-6 text-text-subtle border-t border-border mt-8">
       </footer>
     </div>
