@@ -1,10 +1,12 @@
 import React from 'react';
 import type { View } from '../types';
-import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, SparklesIcon } from './Icons';
+import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, SparklesIcon, ArrowRightOnRectangleIcon } from './Icons';
+import type firebase from 'firebase/compat/app';
 
 interface MobileNavProps {
   currentView: View;
   setView: (view: View) => void;
+  currentUser: firebase.User | null;
 }
 
 const NavButton: React.FC<{
@@ -30,11 +32,16 @@ const NavButton: React.FC<{
 };
 
 
-export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView }) => {
+export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, currentUser }) => {
     const isProfileActive = ['PROFILE', 'MY_MATCHES', 'STATS', 'BADGES', 'GROUNDS'].includes(currentView);
     
     const navItems: { view: View; label: string; icon: React.FC<React.SVGProps<SVGSVGElement>>; isActive: boolean }[] = [
-        { view: 'PROFILE', label: 'Profile', icon: UserCircleIcon, isActive: isProfileActive },
+        { 
+            view: 'PROFILE', 
+            label: currentUser ? 'Profile' : 'Login', 
+            icon: currentUser ? UserCircleIcon : ArrowRightOnRectangleIcon, 
+            isActive: isProfileActive 
+        },
         { view: 'UPCOMING', label: 'Upcoming', icon: CalendarIcon, isActive: currentView === 'UPCOMING' },
         { view: 'NEARBY', label: 'Nearby', icon: LocationMarkerIcon, isActive: currentView === 'NEARBY' },
         { view: 'COMMUNITY', label: 'Community', icon: UsersIcon, isActive: currentView === 'COMMUNITY' },

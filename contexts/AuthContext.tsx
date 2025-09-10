@@ -59,7 +59,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                                 favoriteTeamId: finalUser.favoriteTeamId,
                                 avatarUrl: finalUser.avatarUrl,
                             },
-                            attendedMatches: Array.isArray(userProfile.attendedMatches) ? userProfile.attendedMatches : [],
+                            attendedMatches: (Array.isArray(userProfile.attendedMatches) ? userProfile.attendedMatches : [])
+                                .filter(am => am && am.match),
                             earnedBadgeIds: Array.isArray(userProfile.earnedBadgeIds) ? userProfile.earnedBadgeIds : [],
                             friendIds: Array.isArray(userProfile.friendIds) ? userProfile.friendIds : [],
                         };
@@ -94,18 +95,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     setLoading(false);
                 }
             } else {
-                // User is signed out, attempt to sign in anonymously.
-                try {
-                    // FIX: Use v8-compatible signInAnonymously method.
-                    await auth.signInAnonymously();
-                } catch (error) {
-                    console.error("Auto anonymous sign-in failed", error);
-                    // If sign in fails, we can't do much.
-                    // Keep user as null and stop loading so the app can show an error.
-                    setCurrentUser(null);
-                    setProfile(null);
-                    setLoading(false);
-                }
+                // User is signed out. Update the state and stop loading.
+                setCurrentUser(null);
+                setProfile(null);
+                setLoading(false);
             }
         });
 
@@ -119,7 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             await auth.signInAnonymously();
             // onAuthStateChanged will handle setting the user and profile
         } catch (error) {
-            console.error("Auto anonymous sign-in failed", error);
+            console.error("Anonymous sign-in failed", error);
             setLoading(false);
         }
     };

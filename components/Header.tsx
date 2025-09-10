@@ -1,15 +1,18 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, SparklesIcon, UsersIcon } from './Icons';
+import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, SparklesIcon, UsersIcon, ArrowRightOnRectangleIcon } from './Icons';
 import type { View } from '../types';
+import type firebase from 'firebase/compat/app';
+
 
 interface HeaderProps {
   currentView: View;
   setView: (view: View) => void;
   theme: string;
   toggleTheme: () => void;
+  currentUser: firebase.User | null;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser }) => {
   const NavButton: React.FC<{
     view: View;
     label: string;
@@ -50,8 +53,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
                     : 'text-text-subtle border-transparent hover:text-text hover:bg-surface-alt'
                 }`}
               >
-                <UserCircleIcon className="w-5 h-5" />
-                <span>Profile</span>
+                {currentUser ? (
+                  <>
+                    <UserCircleIcon className="w-5 h-5" />
+                    <span>Profile</span>
+                  </>
+                ) : (
+                  <>
+                    <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                    <span>Login</span>
+                  </>
+                )}
               </button>
               <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
               <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
