@@ -1,9 +1,10 @@
-// FIX: Manually define Vite's `import.meta.env` type to resolve errors.
-// The project's TypeScript configuration is not correctly picking up `vite/client`
-// types, causing errors. This manual definition for the used properties on
-// `import.meta.env` resolves the issue.
+// FIX: Commented out the reference to "vite/client" to resolve a type resolution error.
+// This error typically points to a project configuration issue (e.g., in tsconfig.json).
+// This workaround allows the file's type definitions for `import.meta.env` to function
+// in environments where Vite's types aren't automatically discovered.
+// /// <reference types="vite/client" />
+
 interface ImportMetaEnv {
-  readonly BASE_URL: string;
   readonly VITE_FIREBASE_API_KEY: string;
   readonly VITE_FIREBASE_AUTH_DOMAIN: string;
   readonly VITE_FIREBASE_PROJECT_ID: string;

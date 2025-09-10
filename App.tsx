@@ -9,7 +9,7 @@ import { StatsView } from './components/StatsView';
 import { GroundsView, LeagueTableView } from './components/LeagueTableView';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorDisplay } from './components/ErrorDisplay';
-import type { Match, User } from './types';
+import type { Match, User, View } from './types';
 import { fetchMatches } from './services/apiService';
 import { useTheme } from './hooks/useTheme';
 import { allBadges } from './badges';
@@ -19,8 +19,7 @@ import { TeamStatsView } from './components/TeamStatsView';
 import { useAuth } from './contexts/AuthContext';
 import { NearbyMatchesView } from './components/NearbyMatchesView';
 import { DataUploader } from './components/DataUploader';
-
-export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS' | 'NEARBY' | 'ADMIN';
+import { AIChatView } from './components/AIChatView';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('UPCOMING');
@@ -56,18 +55,18 @@ const App: React.FC = () => {
   
   if (authLoading) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-surface">
             <LoadingSpinner />
             <p className="mt-4 text-text-subtle">Connecting to The Scrum Book...</p>
         </div>
     );
   }
 
-  if (!profile) {
+  if (!currentUser || !profile) {
     return (
         <div className="container mx-auto p-4 md:p-6 min-h-screen flex items-center justify-center">
             <ErrorDisplay 
-                message="Could not connect to the service. Please check your internet connection and refresh the page."
+                message="Could not connect to The Scrum Book. Please check your internet connection and try refreshing the page."
                 onRetry={() => window.location.reload()}
             />
         </div>
@@ -81,14 +80,14 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
-    if (loading) {
+    if (error) {
+      return <ErrorDisplay message={error} onRetry={loadAppData} />;
+    }
+    if (loading && !error) {
       return <div className="flex flex-col items-center justify-center h-64">
         <LoadingSpinner />
         <p className="mt-4 text-text-subtle">Fetching season fixtures...</p>
       </div>;
-    }
-    if (error) {
-      return <ErrorDisplay message={error} onRetry={loadAppData} />;
     }
     
     switch (view) {
@@ -129,6 +128,8 @@ const App: React.FC = () => {
         return <AboutView />;
       case 'BADGES':
         return <BadgesView allBadges={allBadges} earnedBadgeIds={earnedBadgeIds} />;
+      case 'AI_CHAT':
+        return <AIChatView />;
       case 'PROFILE':
         return <ProfileView
                   user={user}
@@ -153,7 +154,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen font-sans text-text">
+    <div className="min-h-screen font-sans text-text app-background">
       <Header currentView={view} setView={setView} theme={theme} toggleTheme={toggleTheme} />
       <main className="container mx-auto p-4 md:p-6 pb-24 md:pb-6">
         {renderContent()}

@@ -4,7 +4,7 @@ import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
 import { TeamSelectionModal } from './TeamSelectionModal';
 import { AvatarModal } from './AvatarModal';
-import { View } from '../App';
+import type { View } from '../types';
 import { UserCircleIcon, PencilIcon, ListBulletIcon, Squares2X2Icon, ChartBarIcon, TrophyIcon, StarIcon, ArrowLeftOnRectangleIcon, ServerIcon } from './Icons';
 
 interface ProfileViewProps {

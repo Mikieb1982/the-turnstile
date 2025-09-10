@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// FIX: Remove v9 modular imports.
 import { db } from '../firebase';
 import { mockMatches, mockLeagueTable } from '../services/mockData';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -20,6 +21,7 @@ export const DataUploader: React.FC = () => {
         }
 
         try {
+            // FIX: Use v8-compatible batch write API.
             const batch = db.batch();
 
             // Upload matches

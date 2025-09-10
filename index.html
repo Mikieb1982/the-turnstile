@@ -37,6 +37,9 @@
         --clr-border: #334155;
       }
       body {
+        background-color: var(--clr-surface);
+      }
+      .app-background {
         background-color: var(--pitch-color-1);
         background-image: 
           var(--pitch-overlay-light),
@@ -50,7 +53,7 @@
         background-attachment: fixed;
       }
 
-      html.dark body {
+      html.dark .app-background {
         background-image: 
           linear-gradient(var(--pitch-overlay-dark), var(--pitch-overlay-dark)),
           repeating-linear-gradient(
@@ -111,7 +114,8 @@
     "msw": "https://aistudiocdn.com/msw@^2.4.1",
     "msw/browser": "https://aistudiocdn.com/msw@^2.4.1/browser",
     "msw/": "https://aistudiocdn.com/msw@^2.11.1/",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.2.1/"
+    "firebase/": "https://aistudiocdn.com/firebase@^12.2.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^0.20.0"
   }
 }
 </script>

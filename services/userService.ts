@@ -1,4 +1,6 @@
-import firebase, { db } from '../firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import { db } from '../firebase';
 import type { Profile, AttendedMatch } from '../types';
 
 export const getUserProfile = async (uid: string): Promise<Profile | null> => {
@@ -30,7 +32,7 @@ export const addAttendedMatchToProfile = async (uid: string, attendedMatch: Atte
 export const removeAttendedMatchFromProfile = async (uid: string, matchId: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
     if (userProfile) {
-        const updatedMatches = userProfile.attendedMatches.filter(am => am.match.id !== matchId);
+        const updatedMatches = (userProfile.attendedMatches || []).filter(am => am.match.id !== matchId);
         await updateUserProfile(uid, { attendedMatches: updatedMatches });
     }
 };
@@ -40,4 +42,17 @@ export const addBadgeToProfile = async (uid: string, badgeIds: string[]): Promis
     await docRef.update({
         earnedBadgeIds: firebase.firestore.FieldValue.arrayUnion(...badgeIds)
     });
+};
+
+export const updateAttendedMatchPhotoInProfile = async (uid: string, matchId: string, photoUrl: string): Promise<void> => {
+    const userProfile = await getUserProfile(uid);
+    if (userProfile) {
+        const updatedMatches = (userProfile.attendedMatches || []).map(am => {
+            if (am.match.id === matchId) {
+                return { ...am, photoUrl };
+            }
+            return am;
+        });
+        await updateUserProfile(uid, { attendedMatches: updatedMatches });
+    }
 };

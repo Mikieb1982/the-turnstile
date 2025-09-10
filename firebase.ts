@@ -1,6 +1,9 @@
+// FIX: Update Firebase imports to use the v9 compat libraries to resolve module export errors.
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,16 +16,17 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase if it hasn't been already
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+
 
 // Export Firebase services
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+export const storage = firebase.storage();
 
 // Enable offline persistence
+// FIX: Use the v8-compatible API for enabling persistence.
 db.enablePersistence().catch((err) => {
     if (err.code === 'failed-precondition') {
         // This can happen if multiple tabs are open.
@@ -32,5 +36,3 @@ db.enablePersistence().catch((err) => {
         console.warn('Firestore persistence is not supported in this browser.');
     }
 });
-
-export default firebase;

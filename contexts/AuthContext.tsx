@@ -1,18 +1,22 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import firebase from 'firebase/compat/app';
-import { auth } from '../firebase';
+// FIX: Update Firebase imports for v9 compat API.
+import type firebase from 'firebase/compat/app';
+import { auth, storage } from '../firebase';
 import type { User, AttendedMatch, Profile } from '../types';
-import { getUserProfile, createUserProfile, addAttendedMatchToProfile, removeAttendedMatchFromProfile, updateUserProfile, addBadgeToProfile } from '../services/userService';
+import { getUserProfile, createUserProfile, addAttendedMatchToProfile, removeAttendedMatchFromProfile, updateUserProfile, addBadgeToProfile, updateAttendedMatchPhotoInProfile } from '../services/userService';
 import { checkAndAwardBadges } from '../badges';
 
 interface AuthContextType {
+    // FIX: Use firebase.User type from the compat library.
     currentUser: firebase.User | null;
     profile: Profile | null;
     loading: boolean;
+    login: () => Promise<void>;
     logout: () => Promise<void>;
     addAttendedMatch: (match: AttendedMatch['match']) => Promise<void>;
     removeAttendedMatch: (matchId: string) => Promise<void>;
     updateUser: (user: Partial<User>) => Promise<void>;
+    addPhotoToMatch: (matchId: string, photoFile: File) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,17 +39,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // FIX: Use v8-compatible onAuthStateChanged method.
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setCurrentUser(user);
                 try {
                     const userProfile = await getUserProfile(user.uid);
                     if (userProfile) {
-                        setProfile(userProfile);
+                        // Sanitize the profile to ensure all required fields are present and prevent runtime errors.
+                        const sanitizedProfile: Profile = {
+                            user: userProfile.user || { name: user.displayName || 'Rugby Fan' },
+                            attendedMatches: userProfile.attendedMatches || [],
+                            earnedBadgeIds: userProfile.earnedBadgeIds || [],
+                        };
+                        setProfile(sanitizedProfile);
                     } else {
                         // Create a profile for a new anonymous user
                         const newProfile: Profile = {
-                            user: { name: 'Rugby Fan' },
+                            user: { name: user.displayName || 'Rugby Fan' },
                             attendedMatches: [],
                             earnedBadgeIds: [],
                         };
@@ -70,20 +81,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     setLoading(false);
                 }
             } else {
-                // If no user, automatically sign in as guest
-                auth.signInAnonymously().catch(error => {
+                // User is signed out, attempt to sign in anonymously.
+                try {
+                    // FIX: Use v8-compatible signInAnonymously method.
+                    await auth.signInAnonymously();
+                } catch (error) {
                     console.error("Auto anonymous sign-in failed", error);
-                    setLoading(false); // Stop loading on failure
-                });
+                    // If sign in fails, we can't do much.
+                    // Keep user as null and stop loading so the app can show an error.
+                    setCurrentUser(null);
+                    setProfile(null);
+                    setLoading(false);
+                }
             }
         });
 
         return unsubscribe;
     }, []);
 
+    const login = async () => {
+        setLoading(true);
+        try {
+            // FIX: Use v8-compatible signInAnonymously method.
+            await auth.signInAnonymously();
+            // onAuthStateChanged will handle setting the user and profile
+        } catch (error) {
+            console.error("Auto anonymous sign-in failed", error);
+            setLoading(false);
+        }
+    };
+
     const logout = async () => {
         setLoading(true);
-        // Signing out will trigger onAuthStateChanged, which will create a new anonymous user.
+        // Signing out will trigger onAuthStateChanged, which will clear user and profile.
+        // FIX: Use v8-compatible signOut method.
         await auth.signOut();
     };
 
@@ -95,13 +126,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             attendedOn: new Date().toISOString()
         };
 
-        const updatedMatches = [...profile.attendedMatches, newAttendedMatch];
-        const newlyEarnedBadges = checkAndAwardBadges(updatedMatches, profile.earnedBadgeIds, profile.user);
+        const updatedMatches = [...(profile.attendedMatches || []), newAttendedMatch];
+        const newlyEarnedBadges = checkAndAwardBadges(updatedMatches, profile.earnedBadgeIds || [], profile.user);
 
         // Optimistically update state for a responsive UI
         setProfile(prev => {
             if (!prev) return null;
-            const updatedBadgeIds = [...prev.earnedBadgeIds, ...newlyEarnedBadges];
+            const updatedBadgeIds = [...(prev.earnedBadgeIds || []), ...newlyEarnedBadges];
             return { ...prev, attendedMatches: updatedMatches, earnedBadgeIds: updatedBadgeIds };
         });
 
@@ -124,7 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (!currentUser || !profile) return;
         
         // Optimistically update state
-        const updatedMatches = profile.attendedMatches.filter(am => am.match.id !== matchId);
+        const updatedMatches = (profile.attendedMatches || []).filter(am => am.match.id !== matchId);
         setProfile(prev => prev ? { ...prev, attendedMatches: updatedMatches } : null);
 
         // Sync with Firestore, handling offline state
@@ -159,14 +190,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const addPhotoToMatch = async (matchId: string, photoFile: File) => {
+        if (!currentUser || !profile) return;
+
+        const filePath = `users/${currentUser.uid}/photos/${matchId}-${photoFile.name}`;
+        // FIX: Use v8-compatible Storage API.
+        const storageRef = storage.ref(filePath);
+        const fileSnapshot = await storageRef.put(photoFile);
+        const photoUrl = await fileSnapshot.ref.getDownloadURL();
+
+        const updatedMatches = (profile.attendedMatches || []).map(am => {
+            if (am.match.id === matchId) {
+                return { ...am, photoUrl };
+            }
+            return am;
+        });
+
+        // Optimistically update local state
+        setProfile(prev => prev ? { ...prev, attendedMatches: updatedMatches } : null);
+
+        // Sync with Firestore
+        try {
+            await updateAttendedMatchPhotoInProfile(currentUser.uid, matchId, photoUrl);
+        } catch (error: any) {
+            if (error.code === 'unavailable') {
+                console.warn('Offline: Photo URL update saved locally and will sync when connection is restored.');
+            } else {
+                console.error("Error updating photo URL in profile:", error);
+                // Optional: revert optimistic update on failure
+            }
+        }
+    };
+
     const value = {
         currentUser,
         profile,
         loading,
+        login,
         logout,
         addAttendedMatch,
         removeAttendedMatch,
-        updateUser
+        updateUser,
+        addPhotoToMatch
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,6 +1,6 @@
 import React from 'react';
-import type { View } from '../App';
-import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, BuildingStadiumIcon, LocationMarkerIcon } from './Icons';
+import type { View } from '../types';
+import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, BuildingStadiumIcon, LocationMarkerIcon, SparklesIcon } from './Icons';
 
 interface MobileNavProps {
   currentView: View;
@@ -37,6 +37,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView }) =>
         { view: 'PROFILE', label: 'Profile', icon: UserCircleIcon, isActive: isProfileActive },
         { view: 'UPCOMING', label: 'Upcoming', icon: CalendarIcon, isActive: currentView === 'UPCOMING' },
         { view: 'NEARBY', label: 'Nearby', icon: LocationMarkerIcon, isActive: currentView === 'NEARBY' },
+        { view: 'AI_CHAT', label: 'AI Chat', icon: SparklesIcon, isActive: currentView === 'AI_CHAT' },
         { view: 'MATCH_DAY', label: 'Fixtures', icon: ListBulletIcon, isActive: currentView === 'MATCH_DAY' },
         { view: 'LEAGUE_TABLE', label: 'Table', icon: TableCellsIcon, isActive: currentView === 'LEAGUE_TABLE' },
         { view: 'TEAM_STATS', label: 'Teams', icon: BuildingStadiumIcon, isActive: currentView === 'TEAM_STATS' },
