@@ -1,4 +1,3 @@
-// FIX: Remove v9 modular imports, as the app is being switched to the compat API.
 import { db } from '../firebase';
 import type { Match, LeagueStanding } from "../types";
 import { mockMatches, mockLeagueTable } from './mockData';
@@ -8,19 +7,25 @@ import { mockMatches, mockLeagueTable } from './mockData';
  */
 export const fetchMatches = async (): Promise<Match[]> => {
     try {
-        // FIX: Use v8-compatible API for Firestore queries.
         const matchesCollection = db.collection('matches');
         const q = matchesCollection.orderBy('startTime', 'asc');
         const snapshot = await q.get();
         
-        // If Firestore is offline and cache is empty, or the collection is empty on the server,
-        // it's better to fall back to mock data than show an empty screen.
         if (snapshot.empty) {
             console.warn('Firestore "matches" collection is empty or unavailable from cache. Using mock data.');
             return mockMatches;
         }
-        const matches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
+        
+        const matches = snapshot.docs.map(doc => {
+            const data = doc.data();
+            // Firestore may return a Timestamp object; convert it to an ISO string the app expects.
+            if (data.startTime && typeof data.startTime.toDate === 'function') {
+                data.startTime = data.startTime.toDate().toISOString();
+            }
+            return { id: doc.id, ...data } as Match;
+        });
         return matches;
+
     } catch (error: any) {
         if (error.code === 'unavailable') {
             console.warn("Firestore is offline. Falling back to mock data for matches.");
@@ -37,7 +42,6 @@ export const fetchMatches = async (): Promise<Match[]> => {
  */
 export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
     try {
-        // FIX: Use v8-compatible API for Firestore queries.
         const leagueTableCollection = db.collection('leagueTable');
         const q = leagueTableCollection.orderBy('rank', 'asc');
         const snapshot = await q.get();

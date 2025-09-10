@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { db } from '../firebase';
-import type { Profile, AttendedMatch } from '../types';
+import type { Profile, AttendedMatch, Prediction } from '../types';
 
 export const getUserProfile = async (uid: string): Promise<Profile | null> => {
     const docRef = db.collection('users').doc(uid);
@@ -31,8 +31,8 @@ export const addAttendedMatchToProfile = async (uid: string, attendedMatch: Atte
 
 export const removeAttendedMatchFromProfile = async (uid: string, matchId: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile) {
-        const validMatches = (userProfile.attendedMatches || []).filter(am => am && am.match);
+    if (userProfile && userProfile.attendedMatches) {
+        const validMatches = userProfile.attendedMatches.filter(am => am && am.match && am.match.id);
         const updatedMatches = validMatches.filter(am => am.match.id !== matchId);
         await updateUserProfile(uid, { attendedMatches: updatedMatches });
     }
@@ -47,8 +47,8 @@ export const addBadgeToProfile = async (uid: string, badgeIds: string[]): Promis
 
 export const updateAttendedMatchPhotoInProfile = async (uid: string, matchId: string, photoUrl: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile) {
-        const validMatches = (userProfile.attendedMatches || []).filter(am => am && am.match);
+    if (userProfile && userProfile.attendedMatches) {
+        const validMatches = userProfile.attendedMatches.filter(am => am && am.match && am.match.id);
         const updatedMatches = validMatches.map(am => {
             if (am.match.id === matchId) {
                 return { ...am, photoUrl };
@@ -97,4 +97,21 @@ export const removeFriendFromProfile = async (uid: string, friendId: string): Pr
         friendIds: firebase.firestore.FieldValue.arrayRemove(uid)
     });
     await batch.commit();
+};
+
+export const savePrediction = async (uid: string, prediction: Prediction): Promise<void> => {
+    const userProfile = await getUserProfile(uid);
+    if (userProfile) {
+        const otherPredictions = (userProfile.predictions || []).filter(p => p.matchId !== prediction.matchId);
+        const updatedPredictions = [...otherPredictions, prediction];
+        await updateUserProfile(uid, { predictions: updatedPredictions });
+    }
+};
+
+export const deletePrediction = async (uid: string, matchId: string): Promise<void> => {
+    const userProfile = await getUserProfile(uid);
+    if (userProfile) {
+        const updatedPredictions = (userProfile.predictions || []).filter(p => p.matchId !== matchId);
+        await updateUserProfile(uid, { predictions: updatedPredictions });
+    }
 };

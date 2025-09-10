@@ -1,6 +1,6 @@
 import React from 'react';
 import type { View } from '../types';
-import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, SparklesIcon, ArrowRightOnRectangleIcon } from './Icons';
+import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, SparklesIcon, ArrowRightOnRectangleIcon, ClipboardDocumentCheckIcon } from './Icons';
 import type firebase from 'firebase/compat/app';
 
 interface MobileNavProps {
@@ -43,11 +43,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
             isActive: isProfileActive 
         },
         { view: 'UPCOMING', label: 'Upcoming', icon: CalendarIcon, isActive: currentView === 'UPCOMING' },
-        { view: 'NEARBY', label: 'Nearby', icon: LocationMarkerIcon, isActive: currentView === 'NEARBY' },
-        { view: 'COMMUNITY', label: 'Community', icon: UsersIcon, isActive: currentView === 'COMMUNITY' },
         { view: 'MATCH_DAY', label: 'Fixtures', icon: ListBulletIcon, isActive: currentView === 'MATCH_DAY' },
         { view: 'LEAGUE_TABLE', label: 'Table', icon: TableCellsIcon, isActive: currentView === 'LEAGUE_TABLE' },
-        { view: 'AI_CHAT', label: 'AI Chat', icon: SparklesIcon, isActive: currentView === 'AI_CHAT' },
+        { view: 'PREDICTION_GAMES', label: 'Predictions', icon: ClipboardDocumentCheckIcon, isActive: currentView === 'PREDICTION_GAMES' },
+        { view: 'COMMUNITY', label: 'Community', icon: UsersIcon, isActive: currentView === 'COMMUNITY' },
     ];
 
     return (

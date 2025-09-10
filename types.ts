@@ -1,8 +1,25 @@
-// FIX: Add an explicit import for React types to resolve type conflicts across files.
+// Fix: explicit React type imports so this file compiles without relying on a global React namespace
 import type { FC, SVGProps } from 'react';
-// FIX: Removed circular dependency. The User type is defined in this file and should not be imported from App.tsx.
 
-export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS' | 'NEARBY' | 'ADMIN' | 'AI_CHAT' | 'COMMUNITY';
+// This file defines the core data structures for the application.
+// By centralizing types, we ensure consistency across components and services.
+
+export type View =
+  | 'UPCOMING'
+  | 'MATCH_DAY'
+  | 'LEAGUE_TABLE'
+  | 'GROUNDS'
+  | 'MY_MATCHES'
+  | 'STATS'
+  | 'ABOUT'
+  | 'BADGES'
+  | 'PROFILE'
+  | 'TEAM_STATS'
+  | 'NEARBY'
+  | 'ADMIN'
+  | 'AI_CHAT'
+  | 'COMMUNITY'
+  | 'PREDICTION_GAMES';
 
 export interface Team {
   id: string;
@@ -50,34 +67,33 @@ export interface AttendedMatch {
 }
 
 export interface Badge {
-    id: string;
-    name: string;
-    description: string;
-    category: 'Milestone' | 'Tournament';
-    // FIX: Use the explicitly imported FC and SVGProps types to match the type definition used in the Icon components.
-    icon: FC<SVGProps<SVGSVGElement>>;
+  id: string;
+  name: string;
+  description: string;
+  category: 'Milestone' | 'Tournament';
+  icon: FC<SVGProps<SVGSVGElement>>;
 }
 
 export interface LeagueStanding {
-    rank: number;
-    teamId: string;
-    teamName: string;
-    teamLogoUrl: string;
-    played: number;
-    wins: number;
-    draws: number;
-    losses: number;
-    points: number;
-    form: string; // e.g., "WWLWL"
+  rank: number;
+  teamId: string;
+  teamName: string;
+  teamLogoUrl: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  points: number;
+  form: string; // e.g., "WWLWL"
 }
 
 export interface Venue {
-    name: string;
-    team: string;
-    lat: number;
-    lon: number;
-    x?: number; // for SVG map
-    y?: number; // for SVG map
+  name: string;
+  team: string;
+  lat: number;
+  lon: number;
+  x?: number; // for SVG map
+  y?: number; // for SVG map
 }
 
 export interface User {
@@ -100,12 +116,19 @@ export interface TeamInfo {
   stadium: StadiumInfo;
 }
 
+export interface Prediction {
+  matchId: string;
+  predictedWinnerId: string | 'draw';
+  predictedMargin: number;
+}
+
 // New types for multi-profile support
 export interface Profile {
   user: User;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
   friendIds: string[];
+  predictions?: Prediction[];
 }
 
 export interface ScrumBookData {

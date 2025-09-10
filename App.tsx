@@ -22,12 +22,13 @@ import { DataUploader } from './components/DataUploader';
 import { AIChatView } from './components/AIChatView';
 import { CommunityView } from './components/CommunityView';
 import { LoginPromptView } from './components/LoginPromptView';
+import { PredictionGamesView } from './components/PredictionGamesView';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('UPCOMING');
   const [theme, toggleTheme] = useTheme();
 
-  const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
+  const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser, saveUserPrediction, deleteUserPrediction } = useAuth();
   
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -82,7 +83,7 @@ const App: React.FC = () => {
       </div>;
     }
 
-    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'AI_CHAT', 'ADMIN'];
+    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'AI_CHAT', 'ADMIN', 'PREDICTION_GAMES'];
     if (!currentUser && protectedViews.includes(view)) {
       return <LoginPromptView onLogin={login} />;
     }
@@ -138,6 +139,13 @@ const App: React.FC = () => {
         return <AIChatView />;
       case 'COMMUNITY':
         return <CommunityView />;
+      case 'PREDICTION_GAMES':
+        return profile ? <PredictionGamesView
+                  matches={matches}
+                  predictions={profile.predictions || []}
+                  onSavePrediction={saveUserPrediction}
+                  onDeletePrediction={deleteUserPrediction}
+                /> : <LoadingSpinner />;
       case 'PROFILE':
         return profile ? <ProfileView
                   user={profile.user}
