@@ -22,7 +22,7 @@ export const AIChatView: React.FC = () => {
 
     useEffect(() => {
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+            const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
             chatRef.current = ai.chats.create({
                 model: 'gemini-2.5-flash',
                 config: {
