@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, SparklesIcon } from './Icons';
+import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, SparklesIcon, UsersIcon } from './Icons';
 import type { View } from '../types';
 
 interface HeaderProps {
@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
               <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
               <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
               <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
-              <NavButton view="TEAM_STATS" label="Teams & Stadiums" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
+              <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
               <NavButton view="AI_CHAT" label="AI Chat" icon={<SparklesIcon className="w-5 h-5" />} />
               <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
             </nav>

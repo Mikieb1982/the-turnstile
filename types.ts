@@ -2,7 +2,7 @@
 import type { FC, SVGProps } from 'react';
 // FIX: Removed circular dependency. The User type is defined in this file and should not be imported from App.tsx.
 
-export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS' | 'NEARBY' | 'ADMIN' | 'AI_CHAT';
+export type View = 'UPCOMING' | 'MATCH_DAY' | 'LEAGUE_TABLE' | 'GROUNDS' | 'MY_MATCHES' | 'STATS' | 'ABOUT' | 'BADGES' | 'PROFILE' | 'TEAM_STATS' | 'NEARBY' | 'ADMIN' | 'AI_CHAT' | 'COMMUNITY';
 
 export interface Team {
   id: string;
@@ -105,6 +105,7 @@ export interface Profile {
   user: User;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
+  friendIds: string[];
 }
 
 export interface ScrumBookData {

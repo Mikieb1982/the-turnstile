@@ -31,8 +31,8 @@ export const addAttendedMatchToProfile = async (uid: string, attendedMatch: Atte
 
 export const removeAttendedMatchFromProfile = async (uid: string, matchId: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile) {
-        const updatedMatches = (userProfile.attendedMatches || []).filter(am => am.match.id !== matchId);
+    if (userProfile && userProfile.attendedMatches) {
+        const updatedMatches = userProfile.attendedMatches.filter(am => am.match.id !== matchId);
         await updateUserProfile(uid, { attendedMatches: updatedMatches });
     }
 };
@@ -46,8 +46,8 @@ export const addBadgeToProfile = async (uid: string, badgeIds: string[]): Promis
 
 export const updateAttendedMatchPhotoInProfile = async (uid: string, matchId: string, photoUrl: string): Promise<void> => {
     const userProfile = await getUserProfile(uid);
-    if (userProfile) {
-        const updatedMatches = (userProfile.attendedMatches || []).map(am => {
+    if (userProfile && userProfile.attendedMatches) {
+        const updatedMatches = userProfile.attendedMatches.map(am => {
             if (am.match.id === matchId) {
                 return { ...am, photoUrl };
             }
@@ -55,4 +55,44 @@ export const updateAttendedMatchPhotoInProfile = async (uid: string, matchId: st
         });
         await updateUserProfile(uid, { attendedMatches: updatedMatches });
     }
+};
+
+export const fetchAllUsers = async (currentUid: string): Promise<(Profile & { uid: string })[]> => {
+    const usersCollection = db.collection('users');
+    const snapshot = await usersCollection.get();
+    if (snapshot.empty) {
+        return [];
+    }
+    return snapshot.docs
+        .filter(doc => doc.id !== currentUid)
+        .map(doc => ({
+            uid: doc.id,
+            ...(doc.data() as Profile)
+        }));
+};
+
+export const addFriendToProfile = async (uid: string, friendId: string): Promise<void> => {
+    const batch = db.batch();
+    const userDocRef = db.collection('users').doc(uid);
+    batch.update(userDocRef, {
+        friendIds: firebase.firestore.FieldValue.arrayUnion(friendId)
+    });
+    const friendDocRef = db.collection('users').doc(friendId);
+    batch.update(friendDocRef, {
+        friendIds: firebase.firestore.FieldValue.arrayUnion(uid)
+    });
+    await batch.commit();
+};
+
+export const removeFriendFromProfile = async (uid: string, friendId: string): Promise<void> => {
+    const batch = db.batch();
+    const userDocRef = db.collection('users').doc(uid);
+    batch.update(userDocRef, {
+        friendIds: firebase.firestore.FieldValue.arrayRemove(friendId)
+    });
+    const friendDocRef = db.collection('users').doc(friendId);
+    batch.update(friendDocRef, {
+        friendIds: firebase.firestore.FieldValue.arrayRemove(uid)
+    });
+    await batch.commit();
 };

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import type firebase from 'firebase/compat/app';
 import { auth, storage } from '../firebase';
 import type { User, AttendedMatch, Profile } from '../types';
-import { getUserProfile, createUserProfile, addAttendedMatchToProfile, removeAttendedMatchFromProfile, updateUserProfile, addBadgeToProfile, updateAttendedMatchPhotoInProfile } from '../services/userService';
+import { getUserProfile, createUserProfile, addAttendedMatchToProfile, removeAttendedMatchFromProfile, updateUserProfile, addBadgeToProfile, updateAttendedMatchPhotoInProfile, addFriendToProfile, removeFriendFromProfile } from '../services/userService';
 import { checkAndAwardBadges } from '../badges';
 
 interface AuthContextType {
@@ -17,6 +17,8 @@ interface AuthContextType {
     removeAttendedMatch: (matchId: string) => Promise<void>;
     updateUser: (user: Partial<User>) => Promise<void>;
     addPhotoToMatch: (matchId: string, photoFile: File) => Promise<void>;
+    addFriend: (friendId: string) => Promise<void>;
+    removeFriend: (friendId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -46,11 +48,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 try {
                     const userProfile = await getUserProfile(user.uid);
                     if (userProfile) {
-                        // Sanitize the profile to ensure all required fields are present and prevent runtime errors.
+                        // Sanitize the profile to ensure all required fields are present and of the correct type.
+                        const finalUser = (userProfile.user && typeof userProfile.user === 'object') 
+                            ? (userProfile.user as User)
+                            : { name: user.displayName || 'Rugby Fan' };
+
                         const sanitizedProfile: Profile = {
-                            user: userProfile.user || { name: user.displayName || 'Rugby Fan' },
-                            attendedMatches: userProfile.attendedMatches || [],
-                            earnedBadgeIds: userProfile.earnedBadgeIds || [],
+                            user: {
+                                name: finalUser.name || user.displayName || 'Rugby Fan',
+                                favoriteTeamId: finalUser.favoriteTeamId,
+                                avatarUrl: finalUser.avatarUrl,
+                            },
+                            attendedMatches: Array.isArray(userProfile.attendedMatches) ? userProfile.attendedMatches : [],
+                            earnedBadgeIds: Array.isArray(userProfile.earnedBadgeIds) ? userProfile.earnedBadgeIds : [],
+                            friendIds: Array.isArray(userProfile.friendIds) ? userProfile.friendIds : [],
                         };
                         setProfile(sanitizedProfile);
                     } else {
@@ -59,6 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                             user: { name: user.displayName || 'Rugby Fan' },
                             attendedMatches: [],
                             earnedBadgeIds: [],
+                            friendIds: [],
                         };
                         await createUserProfile(user.uid, newProfile);
                         setProfile(newProfile);
@@ -75,6 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                         user: { name: 'Guest' },
                         attendedMatches: [],
                         earnedBadgeIds: [],
+                        friendIds: [],
                     };
                     setProfile(temporaryProfile);
                 } finally {
@@ -222,6 +235,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const addFriend = async (friendId: string) => {
+        if (!currentUser || !profile) return;
+        const updatedFriendIds = [...profile.friendIds, friendId];
+        setProfile({ ...profile, friendIds: updatedFriendIds });
+        try {
+            await addFriendToProfile(currentUser.uid, friendId);
+        } catch (error) {
+            console.error("Error adding friend:", error);
+            setProfile(profile); // Revert on error
+        }
+    };
+
+    const removeFriend = async (friendId: string) => {
+        if (!currentUser || !profile) return;
+        const updatedFriendIds = profile.friendIds.filter(id => id !== friendId);
+        setProfile({ ...profile, friendIds: updatedFriendIds });
+        try {
+            await removeFriendFromProfile(currentUser.uid, friendId);
+        } catch (error) {
+            console.error("Error removing friend:", error);
+            setProfile(profile); // Revert on error
+        }
+    };
+
     const value = {
         currentUser,
         profile,
@@ -231,7 +268,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         addAttendedMatch,
         removeAttendedMatch,
         updateUser,
-        addPhotoToMatch
+        addPhotoToMatch,
+        addFriend,
+        removeFriend,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -20,6 +20,7 @@ import { useAuth } from './contexts/AuthContext';
 import { NearbyMatchesView } from './components/NearbyMatchesView';
 import { DataUploader } from './components/DataUploader';
 import { AIChatView } from './components/AIChatView';
+import { CommunityView } from './components/CommunityView';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('UPCOMING');
@@ -130,6 +131,8 @@ const App: React.FC = () => {
         return <BadgesView allBadges={allBadges} earnedBadgeIds={earnedBadgeIds} />;
       case 'AI_CHAT':
         return <AIChatView />;
+      case 'COMMUNITY':
+        return <CommunityView />;
       case 'PROFILE':
         return <ProfileView
                   user={user}
