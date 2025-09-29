@@ -17,7 +17,6 @@ export type View =
   | 'TEAM_STATS'
   | 'NEARBY'
   | 'ADMIN'
-  | 'AI_CHAT'
   | 'COMMUNITY'
   | 'PREDICTION_GAMES';
 

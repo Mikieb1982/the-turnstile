@@ -9,7 +9,7 @@ import { StatsView } from './components/StatsView';
 import { GroundsView, LeagueTableView } from './components/LeagueTableView';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorDisplay } from './components/ErrorDisplay';
-import type { Match, User, View } from './types';
+import type { Match, View } from './types';
 import { fetchMatches } from './services/apiService';
 import { useTheme } from './hooks/useTheme';
 import { allBadges } from './badges';
@@ -19,7 +19,6 @@ import { TeamStatsView } from './components/TeamStatsView';
 import { useAuth } from './contexts/AuthContext';
 import { NearbyMatchesView } from './components/NearbyMatchesView';
 import { DataUploader } from './components/DataUploader';
-import { AIChatView } from './components/AIChatView';
 import { CommunityView } from './components/CommunityView';
 import { LoginPromptView } from './components/LoginPromptView';
 import { PredictionGamesView } from './components/PredictionGamesView';
@@ -83,7 +82,7 @@ const App: React.FC = () => {
       </div>;
     }
 
-    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'AI_CHAT', 'ADMIN', 'PREDICTION_GAMES'];
+    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN', 'PREDICTION_GAMES'];
     if (!currentUser && protectedViews.includes(view)) {
       return <LoginPromptView onLogin={login} />;
     }
@@ -135,8 +134,6 @@ const App: React.FC = () => {
         return profile ? <StatsView user={profile.user} attendedMatches={profile.attendedMatches} /> : <LoadingSpinner />;
       case 'BADGES':
         return profile ? <BadgesView allBadges={allBadges} earnedBadgeIds={profile.earnedBadgeIds} /> : <LoadingSpinner />;
-      case 'AI_CHAT':
-        return <AIChatView />;
       case 'COMMUNITY':
         return <CommunityView />;
       case 'PREDICTION_GAMES':
@@ -172,11 +169,15 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans text-text app-background">
       <Header currentView={view} setView={setView} theme={theme} toggleTheme={toggleTheme} currentUser={currentUser} />
-      <main className="container mx-auto p-4 md:p-6 pb-24 md:pb-6">
-        {renderContent()}
+      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-12 pb-24 md:pb-16">
+        <div className="space-y-8">
+          {renderContent()}
+        </div>
       </main>
       <MobileNav currentView={view} setView={setView} currentUser={currentUser} />
-      <footer className="hidden md:block text-center py-6 text-text-subtle border-t border-border mt-8">
+      <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
+        <p className="font-semibold text-text">The Scrum Book</p>
+        <p className="mt-1">A living playbook for product teams who want to move from theory to shipping value every sprint.</p>
       </footer>
     </div>
   );
