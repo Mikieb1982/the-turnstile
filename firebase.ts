@@ -5,6 +5,24 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 
 
+const requiredKeys = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID'
+];
+
+const missingKeys = requiredKeys.filter((key) => !import.meta.env[key]);
+
+if (missingKeys.length > 0) {
+  console.warn(
+    `Firebase configuration is incomplete. Missing values for: ${missingKeys.join(', ')}.\n` +
+      'Update your environment variables (see .env.example) before using authenticated features.'
+  );
+}
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,14 +34,21 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+// Initialize Firebase (guard against re-initialisation during hot reloads)
+const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
 
 
 // Export Firebase services
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const storage = firebase.storage();
+
+if (import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true') {
+  console.info('Using Firebase emulators for local development.');
+  auth.useEmulator('http://localhost:9099');
+  db.useEmulator('localhost', 8080);
+  storage.useEmulator('localhost', 9199);
+}
 
 // Enable offline persistence
 // FIX: Use the v8-compatible API for enabling persistence.
