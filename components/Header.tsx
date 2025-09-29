@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, SparklesIcon, UsersIcon, ArrowRightOnRectangleIcon, ClipboardDocumentCheckIcon } from './Icons';
+import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, UsersIcon, ArrowRightOnRectangleIcon, ClipboardDocumentCheckIcon } from './Icons';
 import type { View } from '../types';
 import type firebase from 'firebase/compat/app';
 
@@ -69,9 +69,9 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
               <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
               <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
               <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
+              <NavButton view="GROUNDS" label="Grounds" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
               <NavButton view="PREDICTION_GAMES" label="Predictions" icon={<ClipboardDocumentCheckIcon className="w-5 h-5" />} />
               <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
-              <NavButton view="AI_CHAT" label="AI Chat" icon={<SparklesIcon className="w-5 h-5" />} />
               <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
             </nav>
             <button
