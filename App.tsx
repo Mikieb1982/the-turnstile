@@ -96,28 +96,30 @@ const App: React.FC = () => {
 
     switch (view) {
       case 'UPCOMING':
-        return <MatchList 
-                  matches={matches}
-                  setMatches={setMatches}
-                  attendedMatchIds={attendedMatchIds}
-                  onAttend={handleAttend} 
-                  onUnattend={handleUnattend}
-                  onRefresh={loadAppData}
-                />;
+        return (
+          <MatchList
+            matches={matches}
+            attendedMatchIds={attendedMatchIds}
+            onAttend={handleAttend}
+            onRefresh={loadAppData}
+          />
+        );
       case 'NEARBY':
-        return <NearbyMatchesView
-                  matches={matches}
-                  attendedMatchIds={attendedMatchIds}
-                  onAttend={handleAttend}
-                  onUnattend={handleUnattend}
-                />;
+        return (
+          <NearbyMatchesView
+            matches={matches}
+            attendedMatchIds={attendedMatchIds}
+            onAttend={handleAttend}
+          />
+        );
       case 'MATCH_DAY':
-        return <MatchdayView 
-                  matches={matches}
-                  attendedMatchIds={attendedMatchIds}
-                  onAttend={handleAttend} 
-                  onUnattend={handleUnattend}
-                />;
+        return (
+          <MatchdayView
+            matches={matches}
+            attendedMatchIds={attendedMatchIds}
+            onAttend={handleAttend}
+          />
+        );
       case 'LEAGUE_TABLE':
         return <LeagueTableView />;
       case 'TEAM_STATS':
@@ -155,14 +157,14 @@ const App: React.FC = () => {
       case 'ADMIN':
         return <DataUploader />;
       default:
-        return <MatchList 
-                  matches={matches} 
-                  setMatches={setMatches}
-                  attendedMatchIds={attendedMatchIds}
-                  onAttend={handleAttend}
-                  onUnattend={handleUnattend}
-                  onRefresh={loadAppData}
-                />;
+        return (
+          <MatchList
+            matches={matches}
+            attendedMatchIds={attendedMatchIds}
+            onAttend={handleAttend}
+            onRefresh={loadAppData}
+          />
+        );
     }
   };
 

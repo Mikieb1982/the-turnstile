@@ -1,27 +1,41 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "skipLibCheck": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "allowSyntheticDefaultImports": true,
-    "strict": true
-  },
-  "include": ["vite.config.ts"]
-}
-{
-  "compilerOptions": {
+    "jsx": "react-jsx",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src"
+    "baseUrl": "."
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "vite.config.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "App.tsx",
+    "index.tsx",
+    "firebase.ts",
+    "badges.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "contexts/**/*.ts",
+    "contexts/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "mocks/**/*.ts",
+    "mocks/**/*.tsx",
+    "services/**/*.ts",
+    "services/**/*.tsx",
+    "utils/**/*.ts",
+    "utils/**/*.tsx",
+    "types.ts",
+    "src/types.ts",
+    "vite-env.d.ts"
+  ],
+  "exclude": ["dist", "node_modules", ".vite", "coverage", "src/views/**/*"]
 }
