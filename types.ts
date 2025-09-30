@@ -16,6 +16,7 @@ export type View =
   | 'PROFILE'
   | 'TEAM_STATS'
   | 'NEARBY'
+  | 'PREDICTION_GAMES'
   | 'ADMIN'
   | 'COMMUNITY';
 
@@ -123,11 +124,33 @@ export interface TeamInfo {
 }
 
 // New types for multi-profile support
+export type PredictionOutcome = 'HOME_WIN' | 'AWAY_WIN' | 'DRAW';
+
+export type PredictionConfidence = 'LOW' | 'MEDIUM' | 'HIGH';
+
+export interface Prediction {
+  id: string;
+  matchId: string;
+  outcome: PredictionOutcome;
+  confidence?: PredictionConfidence;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SaveUserPredictionInput {
+  matchId: string;
+  outcome: PredictionOutcome;
+  confidence?: PredictionConfidence;
+  notes?: string;
+}
+
 export interface Profile {
   user: User;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
   friendIds: string[];
+  predictions: Prediction[];
 }
 
 export interface ScrumBookData {

@@ -128,6 +128,21 @@ The default fixture list in `services/mockData.ts` mirrors the 2026 season so yo
 
 ---
 
+## Continuous Deployment to Firebase Hosting
+
+This repository includes a GitHub Actions workflow (`.github/workflows/firebase-hosting.yml`) that builds the app and deploys it to Firebase Hosting every time you push to the `main` branch.
+
+1. Create a Firebase service account with the **Firebase Hosting Admin** role and download the JSON credentials file.
+2. In your GitHub repository settings, add the following secrets:
+   - `FIREBASE_SERVICE_ACCOUNT` — the full JSON of the service account credentials.
+   - `FIREBASE_PROJECT_ID` — the target Firebase project ID (for example, `the-scrum-book`).
+3. Update `.firebaserc` so the `default` project matches the value of `FIREBASE_PROJECT_ID`.
+4. Push to `main` (or trigger the workflow manually from the **Actions** tab) to build the project and deploy to Firebase Hosting.
+
+The workflow uses `npm ci` and `npm run build` to ensure the production bundle is valid before publishing. Deployment status is reported directly in the pull request or commit checks.
+
+---
+
 ## Suggested Security Rules
 
 ```text
