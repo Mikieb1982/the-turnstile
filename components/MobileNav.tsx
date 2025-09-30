@@ -1,12 +1,20 @@
 import React from 'react';
-import type { View } from '../types';
-import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, ArrowRightOnRectangleIcon, BuildingStadiumIcon } from './Icons';
-import type firebase from 'firebase/compat/app';
+import type { View, AuthUser } from '../types';
+import {
+  CalendarIcon,
+  TableCellsIcon,
+  ListBulletIcon,
+  UserCircleIcon,
+  UsersIcon,
+  LocationMarkerIcon,
+  ArrowRightOnRectangleIcon,
+  BuildingStadiumIcon,
+} from './Icons';
 
 interface MobileNavProps {
   currentView: View;
   setView: (view: View) => void;
-  currentUser: firebase.User | null;
+  currentUser: AuthUser | null;
 }
 
 const NavButton: React.FC<{
