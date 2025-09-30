@@ -100,6 +100,14 @@ export interface User {
   avatarUrl?: string;
 }
 
+export interface AuthUser {
+  uid: string;
+  displayName?: string | null;
+  avatarUrl?: string | null;
+  email?: string | null;
+  isAnonymous?: boolean;
+}
+
 export interface StadiumInfo {
   name: string;
   capacity: string;
