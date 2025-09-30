@@ -1,88 +1,191 @@
-The Scrum Book
-The Scrum Book is a Vite + React application that curates fixtures, stats, and community resources for rugby league fans. The project has been redesigned with a marketing-style landing page and modular dashboards that can be adapted for future seasons.
 
-Getting Started
-Prerequisites
-Node.js 18 or newer
+```md
+# The Scrum Book
 
-npm 9+
+The Scrum Book is a tile-based React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
-Installation
-Bash
+---
 
+## Features
+
+- **Match Browser** — search and filter the full season fixture list and mark games you attended.
+- **Match Detail View** — review venue notes, broadcast info, and log a match to your Scrum Book in one click.
+- **My Scrum Book** — track total matches, unique venues, and revisit the games you have already logged.
+- **Offline-friendly seed data** — local fixtures and venues power the UI until you wire up Firestore.
+
+---
+
+## Project Structure
+
+```
+
+src/
+├── App.tsx                  # View orchestration and layout shell
+├── components/              # Tile, header, filters, and list components
+├── content/fixtures.ts      # Seeded venues and 2026 Super League fixtures
+├── firebase.ts              # Optional Firebase initialisation (falls back to local data)
+├── hooks/useScrumBook.ts    # Data loading, filtering, and attendance helpers
+├── services/matchService.ts # Firestore + local persistence utilities
+├── types.ts                 # Shared TypeScript types
+└── views/                   # Browser, detail, and My Scrum Book screens
+
+````
+
+---
+
+## Prerequisites
+
+- Node.js 18 or newer  
+- npm 9+
+
+---
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
 npm install
-Development Server
-Bash
+````
 
+### 2. Run the dev server
+
+```bash
 npm run dev
-The dev server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on layout and content.
+```
 
-Production Build
-Bash
+The server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on tile copy and layout tweaks.
 
+> ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage.
+
+### 3. Build for production
+
+```bash
 npm run build
-The output is written to dist/ and can be deployed to any static host. Use npm run preview to verify the production bundle locally.
+```
 
-Environment Variables
-Firebase powers authentication, profile storage, and match backups. Copy the .env.example file to .env.local and fill in your project values:
+The bundled assets are output to `dist/`. Use `npm run preview` to run the production build locally.
 
-Bash
+---
 
+## Available Scripts
+
+* `npm run dev` — start dev server with HMR
+* `npm run build` — bundle production assets
+* `npm run preview` — serve production build locally
+* `npm run deploy` — deploy to GitHub Pages
+
+---
+
+## Firebase Integration (Optional)
+
+Copy the example environment file to start wiring up your own Firebase project:
+
+```bash
 cp .env.example .env.local
-Then edit .env.local:
+```
 
+Update `.env.local` with the values from **Project Settings → General → Your apps → Web app** in the Firebase console:
+
+```
 VITE_FIREBASE_API_KEY=your-api-key
 VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your-project-id
 VITE_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
-VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
-# VITE_USE_FIREBASE_EMULATORS=true
-Set VITE_USE_FIREBASE_EMULATORS to true when running against the local Firebase emulator suite.
+```
 
-Customisation Tips
-Update the colour palette in index.html by editing the CSS custom properties within the <style> block.
+Restart `npm run dev` after saving the file. When the keys are missing the app falls back to the seeded fixtures and stores attendance locally in `localStorage`.
 
-Landing page content lives in components/AboutView.tsx; dashboard cards and stats are under components/.
+---
 
-Tailwind utilities are provided at runtime via the CDN configuration in index.html, so no additional build-step changes are required for styling tweaks.
+## Firestore Data Model
 
-Connecting Your Firebase Project
-Create a Firebase project in the Firebase Console, then add a new Web app and copy the config block into .env.local.
+Create the following collections to mirror the MVP structure:
 
-Enable Authentication → Sign-in method → Anonymous so visitors can save attended matches without creating accounts.
+* **matches**
 
-Create a Cloud Firestore database in production mode. The app expects a users collection where each document ID matches a Firebase Auth UID.
+  * `competitionName: string`
+  * `date: string` (ISO "YYYY-MM-DD")
+  * `kickoffTime: string` ("HH:MM")
+  * `round: string`
+  * `homeTeam: string`
+  * `awayTeam: string`
+  * `venueId: string`
+  * `broadcast?: string`
+  * `headline?: string`
 
-Optional: Storage uploads — enable Cloud Storage if you plan to let fans attach match photos.
+* **venues**
 
-Deploy security rules that match your data model. The starter rules below allow each authenticated user to manage their own profile document:
+  * `name: string`
+  * `city: string`
+  * `capacity?: number`
+  * `notes?: string`
 
+* **users**
+
+  * Each document ID should match an authenticated user ID
+  * Field: `attendedMatches: (string | { matchId: string; attendedOn: string })[]`
+
+Seed the collections manually in the Firestore console while you build the UI.
+The default fixture list in `src/content/fixtures.ts` mirrors the 2026 season so you can copy/paste values during the initial import.
+
+---
+
+## Suggested Security Rules
+
+```text
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /matches/{document=**} {
+      allow read;
+    }
+    match /venues/{document=**} {
+      allow read;
     }
   }
 }
-Seed initial content (optional) by creating a document manually via the console. The app will create a starter profile the first time someone logs in anonymously.
+```
 
-Backing Up Your Data
-The Firebase console provides on-demand exports under Firestore → Data → Export/Import. For scripted backups, install the Firebase CLI and run:
+---
 
-Bash
+## Customising the Template
 
-firebase login
-firebase firestore:export ./backups/scrum-book-$(date +%Y%m%d)
-Run the command from the project root after authenticating with an account that has export permissions.
+1. **Branding** — update the CSS custom properties in `index.html` to change gradients and accent colours.
+2. **Fixtures** — edit `src/content/fixtures.ts` to swap in a different competition or off-season friendly schedule.
+3. **Copy & Tiles** — adjust the hero copy in `src/components/Header.tsx` and tile content in the view components.
+4. **Data Sources** — replace the seed fetch helpers in `src/services/matchService.ts` with API calls or additional Firestore queries as you scale beyond the MVP.
 
-Deployment
-The repository includes a deploy script that publishes the built assets to GitHub Pages.
+---
 
-Bash
+## Deployment
 
+The project includes a Pages-friendly script if you want to ship to GitHub Pages:
+
+```bash
 npm run deploy
-Make sure the homepage field in package.json reflects the correct repository URL before deploying.
+```
+
+Update the `homepage` field in `package.json` to point at your repository slug before deploying. Any static host that can serve the files in `dist/` will work.
+
+---
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss your ideas.
+
+---
+
+## License
+
+MIT
+
+
+Would you like me to also add **screenshots / animated GIFs** sections (placeholders) so you can drop visuals of the app UI in the README for GitHub/marketing polish?
+
+
