@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { MatchWithVenue } from '../types';
-import { Tile } from '../components/Tile';
+import { Tile } from '../../components/Tile';
 
 interface MatchDetailViewProps {
   match?: MatchWithVenue;
