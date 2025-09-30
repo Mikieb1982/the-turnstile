@@ -10,7 +10,7 @@ export const RugbyBallIcon: React.FC<IconProps> = (props) => (
 
 export const LogoIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ className, ...props }) => (
   <img
-    src="/logo.png"
+    src="/public/logo.png"
     alt="The Scrum Book logo"
     className={className}
     loading="lazy"
