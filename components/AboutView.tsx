@@ -5,14 +5,10 @@ import {
   UsersIcon,
   ListBulletIcon,
   CalendarIcon,
-  ShieldCheckIcon,
   ChartBarIcon,
   PencilIcon,
   TrophyIcon,
-  LocationMarkerIcon,
-  ClipboardDocumentCheckIcon,
-  TableCellsIcon,
-} from './Icons';
+  } from './Icons';
 
 interface HighlightCard {
   title: string;
@@ -67,7 +63,7 @@ const featureColumns: FeatureColumn[] = [
       'Log every match you attend with a single click.',
       'View upcoming fixtures and past results for the season.',
       'See the live Super League table with team form guides.',
-      'Play prediction games and test your rugby league knowledge.',
+      'Explore community insights shared by fellow supporters.',
     ],
   },
   {
@@ -96,10 +92,10 @@ const featureCards: FeatureCard[] = [
     icon: ChartBarIcon,
   },
   {
-    title: 'Prediction Games',
-    summary: 'Predict the winner and margin for upcoming matches and compete with other fans.',
-    focus: 'Test your knowledge and see how you rank against the community.',
-    icon: ClipboardDocumentCheckIcon,
+    title: 'Community Hub',
+    summary: 'Connect with other rugby league fans, swap match stories, and compare attendance streaks.',
+    focus: 'Discover new grounds and fixtures through the crowd’s recommendations.',
+    icon: UsersIcon,
   },
 ];
 
@@ -108,7 +104,7 @@ const getStartedSteps: string[] = [
   'Browse the fixtures and mark any matches you have attended in the past.',
   'Upload photos to your attended matches to create a visual diary.',
   'Check out the "Grounds" view to see which stadiums are closest to you.',
-  'Make your predictions for upcoming games and see how you do!',
+  'Join the community hub to share tips, photos, and matchday highlights.',
 ];
 
 export const AboutView: React.FC = () => {

@@ -2,6 +2,8 @@
 ```md
 # The Scrum Book
 
+![The Scrum Book logo](public/logo.svg)
+
 The Scrum Book is a tile-based React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
 ---
