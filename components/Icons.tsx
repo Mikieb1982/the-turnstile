@@ -2,6 +2,8 @@ import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement>;
 
+const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
+
 export const RugbyBallIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
         <path d="M12.01,2.02c-5.5,0-9.99,3.58-9.99,8c0,4.42,4.49,8,9.99,8c5.5,0,9.99-3.58,9.99-8C22,5.6,17.51,2.02,12.01,2.02z M10.43,14.6l-3.32-1.92l1.66-2.88l3.32,1.92L10.43,14.6z M11.99,11.02l-3.32-1.92l1.66-2.88l3.32,1.92L11.99,11.02z M15.25,12.68l-3.32-1.92l1.66-2.88l3.32,1.92L15.25,12.68z"/>
@@ -10,7 +12,8 @@ export const RugbyBallIcon: React.FC<IconProps> = (props) => (
 
 export const LogoIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ className, ...props }) => (
   <img
-    src="/public/logo.png"
+
+    src={logoSrc}
     alt="The Scrum Book logo"
     className={className}
     loading="lazy"
