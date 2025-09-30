@@ -9,35 +9,38 @@
     <style>
       :root {
         color-scheme: light;
-        --clr-primary: #003087;
-        --clr-secondary: #fdb913;
-        --clr-accent: #e6332a;
-        --clr-danger: #e6332a;
-        --clr-warning: #ffb81c;
-        --clr-info: #1f6ae5;
-        --clr-success: #1bbf6d;
-        --clr-text-strong: #02163d;
-        --clr-text: #1b2f5c;
-        --clr-text-subtle: #6374a1;
-        --clr-border: #d4d9e8;
-        --clr-surface: #ffffff;
-        --clr-surface-alt: #f4f7fb;
+        --clr-primary: #D50032; /* Strong Red */
+        --clr-secondary: #FFB700; /* Bold Gold */
+        --clr-accent: #007BFF; /* Electric Blue */
+        --clr-danger: #D50032;
+        --clr-warning: #FFB700;
+        --clr-info: #007BFF;
+        --clr-success: #00A86B; /* Jade Green */
+        --clr-text-strong: #121212;
+        --clr-text: #333333;
+        --clr-text-subtle: #666666;
+        --clr-border: #DDDDDD;
+        --clr-surface: #FFFFFF;
+        --clr-surface-alt: #F5F5F5;
 
-        --gradient-1: linear-gradient(140deg, rgba(0, 48, 135, 0.2), rgba(31, 106, 229, 0.18));
-        --gradient-2: radial-gradient(circle at 20% 15%, rgba(253, 185, 19, 0.22), transparent 55%);
-        --gradient-3: radial-gradient(circle at 80% 0%, rgba(230, 51, 42, 0.18), transparent 45%);
+        --gradient-1: linear-gradient(140deg, rgba(213, 0, 50, 0.1), rgba(0, 123, 255, 0.08));
+        --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 183, 0, 0.15), transparent 55%);
+        --gradient-3: radial-gradient(circle at 80% 0%, rgba(213, 0, 50, 0.12), transparent 45%);
       }
       html.dark {
         color-scheme: dark;
-        --clr-surface: #030b21;
-        --clr-surface-alt: #07142f;
-        --clr-text-strong: #f7fbff;
-        --clr-text: #dce6ff;
-        --clr-text-subtle: #93a5d4;
-        --clr-border: #13244a;
-        --gradient-1: linear-gradient(140deg, rgba(0, 48, 135, 0.28), rgba(31, 106, 229, 0.25));
-        --gradient-2: radial-gradient(circle at 15% 20%, rgba(253, 185, 19, 0.3), transparent 60%);
-        --gradient-3: radial-gradient(circle at 90% 10%, rgba(230, 51, 42, 0.25), transparent 55%);
+        --clr-primary: #E50914; /* Brighter Red for dark mode */
+        --clr-secondary: #FFD700; /* Gold */
+        --clr-accent: #00A9E0; /* Cyan Blue */
+        --clr-surface: #1A1A1A;
+        --clr-surface-alt: #2C2C2C;
+        --clr-text-strong: #FFFFFF;
+        --clr-text: #E0E0E0;
+        --clr-text-subtle: #A0A0A0;
+        --clr-border: #404040;
+        --gradient-1: linear-gradient(140deg, rgba(229, 9, 20, 0.2), rgba(0, 169, 224, 0.15));
+        --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 215, 0, 0.2), transparent 60%);
+        --gradient-3: radial-gradient(circle at 90% 10%, rgba(229, 9, 20, 0.18), transparent 55%);
       }
       body {
         background: var(--clr-surface-alt);
@@ -49,7 +52,7 @@
       }
 
       html.dark .app-background {
-        background-color: #020617;
+        background-color: #121212;
         background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
       }
     </style>
@@ -73,9 +76,9 @@
               'text-subtle': 'var(--clr-text-subtle)',
               border: 'var(--clr-border)',
             },
-            borderRadius: { 
-              'md': '12px', 
-              'xl': '16px' 
+            borderRadius: {
+              'md': '12px',
+              'xl': '16px'
             },
             boxShadow: {
               card: '0 1px 2px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06)',
