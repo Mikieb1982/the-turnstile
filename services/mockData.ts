@@ -1,351 +1,256 @@
-import type { Match, LeagueStanding, Venue } from '../types';
+// fixtures.ts
 
+import type { Match, LeagueStanding, Venue } from 'types';
+
+// ---------- Teams ----------
 export const TEAMS = {
-    wigan: { id: '1', name: 'Wigan Warriors', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/z328jy1600893040.png' },
-    stHelens: { id: '2', name: 'St Helens', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/qsw4741599320017.png' },
-    leeds: { id: '3', name: 'Leeds Rhinos', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/p14u931599320349.png' },
-    warrington: { id: '4', name: 'Warrington Wolves', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/6990ay1599320138.png' },
-    catalans: { id: '5', name: 'Catalans Dragons', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/19k0uq1599320256.png' },
-    huddersfield: { id: '6', name: 'Huddersfield Giants', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/yt8cfx1599320478.png' },
-    hullKR: { id: '7', name: 'Hull KR', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/u0ypre1599320577.png' },
-    hullFC: { id: '8', name: 'Hull FC', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/34tppc1599320649.png' },
-    salford: { id: '9', name: 'Salford Red Devils', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/mvx62g1599320875.png' },
-    leigh: { id: '10', name: 'Leigh Leopards', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/b5z9g31671732681.png' },
-    castleford: { id: '11', name: 'Castleford Tigers', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/8iif5k1599320790.png' },
-    london: { id: '12', name: 'London Broncos', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/3k75b41600892790.png' },
-    wakefield: { id: '13', name: 'Wakefield Trinity', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/en323k1599320716.png' },
-};
+  wigan: { id: '1', name: 'Wigan Warriors', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/z328jy1600893040.png' },
+  stHelens: { id: '2', name: 'St Helens', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/qsw4741599320017.png' },
+  leeds: { id: '3', name: 'Leeds Rhinos', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/p14u931599320349.png' },
+  warrington: { id: '4', name: 'Warrington Wolves', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/6990ay1599320138.png' },
+  catalans: { id: '5', name: 'Catalans Dragons', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/19k0uq1599320256.png' },
+  huddersfield: { id: '6', name: 'Huddersfield Giants', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/yt8cfx1599320478.png' },
+  hullKR: { id: '7', name: 'Hull KR', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/u0ypre1599320577.png' },
+  hullFC: { id: '8', name: 'Hull FC', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/34tppc1599320649.png' },
+  salford: { id: '9', name: 'Salford Red Devils', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/mvx62g1599320875.png' },
+  leigh: { id: '10', name: 'Leigh Leopards', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/b5z9g31671732681.png' },
+  castleford: { id: '11', name: 'Castleford Tigers', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/8iif5k1599320790.png' },
+  london: { id: '12', name: 'London Broncos', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/3k75b41600892790.png' },
+  wakefield: { id: '13', name: 'Wakefield Trinity', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/en323k1599320716.png' }
+} as const;
 
+type TeamEntry = (typeof TEAMS)[keyof typeof TEAMS];
+
+// ---------- Team branding ----------
 export const TEAM_BRANDING: Record<string, { bg: string; text: string }> = {
-  '1': { bg: '#A90533', text: '#FFFFFF' }, // Wigan Warriors (Cherry)
-  '2': { bg: '#D40404', text: '#FFFFFF' }, // St Helens (Red)
-  '3': { bg: '#003366', text: '#FFFFFF' }, // Leeds Rhinos (Blue)
-  '4': { bg: '#00559E', text: '#FFFFFF' }, // Warrington Wolves (Blue)
-  '5': { bg: '#E60026', text: '#FFFFFF' }, // Catalans Dragons (Red)
-  '6': { bg: '#8B0000', text: '#FFFFFF' }, // Huddersfield Giants (Claret)
-  '7': { bg: '#ED1C24', text: '#FFFFFF' }, // Hull KR (Red)
-  '8': { bg: '#1A1A1A', text: '#FFFFFF' }, // Hull FC (Black)
-  '9': { bg: '#C8102E', text: '#FFFFFF' }, // Salford Red Devils (Red)
-  '10': { bg: '#1A1A1A', text: '#FFFFFF' }, // Leigh Leopards (Black)
-  '11': { bg: '#FFA500', text: '#000000' }, // Castleford Tigers (Amber)
-  '12': { bg: '#1A1A1A', text: '#FFFFFF' }, // London Broncos (Black)
-  '13': { bg: '#0073C0', text: '#FFFFFF' }, // Wakefield Trinity (Blue)
+  '1': { bg: '#A90533', text: '#FFFFFF' },
+  '2': { bg: '#D40404', text: '#FFFFFF' },
+  '3': { bg: '#003366', text: '#FFFFFF' },
+  '4': { bg: '#00559E', text: '#FFFFFF' },
+  '5': { bg: '#E60026', text: '#FFFFFF' },
+  '6': { bg: '#8B0000', text: '#FFFFFF' },
+  '7': { bg: '#ED1C24', text: '#FFFFFF' },
+  '8': { bg: '#1A1A1A', text: '#FFFFFF' },
+  '9': { bg: '#C8102E', text: '#FFFFFF' },
+  '10': { bg: '#1A1A1A', text: '#FFFFFF' },
+  '11': { bg: '#FFA500', text: '#000000' },
+  '12': { bg: '#1A1A1A', text: '#FFFFFF' },
+  '13': { bg: '#0073C0', text: '#FFFFFF' }
 };
 
+// ---------- Venues ----------
 const VENUES = {
-    dw: 'The Brick Community Stadium',
-    totallyWicked: 'Totally Wicked Stadium',
-    headingley: 'Headingley',
-    halliwellJones: 'Halliwell Jones Stadium',
-    gilbertBrutus: 'Stade Gilbert Brutus',
-    johnSmiths: "John Smith's Stadium",
-    cravenPark: 'Sewell Group Craven Park',
-    mkm: 'MKM Stadium',
-    salfordCommunity: 'Salford Community Stadium',
-    leighSportsVillage: 'Leigh Sports Village',
-    mendAHose: 'Mend-A-Hose Jungle',
-    cherryRed: 'Cherry Red Records Stadium',
-    belleVue: 'Belle Vue',
-    oldTrafford: 'Old Trafford',
-    stJamesPark: "St James' Park",
-};
+  dw: 'The Brick Community Stadium',
+  totallyWicked: 'Totally Wicked Stadium',
+  headingley: 'Headingley',
+  halliwellJones: 'Halliwell Jones Stadium',
+  gilbertBrutus: 'Stade Gilbert Brutus',
+  johnSmiths: "John Smith's Stadium",
+  cravenPark: 'Sewell Group Craven Park',
+  mkm: 'MKM Stadium',
+  salfordCommunity: 'Salford Community Stadium',
+  leighSportsVillage: 'Leigh Sports Village',
+  mendAHose: 'Mend-A-Hose Jungle',
+  cherryRed: 'Cherry Red Records Stadium',
+  belleVue: 'Belle Vue',
+  oldTrafford: 'Old Trafford',
+  stJamesPark: "St James' Park"
+} as const;
 
 export const teamIdToVenue: Record<string, string> = {
-    [TEAMS.wigan.id]: VENUES.dw,
-    [TEAMS.stHelens.id]: VENUES.totallyWicked,
-    [TEAMS.leeds.id]: VENUES.headingley,
-    [TEAMS.warrington.id]: VENUES.halliwellJones,
-    [TEAMS.catalans.id]: VENUES.gilbertBrutus,
-    [TEAMS.huddersfield.id]: VENUES.johnSmiths,
-    [TEAMS.hullKR.id]: VENUES.cravenPark,
-    [TEAMS.hullFC.id]: VENUES.mkm,
-    [TEAMS.salford.id]: VENUES.salfordCommunity,
-    [TEAMS.leigh.id]: VENUES.leighSportsVillage,
-    [TEAMS.castleford.id]: VENUES.mendAHose,
-    [TEAMS.london.id]: VENUES.cherryRed,
-    [TEAMS.wakefield.id]: VENUES.belleVue,
+  [TEAMS.wigan.id]: VENUES.dw,
+  [TEAMS.stHelens.id]: VENUES.totallyWicked,
+  [TEAMS.leeds.id]: VENUES.headingley,
+  [TEAMS.warrington.id]: VENUES.halliwellJones,
+  [TEAMS.catalans.id]: VENUES.gilbertBrutus,
+  [TEAMS.huddersfield.id]: VENUES.johnSmiths,
+  [TEAMS.hullKR.id]: VENUES.cravenPark,
+  [TEAMS.hullFC.id]: VENUES.mkm,
+  [TEAMS.salford.id]: VENUES.salfordCommunity,
+  [TEAMS.leigh.id]: VENUES.leighSportsVillage,
+  [TEAMS.castleford.id]: VENUES.mendAHose,
+  [TEAMS.london.id]: VENUES.cherryRed,
+  [TEAMS.wakefield.id]: VENUES.belleVue
 };
 
+// If your Venue type makes x and y optional, this matches your data below.
+// If not, add x and y to the neutral venues too.
 export const ALL_VENUES: Venue[] = [
-    { name: VENUES.dw, team: TEAMS.wigan.name, lat: 53.547, lon: -2.651, x: 245, y: 300 },
-    { name: VENUES.totallyWicked, team: TEAMS.stHelens.name, lat: 53.453, lon: -2.729, x: 235, y: 310 },
-    { name: VENUES.headingley, team: TEAMS.leeds.name, lat: 53.816, lon: -1.583, x: 280, y: 285 },
-    { name: VENUES.halliwellJones, team: TEAMS.warrington.name, lat: 53.393, lon: -2.583, x: 250, y: 320 },
-    { name: VENUES.gilbertBrutus, team: TEAMS.catalans.name, lat: 42.716, lon: 2.894, x: 450, y: 750 },
-    { name: VENUES.johnSmiths, team: TEAMS.huddersfield.name, lat: 53.655, lon: -1.768, x: 275, y: 295 },
-    { name: VENUES.cravenPark, team: TEAMS.hullKR.name, lat: 53.750, lon: -0.298, x: 335, y: 280 },
-    { name: VENUES.mkm, team: TEAMS.hullFC.name, lat: 53.746, lon: -0.367, x: 330, y: 285 },
-    { name: VENUES.salfordCommunity, team: TEAMS.salford.name, lat: 53.468, lon: -2.359, x: 255, y: 310 },
-    { name: VENUES.leighSportsVillage, team: TEAMS.leigh.name, lat: 53.492, lon: -2.528, x: 240, y: 305 },
-    { name: VENUES.mendAHose, team: TEAMS.castleford.name, lat: 53.719, lon: -1.336, x: 290, y: 290 },
-    { name: VENUES.cherryRed, team: TEAMS.london.name, lat: 51.431, lon: -0.188, x: 320, y: 640 },
-    { name: VENUES.belleVue, team: TEAMS.wakefield.name, lat: 53.673, lon: -1.481, x: 285, y: 292 },
-    { name: VENUES.oldTrafford, team: 'Neutral', lat: 53.4631, lon: -2.2913 },
-    { name: VENUES.stJamesPark, team: 'Neutral', lat: 54.9756, lon: -1.6218 }
+  { name: VENUES.dw, team: TEAMS.wigan.name, lat: 53.547, lon: -2.651, x: 245, y: 300 },
+  { name: VENUES.totallyWicked, team: TEAMS.stHelens.name, lat: 53.453, lon: -2.729, x: 235, y: 310 },
+  { name: VENUES.headingley, team: TEAMS.leeds.name, lat: 53.816, lon: -1.583, x: 280, y: 285 },
+  { name: VENUES.halliwellJones, team: TEAMS.warrington.name, lat: 53.393, lon: -2.583, x: 250, y: 320 },
+  { name: VENUES.gilbertBrutus, team: TEAMS.catalans.name, lat: 42.716, lon: 2.894, x: 450, y: 750 },
+  { name: VENUES.johnSmiths, team: TEAMS.huddersfield.name, lat: 53.655, lon: -1.768, x: 275, y: 295 },
+  { name: VENUES.cravenPark, team: TEAMS.hullKR.name, lat: 53.75, lon: -0.298, x: 335, y: 280 },
+  { name: VENUES.mkm, team: TEAMS.hullFC.name, lat: 53.746, lon: -0.367, x: 330, y: 285 },
+  { name: VENUES.salfordCommunity, team: TEAMS.salford.name, lat: 53.468, lon: -2.359, x: 255, y: 310 },
+  { name: VENUES.leighSportsVillage, team: TEAMS.leigh.name, lat: 53.492, lon: -2.528, x: 240, y: 305 },
+  { name: VENUES.mendAHose, team: TEAMS.castleford.name, lat: 53.719, lon: -1.336, x: 290, y: 290 },
+  { name: VENUES.cherryRed, team: TEAMS.london.name, lat: 51.431, lon: -0.188, x: 320, y: 640 },
+  { name: VENUES.belleVue, team: TEAMS.wakefield.name, lat: 53.673, lon: -1.481, x: 285, y: 292 },
+  { name: VENUES.oldTrafford, team: 'Neutral', lat: 53.4631, lon: -2.2913 },
+  { name: VENUES.stJamesPark, team: 'Neutral', lat: 54.9756, lon: -1.6218 }
 ];
 
 export const VENUE_LOCATIONS: Record<string, { x: number; y: number; name: string }> = {
-    [VENUES.dw]: { x: 245, y: 300, name: VENUES.dw },
-    [VENUES.totallyWicked]: { x: 235, y: 310, name: VENUES.totallyWicked },
-    [VENUES.headingley]: { x: 280, y: 285, name: VENUES.headingley },
-    [VENUES.halliwellJones]: { x: 250, y: 320, name: VENUES.halliwellJones },
-    [VENUES.gilbertBrutus]: { x: 450, y: 750, name: VENUES.gilbertBrutus }, // Off-map
-    [VENUES.johnSmiths]: { x: 275, y: 295, name: VENUES.johnSmiths },
-    [VENUES.cravenPark]: { x: 335, y: 280, name: VENUES.cravenPark },
-    [VENUES.mkm]: { x: 330, y: 285, name: VENUES.mkm },
-    [VENUES.salfordCommunity]: { x: 255, y: 310, name: VENUES.salfordCommunity },
-    [VENUES.leighSportsVillage]: { x: 240, y: 305, name: VENUES.leighSportsVillage },
-    [VENUES.mendAHose]: { x: 290, y: 290, name: VENUES.mendAHose },
-    [VENUES.cherryRed]: { x: 320, y: 640, name: VENUES.cherryRed },
-    [VENUES.belleVue]: { x: 285, y: 292, name: VENUES.belleVue },
-    [VENUES.oldTrafford]: { x: 260, y: 315, name: VENUES.oldTrafford },
-    [VENUES.stJamesPark]: { x: 280, y: 150, name: VENUES.stJamesPark },
+  [VENUES.dw]: { x: 245, y: 300, name: VENUES.dw },
+  [VENUES.totallyWicked]: { x: 235, y: 310, name: VENUES.totallyWicked },
+  [VENUES.headingley]: { x: 280, y: 285, name: VENUES.headingley },
+  [VENUES.halliwellJones]: { x: 250, y: 320, name: VENUES.halliwellJones },
+  [VENUES.gilbertBrutus]: { x: 450, y: 750, name: VENUES.gilbertBrutus },
+  [VENUES.johnSmiths]: { x: 275, y: 295, name: VENUES.johnSmiths },
+  [VENUES.cravenPark]: { x: 335, y: 280, name: VENUES.cravenPark },
+  [VENUES.mkm]: { x: 330, y: 285, name: VENUES.mkm },
+  [VENUES.salfordCommunity]: { x: 255, y: 310, name: VENUES.salfordCommunity },
+  [VENUES.leighSportsVillage]: { x: 240, y: 305, name: VENUES.leighSportsVillage },
+  [VENUES.mendAHose]: { x: 290, y: 290, name: VENUES.mendAHose },
+  [VENUES.cherryRed]: { x: 320, y: 640, name: VENUES.cherryRed },
+  [VENUES.belleVue]: { x: 285, y: 292, name: VENUES.belleVue },
+  [VENUES.oldTrafford]: { x: 260, y: 315, name: VENUES.oldTrafford },
+  [VENUES.stJamesPark]: { x: 280, y: 150, name: VENUES.stJamesPark }
 };
 
-const createMatch = (id: number, homeTeam: any, awayTeam: any, status: 'SCHEDULED' | 'FULL-TIME', daysOffset: number, homeScore: number, awayScore: number, venue: string): Match => {
-    const date = new Date();
-    date.setDate(date.getDate() + daysOffset);
-    date.setHours(19, 45, 0, 0);
+// ---------- Match factory helpers ----------
+const createMatch = (
+  id: number,
+  homeTeam: TeamEntry,
+  awayTeam: TeamEntry,
+  status: Match['status'],
+  daysOffset: number,
+  homeScore: number,
+  awayScore: number,
+  venue: string
+): Match => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysOffset);
+  date.setHours(19, 45, 0, 0);
 
-    return {
-        id: `mock-${id}`,
-        competition: { id: '4415', name: 'Betfred Super League' },
-        homeTeam,
-        awayTeam,
-        status,
-        startTime: date.toISOString(),
-        venue,
-        scores: { home: homeScore, away: awayScore },
-        stats: status === 'FULL-TIME' ? {
-            possession: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            territory: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            tackles: { home: 300 + Math.floor(Math.random() * 50), away: 300 + Math.floor(Math.random() * 50) }
-        } : undefined,
-    };
+  return {
+    id: `mock-${id}`,
+    competition: { id: '4415', name: 'Betfred Super League' },
+    homeTeam,
+    awayTeam,
+    status,
+    startTime: date.toISOString(),
+    venue,
+    scores: { home: homeScore, away: awayScore },
+    stats:
+      status === 'FULL-TIME'
+        ? {
+            possession: {
+              home: 50 + Math.floor(Math.random() * 10) - 5,
+              away: 50 + Math.floor(Math.random() * 10) - 5
+            },
+            territory: {
+              home: 50 + Math.floor(Math.random() * 10) - 5,
+              away: 50 + Math.floor(Math.random() * 10) - 5
+            },
+            tackles: {
+              home: 300 + Math.floor(Math.random() * 50),
+              away: 300 + Math.floor(Math.random() * 50)
+            }
+          }
+        : undefined
+  };
 };
 
-const createMatchOnDate = (id: number, homeTeam: any, awayTeam: any, status: 'SCHEDULED' | 'FULL-TIME', date: Date, homeScore: number, awayScore: number, venue: string): Match => {
-    return {
-        id: `mock-${id}`,
-        competition: { id: '4415', name: 'Betfred Super League' },
-        homeTeam,
-        awayTeam,
-        status,
-        startTime: date.toISOString(),
-        venue,
-        scores: { home: homeScore, away: awayScore },
-        stats: status === 'FULL-TIME' ? {
-            possession: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            territory: { home: 50 + Math.floor(Math.random() * 10) - 5, away: 50 + Math.floor(Math.random() * 10) - 5 },
-            tackles: { home: 300 + Math.floor(Math.random() * 50), away: 300 + Math.floor(Math.random() * 50) }
-        } : undefined,
-    };
+const createMatchOnDate = (
+  id: number,
+  homeTeam: TeamEntry,
+  awayTeam: TeamEntry,
+  status: Match['status'],
+  date: Date,
+  homeScore: number,
+  awayScore: number,
+  venue: string
+): Match => {
+  return {
+    id: `mock-${id}`,
+    competition: { id: '4415', name: 'Betfred Super League' },
+    homeTeam,
+    awayTeam,
+    status,
+    startTime: date.toISOString(),
+    venue,
+    scores: { home: homeScore, away: awayScore },
+    stats:
+      status === 'FULL-TIME'
+        ? {
+            possession: {
+              home: 50 + Math.floor(Math.random() * 10) - 5,
+              away: 50 + Math.floor(Math.random() * 10) - 5
+            },
+            territory: {
+              home: 50 + Math.floor(Math.random() * 10) - 5,
+              away: 50 + Math.floor(Math.random() * 10) - 5
+            },
+            tackles: {
+              home: 300 + Math.floor(Math.random() * 50),
+              away: 300 + Math.floor(Math.random() * 50)
+            }
+          }
+        : undefined
+  };
 };
 
+// ---------- Mock data ----------
 export const mockMatches: Match[] = [
-    // Upcoming match
-    createMatch(1, TEAMS.wigan, TEAMS.stHelens, 'SCHEDULED', 1, 0, 0, VENUES.dw),
-    // Upcoming matches (next 7 days)
-    createMatch(2, TEAMS.leeds, TEAMS.warrington, 'SCHEDULED', 2, 0, 0, VENUES.headingley),
-    createMatch(3, TEAMS.catalans, TEAMS.huddersfield, 'SCHEDULED', 3, 0, 0, VENUES.gilbertBrutus),
-    createMatch(4, TEAMS.hullKR, TEAMS.hullFC, 'SCHEDULED', 4, 0, 0, VENUES.cravenPark), // Derby
-    createMatch(5, TEAMS.salford, TEAMS.leigh, 'SCHEDULED', 5, 0, 0, VENUES.salfordCommunity),
-    createMatch(6, TEAMS.castleford, TEAMS.london, 'SCHEDULED', 6, 0, 0, VENUES.mendAHose),
-    
-    // Past matches for stats and history
-    createMatch(7, TEAMS.wigan, TEAMS.leeds, 'FULL-TIME', -7, 34, 8, VENUES.dw),
-    createMatch(8, TEAMS.stHelens, TEAMS.catalans, 'FULL-TIME', -8, 22, 12, VENUES.totallyWicked),
-    createMatch(9, TEAMS.warrington, TEAMS.hullKR, 'FULL-TIME', -9, 18, 26, VENUES.halliwellJones),
-    createMatch(10, TEAMS.huddersfield, TEAMS.salford, 'FULL-TIME', -10, 16, 16, VENUES.johnSmiths),
-    createMatch(11, TEAMS.hullFC, TEAMS.london, 'FULL-TIME', -11, 28, 24, VENUES.mkm),
-    createMatch(12, TEAMS.leigh, TEAMS.castleford, 'FULL-TIME', -12, 30, 6, VENUES.leighSportsVillage),
-    
-    // Matches for new badges
-    createMatch(13, TEAMS.wigan, TEAMS.warrington, 'FULL-TIME', -30, 18, 10, VENUES.oldTrafford), // Grand Final badge
-    createMatch(14, TEAMS.leeds, TEAMS.hullFC, 'FULL-TIME', -60, 28, 22, VENUES.stJamesPark), // Magic Weekend badge
-    createMatch(15, TEAMS.catalans, TEAMS.wigan, 'FULL-TIME', -20, 30, 12, VENUES.gilbertBrutus), // French Connection badge
-    // Away Day badges (for default user with St Helens as favorite team)
-    createMatch(16, TEAMS.huddersfield, TEAMS.stHelens, 'FULL-TIME', -40, 12, 24, VENUES.johnSmiths),
-    createMatch(17, TEAMS.warrington, TEAMS.stHelens, 'FULL-TIME', -50, 6, 18, VENUES.halliwellJones),
-    createMatch(18, TEAMS.leigh, TEAMS.stHelens, 'FULL-TIME', -25, 10, 30, VENUES.leighSportsVillage),
-    
-    // 2024 Fixtures
-    createMatchOnDate(101, TEAMS.leeds, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-11T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(102, TEAMS.wigan, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(103, TEAMS.leigh, TEAMS.stHelens, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(104, TEAMS.wakefield, TEAMS.hullKR, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(105, TEAMS.hullFC, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(106, TEAMS.huddersfield, TEAMS.salford, 'SCHEDULED', new Date('2024-09-14T15:00:00'), 0, 0, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(107, TEAMS.hullKR, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(108, TEAMS.stHelens, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(109, TEAMS.leigh, TEAMS.huddersfield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(110, TEAMS.salford, TEAMS.wakefield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(111, TEAMS.hullFC, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(112, TEAMS.wigan, TEAMS.leeds, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
-    
-    // 2025 Results
-    createMatchOnDate(201, TEAMS.wigan, TEAMS.leigh, 'FULL-TIME', new Date('2025-02-13T20:00:00'), 0, 1, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(202, TEAMS.hullKR, TEAMS.castleford, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 19, 18, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(203, TEAMS.catalans, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 4, 24, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(204, TEAMS.leeds, TEAMS.wakefield, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 12, 14, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(205, TEAMS.stHelens, TEAMS.salford, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 82, 0, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(206, TEAMS.huddersfield, TEAMS.warrington, 'FULL-TIME', new Date('2025-02-16T20:00:00'), 12, 20, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(207, TEAMS.wakefield, TEAMS.hullKR, 'FULL-TIME', new Date('2025-02-20T20:00:00'), 12, 14, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(208, TEAMS.warrington, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 18, 12, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(209, TEAMS.hullFC, TEAMS.wigan, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 4, 46, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(210, TEAMS.salford, TEAMS.leeds, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 32, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(211, TEAMS.castleford, TEAMS.stHelens, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 46, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(212, TEAMS.leigh, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-02-23T20:00:00'), 24, 10, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(213, TEAMS.hullKR, TEAMS.salford, 'FULL-TIME', new Date('2025-02-27T20:00:00'), 42, 0, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(214, TEAMS.huddersfield, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 10, 11, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(215, TEAMS.leigh, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 34, 6, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(216, TEAMS.wakefield, TEAMS.stHelens, 'FULL-TIME', new Date('2025-03-01T20:00:00'), 6, 26, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(217, TEAMS.wigan, TEAMS.warrington, 'FULL-TIME', new Date('2025-03-01T20:00:00'), 48, 24, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(218, TEAMS.leeds, TEAMS.castleford, 'FULL-TIME', new Date('2025-03-02T20:00:00'), 38, 24, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(219, TEAMS.hullFC, TEAMS.leigh, 'FULL-TIME', new Date('2025-03-06T20:00:00'), 22, 22, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(220, TEAMS.stHelens, TEAMS.hullKR, 'FULL-TIME', new Date('2025-03-07T20:00:00'), 10, 20, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(221, TEAMS.castleford, TEAMS.salford, 'FULL-TIME', new Date('2025-03-07T20:00:00'), 22, 14, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(222, TEAMS.catalans, TEAMS.leeds, 'FULL-TIME', new Date('2025-03-08T20:00:00'), 11, 0, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(223, TEAMS.warrington, TEAMS.wakefield, 'FULL-TIME', new Date('2025-03-09T20:00:00'), 16, 30, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(224, TEAMS.wigan, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-03-09T20:00:00'), 44, 18, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(225, TEAMS.salford, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-03-20T20:00:00'), 23, 10, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(226, TEAMS.stHelens, TEAMS.warrington, 'FULL-TIME', new Date('2025-03-21T20:00:00'), 12, 14, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(227, TEAMS.wakefield, TEAMS.hullFC, 'FULL-TIME', new Date('2025-03-21T20:00:00'), 12, 16, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(228, TEAMS.castleford, TEAMS.catalans, 'FULL-TIME', new Date('2025-03-22T20:00:00'), 4, 26, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(229, TEAMS.leeds, TEAMS.wigan, 'FULL-TIME', new Date('2025-03-22T20:00:00'), 12, 10, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(230, TEAMS.hullKR, TEAMS.leigh, 'FULL-TIME', new Date('2025-03-23T20:00:00'), 30, 0, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(231, TEAMS.castleford, TEAMS.hullFC, 'FULL-TIME', new Date('2025-03-27T20:00:00'), 14, 24, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(232, TEAMS.warrington, TEAMS.leeds, 'FULL-TIME', new Date('2025-03-28T20:00:00'), 16, 14, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(233, TEAMS.leigh, TEAMS.wakefield, 'FULL-TIME', new Date('2025-03-28T20:00:00'), 14, 40, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(234, TEAMS.catalans, TEAMS.stHelens, 'FULL-TIME', new Date('2025-03-29T20:00:00'), 13, 14, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(235, TEAMS.huddersfield, TEAMS.hullKR, 'FULL-TIME', new Date('2025-03-30T20:00:00'), 4, 50, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(236, TEAMS.wigan, TEAMS.salford, 'FULL-TIME', new Date('2025-03-30T20:00:00'), 54, 0, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(237, TEAMS.salford, TEAMS.leeds, 'FULL-TIME', new Date('2025-04-10T20:00:00'), 0, 28, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(238, TEAMS.hullKR, TEAMS.wigan, 'FULL-TIME', new Date('2025-04-11T20:00:00'), 12, 28, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(239, TEAMS.stHelens, TEAMS.wakefield, 'FULL-TIME', new Date('2025-04-11T20:00:00'), 26, 14, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(240, TEAMS.warrington, TEAMS.hullFC, 'FULL-TIME', new Date('2025-04-12T20:00:00'), 16, 28, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(241, TEAMS.castleford, TEAMS.leigh, 'FULL-TIME', new Date('2025-04-12T20:00:00'), 6, 20, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(242, TEAMS.huddersfield, TEAMS.catalans, 'FULL-TIME', new Date('2025-04-13T20:00:00'), 18, 38, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(243, TEAMS.wakefield, TEAMS.castleford, 'FULL-TIME', new Date('2025-04-17T20:00:00'), 13, 12, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(244, TEAMS.hullFC, TEAMS.hullKR, 'FULL-TIME', new Date('2025-04-18T20:00:00'), 14, 28, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(245, TEAMS.wigan, TEAMS.stHelens, 'FULL-TIME', new Date('2025-04-18T20:00:00'), 24, 14, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(246, TEAMS.leeds, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-04-18T20:00:00'), 28, 6, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(247, TEAMS.leigh, TEAMS.warrington, 'FULL-TIME', new Date('2025-04-19T20:00:00'), 18, 14, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(248, TEAMS.catalans, TEAMS.salford, 'FULL-TIME', new Date('2025-04-19T20:00:00'), 38, 10, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(249, TEAMS.warrington, TEAMS.stHelens, 'FULL-TIME', new Date('2025-04-24T20:00:00'), 32, 18, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(250, TEAMS.leeds, TEAMS.hullKR, 'FULL-TIME', new Date('2025-04-25T20:00:00'), 14, 20, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(251, TEAMS.huddersfield, TEAMS.castleford, 'FULL-TIME', new Date('2025-04-26T20:00:00'), 12, 30, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(252, TEAMS.salford, TEAMS.leigh, 'FULL-TIME', new Date('2025-04-26T20:00:00'), 6, 28, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(253, TEAMS.catalans, TEAMS.wakefield, 'FULL-TIME', new Date('2025-04-26T20:00:00'), 24, 20, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(254, TEAMS.hullFC, TEAMS.wigan, 'FULL-TIME', new Date('2025-04-27T20:00:00'), 12, 36, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(255, TEAMS.leigh, TEAMS.catalans, 'FULL-TIME', new Date('2025-05-03T20:00:00'), 26, 24, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(256, TEAMS.hullKR, TEAMS.salford, 'FULL-TIME', new Date('2025-05-03T20:00:00'), 54, 0, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(257, TEAMS.stHelens, TEAMS.leeds, 'FULL-TIME', new Date('2025-05-03T20:00:00'), 4, 17, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(258, TEAMS.huddersfield, TEAMS.hullFC, 'FULL-TIME', new Date('2025-05-04T20:00:00'), 12, 10, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(259, TEAMS.wigan, TEAMS.warrington, 'FULL-TIME', new Date('2025-05-04T20:00:00'), 22, 20, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(260, TEAMS.castleford, TEAMS.wakefield, 'FULL-TIME', new Date('2025-05-04T20:00:00'), 8, 32, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(261, TEAMS.stHelens, TEAMS.catalans, 'FULL-TIME', new Date('2025-05-15T20:00:00'), 40, 0, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(262, TEAMS.wigan, TEAMS.leigh, 'FULL-TIME', new Date('2025-05-16T20:00:00'), 36, 28, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(263, TEAMS.leeds, TEAMS.hullFC, 'FULL-TIME', new Date('2025-05-16T20:00:00'), 18, 16, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(264, TEAMS.hullKR, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-05-17T20:00:00'), 34, 0, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(265, TEAMS.wakefield, TEAMS.warrington, 'FULL-TIME', new Date('2025-05-18T20:00:00'), 40, 10, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(266, TEAMS.castleford, TEAMS.salford, 'FULL-TIME', new Date('2025-05-18T20:00:00'), 48, 16, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(267, TEAMS.leigh, TEAMS.hullFC, 'FULL-TIME', new Date('2025-05-22T20:00:00'), 12, 26, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(268, TEAMS.warrington, TEAMS.hullKR, 'FULL-TIME', new Date('2025-05-23T20:00:00'), 12, 31, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(269, TEAMS.huddersfield, TEAMS.stHelens, 'FULL-TIME', new Date('2025-05-23T20:00:00'), 4, 46, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(270, TEAMS.castleford, TEAMS.leeds, 'FULL-TIME', new Date('2025-05-24T20:00:00'), 6, 29, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(271, TEAMS.catalans, TEAMS.wigan, 'FULL-TIME', new Date('2025-05-24T20:00:00'), 0, 48, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(272, TEAMS.wakefield, TEAMS.salford, 'FULL-TIME', new Date('2025-05-25T20:00:00'), 72, 10, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(273, TEAMS.huddersfield, TEAMS.leigh, 'FULL-TIME', new Date('2025-05-29T20:00:00'), 24, 28, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(274, TEAMS.warrington, TEAMS.castleford, 'FULL-TIME', new Date('2025-05-30T20:00:00'), 34, 24, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(275, TEAMS.hullKR, TEAMS.stHelens, 'FULL-TIME', new Date('2025-05-30T20:00:00'), 34, 4, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(276, TEAMS.salford, TEAMS.wigan, 'FULL-TIME', new Date('2025-05-30T20:00:00'), 6, 46, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(277, TEAMS.leeds, TEAMS.wakefield, 'FULL-TIME', new Date('2025-05-31T20:00:00'), 22, 18, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(278, TEAMS.catalans, TEAMS.hullFC, 'FULL-TIME', new Date('2025-05-31T20:00:00'), 0, 34, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(279, TEAMS.hullKR, TEAMS.catalans, 'FULL-TIME', new Date('2025-06-13T20:00:00'), 68, 6, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(280, TEAMS.hullFC, TEAMS.castleford, 'FULL-TIME', new Date('2025-06-13T20:00:00'), 14, 22, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(281, TEAMS.huddersfield, TEAMS.wigan, 'FULL-TIME', new Date('2025-06-14T20:00:00'), 18, 22, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(282, TEAMS.leeds, TEAMS.warrington, 'FULL-TIME', new Date('2025-06-14T20:00:00'), 36, 12, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(283, TEAMS.wakefield, TEAMS.leigh, 'FULL-TIME', new Date('2025-06-15T20:00:00'), 20, 24, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(284, TEAMS.salford, TEAMS.stHelens, 'FULL-TIME', new Date('2025-06-15T20:00:00'), 4, 46, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(285, TEAMS.castleford, TEAMS.hullKR, 'FULL-TIME', new Date('2025-06-19T20:00:00'), 0, 48, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(286, TEAMS.stHelens, TEAMS.leeds, 'FULL-TIME', new Date('2025-06-20T20:00:00'), 18, 4, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(287, TEAMS.wakefield, TEAMS.wigan, 'FULL-TIME', new Date('2025-06-20T20:00:00'), 16, 10, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(288, TEAMS.warrington, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-06-21T20:00:00'), 16, 24, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(289, TEAMS.catalans, TEAMS.leigh, 'FULL-TIME', new Date('2025-06-21T20:00:00'), 12, 26, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(290, TEAMS.salford, TEAMS.hullFC, 'FULL-TIME', new Date('2025-06-22T20:00:00'), 6, 38, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(291, TEAMS.hullKR, TEAMS.wakefield, 'FULL-TIME', new Date('2025-06-27T20:00:00'), 34, 10, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(292, TEAMS.leeds, TEAMS.leigh, 'FULL-TIME', new Date('2025-06-27T20:00:00'), 48, 30, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(293, TEAMS.catalans, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-06-28T20:00:00'), 32, 0, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(294, TEAMS.warrington, TEAMS.hullFC, 'FULL-TIME', new Date('2025-06-28T20:00:00'), 24, 10, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(295, TEAMS.castleford, TEAMS.wigan, 'FULL-TIME', new Date('2025-06-28T20:00:00'), 20, 26, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(296, TEAMS.stHelens, TEAMS.salford, 'FULL-TIME', new Date('2025-06-29T20:00:00'), 58, 0, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(297, TEAMS.castleford, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-07-03T20:00:00'), 12, 30, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(298, TEAMS.leigh, TEAMS.wigan, 'FULL-TIME', new Date('2025-07-04T20:00:00'), 18, 8, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(299, TEAMS.salford, TEAMS.warrington, 'FULL-TIME', new Date('2025-07-04T20:00:00'), 12, 24, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(300, TEAMS.hullFC, TEAMS.stHelens, 'FULL-TIME', new Date('2025-07-05T20:00:00'), 6, 13, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(301, TEAMS.wakefield, TEAMS.catalans, 'FULL-TIME', new Date('2025-07-05T20:00:00'), 44, 6, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(302, TEAMS.hullKR, TEAMS.leeds, 'FULL-TIME', new Date('2025-07-06T20:00:00'), 8, 14, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(303, TEAMS.hullFC, TEAMS.wakefield, 'FULL-TIME', new Date('2025-07-10T20:00:00'), 16, 10, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(304, TEAMS.wigan, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-07-11T20:00:00'), 30, 10, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(305, TEAMS.leeds, TEAMS.stHelens, 'FULL-TIME', new Date('2025-07-11T20:00:00'), 0, 6, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(306, TEAMS.leigh, TEAMS.hullKR, 'FULL-TIME', new Date('2025-07-12T20:00:00'), 28, 10, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(307, TEAMS.catalans, TEAMS.warrington, 'FULL-TIME', new Date('2025-07-12T20:00:00'), 20, 24, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(308, TEAMS.salford, TEAMS.castleford, 'FULL-TIME', new Date('2025-07-13T20:00:00'), 26, 22, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(309, TEAMS.stHelens, TEAMS.leigh, 'FULL-TIME', new Date('2025-07-17T20:00:00'), 4, 16, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(310, TEAMS.huddersfield, TEAMS.wakefield, 'FULL-TIME', new Date('2025-07-18T20:00:00'), 10, 46, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(311, TEAMS.leeds, TEAMS.salford, 'FULL-TIME', new Date('2025-07-18T20:00:00'), 42, 6, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(312, TEAMS.wigan, TEAMS.hullFC, 'FULL-TIME', new Date('2025-07-19T20:00:00'), 12, 32, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(313, TEAMS.catalans, TEAMS.hullKR, 'FULL-TIME', new Date('2025-07-19T20:00:00'), 6, 34, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(314, TEAMS.castleford, TEAMS.warrington, 'FULL-TIME', new Date('2025-07-20T20:00:00'), 20, 14, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(315, TEAMS.wakefield, TEAMS.leeds, 'FULL-TIME', new Date('2025-07-24T20:00:00'), 15, 14, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(316, TEAMS.wigan, TEAMS.catalans, 'FULL-TIME', new Date('2025-07-25T20:00:00'), 28, 18, teamIdToVenue[TEAMS.wigan.id]),
-    // createMatchOnDate(317, TEAMS.hullFC, null, 'FULL-TIME', new Date('2025-07-26T20:00:00'), 14, 30, teamIdToVenue[TEAMS.hullFC.id]), // Missing away team
-    createMatchOnDate(318, TEAMS.salford, TEAMS.hullKR, 'FULL-TIME', new Date('2025-07-31T20:00:00'), 12, 74, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(319, TEAMS.leigh, TEAMS.warrington, 'FULL-TIME', new Date('2025-08-01T20:00:00'), 20, 16, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(320, TEAMS.stHelens, TEAMS.castleford, 'FULL-TIME', new Date('2025-08-01T20:00:00'), 40, 0, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(321, TEAMS.leigh, TEAMS.leeds, 'FULL-TIME', new Date('2025-08-07T20:00:00'), 14, 22, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(322, TEAMS.warrington, TEAMS.wigan, 'FULL-TIME', new Date('2025-08-08T20:00:00'), 18, 24, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(323, TEAMS.wakefield, TEAMS.stHelens, 'FULL-TIME', new Date('2025-08-08T20:00:00'), 4, 34, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(324, TEAMS.hullKR, TEAMS.castleford, 'FULL-TIME', new Date('2025-08-09T20:00:00'), 6, 36, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(325, TEAMS.huddersfield, TEAMS.catalans, 'FULL-TIME', new Date('2025-08-09T20:00:00'), 18, 6, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(326, TEAMS.hullFC, TEAMS.salford, 'FULL-TIME', new Date('2025-08-10T20:00:00'), 80, 6, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(327, TEAMS.warrington, TEAMS.catalans, 'FULL-TIME', new Date('2025-08-14T20:00:00'), 30, 22, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(328, TEAMS.wigan, TEAMS.hullKR, 'FULL-TIME', new Date('2025-08-15T20:00:00'), 6, 10, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(329, TEAMS.castleford, TEAMS.leeds, 'FULL-TIME', new Date('2025-08-16T20:00:00'), 6, 64, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(330, TEAMS.hullFC, TEAMS.leigh, 'FULL-TIME', new Date('2025-08-16T20:00:00'), 18, 12, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(331, TEAMS.stHelens, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-08-17T20:00:00'), 52, 4, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(332, TEAMS.leeds, TEAMS.hullKR, 'FULL-TIME', new Date('2025-08-21T20:00:00'), 28, 6, teamIdToVenue[TEAMS.leeds.id]),
-    createMatchOnDate(333, TEAMS.stHelens, TEAMS.hullFC, 'FULL-TIME', new Date('2025-08-22T20:00:00'), 16, 10, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(334, TEAMS.leigh, TEAMS.salford, 'FULL-TIME', new Date('2025-08-22T20:00:00'), 38, 6, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(335, TEAMS.catalans, TEAMS.castleford, 'FULL-TIME', new Date('2025-08-23T20:00:00'), 38, 4, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(336, TEAMS.huddersfield, TEAMS.warrington, 'FULL-TIME', new Date('2025-08-24T20:00:00'), 23, 10, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(337, TEAMS.wigan, TEAMS.wakefield, 'FULL-TIME', new Date('2025-08-24T20:00:00'), 44, 2, teamIdToVenue[TEAMS.wigan.id]),
-    createMatchOnDate(338, TEAMS.leigh, TEAMS.castleford, 'FULL-TIME', new Date('2025-08-28T20:00:00'), 46, 6, teamIdToVenue[TEAMS.leigh.id]),
-    createMatchOnDate(339, TEAMS.hullKR, TEAMS.stHelens, 'FULL-TIME', new Date('2025-08-29T20:00:00'), 12, 8, teamIdToVenue[TEAMS.hullKR.id]),
-    createMatchOnDate(340, TEAMS.warrington, TEAMS.salford, 'FULL-TIME', new Date('2025-08-29T20:00:00'), 12, 25, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(341, TEAMS.hullFC, TEAMS.leeds, 'FULL-TIME', new Date('2025-08-30T20:00:00'), 0, 34, teamIdToVenue[TEAMS.hullFC.id]),
-    createMatchOnDate(342, TEAMS.wakefield, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-08-30T20:00:00'), 48, 2, teamIdToVenue[TEAMS.wakefield.id]),
-    createMatchOnDate(343, TEAMS.catalans, TEAMS.wigan, 'FULL-TIME', new Date('2025-08-30T20:00:00'), 4, 40, teamIdToVenue[TEAMS.catalans.id]),
-    createMatchOnDate(344, TEAMS.huddersfield, TEAMS.leeds, 'FULL-TIME', new Date('2025-09-04T20:00:00'), 0, 26, teamIdToVenue[TEAMS.huddersfield.id]),
-    createMatchOnDate(345, TEAMS.salford, TEAMS.catalans, 'FULL-TIME', new Date('2025-09-04T20:00:00'), 16, 17, teamIdToVenue[TEAMS.salford.id]),
-    createMatchOnDate(346, TEAMS.stHelens, TEAMS.wigan, 'FULL-TIME', new Date('2025-09-05T20:00:00'), 4, 48, teamIdToVenue[TEAMS.stHelens.id]),
-    createMatchOnDate(347, TEAMS.castleford, TEAMS.wakefield, 'FULL-TIME', new Date('2025-09-05T20:00:00'), 26, 22, teamIdToVenue[TEAMS.castleford.id]),
-    createMatchOnDate(348, TEAMS.warrington, TEAMS.leigh, 'FULL-TIME', new Date('2025-09-06T20:00:00'), 12, 34, teamIdToVenue[TEAMS.warrington.id]),
-    createMatchOnDate(349, TEAMS.hullKR, TEAMS.hullFC, 'FULL-TIME', new Date('2025-09-07T20:00:00'), 18, 4, teamIdToVenue[TEAMS.hullKR.id]),
-];
+  // Upcoming
+  createMatch(1, TEAMS.wigan, TEAMS.stHelens, 'SCHEDULED', 1, 0, 0, VENUES.dw),
+  createMatch(2, TEAMS.leeds, TEAMS.warrington, 'SCHEDULED', 2, 0, 0, VENUES.headingley),
+  createMatch(3, TEAMS.catalans, TEAMS.huddersfield, 'SCHEDULED', 3, 0, 0, VENUES.gilbertBrutus),
+  createMatch(4, TEAMS.hullKR, TEAMS.hullFC, 'SCHEDULED', 4, 0, 0, VENUES.cravenPark),
+  createMatch(5, TEAMS.salford, TEAMS.leigh, 'SCHEDULED', 5, 0, 0, VENUES.salfordCommunity),
+  createMatch(6, TEAMS.castleford, TEAMS.london, 'SCHEDULED', 6, 0, 0, VENUES.mendAHose),
 
-export const mockLeagueTable: LeagueStanding[] = [
-    { rank: 1, teamId: TEAMS.hullKR.id, teamName: 'Hull KR', teamLogoUrl: TEAMS.hullKR.logoUrl, played: 25, wins: 21, draws: 0, losses: 4, points: 42, form: 'WWWWW' },
-    { rank: 2, teamId: TEAMS.wigan.id, teamName: 'Wigan Warriors', teamLogoUrl: TEAMS.wigan.logoUrl, played: 25, wins: 19, draws: 0, losses: 6, points: 38, form: 'WWWLW' },
-    { rank: 3, teamId: TEAMS.leeds.id, teamName: 'Leeds Rhinos', teamLogoUrl: TEAMS.leeds.logoUrl, played: 25, wins: 18, draws: 0, losses: 7, points: 36, form: 'LWWWW' },
-    { rank: 4, teamId: TEAMS.leigh.id, teamName: 'Leigh Leopards', teamLogoUrl: TEAMS.leigh.logoUrl, played: 25, wins: 17, draws: 1, losses: 7, points: 35, form: 'DWLWW' },
-    { rank: 5, teamId: TEAMS.stHelens.id, teamName: 'St Helens', teamLogoUrl: TEAMS.stHelens.logoUrl, played: 25, wins: 16, draws: 0, losses: 9, points: 32, form: 'WLLWW' },
-    { rank: 6, teamId: TEAMS.wakefield.id, teamName: 'Wakefield Trinity', teamLogoUrl: TEAMS.wakefield.logoUrl, played: 25, wins: 13, draws: 0, losses: 12, points: 26, form: 'LWWLW' },
-    { rank: 7, teamId: TEAMS.hullFC.id, teamName: 'Hull FC', teamLogoUrl: TEAMS.hullFC.logoUrl, played: 25, wins: 12, draws: 1, losses: 12, points: 25, form: 'DLLWL' },
-    { rank: 8, teamId: TEAMS.warrington.id, teamName: 'Warrington Wolves', teamLogoUrl: TEAMS.warrington.logoUrl, played: 25, wins: 10, draws: 0, losses: 15, points: 20, form: 'LWLLL' },
-    { rank: 9, teamId: TEAMS.catalans.id, teamName: 'Catalans Dragons', teamLogoUrl: TEAMS.catalans.logoUrl, played: 25, wins: 8, draws: 0, losses: 17, points: 16, form: 'LLWLL' },
-    { rank: 10, teamId: TEAMS.castleford.id, teamName: 'Castleford Tigers', teamLogoUrl: TEAMS.castleford.logoUrl, played: 25, wins: 6, draws: 0, losses: 19, points: 12, form: 'WLLLL' },
-    { rank: 11, teamId: TEAMS.huddersfield.id, teamName: 'Huddersfield Giants', teamLogoUrl: TEAMS.huddersfield.logoUrl, played: 25, wins: 6, draws: 0, losses: 19, points: 12, form: 'LLLWL' },
-    { rank: 12, teamId: TEAMS.salford.id, teamName: 'Salford Red Devils', teamLogoUrl: TEAMS.salford.logoUrl, played: 25, wins: 3, draws: 0, losses: 22, points: 6, form: 'LLLLL' },
-];
+  // Past
+  createMatch(7, TEAMS.wigan, TEAMS.leeds, 'FULL-TIME', -7, 34, 8, VENUES.dw),
+  createMatch(8, TEAMS.stHelens, TEAMS.catalans, 'FULL-TIME', -8, 22, 12, VENUES.totallyWicked),
+  createMatch(9, TEAMS.warrington, TEAMS.hullKR, 'FULL-TIME', -9, 18, 26, VENUES.halliwellJones),
+  createMatch(10, TEAMS.huddersfield, TEAMS.salford, 'FULL-TIME', -10, 16, 16, VENUES.johnSmiths),
+  createMatch(11, TEAMS.hullFC, TEAMS.london, 'FULL-TIME', -11, 28, 24, VENUES.mkm),
+  createMatch(12, TEAMS.leigh, TEAMS.castleford, 'FULL-TIME', -12, 30, 6, VENUES.leighSportsVillage),
+
+  // Badges
+  createMatch(13, TEAMS.wigan, TEAMS.warrington, 'FULL-TIME', -30, 18, 10, VENUES.oldTrafford),
+  createMatch(14, TEAMS.leeds, TEAMS.hullFC, 'FULL-TIME', -60, 28, 22, VENUES.stJamesPark),
+  createMatch(15, TEAMS.catalans, TEAMS.wigan, 'FULL-TIME', -20, 30, 12, VENUES.gilbertBrutus),
+
+  // Away Day badges
+  createMatch(16, TEAMS.huddersfield, TEAMS.stHelens, 'FULL-TIME', -40, 12, 24, VENUES.johnSmiths),
+  createMatch(17, TEAMS.warrington, TEAMS.stHelens, 'FULL-TIME', -50, 6, 18, VENUES.halliwellJones),
+  createMatch(18, TEAMS.leigh, TEAMS.stHelens, 'FULL-TIME', -25, 10, 30, VENUES.leighSportsVillage),
+
+  // 2024 fixtures
+  createMatchOnDate(101, TEAMS.leeds, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-11T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leeds.id]),
+  createMatchOnDate(102, TEAMS.wigan, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(103, TEAMS.leigh, TEAMS.stHelens, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(104, TEAMS.wakefield, TEAMS.hullKR, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.wakefield.id]),
+  createMatchOnDate(105, TEAMS.hullFC, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
+  createMatchOnDate(106, TEAMS.huddersfield, TEAMS.salford, 'SCHEDULED', new Date('2024-09-14T15:00:00'), 0, 0, teamIdToVenue[TEAMS.huddersfield.id]),
+  createMatchOnDate(107, TEAMS.hullKR, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(108, TEAMS.stHelens, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.stHelens.id]),
+  createMatchOnDate(109, TEAMS.leigh, TEAMS.huddersfield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(110, TEAMS.salford, TEAMS.wakefield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.salford.id]),
+  createMatchOnDate(111, TEAMS.hullFC, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
+  createMatchOnDate(112, TEAMS.wigan, TEAMS.leeds, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+
+  // 2025 results
+  createMatchOnDate(201, TEAMS.wigan, TEAMS.leigh, 'FULL-TIME', new Date('2025-02-13T20:00:00'), 0, 1, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(202, TEAMS.hullKR, TEAMS.castleford, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 19, 18, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(203, TEAMS.catalans, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 4, 24, teamIdToVenue[TEAMS.catalans.id]),
+  createMatchOnDate(204, TEAMS.leeds, TEAMS.wakefield, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 12, 14, teamIdToVenue[TEAMS.leeds.id]),
+  createMatchOnDate(205, TEAMS.stHelens, TEAMS.salford, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 82, 0, teamIdToVenue[TEAMS.stHelens.id]),
+  createMatchOnDate(206, TEAMS.huddersfield, TEAMS.warrington, 'FULL-TIME', new Date('2025-02-16T20:00:00'), 12, 20, teamIdToVenue[TEAMS.huddersfield.id]),
+  createMatchOnDate(207, TEAMS.wakefield, TEAMS.hullKR, 'FULL-TIME', new Date('2025-02-20T20:00:00'), 12, 14, teamIdToVenue[TEAMS.wakefield.id]),
+  createMatchOnDate(208, TEAMS.warrington, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 18, 12, teamIdToVenue[TEAMS.warrington.id]),
+  createMatchOnDate(209, TEAMS.hullFC, TEAMS.wigan, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 4, 46, teamIdToVenue[TEAMS.hullFC.id]),
+  createMatchOnDate(210, TEAMS.salford, TEAMS.leeds, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 32, teamIdToVenue[TEAMS.salford.id]),
+  createMatchOnDate(211, TEAMS.castleford, TEAMS.stHelens, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 46, teamIdToVenue[TEAMS.castleford.id]),
+  createMatchOnDate(212, TEAMS.leigh, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-02-23T20:00:00'), 24, 10, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(213, TEAMS.hullKR, TEAMS.salford, 'FULL-TIME', new Date('2025-02-27T20:00:00'), 42, 0, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(214, TEAMS.huddersfield, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 10, 11, teamIdToVenue[TEAMS.huddersfield.id]),
+  createMatchOnDate(215, TEAMS.leigh, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 34, 6, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(216, TEAMS.wakefield, TEAMS.stHelens, 'FULL-TIME', new Date('2025-03-01T20:00:00'), 6, 26, teamIdToVenue[TEAMS.wakefield.id]),
+  createMatchOnDate(
