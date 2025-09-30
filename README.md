@@ -2,16 +2,16 @@
 ```md
 # The Scrum Book
 
-![The Scrum Book logo](public/logo.svg)
+![The Scrum Book logo](public/logo.png)
 
-The Scrum Book is a tile-based React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
+The Scrum Book is a modern React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
 ---
 
 ## Features
 
 - **Match Browser** — search and filter the full season fixture list and mark games you attended.
-- **Match Detail View** — review venue notes, broadcast info, and log a match to your Scrum Book in one click.
+- **Match Day dashboards** — jump to the fixtures happening soon or near you with tailored views.
 - **My Scrum Book** — track total matches, unique venues, and revisit the games you have already logged.
 - **Offline-friendly seed data** — local fixtures and venues power the UI until you wire up Firestore.
 
@@ -21,17 +21,20 @@ The Scrum Book is a tile-based React + Vite application that helps rugby league 
 
 ```
 
-src/
-├── App.tsx                  # View orchestration and layout shell
-├── components/              # Tile, header, filters, and list components
-├── content/fixtures.ts      # Seeded venues and 2026 Super League fixtures
-├── firebase.ts              # Optional Firebase initialisation (falls back to local data)
-├── hooks/useScrumBook.ts    # Data loading, filtering, and attendance helpers
-├── services/matchService.ts # Firestore + local persistence utilities
-├── types.ts                 # Shared TypeScript types
-└── views/                   # Browser, detail, and My Scrum Book screens
+.
+├── App.tsx                # Root view orchestration and layout shell
+├── components/            # Feature views and shared UI components
+├── contexts/              # React context providers (auth, theme, etc.)
+├── hooks/                 # Custom hooks for theme, storage, and location
+├── services/              # Data fetching, Firebase helpers, and mock data
+├── utils/                 # Small shared utilities
+├── firebase.ts            # Optional Firebase initialisation (falls back to local data)
+├── index.tsx              # Vite entry point that renders <App />
+├── public/                # Static assets (logo, favicon, manifest)
+├── types.ts               # Shared TypeScript models
+└── vite.config.ts         # Vite build configuration
 
-````
+```
 
 ---
 
@@ -56,7 +59,7 @@ npm install
 npm run dev
 ```
 
-The server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on tile copy and layout tweaks.
+The server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on copy and layout tweaks.
 
 > ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage.
 
@@ -130,7 +133,7 @@ Create the following collections to mirror the MVP structure:
   * Field: `attendedMatches: (string | { matchId: string; attendedOn: string })[]`
 
 Seed the collections manually in the Firestore console while you build the UI.
-The default fixture list in `src/content/fixtures.ts` mirrors the 2026 season so you can copy/paste values during the initial import.
+The default fixture list in `services/mockData.ts` mirrors the 2026 season so you can copy/paste values during the initial import.
 
 ---
 
@@ -158,9 +161,9 @@ service cloud.firestore {
 ## Customising the Template
 
 1. **Branding** — update the CSS custom properties in `index.html` to change gradients and accent colours.
-2. **Fixtures** — edit `src/content/fixtures.ts` to swap in a different competition or off-season friendly schedule.
-3. **Copy & Tiles** — adjust the hero copy in `src/components/Header.tsx` and tile content in the view components.
-4. **Data Sources** — replace the seed fetch helpers in `src/services/matchService.ts` with API calls or additional Firestore queries as you scale beyond the MVP.
+2. **Fixtures** — edit `services/mockData.ts` to swap in a different competition or off-season friendly schedule.
+3. **Copy & Layout** — adjust the hero copy in `components/Header.tsx` and the supporting view components.
+4. **Data Sources** — replace the seed fetch helpers in `services/apiService.ts` with API calls or additional Firestore queries as you scale beyond the MVP.
 
 ---
 
@@ -191,12 +194,19 @@ Update `.firebaserc` (or run `firebase use --add`) so that the `default` project
 
 ---
 
+## FAQ
+
+### What are "binary files" and why do tools mention them?
+
+Binary files are assets that are not stored as plain human-readable text—think images (`.png`, `.jpg`), fonts, audio, or compiled application bundles. Git can version these files, but many automated review tools skip showing their diffs because the raw bytes do not translate into meaningful text comparisons. When you see a warning such as "Binary files are not supported," it usually means the tool cannot preview changes to those assets inline. The files themselves are still tracked in the repository and ship with the app as expected.
+
+---
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss your ideas.
 
 ---
-
 ## License
 
 MIT
