@@ -9,3 +9,19 @@
   },
   "include": ["vite.config.ts"]
 }
+{
+  "compilerOptions": {
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "vite.config.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
