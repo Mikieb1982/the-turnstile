@@ -1,4 +1,4 @@
-// Fix: explicit React type imports so this file compiles without relying on a global React namespace
+// Explicit React type imports so this file compiles without relying on a global React namespace
 import type { FC, SVGProps } from 'react';
 
 // This file defines the core data structures for the application.
