@@ -73,7 +73,9 @@ The bundled assets are output to `dist/`. Use `npm run preview` to run the produ
 * `npm run dev` — start dev server with HMR
 * `npm run build` — bundle production assets
 * `npm run preview` — serve production build locally
-* `npm run deploy` — deploy to GitHub Pages
+* `npm run firebase:login` — authenticate with the Firebase CLI before your first deploy
+* `npm run firebase:serve` — run the Firebase Hosting emulator to test the built app locally
+* `npm run firebase:deploy` — build the project and deploy the `dist/` folder to Firebase Hosting
 
 ---
 
@@ -85,16 +87,7 @@ Copy the example environment file to start wiring up your own Firebase project:
 cp .env.example .env.local
 ```
 
-Update `.env.local` with the values from **Project Settings → General → Your apps → Web app** in the Firebase console:
-
-```
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
-VITE_FIREBASE_APP_ID=your-app-id
-```
+Update `.env.local` with the values from **Project Settings → General → Your apps → Web app** in the Firebase console. If you are not using Analytics you can leave `VITE_FIREBASE_MEASUREMENT_ID` empty. Set `VITE_USE_FIREBASE_EMULATORS=true` to point the app at your local emulators during development.
 
 Restart `npm run dev` after saving the file. When the keys are missing the app falls back to the seeded fixtures and stores attendance locally in `localStorage`.
 
@@ -165,13 +158,28 @@ service cloud.firestore {
 
 ## Deployment
 
-The project includes a Pages-friendly script if you want to ship to GitHub Pages:
+The repository is pre-configured for Firebase Hosting. To deploy the built app:
 
-```bash
-npm run deploy
-```
+1. Install the Firebase CLI if you have not already:
 
-Update the `homepage` field in `package.json` to point at your repository slug before deploying. Any static host that can serve the files in `dist/` will work.
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. Authenticate once on your machine:
+
+   ```bash
+   npm run firebase:login
+   ```
+
+3. Build and deploy:
+
+   ```bash
+   npm run firebase:deploy
+   ```
+
+The Firebase configuration in `firebase.json` rewrites all routes to `index.html` so that client-side routing works as expected.
+Update `.firebaserc` (or run `firebase use --add`) so that the `default` project matches your Firebase Hosting site before deploying.
 
 ---
 

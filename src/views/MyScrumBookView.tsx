@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import type { AttendanceStats, MatchAttendance, MatchWithVenue } from '../types';
-import { StatsSummary } from '../components/StatsSummary';
-import { AttendanceList } from '../components/AttendanceList';
-import { Tile } from '../components/Tile';
+import { StatsSummary } from '../../components/StatsSummary';
+import { AttendanceList } from '../../components/AttendanceList';
+import { Tile } from '../../components/Tile';
 
 interface MyScrumBookViewProps {
   stats: AttendanceStats;

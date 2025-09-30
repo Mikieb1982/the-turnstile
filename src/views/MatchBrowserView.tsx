@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { MatchWithVenue } from '../types';
-import { formatDateTimeDE } from '../utils/formatDateTime';
+import { formatDateTimeDE } from '../../utils/formatDateTime';
 
 interface MatchGridProps {
   matches: MatchWithVenue[];
