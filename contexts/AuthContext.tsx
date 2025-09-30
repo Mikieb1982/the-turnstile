@@ -1,22 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import firebase from 'firebase/compat/app';
-import { auth, storage } from '../firebase';
-import type { User, AttendedMatch, Profile } from '../types';
-import {
-  getUserProfile,
-  createUserProfile,
-  addAttendedMatchToProfile,
-  removeAttendedMatchFromProfile,
-  updateUserProfile,
-  addBadgeToProfile,
-  updateAttendedMatchPhotoInProfile,
-  addFriendToProfile,
-  removeFriendFromProfile,
-} from '../services/userService';
+import type { User, AttendedMatch, Profile, AuthUser } from '../types';
 import { checkAndAwardBadges } from '../badges';
 
 interface AuthContextType {
-  currentUser: firebase.User | null;
+  currentUser: AuthUser | null;
   profile: Profile | null;
   loading: boolean;
   login: () => Promise<void>;
@@ -76,11 +63,11 @@ const ensureOfflineProfile = (): Profile => {
   return fresh;
 };
 
-const offlineUser = {
+const offlineUser: AuthUser = {
   uid: 'offline-user',
   displayName: 'Offline Fan',
   isAnonymous: true,
-} as unknown as firebase.User;
+};
 
 const markOfflineAuthenticated = (authenticated: boolean) => {
   if (!isBrowser()) {
@@ -116,119 +103,38 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<firebase.User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!auth) {
-      if (hasOfflineSession()) {
-        const existingProfile = ensureOfflineProfile();
-        setCurrentUser(offlineUser);
-        setProfile(existingProfile);
-      }
-      setLoading(false);
-      return;
+    const existingProfile = ensureOfflineProfile();
+    if (hasOfflineSession()) {
+      setCurrentUser(offlineUser);
+      setProfile(existingProfile);
     }
-
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setCurrentUser(user);
-        try {
-          const userProfile = await getUserProfile(user.uid);
-          if (userProfile) {
-            const finalUser =
-              userProfile.user && typeof userProfile.user === 'object'
-                ? (userProfile.user as User)
-                : { name: user.displayName || 'Rugby Fan' };
-
-            const sanitizedProfile: Profile = {
-              user: {
-                name: finalUser.name || user.displayName || 'Rugby Fan',
-                favoriteTeamId: finalUser.favoriteTeamId,
-                avatarUrl: finalUser.avatarUrl,
-              },
-              attendedMatches: (Array.isArray(userProfile.attendedMatches) ? userProfile.attendedMatches : []).filter(
-                (am) => am && am.match && typeof am.match.id === 'string'
-              ),
-              earnedBadgeIds: Array.isArray(userProfile.earnedBadgeIds) ? userProfile.earnedBadgeIds : [],
-              friendIds: Array.isArray(userProfile.friendIds) ? userProfile.friendIds : [],
-            };
-            setProfile(sanitizedProfile);
-          } else {
-            const newProfile: Profile = createEmptyProfile();
-            newProfile.user.name = user.displayName || 'Rugby Fan';
-            await createUserProfile(user.uid, newProfile);
-            setProfile(newProfile);
-          }
-        } catch (error: any) {
-          if (error.code === 'unavailable') {
-            console.warn('Failed to get user profile (client is offline). Using a temporary local profile for this session.');
-          } else {
-            console.error('Failed to get or create user profile:', error?.message ?? error);
-            console.warn('Using a temporary local profile for this session.');
-          }
-          const temporaryProfile = createEmptyProfile();
-          setProfile(temporaryProfile);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setCurrentUser(null);
-        setProfile(null);
-        setLoading(false);
-      }
-    });
-
-    return unsubscribe;
+    setLoading(false);
   }, []);
 
   const login = async () => {
     setLoading(true);
-    if (!auth) {
-      markOfflineAuthenticated(true);
-      const existingProfile = ensureOfflineProfile();
-      setCurrentUser(offlineUser);
-      setProfile(existingProfile);
-      setLoading(false);
-      return;
-    }
-
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-
-    try {
-      await auth.signInWithPopup(provider);
-    } catch (error: any) {
-      if (error?.code === 'auth/operation-not-supported-in-this-environment' || error?.code === 'auth/popup-blocked') {
-        try {
-          await auth.signInWithRedirect(provider);
-          return;
-        } catch (redirectError) {
-          console.error('Google sign-in redirect failed', redirectError);
-        }
-      }
-
-      console.error('Google sign-in failed', error);
-      setLoading(false);
-    }
+    markOfflineAuthenticated(true);
+    const existingProfile = ensureOfflineProfile();
+    setCurrentUser(offlineUser);
+    setProfile(existingProfile);
+    setLoading(false);
   };
 
   const logout = async () => {
     setLoading(true);
-    if (!auth) {
-      markOfflineAuthenticated(false);
-      setCurrentUser(null);
-      setProfile(null);
-      setLoading(false);
-      return;
-    }
-
-    await auth.signOut();
+    markOfflineAuthenticated(false);
+    setCurrentUser(null);
+    setProfile(null);
+    setLoading(false);
   };
 
   const addAttendedMatch = async (match: AttendedMatch['match']) => {
-    if (!currentUser || !profile) {
+    if (!profile) {
       return;
     }
 
@@ -243,157 +149,65 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const nextProfile: Profile = { ...profile, attendedMatches: updatedMatches, earnedBadgeIds: updatedBadgeIds };
 
     setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await addAttendedMatchToProfile(currentUser.uid, newAttendedMatch);
-      if (newlyEarnedBadges.length > 0) {
-        await addBadgeToProfile(currentUser.uid, newlyEarnedBadges);
-      }
-    } catch (error: any) {
-      if (error.code === 'unavailable') {
-        console.warn('Offline: Attended match saved locally. It will sync when connection is restored.');
-        persistOfflineProfile(nextProfile);
-      } else {
-        console.error('Error adding attended match:', error);
-      }
-    }
+    persistOfflineProfile(nextProfile);
   };
 
   const removeAttendedMatch = async (matchId: string) => {
-    if (!currentUser || !profile) return;
+    if (!profile) return;
 
     const updatedMatches = (profile.attendedMatches || []).filter((am) => am.match.id !== matchId);
     const nextProfile: Profile = { ...profile, attendedMatches: updatedMatches };
 
     setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await removeAttendedMatchFromProfile(currentUser.uid, matchId);
-    } catch (error: any) {
-      if (error.code === 'unavailable') {
-        console.warn('Offline: Match removal saved locally. It will sync when connection is restored.');
-        persistOfflineProfile(nextProfile);
-      } else {
-        console.error('Error removing attended match:', error);
-      }
-    }
+    persistOfflineProfile(nextProfile);
   };
 
   const updateUser = async (updatedUser: Partial<User>) => {
-    if (!currentUser || !profile) return;
+    if (!profile) return;
 
     const newProfileUser = { ...profile.user, ...updatedUser };
     const nextProfile: Profile = { ...profile, user: newProfileUser };
 
     setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await updateUserProfile(currentUser.uid, { user: newProfileUser });
-    } catch (error: any) {
-      if (error.code === 'unavailable') {
-        console.warn('Offline: User profile update saved locally. It will sync when connection is restored.');
-        persistOfflineProfile(nextProfile);
-      } else {
-        console.error('Error updating user profile:', error);
-      }
-    }
+    persistOfflineProfile(nextProfile);
   };
 
   const addPhotoToMatch = async (matchId: string, photoFile: File) => {
-    if (!currentUser || !profile) return;
-
-    if (!auth || !storage) {
-      try {
-        const photoUrl = await readFileAsDataUrl(photoFile);
-        const updatedMatches = (profile.attendedMatches || []).map((am) =>
-          am.match.id === matchId ? { ...am, photoUrl } : am
-        );
-        const nextProfile: Profile = { ...profile, attendedMatches: updatedMatches };
-        setProfile(nextProfile);
-        persistOfflineProfile(nextProfile);
-      } catch (error) {
-        console.error('Failed to process photo offline:', error);
-      }
-      return;
-    }
-
-    const filePath = `users/${currentUser.uid}/photos/${matchId}-${photoFile.name}`;
-    const storageRef = storage.ref(filePath);
-    const fileSnapshot = await storageRef.put(photoFile);
-    const photoUrl = await fileSnapshot.ref.getDownloadURL();
-
-    const updatedMatches = (profile.attendedMatches || []).map((am) =>
-      am.match.id === matchId ? { ...am, photoUrl } : am
-    );
-    const nextProfile: Profile = { ...profile, attendedMatches: updatedMatches };
-
-    setProfile(nextProfile);
+    if (!profile) return;
 
     try {
-      await updateAttendedMatchPhotoInProfile(currentUser.uid, matchId, photoUrl);
-    } catch (error: any) {
-      if (error.code === 'unavailable') {
-        console.warn('Offline: Photo URL update saved locally and will sync when connection is restored.');
-        persistOfflineProfile(nextProfile);
-      } else {
-        console.error('Error updating photo URL in profile:', error);
-      }
+      const photoUrl = await readFileAsDataUrl(photoFile);
+      const updatedMatches = (profile.attendedMatches || []).map((am) =>
+        am.match.id === matchId ? { ...am, photoUrl } : am
+      );
+      const nextProfile: Profile = { ...profile, attendedMatches: updatedMatches };
+      setProfile(nextProfile);
+      persistOfflineProfile(nextProfile);
+    } catch (error) {
+      console.error('Failed to process photo offline:', error);
     }
   };
 
   const addFriend = async (friendId: string) => {
-    if (!currentUser || !profile) return;
+    if (!profile) return;
+    if (profile.friendIds.includes(friendId)) {
+      return;
+    }
+
     const updatedFriendIds = [...profile.friendIds, friendId];
     const nextProfile: Profile = { ...profile, friendIds: updatedFriendIds };
 
     setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await addFriendToProfile(currentUser.uid, friendId);
-    } catch (error) {
-      console.error('Error adding friend:', error);
-      setProfile(profile);
-    }
+    persistOfflineProfile(nextProfile);
   };
 
   const removeFriend = async (friendId: string) => {
-    if (!currentUser || !profile) return;
+    if (!profile) return;
     const updatedFriendIds = profile.friendIds.filter((id) => id !== friendId);
     const nextProfile: Profile = { ...profile, friendIds: updatedFriendIds };
 
     setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await removeFriendFromProfile(currentUser.uid, friendId);
-    } catch (error) {
-      console.error('Error removing friend:', error);
-      setProfile(profile);
-    }
+    persistOfflineProfile(nextProfile);
   };
 
   const value = {

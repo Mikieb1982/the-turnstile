@@ -28,7 +28,6 @@ The Scrum Book is a modern React + Vite application that helps rugby league fans
 ├── hooks/                 # Custom hooks for theme, storage, and location
 ├── services/              # Data fetching, Firebase helpers, and mock data
 ├── utils/                 # Small shared utilities
-├── firebase.ts            # Optional Firebase initialisation (falls back to local data)
 ├── index.tsx              # Vite entry point that renders <App />
 ├── public/                # Static assets (logo, favicon, manifest)
 ├── types.ts               # Shared TypeScript models
@@ -86,15 +85,7 @@ The bundled assets are output to `dist/`. Use `npm run preview` to run the produ
 
 ## Firebase Integration (Optional)
 
-Copy the example environment file to start wiring up your own Firebase project:
-
-```bash
-cp .env.example .env.local
-```
-
-Update `.env.local` with the values from **Project Settings → General → Your apps → Web app** in the Firebase console. If you are not using Analytics you can leave `VITE_FIREBASE_MEASUREMENT_ID` empty. Set `VITE_USE_FIREBASE_EMULATORS=true` to point the app at your local emulators during development.
-
-Restart `npm run dev` after saving the file. When the keys are missing the app falls back to the seeded fixtures and stores attendance locally in `localStorage`.
+This build runs entirely offline using localStorage. To connect your own Firebase project, reinstall the `firebase` dependency and recreate a `firebase.ts` initialiser that exports `auth`, `db`, and `storage` instances. Copy `.env.example` to `.env.local`, populate the keys from the Firebase console, and restart the dev server so Vite picks up the changes.
 
 ### Enable Google Sign-In
 
