@@ -134,3 +134,39 @@ export interface ScrumBookData {
   profiles: Record<string, Profile>;
   activeProfileId: string | null;
 }
+
+export interface MatchVenueDetails {
+  name: string;
+  city?: string;
+  capacity?: number;
+  notes?: string;
+}
+
+export interface MatchWithVenue {
+  id: string;
+  round?: string;
+  competitionName?: string;
+  homeTeam: string;
+  awayTeam: string;
+  date: string;
+  kickoffTime?: string;
+  headline?: string;
+  broadcast?: string;
+  venue: MatchVenueDetails;
+}
+
+export interface MatchAttendance {
+  matchId: string;
+  attendedOn: string;
+  notes?: string;
+  rating?: number;
+}
+
+export interface AttendanceStats {
+  totalMatches: number;
+  uniqueVenues: number;
+  currentStreak: number;
+  favouriteVenue?: string;
+  firstMatchDate?: string;
+  recentAttendance?: MatchWithVenue;
+}

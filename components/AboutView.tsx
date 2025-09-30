@@ -119,8 +119,8 @@ export const AboutView: React.FC = () => {
               A modern field guide for resilient product teams
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-text">
-              Inspired by mcfatty’s modular interface, this version wraps the core Scrum patterns in polished cards, vibrant colour blocks,
-              and actionable checklists. Move from reading about agility to practicing it together.
+              The Scrum Book wraps field-tested patterns in polished cards, vibrant colour blocks, and actionable checklists so teams can
+              move from reading about agility to practicing it together.
             </p>
             <div className="mt-8 flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 font-semibold text-primary">
@@ -219,8 +219,8 @@ export const AboutView: React.FC = () => {
       <section className="rounded-3xl border border-border/80 bg-surface p-8 shadow-card">
         <h2 className="text-2xl font-bold text-text-strong">Run every ceremony with confidence</h2>
         <p className="mt-2 max-w-2xl text-text">
-          Each chapter mirrors the warm, card-based style of the McFatty template so you can facilitate from the book without extra slides.
-          Pair each ritual with done-for-you prompts, suggested visual layouts, and recommended artefacts to inspect.
+          Each chapter follows the warm, card-based system introduced throughout the Scrum Book, letting you facilitate without extra
+          slides. Pair each ritual with done-for-you prompts, suggested visual layouts, and recommended artefacts to inspect.
         </p>
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {ceremonyCards.map((ceremony) => {
@@ -256,8 +256,8 @@ export const AboutView: React.FC = () => {
       <section className="rounded-3xl border border-border/80 bg-surface-alt/80 p-8 text-center shadow-card">
         <h2 className="text-2xl font-bold text-text-strong">Bring the Scrum Book to your next sprint</h2>
         <p className="mt-2 text-text">
-          Print it, project it, or drop it into your team workspace. The refreshed interface mirrors the modular blocks from the McFatty food tracker,
-          so every squad can remix the layouts without rebuilding the system.
+          Print it, project it, or drop it into your team workspace. The unified layout keeps every squad working from the same playbook while still
+          giving you the freedom to remix the sections that matter most.
         </p>
         <p className="mt-4 text-sm font-medium uppercase tracking-[0.2em] text-text-subtle">
           Co-create. Inspect. Adapt. Repeat.
