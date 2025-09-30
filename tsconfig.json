@@ -14,28 +14,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "baseUrl": "."
+    "baseUrl": "./src"
   },
-  "include": [
-    "App.tsx",
-    "index.tsx",
-    "firebase.ts",
-    "badges.ts",
-    "components/**/*.ts",
-    "components/**/*.tsx",
-    "contexts/**/*.ts",
-    "contexts/**/*.tsx",
-    "hooks/**/*.ts",
-    "hooks/**/*.tsx",
-    "mocks/**/*.ts",
-    "mocks/**/*.tsx",
-    "services/**/*.ts",
-    "services/**/*.tsx",
-    "utils/**/*.ts",
-    "utils/**/*.tsx",
-    "types.ts",
-    "src/types.ts",
-    "vite-env.d.ts"
-  ],
-  "exclude": ["dist", "node_modules", ".vite", "coverage", "src/views/**/*"]
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["dist", "node_modules", ".vite", "coverage"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }
+
