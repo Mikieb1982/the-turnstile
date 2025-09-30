@@ -1,7 +1,19 @@
 import React from 'react';
-import { CalendarIcon, InformationCircleIcon, TableCellsIcon, SunIcon, MoonIcon, CalendarDaysIcon, UserCircleIcon, BuildingStadiumIcon, LogoIcon, LocationMarkerIcon, UsersIcon, ArrowRightOnRectangleIcon } from './Icons';
-import type { View } from '../types';
-import type firebase from 'firebase/compat/app';
+import {
+  CalendarIcon,
+  InformationCircleIcon,
+  TableCellsIcon,
+  SunIcon,
+  MoonIcon,
+  CalendarDaysIcon,
+  UserCircleIcon,
+  BuildingStadiumIcon,
+  LogoIcon,
+  LocationMarkerIcon,
+  UsersIcon,
+  ArrowRightOnRectangleIcon,
+} from './Icons';
+import type { View, AuthUser } from '../types';
 
 
 interface HeaderProps {
@@ -9,7 +21,7 @@ interface HeaderProps {
   setView: (view: View) => void;
   theme: string;
   toggleTheme: () => void;
-  currentUser: firebase.User | null;
+  currentUser: AuthUser | null;
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser }) => {
