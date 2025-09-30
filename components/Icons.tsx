@@ -2,16 +2,12 @@ import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement>;
 
-// FIX: Removed the duplicate SVG version of LogoIcon.
-
-// FIX: Added missing closing tag and parenthesis.
 export const RugbyBallIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
         <path d="M12.01,2.02c-5.5,0-9.99,3.58-9.99,8c0,4.42,4.49,8,9.99,8c5.5,0,9.99-3.58,9.99-8C22,5.6,17.51,2.02,12.01,2.02z M10.43,14.6l-3.32-1.92l1.66-2.88l3.32,1.92L10.43,14.6z M11.99,11.02l-3.32-1.92l1.66-2.88l3.32,1.92L11.99,11.02z M15.25,12.68l-3.32-1.92l1.66-2.88l3.32,1.92L15.25,12.68z"/>
     </svg>
 );
 
-// This is the correct LogoIcon component using an image.
 export const LogoIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ className, ...props }) => (
   <img
     src="/logo.png"
@@ -22,10 +18,9 @@ export const LogoIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ 
   />
 );
 
-// FIX: Corrected the path data by removing the invalid segment.
 export const CalendarIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18.75z" />
     </svg>
 );
 
@@ -102,7 +97,6 @@ export const UserCircleIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
-// FIX: Added a complete SVG implementation.
 export const BuildingStadiumIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-18 0v8.25a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 17.25V9" />
