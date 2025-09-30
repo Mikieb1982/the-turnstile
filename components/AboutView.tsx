@@ -10,6 +10,8 @@ import {
   PencilIcon,
   TrophyIcon,
   LocationMarkerIcon,
+  ClipboardDocumentCheckIcon,
+  TableCellsIcon,
 } from './Icons';
 
 interface HighlightCard {
@@ -21,7 +23,7 @@ interface HighlightCard {
 }
 
 interface FeatureColumn {
-  title: string;
+  title:string;
   items: string[];
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
@@ -35,7 +37,7 @@ interface FeatureCard {
 
 const highlightCards: HighlightCard[] = [
   {
-    title: 'Your Digital Matchday Diary',
+    title: 'Your Digital Match Day Diary',
     description: 'The Scrum Book is your personal companion for tracking every rugby league match you attend, creating a digital diary of your support.',
     icon: SparklesIcon,
     accent: 'from-primary/80 to-secondary/70',
@@ -65,6 +67,7 @@ const featureColumns: FeatureColumn[] = [
       'Log every match you attend with a single click.',
       'View upcoming fixtures and past results for the season.',
       'See the live Super League table with team form guides.',
+      'Play prediction games and test your rugby league knowledge.',
     ],
   },
   {
@@ -74,6 +77,7 @@ const featureColumns: FeatureColumn[] = [
       'Track your personal stats, including total matches and unique venues.',
       'Find nearby matches based on your current location.',
       'Set your favorite team for a more tailored experience.',
+      'Upload photos to your attended matches to create a visual diary.',
     ],
   },
 ];
@@ -92,10 +96,10 @@ const featureCards: FeatureCard[] = [
     icon: ChartBarIcon,
   },
   {
-    title: 'Grounds Guide',
-    summary: 'Discover all the Super League stadiums, sorted by distance from you, with key facts about each one.',
-    focus: 'Plan your next away day and tick another ground off your list.',
-    icon: LocationMarkerIcon,
+    title: 'Prediction Games',
+    summary: 'Predict the winner and margin for upcoming matches and compete with other fans.',
+    focus: 'Test your knowledge and see how you rank against the community.',
+    icon: ClipboardDocumentCheckIcon,
   },
 ];
 
@@ -104,6 +108,7 @@ const getStartedSteps: string[] = [
   'Browse the fixtures and mark any matches you have attended in the past.',
   'Upload photos to your attended matches to create a visual diary.',
   'Check out the "Grounds" view to see which stadiums are closest to you.',
+  'Make your predictions for upcoming games and see how you do!',
 ];
 
 export const AboutView: React.FC = () => {
