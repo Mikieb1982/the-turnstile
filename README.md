@@ -2,6 +2,8 @@
 ```md
 # The Scrum Book
 
+![The Scrum Book logo](public/logo.svg)
+
 The Scrum Book is a tile-based React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
 ---
@@ -90,6 +92,12 @@ cp .env.example .env.local
 Update `.env.local` with the values from **Project Settings → General → Your apps → Web app** in the Firebase console. If you are not using Analytics you can leave `VITE_FIREBASE_MEASUREMENT_ID` empty. Set `VITE_USE_FIREBASE_EMULATORS=true` to point the app at your local emulators during development.
 
 Restart `npm run dev` after saving the file. When the keys are missing the app falls back to the seeded fixtures and stores attendance locally in `localStorage`.
+
+### Enable Google Sign-In
+
+1. In the Firebase console, open **Build → Authentication → Sign-in method** and enable the **Google** provider. Configure the support email when prompted so users can sign in with their Google account.
+2. Still in **Project settings → General**, scroll to **Your apps** and add the SHA-1 release fingerprint for every Android app that should support Google Sign-In. This step is required for Google to trust the OAuth client.
+3. In **Project settings → General → Your project**, update the **Public-facing name** so it matches `project-99200945430`. Firebase uses this value during the Google account consent screen.
 
 ---
 

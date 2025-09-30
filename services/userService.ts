@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { db, isFirebaseConfigured } from '../firebase';
-import type { Profile, AttendedMatch, Prediction } from '../types';
+import type { Profile, AttendedMatch } from '../types';
 
 const offlineError = () => {
   const error = new Error(
@@ -128,19 +128,3 @@ export const removeFriendFromProfile = async (uid: string, friendId: string): Pr
   await batch.commit();
 };
 
-export const savePrediction = async (uid: string, prediction: Prediction): Promise<void> => {
-  const userProfile = await getUserProfile(uid);
-  if (userProfile) {
-    const otherPredictions = (userProfile.predictions || []).filter((p) => p.matchId !== prediction.matchId);
-    const updatedPredictions = [...otherPredictions, prediction];
-    await updateUserProfile(uid, { predictions: updatedPredictions });
-  }
-};
-
-export const deletePrediction = async (uid: string, matchId: string): Promise<void> => {
-  const userProfile = await getUserProfile(uid);
-  if (userProfile) {
-    const updatedPredictions = (userProfile.predictions || []).filter((p) => p.matchId !== matchId);
-    await updateUserProfile(uid, { predictions: updatedPredictions });
-  }
-};

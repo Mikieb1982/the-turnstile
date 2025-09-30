@@ -236,21 +236,20 @@ export const mockMatches: Match[] = [
   createMatchOnDate(111, TEAMS.hullFC, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
   createMatchOnDate(112, TEAMS.wigan, TEAMS.leeds, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
 
-  // 2025 results
-  createMatchOnDate(201, TEAMS.wigan, TEAMS.leigh, 'FULL-TIME', new Date('2025-02-13T20:00:00'), 0, 1, teamIdToVenue[TEAMS.wigan.id]),
-  createMatchOnDate(202, TEAMS.hullKR, TEAMS.castleford, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 19, 18, teamIdToVenue[TEAMS.hullKR.id]),
-  createMatchOnDate(203, TEAMS.catalans, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-14T20:00:00'), 4, 24, teamIdToVenue[TEAMS.catalans.id]),
-  createMatchOnDate(204, TEAMS.leeds, TEAMS.wakefield, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 12, 14, teamIdToVenue[TEAMS.leeds.id]),
-  createMatchOnDate(205, TEAMS.stHelens, TEAMS.salford, 'FULL-TIME', new Date('2025-02-15T20:00:00'), 82, 0, teamIdToVenue[TEAMS.stHelens.id]),
-  createMatchOnDate(206, TEAMS.huddersfield, TEAMS.warrington, 'FULL-TIME', new Date('2025-02-16T20:00:00'), 12, 20, teamIdToVenue[TEAMS.huddersfield.id]),
-  createMatchOnDate(207, TEAMS.wakefield, TEAMS.hullKR, 'FULL-TIME', new Date('2025-02-20T20:00:00'), 12, 14, teamIdToVenue[TEAMS.wakefield.id]),
-  createMatchOnDate(208, TEAMS.warrington, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 18, 12, teamIdToVenue[TEAMS.warrington.id]),
-  createMatchOnDate(209, TEAMS.hullFC, TEAMS.wigan, 'FULL-TIME', new Date('2025-02-21T20:00:00'), 4, 46, teamIdToVenue[TEAMS.hullFC.id]),
-  createMatchOnDate(210, TEAMS.salford, TEAMS.leeds, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 32, teamIdToVenue[TEAMS.salford.id]),
-  createMatchOnDate(211, TEAMS.castleford, TEAMS.stHelens, 'FULL-TIME', new Date('2025-02-22T20:00:00'), 6, 46, teamIdToVenue[TEAMS.castleford.id]),
-  createMatchOnDate(212, TEAMS.leigh, TEAMS.huddersfield, 'FULL-TIME', new Date('2025-02-23T20:00:00'), 24, 10, teamIdToVenue[TEAMS.leigh.id]),
-  createMatchOnDate(213, TEAMS.hullKR, TEAMS.salford, 'FULL-TIME', new Date('2025-02-27T20:00:00'), 42, 0, teamIdToVenue[TEAMS.hullKR.id]),
-  createMatchOnDate(214, TEAMS.huddersfield, TEAMS.hullFC, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 10, 11, teamIdToVenue[TEAMS.huddersfield.id]),
-  createMatchOnDate(215, TEAMS.leigh, TEAMS.catalans, 'FULL-TIME', new Date('2025-02-28T20:00:00'), 34, 6, teamIdToVenue[TEAMS.leigh.id]),
-  createMatchOnDate(216, TEAMS.wakefield, TEAMS.stHelens, 'FULL-TIME', new Date('2025-03-01T20:00:00'), 6, 26, teamIdToVenue[TEAMS.wakefield.id]),
-  createMatchOnDate(
+];
+
+export const mockLeagueTable: LeagueStanding[] = [
+  { rank: 1, teamId: TEAMS.wigan.id, teamName: TEAMS.wigan.name, teamLogoUrl: TEAMS.wigan.logoUrl, played: 20, wins: 16, draws: 0, losses: 4, points: 32, form: 'WWWLW' },
+  { rank: 2, teamId: TEAMS.stHelens.id, teamName: TEAMS.stHelens.name, teamLogoUrl: TEAMS.stHelens.logoUrl, played: 20, wins: 15, draws: 0, losses: 5, points: 30, form: 'WWLWW' },
+  { rank: 3, teamId: TEAMS.leeds.id, teamName: TEAMS.leeds.name, teamLogoUrl: TEAMS.leeds.logoUrl, played: 20, wins: 13, draws: 1, losses: 6, points: 27, form: 'WLWWD' },
+  { rank: 4, teamId: TEAMS.warrington.id, teamName: TEAMS.warrington.name, teamLogoUrl: TEAMS.warrington.logoUrl, played: 20, wins: 12, draws: 1, losses: 7, points: 25, form: 'LWWDW' },
+  { rank: 5, teamId: TEAMS.catalans.id, teamName: TEAMS.catalans.name, teamLogoUrl: TEAMS.catalans.logoUrl, played: 20, wins: 11, draws: 0, losses: 9, points: 22, form: 'WWLLW' },
+  { rank: 6, teamId: TEAMS.leigh.id, teamName: TEAMS.leigh.name, teamLogoUrl: TEAMS.leigh.logoUrl, played: 20, wins: 10, draws: 1, losses: 9, points: 21, form: 'LWLWW' },
+  { rank: 7, teamId: TEAMS.salford.id, teamName: TEAMS.salford.name, teamLogoUrl: TEAMS.salford.logoUrl, played: 20, wins: 9, draws: 0, losses: 11, points: 18, form: 'LLWWL' },
+  { rank: 8, teamId: TEAMS.hullKR.id, teamName: TEAMS.hullKR.name, teamLogoUrl: TEAMS.hullKR.logoUrl, played: 20, wins: 8, draws: 1, losses: 11, points: 17, form: 'WLLDW' },
+  { rank: 9, teamId: TEAMS.huddersfield.id, teamName: TEAMS.huddersfield.name, teamLogoUrl: TEAMS.huddersfield.logoUrl, played: 20, wins: 7, draws: 0, losses: 13, points: 14, form: 'LLWLL' },
+  { rank: 10, teamId: TEAMS.castleford.id, teamName: TEAMS.castleford.name, teamLogoUrl: TEAMS.castleford.logoUrl, played: 20, wins: 6, draws: 0, losses: 14, points: 12, form: 'LWLWL' },
+  { rank: 11, teamId: TEAMS.hullFC.id, teamName: TEAMS.hullFC.name, teamLogoUrl: TEAMS.hullFC.logoUrl, played: 20, wins: 5, draws: 1, losses: 14, points: 11, form: 'DLLWL' },
+  { rank: 12, teamId: TEAMS.london.id, teamName: TEAMS.london.name, teamLogoUrl: TEAMS.london.logoUrl, played: 20, wins: 3, draws: 1, losses: 16, points: 7, form: 'LLLDL' },
+  { rank: 13, teamId: TEAMS.wakefield.id, teamName: TEAMS.wakefield.name, teamLogoUrl: TEAMS.wakefield.logoUrl, played: 20, wins: 2, draws: 0, losses: 18, points: 4, form: 'LLLLL' }
+];

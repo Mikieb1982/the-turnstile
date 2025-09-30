@@ -1,6 +1,6 @@
 import React from 'react';
 import type { View } from '../types';
-import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, ArrowRightOnRectangleIcon, ClipboardDocumentCheckIcon, BuildingStadiumIcon } from './Icons';
+import { CalendarIcon, TableCellsIcon, ListBulletIcon, UserCircleIcon, UsersIcon, LocationMarkerIcon, ArrowRightOnRectangleIcon, BuildingStadiumIcon } from './Icons';
 import type firebase from 'firebase/compat/app';
 
 interface MobileNavProps {
@@ -46,7 +46,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
         { view: 'MATCH_DAY', label: 'Fixtures', icon: ListBulletIcon, isActive: currentView === 'MATCH_DAY' },
         { view: 'LEAGUE_TABLE', label: 'Table', icon: TableCellsIcon, isActive: currentView === 'LEAGUE_TABLE' },
         { view: 'GROUNDS', label: 'Grounds', icon: BuildingStadiumIcon, isActive: currentView === 'GROUNDS' },
-        { view: 'PREDICTION_GAMES', label: 'Predictions', icon: ClipboardDocumentCheckIcon, isActive: currentView === 'PREDICTION_GAMES' },
         { view: 'COMMUNITY', label: 'Community', icon: UsersIcon, isActive: currentView === 'COMMUNITY' },
     ];
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type firebase from 'firebase/compat/app';
+import firebase from 'firebase/compat/app';
 import { auth, storage } from '../firebase';
-import type { User, AttendedMatch, Profile, Prediction } from '../types';
+import type { User, AttendedMatch, Profile } from '../types';
 import {
   getUserProfile,
   createUserProfile,
@@ -12,8 +12,6 @@ import {
   updateAttendedMatchPhotoInProfile,
   addFriendToProfile,
   removeFriendFromProfile,
-  savePrediction,
-  deletePrediction,
 } from '../services/userService';
 import { checkAndAwardBadges } from '../badges';
 
@@ -29,8 +27,6 @@ interface AuthContextType {
   addPhotoToMatch: (matchId: string, photoFile: File) => Promise<void>;
   addFriend: (friendId: string) => Promise<void>;
   removeFriend: (friendId: string) => Promise<void>;
-  saveUserPrediction: (prediction: Prediction) => Promise<void>;
-  deleteUserPrediction: (matchId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,7 +41,6 @@ const createEmptyProfile = (): Profile => ({
   attendedMatches: [],
   earnedBadgeIds: [],
   friendIds: [],
-  predictions: [],
 });
 
 const loadOfflineProfile = (): Profile | null => {
@@ -158,9 +153,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               ),
               earnedBadgeIds: Array.isArray(userProfile.earnedBadgeIds) ? userProfile.earnedBadgeIds : [],
               friendIds: Array.isArray(userProfile.friendIds) ? userProfile.friendIds : [],
-              predictions: (Array.isArray(userProfile.predictions) ? userProfile.predictions : []).filter(
-                (p) => p && typeof p.matchId === 'string'
-              ),
             };
             setProfile(sanitizedProfile);
           } else {
@@ -202,10 +194,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return;
     }
 
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
     try {
-      await auth.signInAnonymously();
-    } catch (error) {
-      console.error('Anonymous sign-in failed', error);
+      await auth.signInWithPopup(provider);
+    } catch (error: any) {
+      if (error?.code === 'auth/operation-not-supported-in-this-environment' || error?.code === 'auth/popup-blocked') {
+        try {
+          await auth.signInWithRedirect(provider);
+          return;
+        } catch (redirectError) {
+          console.error('Google sign-in redirect failed', redirectError);
+        }
+      }
+
+      console.error('Google sign-in failed', error);
       setLoading(false);
     }
   };
@@ -392,47 +396,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const saveUserPrediction = async (prediction: Prediction) => {
-    if (!currentUser || !profile) return;
-    const otherPredictions = (profile.predictions || []).filter((p) => p.matchId !== prediction.matchId);
-    const updatedPredictions = [...otherPredictions, prediction];
-    const nextProfile: Profile = { ...profile, predictions: updatedPredictions };
-
-    setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await savePrediction(currentUser.uid, prediction);
-    } catch (error) {
-      console.error('Error saving prediction:', error);
-      setProfile(profile);
-    }
-  };
-
-  const deleteUserPrediction = async (matchId: string) => {
-    if (!currentUser || !profile) return;
-    const updatedPredictions = (profile.predictions || []).filter((p) => p.matchId !== matchId);
-    const nextProfile: Profile = { ...profile, predictions: updatedPredictions };
-
-    setProfile(nextProfile);
-
-    if (!auth) {
-      persistOfflineProfile(nextProfile);
-      return;
-    }
-
-    try {
-      await deletePrediction(currentUser.uid, matchId);
-    } catch (error) {
-      console.error('Error deleting prediction:', error);
-      setProfile(profile);
-    }
-  };
-
   const value = {
     currentUser,
     profile,
@@ -445,8 +408,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     addPhotoToMatch,
     addFriend,
     removeFriend,
-    saveUserPrediction,
-    deleteUserPrediction,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

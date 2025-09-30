@@ -17,8 +17,7 @@ export type View =
   | 'TEAM_STATS'
   | 'NEARBY'
   | 'ADMIN'
-  | 'COMMUNITY'
-  | 'PREDICTION_GAMES';
+  | 'COMMUNITY';
 
 export interface Team {
   id: string;
@@ -115,19 +114,12 @@ export interface TeamInfo {
   stadium: StadiumInfo;
 }
 
-export interface Prediction {
-  matchId: string;
-  predictedWinnerId: string | 'draw';
-  predictedMargin: number;
-}
-
 // New types for multi-profile support
 export interface Profile {
   user: User;
   attendedMatches: AttendedMatch[];
   earnedBadgeIds: string[];
   friendIds: string[];
-  predictions?: Prediction[];
 }
 
 export interface ScrumBookData {
