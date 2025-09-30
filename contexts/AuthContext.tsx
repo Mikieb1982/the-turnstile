@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type firebase from 'firebase/compat/app';
+import firebase from 'firebase/compat/app';
 import { auth, storage } from '../firebase';
 import type { User, AttendedMatch, Profile, Prediction } from '../types';
 import {
@@ -202,10 +202,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return;
     }
 
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
     try {
-      await auth.signInAnonymously();
-    } catch (error) {
-      console.error('Anonymous sign-in failed', error);
+      await auth.signInWithPopup(provider);
+    } catch (error: any) {
+      if (error?.code === 'auth/operation-not-supported-in-this-environment' || error?.code === 'auth/popup-blocked') {
+        try {
+          await auth.signInWithRedirect(provider);
+          return;
+        } catch (redirectError) {
+          console.error('Google sign-in redirect failed', redirectError);
+        }
+      }
+
+      console.error('Google sign-in failed', error);
       setLoading(false);
     }
   };
