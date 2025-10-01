@@ -62,6 +62,7 @@ const App: React.FC = () => {
     syncThemeWithFavouriteTeam(favouriteTeamId, themeMode);
   }, [favouriteTeamId, themeMode]);
 
+
   const handleAttend = (match: Match) => {
     if (!currentUser) {
       setView('PROFILE'); // Will be caught by the protected view logic and show the prompt
