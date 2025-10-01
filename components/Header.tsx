@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CalendarIcon,
   InformationCircleIcon,
@@ -14,7 +14,7 @@ import {
   ArrowRightOnRectangleIcon,
 } from './Icons';
 import type { View, AuthUser } from '../types';
-
+import styles from './Header.module.css'; // Import the CSS module
 
 interface HeaderProps {
   currentView: View;
@@ -25,6 +25,30 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 80) { // If scrolling down and past 80px
+          setIsVisible(false);
+        } else { // If scrolling up
+          setIsVisible(true);
+        }
+        setLastScrollY(window.scrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
+
   const NavButton: React.FC<{
     view: View;
     label: string;
@@ -49,14 +73,13 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
   const isProfileActive = ['PROFILE', 'MY_MATCHES', 'STATS', 'BADGES', 'GROUNDS', 'ADMIN'].includes(currentView);
 
   return (
-    <header className="bg-surface shadow-sm sticky top-0 z-8 border-b border-border">
+    <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''}`}>
       <div className="container mx-auto flex justify-between items-center p-2">
         <div className="flex items-center">
           <LogoIcon
-            className="h-48 w-auto text-primary object-contain"
+            className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
-
         </div>
         <div className="flex items-center gap-2 md:gap-4">
             <nav className="hidden md:flex items-center gap-1">
