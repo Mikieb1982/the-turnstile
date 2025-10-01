@@ -19,6 +19,7 @@ import styles from './ProfileView.module.css';
 
 // --- React Grid Layout Imports ---
 import { Responsive, WidthProvider } from 'react-grid-layout';
+import type { Layouts } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
@@ -40,7 +41,7 @@ interface ProfileViewProps {
 }
 
 // Define the initial layout for the tiles
-const initialLayouts = {
+const initialLayouts: Layouts = {
   lg: [
     { i: 'profile', x: 0, y: 0, w: 12, h: 2, static: true },
     { i: 'team', x: 0, y: 2, w: 4, h: 2 },
@@ -52,6 +53,10 @@ const initialLayouts = {
     { i: 'admin', x: 8, y: 4, w: 4, h: 1 },
     { i: 'logout', x: 8, y: 5, w: 4, h: 1 },
   ],
+  md: [],
+  sm: [],
+  xs: [],
+  xxs: [],
 };
 
 const LAYOUT_STORAGE_KEY = 'profile-tile-layout';
@@ -70,20 +75,29 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [pendingName, setPendingName] = useState(user.name ?? '');
   const [isEditable, setIsEditable] = useState(false);
 
-  const [layouts, setLayouts] = useState(() => {
-    try {
-      const storedLayouts = localStorage.getItem(LAYOUT_STORAGE_KEY);
-      return storedLayouts ? JSON.parse(storedLayouts) : initialLayouts;
-    } catch (error) {
-      return initialLayouts;
+  const [layouts, setLayouts] = useState<Layouts>(initialLayouts);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
     }
-  });
+
+    try {
+      const storedLayouts = window.localStorage.getItem(LAYOUT_STORAGE_KEY);
+      if (storedLayouts) {
+        const parsedLayouts = JSON.parse(storedLayouts) as Layouts;
+        setLayouts((prevLayouts: Layouts) => ({ ...prevLayouts, ...parsedLayouts }));
+      }
+    } catch (error) {
+      console.warn('Unable to load saved profile layout', error);
+    }
+  }, []);
 
   useEffect(() => {
     setPendingName(user.name ?? '');
   }, [user.name]);
 
-  const favouriteTeam = useMemo(() => getTeamById(user.favoriteTeamId), [user.favoriteTeamId]);
+  const favoriteTeam = useMemo(() => getTeamById(user.favoriteTeamId), [user.favoriteTeamId]);
   const recentMatch = useMemo(() => {
     if (attendedMatches.length === 0) return null;
     return [...attendedMatches].sort((a, b) => new Date(b.attendedOn).getTime() - new Date(a.attendedOn).getTime())[0];
@@ -104,8 +118,15 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     setIsAvatarModalOpen(false);
   };
 
-  const onLayoutChange = (layout: any, allLayouts: any) => {
-    localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
+  const onLayoutChange = (_currentLayout: unknown, allLayouts: Layouts) => {
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
+      } catch (error) {
+        console.warn('Unable to persist profile layout', error);
+      }
+    }
+
     setLayouts(allLayouts);
   };
 
@@ -161,16 +182,16 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
         <div key="team" className={styles.tile}>
           <h3 className={`${styles.tile_title} no-drag`}>My Team</h3>
-          {favouriteTeam ? (
+          {favoriteTeam ? (
             <div className={`${styles.team_info} no-drag`}>
-              <TeamLogo teamId={favouriteTeam.id} teamName={favouriteTeam.name} />
-              <span className={styles.team_name}>{favouriteTeam.name}</span>
+              <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} />
+              <span className={styles.team_name}>{favoriteTeam.name}</span>
             </div>
           ) : (
             <p className={`${styles.tile_description} no-drag`}>No favorite team selected.</p>
           )}
           <button onClick={() => setIsTeamModalOpen(true)} className={`${styles.tile_button} no-drag`}>
-            {favouriteTeam ? 'Change' : 'Select'} Team
+            {favoriteTeam ? 'Change' : 'Select'} Team
           </button>
         </div>
         
