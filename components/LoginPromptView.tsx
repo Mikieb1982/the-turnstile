@@ -12,6 +12,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isGoogleConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+main
   const handleLogin = async () => {
     setError(null);
     if (!isGoogleConfigured) {
@@ -55,7 +56,6 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
                 {MISSING_CLIENT_ID_MESSAGE}
             </p>
         ) : null}
-
         {error ? <p className="mt-4 text-sm text-red-500" role="alert">{error}</p> : null}
     </div>
   );

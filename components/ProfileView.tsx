@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { User, AttendedMatch } from '../types';
 import { TEAMS, teamIdToVenue } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
@@ -209,6 +209,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [isCustomisingLayout, setIsCustomisingLayout] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [draggingTileId, setDraggingTileId] = useState<TileId | null>(null);
+  const dragState = useRef<{ tileId: TileId; pointerId: number; startY: number } | null>(null);
   const [tileLayout, setTileLayout] = useState<TileLayoutItem[]>(() => {
     if (typeof window === 'undefined') {
       return defaultLayout;
@@ -256,6 +259,23 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   };
 
   const currentLayout = ensureAllTilesPresent(tileLayout);
+
+  const handleViewportChange = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+  }, []);
+
+  useEffect(() => {
+    handleViewportChange();
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.addEventListener('resize', handleViewportChange);
+    return () => window.removeEventListener('resize', handleViewportChange);
+  }, [handleViewportChange]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -380,6 +400,74 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       }),
     );
   };
+
+  const handleMobileDragPointerDown = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isMobile || !isCustomisingLayout) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch (error) {
+      // Ignore failures to capture pointer; dragging will still function using bubbling events.
+    }
+    dragState.current = { tileId, pointerId: event.pointerId, startY: event.clientY };
+    setDraggingTileId(tileId);
+  };
+
+  const handleMobileDragPointerMove = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isMobile || !isCustomisingLayout) {
+      return;
+    }
+    if (!dragState.current || dragState.current.tileId !== tileId) {
+      return;
+    }
+
+    event.preventDefault();
+    const deltaY = event.clientY - dragState.current.startY;
+    if (deltaY <= -40) {
+      handleMoveTile(tileId, 'up');
+      dragState.current.startY = event.clientY;
+    } else if (deltaY >= 40) {
+      handleMoveTile(tileId, 'down');
+      dragState.current.startY = event.clientY;
+    }
+  };
+
+  const clearMobileDragState = useCallback(() => {
+    dragState.current = null;
+    setDraggingTileId(null);
+  }, []);
+
+  const handleMobileDragPointerEnd = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isMobile || !isCustomisingLayout) {
+      return;
+    }
+    if (!dragState.current || dragState.current.tileId !== tileId) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      event.currentTarget.releasePointerCapture(dragState.current.pointerId);
+    } catch (error) {
+      // Ignore release failures.
+    }
+    clearMobileDragState();
+  };
+
+  useEffect(() => {
+    if (!isCustomisingLayout) {
+      clearMobileDragState();
+    }
+  }, [isCustomisingLayout, clearMobileDragState]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      clearMobileDragState();
+    }
+  }, [isMobile, clearMobileDragState]);
 
   const firstName = user.name ? user.name.split(' ')[0] : 'there';
 
@@ -724,18 +812,35 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             <section
               key={tile.id}
               aria-label={definition.label}
-              className={`${sizeClasses} relative transition`}
+              className={`${sizeClasses} relative transition ${isMobile ? 'sticky top-24' : ''} ${
+                draggingTileId === tile.id ? 'z-20 scale-[0.98]' : ''
+              }`}
+              style={draggingTileId === tile.id ? { zIndex: 20 } : undefined}
             >
               <div className={`h-full rounded-2xl ${isCustomisingLayout ? 'ring-2 ring-primary/60 ring-offset-2' : ''}`}>
                 {content()}
               </div>
 
               {isCustomisingLayout && (
-                <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap justify-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
+                <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-col items-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
                   <span className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-surface-alt/90 px-3 py-1 shadow-sm">
                     {getTileTypeHint(definition)}
                   </span>
-                  <div className="pointer-events-auto flex items-center gap-2">
+                  <div className="pointer-events-auto flex flex-wrap items-center gap-2">
+                    {isMobile && (
+                      <button
+                        type="button"
+                        onPointerDown={(event) => handleMobileDragPointerDown(tile.id, event)}
+                        onPointerMove={(event) => handleMobileDragPointerMove(tile.id, event)}
+                        onPointerUp={(event) => handleMobileDragPointerEnd(tile.id, event)}
+                        onPointerCancel={(event) => handleMobileDragPointerEnd(tile.id, event)}
+                        onPointerLeave={(event) => handleMobileDragPointerEnd(tile.id, event)}
+                        className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary transition hover:bg-primary/20"
+                      >
+                        <Squares2X2Icon className="h-4 w-4" />
+                        Drag to reorder
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => handleMoveTile(tile.id, 'up')}

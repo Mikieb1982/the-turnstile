@@ -105,6 +105,7 @@ This build runs entirely offline using localStorage. To connect your own Firebas
 2. Still in **Project settings → General**, scroll to **Your apps** and add the SHA-1 release fingerprint for every Android app that should support Google Sign-In. This step is required for Google to trust the OAuth client.
 3. In **Project settings → General → Your project**, update the **Public-facing name** so it matches `project-99200945430`. Firebase uses this value during the Google account consent screen.
 4. Update your `.env.local` file in the project root with your web client ID so the frontend can call Google directly:
+
    ```bash
    # If you have not already created the file:
    cp .env.example .env.local
