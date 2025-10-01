@@ -1,0 +1,217 @@
+/* --- Color Palette and Core Variables --- */
+:root {
+    --color-deep-red: #8B0000;
+    --color-dark-blue: #1A237E;
+    --color-yellow: #FFD700;
+    --color-background: #F4F4F5;
+    --color-text-light: #FFFFFF;
+    --color-text-dark: #1F2937;
+    --tile-border-radius: 16px;
+    --tile-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --tile-padding: 1.5rem;
+    --grid-gap: 1.5rem;
+}
+
+/* --- Tile Grid Layout --- */
+.tile-grid {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: 1fr; /* Default to single column */
+}
+
+/* --- Base Tile Styling --- */
+.tile {
+    border-radius: var(--tile-border-radius);
+    padding: var(--tile-padding);
+    box-shadow: var(--tile-shadow);
+    color: var(--color-text-light);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    text-align: left;
+}
+
+.tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Color Utility Classes --- */
+.color-deep-red { background-color: var(--color-deep-red); }
+.color-dark-blue { background-color: var(--color-dark-blue); }
+.color-yellow { background-color: var(--color-yellow); color: var(--color-text-dark); }
+
+/* --- Specific Tile Designs --- */
+
+/* Profile Tile */
+.profile-tile {
+    grid-column: 1 / -1; /* Span full width */
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+}
+.avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    color: var(--color-text-light);
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    padding: 0.5rem;
+}
+
+.edit-avatar-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--color-yellow);
+    color: var(--color-text-dark);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.edit-avatar-button svg {
+    width: 14px;
+    height: 14px;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.edit-name-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+.profile-name:hover .edit-name-icon {
+    opacity: 1;
+}
+
+.name-edit-form input {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--color-text-light);
+    color: var(--color-text-light);
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 1.25rem;
+}
+.name-edit-form button {
+    background: var(--color-yellow);
+    color: var(--color-text-dark);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.profile-status {
+    margin: 0.25rem 0 0 0;
+    opacity: 0.8;
+}
+
+/* My Team & Last Match Tiles */
+.tile-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin: 0 0 0.75rem 0;
+}
+.tile-description {
+    font-size: 1rem;
+    margin: auto 0 1rem 0;
+}
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: auto 0 1rem 0;
+}
+.team-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.match-recap {
+    margin: auto 0 1rem 0;
+}
+.match-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.tile-button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: inherit;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+.tile-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+/* Navigation Tiles */
+.nav-tile {
+    text-align: center;
+    cursor: pointer;
+    min-height: 160px;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+.nav-tile .icon {
+    width: 32px;
+    height: 32px;
+}
+.nav-tile h4 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* --- Responsive Adjustments --- */
+@media (min-width: 640px) {
+    .tile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .tile-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
