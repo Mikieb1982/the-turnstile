@@ -239,17 +239,16 @@ export const mockMatches: Match[] = [
 ];
 
 export const mockLeagueTable: LeagueStanding[] = [
-  { rank: 1, teamId: TEAMS.wigan.id, teamName: TEAMS.wigan.name, teamLogoUrl: TEAMS.wigan.logoUrl, played: 20, wins: 16, draws: 0, losses: 4, points: 32, form: 'WWWLW' },
-  { rank: 2, teamId: TEAMS.stHelens.id, teamName: TEAMS.stHelens.name, teamLogoUrl: TEAMS.stHelens.logoUrl, played: 20, wins: 15, draws: 0, losses: 5, points: 30, form: 'WWLWW' },
-  { rank: 3, teamId: TEAMS.leeds.id, teamName: TEAMS.leeds.name, teamLogoUrl: TEAMS.leeds.logoUrl, played: 20, wins: 13, draws: 1, losses: 6, points: 27, form: 'WLWWD' },
-  { rank: 4, teamId: TEAMS.warrington.id, teamName: TEAMS.warrington.name, teamLogoUrl: TEAMS.warrington.logoUrl, played: 20, wins: 12, draws: 1, losses: 7, points: 25, form: 'LWWDW' },
-  { rank: 5, teamId: TEAMS.catalans.id, teamName: TEAMS.catalans.name, teamLogoUrl: TEAMS.catalans.logoUrl, played: 20, wins: 11, draws: 0, losses: 9, points: 22, form: 'WWLLW' },
-  { rank: 6, teamId: TEAMS.leigh.id, teamName: TEAMS.leigh.name, teamLogoUrl: TEAMS.leigh.logoUrl, played: 20, wins: 10, draws: 1, losses: 9, points: 21, form: 'LWLWW' },
-  { rank: 7, teamId: TEAMS.salford.id, teamName: TEAMS.salford.name, teamLogoUrl: TEAMS.salford.logoUrl, played: 20, wins: 9, draws: 0, losses: 11, points: 18, form: 'LLWWL' },
-  { rank: 8, teamId: TEAMS.hullKR.id, teamName: TEAMS.hullKR.name, teamLogoUrl: TEAMS.hullKR.logoUrl, played: 20, wins: 8, draws: 1, losses: 11, points: 17, form: 'WLLDW' },
-  { rank: 9, teamId: TEAMS.huddersfield.id, teamName: TEAMS.huddersfield.name, teamLogoUrl: TEAMS.huddersfield.logoUrl, played: 20, wins: 7, draws: 0, losses: 13, points: 14, form: 'LLWLL' },
-  { rank: 10, teamId: TEAMS.castleford.id, teamName: TEAMS.castleford.name, teamLogoUrl: TEAMS.castleford.logoUrl, played: 20, wins: 6, draws: 0, losses: 14, points: 12, form: 'LWLWL' },
-  { rank: 11, teamId: TEAMS.hullFC.id, teamName: TEAMS.hullFC.name, teamLogoUrl: TEAMS.hullFC.logoUrl, played: 20, wins: 5, draws: 1, losses: 14, points: 11, form: 'DLLWL' },
-  { rank: 12, teamId: TEAMS.london.id, teamName: TEAMS.london.name, teamLogoUrl: TEAMS.london.logoUrl, played: 20, wins: 3, draws: 1, losses: 16, points: 7, form: 'LLLDL' },
-  { rank: 13, teamId: TEAMS.wakefield.id, teamName: TEAMS.wakefield.name, teamLogoUrl: TEAMS.wakefield.logoUrl, played: 20, wins: 2, draws: 0, losses: 18, points: 4, form: 'LLLLL' }
+  { rank: 1, teamId: TEAMS.hullKR.id, teamName: 'Hull KR', teamLogoUrl: TEAMS.hullKR.logoUrl, played: 27, wins: 22, draws: 0, losses: 5, points: 44, form: 'L W W W W' },
+  { rank: 2, teamId: TEAMS.wigan.id, teamName: 'Wigan Warriors', teamLogoUrl: TEAMS.wigan.logoUrl, played: 27, wins: 21, draws: 0, losses: 6, points: 42, form: 'W W W W W' },
+  { rank: 3, teamId: TEAMS.leigh.id, teamName: 'Leigh Leopards', teamLogoUrl: TEAMS.leigh.logoUrl, played: 27, wins: 19, draws: 1, losses: 7, points: 39, form: 'W W W W W' },
+  { rank: 4, teamId: TEAMS.leeds.id, teamName: 'Leeds Rhinos', teamLogoUrl: TEAMS.leeds.logoUrl, played: 27, wins: 18, draws: 0, losses: 9, points: 36, form: 'W W W L L' },
+  { rank: 5, teamId: TEAMS.stHelens.id, teamName: 'St Helens', teamLogoUrl: TEAMS.stHelens.logoUrl, played: 27, wins: 17, draws: 0, losses: 10, points: 34, form: 'W L L L W' },
+  { rank: 6, teamId: TEAMS.wakefield.id, teamName: 'Wakefield Trinity', teamLogoUrl: TEAMS.wakefield.logoUrl, played: 27, wins: 15, draws: 0, losses: 12, points: 30, form: 'L W L W W' },
+  { rank: 7, teamId: TEAMS.hullFC.id, teamName: 'Hull FC', teamLogoUrl: TEAMS.hullFC.logoUrl, played: 27, wins: 13, draws: 1, losses: 13, points: 27, form: 'L L L W L' },
+  { rank: 8, teamId: TEAMS.warrington.id, teamName: 'Warrington Wolves', teamLogoUrl: TEAMS.warrington.logoUrl, played: 27, wins: 10, draws: 0, losses: 17, points: 20, form: 'L L L L L' },
+  { rank: 9, teamId: TEAMS.catalans.id, teamName: 'Catalans Dragons', teamLogoUrl: TEAMS.catalans.logoUrl, played: 27, wins: 10, draws: 0, losses: 17, points: 20, form: 'W L W W W' },
+  { rank: 10, teamId: TEAMS.huddersfield.id, teamName: 'Huddersfield Giants', teamLogoUrl: TEAMS.huddersfield.logoUrl, played: 27, wins: 7, draws: 0, losses: 20, points: 14, form: 'W L L W L' },
+  { rank: 11, teamId: TEAMS.castleford.id, teamName: 'Castleford Tigers', teamLogoUrl: TEAMS.castleford.logoUrl, played: 27, wins: 6, draws: 0, losses: 21, points: 12, form: 'L L W L L' },
+  { rank: 12, teamId: TEAMS.salford.id, teamName: 'Salford Red Devils', teamLogoUrl: TEAMS.salford.logoUrl, played: 27, wins: 3, draws: 0, losses: 24, points: 4, form: 'L W L L L' }
 ];

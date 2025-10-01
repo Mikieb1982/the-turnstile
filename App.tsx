@@ -24,7 +24,7 @@ import { LoginPromptView } from './components/LoginPromptView';
 import { LogoIcon } from './components/Icons';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<View>('UPCOMING');
+  const [view, setView] = useState<View>('PROFILE');
   const [theme, toggleTheme] = useTheme();
 
   const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();

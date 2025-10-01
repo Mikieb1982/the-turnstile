@@ -135,7 +135,6 @@ const defaultLayout: TileLayoutItem[] = Object.values(tileDefinitions).map(({ id
   id,
   size: defaultSize,
 }));
-
 const ensureAllTilesPresent = (layout: TileLayoutItem[]): TileLayoutItem[] => {
   const seen = new Set<TileId>();
   const result: TileLayoutItem[] = [];
@@ -396,6 +395,198 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       }),
     );
   };
+=======
+
+
+
+  coconst currentLayout = ensureAllTilesPresent(tileLayout);
+
+  const handleViewportChange = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+  }, []);
+
+  useEffect(() => {
+    handleViewportChange();
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.addEventListener('resize', handleViewportChange);
+    return () => window.removeEventListener('resize', handleViewportChange);
+  }, [handleViewportChange]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem(TILE_LAYOUT_STORAGE_KEY, JSON.stringify(currentLayout));
+  }, [currentLayout]);
+
+  const favoriteTeam = useMemo(() => {
+    if (!user.favoriteTeamId) return null;
+    return Object.values(TEAMS).find((t) => t.id === user.favoriteTeamId) || null;
+  }, [user.favoriteTeamId]);
+
+  const statsSummary = useMemo(() => {
+    const totalMatches = attendedMatches.length;
+    const currentYear = new Date().getFullYear();
+    const matchesThisSeason = attendedMatches.filter((match) => {
+      const attendedDate = match.attendedOn ? new Date(match.attendedOn) : new Date(match.match.startTime);
+      return attendedDate.getFullYear() === currentYear;
+    });
+
+    const totalPoints = attendedMatches.reduce(
+      (sum, attendedMatch) => sum + attendedMatch.match.scores.home + attendedMatch.match.scores.away,
+      0,
+    );
+
+    const uniqueVenues = new Set(attendedMatches.map((am) => am.match.venue));
+    const uniqueVenuesThisSeason = new Set(matchesThisSeason.map((am) => am.match.venue));
+
+    return {
+      totalMatches,
+      matchesThisSeason: matchesThisSeason.length,
+      totalPoints,
+      averagePoints: totalMatches > 0 ? Math.round(totalPoints / totalMatches) : 0,
+      uniqueVenues: uniqueVenues.size,
+      newGroundsThisSeason: uniqueVenuesThisSeason.size,
+    };
+  }, [attendedMatches]);
+
+  const uniqueVenuesCount = statsSummary.uniqueVenues;
+
+  const recentMatches = useMemo(() => {
+    return [...attendedMatches]
+      .sort((a, b) => {
+        const dateA = a.attendedOn ? new Date(a.attendedOn).getTime() : new Date(a.match.startTime).getTime();
+        const dateB = b.attendedOn ? new Date(b.attendedOn).getTime() : new Date(b.match.startTime).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 3);nst currentLayout = ensureAllTilesPresent(tileLayout);
+
+  const handleViewportChange = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+  }, []);
+
+  useEffect(() => {
+    handleViewportChange();
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.addEventListener('resize', handleViewportChange);
+    return () => window.removeEventListener('resize', handleViewportChange);
+  }, [handleViewportChange]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem(TILE_LAYOUT_STORAGE_KEY, JSON.stringify(currentLayout));
+  }, [currentLayout]);
+
+  const favoriteTeam = useMemo(() => {
+    if (!user.favoriteTeamId) return null;
+    return Object.values(TEAMS).find((t) => t.id === user.favoriteTeamId) || null;
+  }, [user.favoriteTeamId]);
+
+  const statsSummary = useMemo(() => {
+    const totalMatches = attendedMatches.length;
+    const currentYear = new Date().getFullYear();
+    const matchesThisSeason = attendedMatches.filter((match) => {
+      const attendedDate = match.attendedOn ? new Date(match.attendedOn) : new Date(match.match.startTime);
+      return attendedDate.getFullYear() === currentYear;
+    });
+
+    const totalPoints = attendedMatches.reduce(
+      (sum, attendedMatch) => sum + attendedMatch.match.scores.home + attendedMatch.match.scores.away,
+      0,
+    );
+
+    const uniqueVenues = new Set(attendedMatches.map((am) => am.match.venue));
+    const uniqueVenuesThisSeason = new Set(matchesThisSeason.map((am) => am.match.venue));
+
+    return {
+      totalMatches,
+      matchesThisSeason: matchesThisSeason.length,
+      totalPoints,
+      averagePoints: totalMatches > 0 ? Math.round(totalPoints / totalMatches) : 0,
+      uniqueVenues: uniqueVenues.size,
+      newGroundsThisSeason: uniqueVenuesThisSeason.size,
+    };
+  }, [attendedMatches]);
+
+  const uniqueVenuesCount = statsSummary.uniqueVenues;
+
+  const recentMatches = useMemo(() => {
+    return [...attendedMatches]
+      .sort((a, b) => {
+        const dateA = a.attendedOn ? new Date(a.attendedOn).getTime() : new Date(a.match.startTime).getTime();
+        const dateB = b.attendedOn ? new Date(b.attendedOn).getTime() : new Date(b.match.startTime).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 3);
+  }, [attendedMatches]);
+
+  const favoriteTeamAppearances = useMemo(() => {
+    if (!favoriteTeam) return 0;
+    return attendedMatches.filter(
+      (am) => am.match.homeTeam.id === favoriteTeam.id || am.match.awayTeam.id === favoriteTeam.id,
+    ).length;
+  }, [attendedMatches, favoriteTeam]);
+
+  const earnedBadges = useMemo(() => allBadges.filter((badge) => earnedBadgeIds.includes(badge.id)), [earnedBadgeIds]);
+
+  const dailyScrumTip = useMemo(() => {
+    const tips = [
+      {
+        title: 'Pause, notice, breathe',
+        question: "What's your focus today?",
+        tip: 'Bring the calm of a steady scrum to your day. Slow down, scan the field, and move with purpose.',
+      },
+      {
+        title: 'Lead the defensive line',
+        question: 'Where can you lift a teammate?',
+        tip: 'Great captains communicate early. Send a quick message to keep your squad aligned.',
+      },
+      {
+        title: 'Own the gain line',
+        question: 'What small win are you chasing?',
+        tip: 'Break big goals into short carries. Five metres at a time still gets you over the try line.',
+      },
+      {
+        title: 'Recover like a pro',
+        question: 'What will keep your energy up?',
+        tip: 'Fuel, hydrate, and reset. Even legends take a water break before the next set.',
+      },
+    ];
+    const today = new Date();
+    const index = (today.getFullYear() + today.getMonth() + today.getDate()) % tips.length;
+    return tips[index];
+  }, []);
+
+  const handleSelectTeam = (teamId: string) => {
+    setUser({ favoriteTeamId: teamId });
+    setIsTeamModalOpen(false);
+  };
+
+  const handleSaveAvatar = (avatarUrl: string) => {
+    setUser({ avatarUrl });
+    setIsAvatarModalOpen(false);
+  };
+
+  const handleMoveTile = (tileId: TileId, direction: 'up' | 'down') => {
+    setTileLayout((previous) => {
+      const next = [...previous];
+      const index = next.findIndex((tile) => tile.id === tileId);
+      if (index === -1) return previous;
+       clearMobileDragState])
 
   const firstName = user.name ? user.name.split(' ')[0] : 'there';
 
@@ -734,27 +925,33 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         {currentLayout.map((tile, index) => {
           const definition = tileDefinitions[tile.id];
           const content = renderers[tile.id];
+
           if (!definition || typeof content !== 'function') {
             return null;
           }
+
           const sizeClasses = getTileSizeClasses(definition, tile.size);
 
           return (
             <section
               key={tile.id}
               aria-label={definition.label}
+ 
               className={`${sizeClasses} relative transition`}
+
             >
               <div className={`h-full rounded-2xl ${isCustomisingLayout ? 'ring-2 ring-primary/60 ring-offset-2' : ''}`}>
                 {content()}
               </div>
 
               {isCustomisingLayout && (
+              
                 <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap justify-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
                   <span className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-surface-alt/90 px-3 py-1 shadow-sm">
                     {getTileTypeHint(definition)}
                   </span>
                   <div className="pointer-events-auto flex items-center gap-2">
+
                     <button
                       type="button"
                       onClick={() => handleMoveTile(tile.id, 'up')}
