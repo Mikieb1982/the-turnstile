@@ -42,7 +42,7 @@ interface ProfileViewProps {
 // Define the initial layout for the tiles
 const initialLayouts = {
   lg: [
-    { i: 'profile', x: 0, y: 0, w: 12, h: 2, static: true }, // Profile tile is static
+    { i: 'profile', x: 0, y: 0, w: 12, h: 2, static: true },
     { i: 'team', x: 0, y: 2, w: 4, h: 2 },
     { i: 'last_match', x: 4, y: 2, w: 4, h: 2 },
     { i: 'my_matches', x: 8, y: 2, w: 4, h: 1 },
@@ -197,4 +197,26 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           <BuildingStadiumIcon className={`${styles.icon} no-drag`} />
           <h4 className="no-drag">Grounds</h4>
         </div>
-        <div key="stats" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('
+        <div key="stats" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('STATS')}>
+          <ChartBarIcon className={`${styles.icon} no-drag`} />
+          <h4 className="no-drag">My Stats</h4>
+        </div>
+        <div key="badges" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('BADGES')}>
+          <TrophyIcon className={`${styles.icon} no-drag`} />
+          <h4 className="no-drag">Badges</h4>
+        </div>
+        <div key="admin" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('ADMIN')}>
+          <UserCircleIcon className={`${styles.icon} no-drag`} />
+          <h4 className="no-drag">Admin Tools</h4>
+        </div>
+        <div key="logout" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && onLogout()}>
+          <ArrowRightOnRectangleIcon className={`${styles.icon} no-drag`} />
+          <h4 className="no-drag">Logout</h4>
+        </div>
+      </ResponsiveGridLayout>
+
+      <TeamSelectionModal isOpen={isTeamModalOpen} onClose={() => setIsTeamModalOpen(false)} onSelectTeam={handleTeamSelect} currentTeamId={user.favoriteTeamId} />
+      <AvatarModal isOpen={isAvatarModalOpen} onClose={() => setIsAvatarModalOpen(false)} onSave={handleAvatarSave} currentAvatar={user.avatarUrl} />
+    </>
+  );
+};
