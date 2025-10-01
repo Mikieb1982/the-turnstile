@@ -1,6 +1,5 @@
 import { TEAM_BRANDING } from '../services/mockData';
-
-// --- Type Definitions ---
+import type { TeamBranding } from '../services/mockData';
 export type ThemeMode = 'light' | 'dark';
 
 interface ThemeVariables {
@@ -22,7 +21,6 @@ interface ThemeVariables {
   gradient3: string;
 }
 
-// --- Default Themes ---
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
   primary: '#7F1028',
   secondary: '#FFD447',
@@ -60,8 +58,6 @@ const DEFAULT_DARK_THEME: ThemeVariables = {
   gradient2: 'radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%)',
   gradient3: 'radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%)',
 };
-
-// --- Utility Constants ---
 const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   primary: '--clr-primary',
   secondary: '--clr-secondary',
@@ -80,8 +76,6 @@ const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   gradient2: '--gradient-2',
   gradient3: '--gradient-3',
 };
-
-// --- Color Utility Functions ---
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
@@ -241,73 +235,70 @@ const adjustColorIntensity = (
   return hslToHex(h, adjustedS, adjustedL);
 };
 
-// --- Theme Generation Logic ---
+const emphasisePrimaryColor = (hex: string, mode: ThemeMode) =>
+  adjustColorIntensity(hex, {
+    saturationMultiplier: 1.12,
+    lightnessMultiplier: mode === 'dark' ? 1.08 : 1,
+  });
 
 const createTeamOverrides = (
-  baseColor: string,
-  textColor: string,
+  branding: TeamBranding,
   mode: ThemeMode,
   defaults: ThemeVariables,
 ): Partial<ThemeVariables> => {
-  // 1. Create an emphasised version of the base color
-  const emphasisedBase = adjustColorIntensity(baseColor, {
-    saturationMultiplier: 1.35,
-    lightnessMultiplier: mode === 'dark' ? 1.05 : 0.9,
+  const palette = branding.palette && branding.palette.length > 0 ? branding.palette : [branding.bg, branding.text];
+  const [rawPrimary, rawSecondary, rawTertiary] = palette;
+
+  const primary = emphasisePrimaryColor(rawPrimary ?? branding.bg, mode);
+
+  const secondaryBase = rawSecondary ?? mixHexColors(primary, '#FFFFFF', mode === 'dark' ? 0.18 : 0.28);
+  const accentBase = rawTertiary ?? rawSecondary ?? adjustColorIntensity(primary, {
+    saturationMultiplier: 0.95,
+    lightnessMultiplier: mode === 'dark' ? 1.22 : 0.88,
   });
 
-  // 2. Generate secondary color
-  const secondary = adjustColorIntensity(
-    mixHexColors(emphasisedBase, '#FFFFFF', mode === 'dark' ? 0.22 : 0.42),
-    {
-      saturationMultiplier: 1.2,
-      lightnessMultiplier: mode === 'dark' ? 1 : 0.96,
-    },
-  );
+  const secondary = adjustColorIntensity(secondaryBase, {
+    saturationMultiplier: 1.08,
+    lightnessMultiplier: mode === 'dark' ? 1.04 : 0.98,
+  });
 
-  // 3. Generate accent color
-  const accent = adjustColorIntensity(
-    mixHexColors(emphasisedBase, textColor, mode === 'dark' ? 0.32 : 0.16),
-    {
-      saturationMultiplier: 1.25,
-      lightnessBias: mode === 'dark' ? 0.02 : -0.02,
-    },
-  );
-
-  // 4. Generate system colors (Warning, Info, Success)
-  const warning = adjustColorIntensity(mixHexColors(emphasisedBase, '#FACC15', mode === 'dark' ? 0.44 : 0.24), {
+  const accent = adjustColorIntensity(accentBase, {
     saturationMultiplier: 1.1,
-    lightnessBias: 0.02,
+    lightnessMultiplier: mode === 'dark' ? 1.02 : 0.96,
   });
 
-  const info = adjustColorIntensity(mixHexColors(emphasisedBase, '#38BDF8', mode === 'dark' ? 0.48 : 0.28), {
-    saturationMultiplier: 1.2,
-    lightnessMultiplier: 0.95,
+  const warning = adjustColorIntensity(rawSecondary ?? mixHexColors(primary, '#F97316', 0.45), {
+    saturationMultiplier: 1.05,
+    lightnessMultiplier: mode === 'dark' ? 1 : 0.98,
   });
 
-  const success = adjustColorIntensity(mixHexColors(emphasisedBase, '#22C55E', mode === 'dark' ? 0.52 : 0.3), {
-    saturationMultiplier: 1.25,
-    lightnessMultiplier: 0.96,
+  const info = adjustColorIntensity(mixHexColors(accent, '#2563EB', 0.35), {
+    saturationMultiplier: 1.05,
+    lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
   });
 
-  // 5. Generate surface colors
-  const border = adjustColorIntensity(mixHexColors(defaults.border, emphasisedBase, mode === 'dark' ? 0.46 : 0.3), {
-    saturationMultiplier: 1.15,
+  const success = adjustColorIntensity(mixHexColors(accent, '#16A34A', 0.4), {
+    saturationMultiplier: 1.08,
+    lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
+  });
+
+  const border = adjustColorIntensity(mixHexColors(defaults.border, primary, mode === 'dark' ? 0.38 : 0.24), {
+    saturationMultiplier: 1.05,
     lightnessMultiplier: mode === 'dark' ? 1 : 0.92,
   });
 
-  const surface = mixHexColors(defaults.surface, emphasisedBase, mode === 'dark' ? 0.16 : 0.12);
-  const surfaceAlt = mixHexColors(defaults.surfaceAlt, emphasisedBase, mode === 'dark' ? 0.2 : 0.16);
+  const surface = mixHexColors(defaults.surface, primary, mode === 'dark' ? 0.12 : 0.07);
+  const surfaceAlt = mixHexColors(defaults.surfaceAlt, primary, mode === 'dark' ? 0.16 : 0.1);
 
-  // 6. Generate gradients
-  const gradient1 = `linear-gradient(135deg, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.42 : 0.28)}, ${hexToRgba(accent, mode === 'dark' ? 0.24 : 0.18)})`;
-  const gradient2 = `radial-gradient(circle at 20% 15%, ${hexToRgba(secondary, mode === 'dark' ? 0.32 : 0.22)}, transparent 52%)`;
-  const gradient3 = `radial-gradient(circle at 80% 0%, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.28 : 0.18)}, transparent 42%)`;
+  const gradient1 = `linear-gradient(135deg, ${hexToRgba(primary, mode === 'dark' ? 0.65 : 0.5)}, ${hexToRgba(accent, mode === 'dark' ? 0.52 : 0.35)})`;
+  const gradient2 = `radial-gradient(circle at 18% 20%, ${hexToRgba(secondary, mode === 'dark' ? 0.5 : 0.32)}, transparent 56%)`;
+  const gradient3 = `radial-gradient(circle at 78% -10%, ${hexToRgba(primary, mode === 'dark' ? 0.5 : 0.28)}, transparent 48%)`;
 
   return {
-    primary: emphasisedBase,
+    primary,
     secondary,
     accent,
-    danger: emphasisedBase, // Using primary for danger, as is common
+    danger: primary,
     warning,
     info,
     success,
@@ -334,12 +325,11 @@ export const getThemeVariables = (teamId: string | undefined, mode: ThemeMode): 
     return defaults;
   }
 
-  // Create customized colors using team's base (bg) and text colors
-  const overrides = createTeamOverrides(branding.bg, branding.text, mode, defaults);
+
+  const overrides = createTeamOverrides(branding, mode, defaults);
   return { ...defaults, ...overrides };
 };
 
-// --- Theme Application ---
 
 const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
   if (typeof document === 'undefined') {
@@ -352,11 +342,13 @@ const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
     root.style.setProperty(cssVar, variables[key]);
   });
 
-  // Set color-scheme property for browser hints
+
   root.style.setProperty('color-scheme', mode);
 };
 
 export const syncThemeWithFavouriteTeam = (teamId: string | undefined, mode: ThemeMode) => {
   const variables = getThemeVariables(teamId, mode);
   applyVariablesToRoot(variables, mode);
+
 };
+
