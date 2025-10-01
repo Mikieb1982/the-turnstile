@@ -1,5 +1,6 @@
 import { TEAM_BRANDING } from '../services/mockData';
 
+// --- Type Definitions ---
 export type ThemeMode = 'light' | 'dark';
 
 interface ThemeVariables {
@@ -21,6 +22,7 @@ interface ThemeVariables {
   gradient3: string;
 }
 
+// --- Default Themes ---
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
   primary: '#7F1028',
   secondary: '#FFD447',
@@ -59,6 +61,7 @@ const DEFAULT_DARK_THEME: ThemeVariables = {
   gradient3: 'radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%)',
 };
 
+// --- Utility Constants ---
 const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   primary: '--clr-primary',
   secondary: '--clr-secondary',
@@ -77,6 +80,8 @@ const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   gradient2: '--gradient-2',
   gradient3: '--gradient-3',
 };
+
+// --- Color Utility Functions ---
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
@@ -137,30 +142,172 @@ const hexToRgba = (hex: string, alpha: number): string => {
   return `rgba(${r}, ${g}, ${b}, ${clamp(alpha, 0, 1)})`;
 };
 
+const hexToHsl = (hex: string): [number, number, number] | null => {
+  const rgb = hexToRgb(hex);
+  if (!rgb) {
+    return null;
+  }
+
+  const [r, g, b] = rgb.map(component => component / 255) as [number, number, number];
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+
+  const delta = max - min;
+  if (delta === 0) {
+    return [0, 0, l];
+  }
+
+  s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+
+  switch (max) {
+    case r:
+      h = (g - b) / delta + (g < b ? 6 : 0);
+      break;
+    case g:
+      h = (b - r) / delta + 2;
+      break;
+    case b:
+      h = (r - g) / delta + 4;
+      break;
+    default:
+      h = 0;
+  }
+
+  h /= 6;
+
+  return [h, s, l];
+};
+
+const hueToRgb = (p: number, q: number, t: number) => {
+  let temp = t;
+  if (temp < 0) {
+    temp += 1;
+  }
+  if (temp > 1) {
+    temp -= 1;
+  }
+  if (temp < 1 / 6) {
+    return p + (q - p) * 6 * temp;
+  }
+  if (temp < 1 / 2) {
+    return q;
+  }
+  if (temp < 2 / 3) {
+    return p + (q - p) * (2 / 3 - temp) * 6;
+  }
+  return p;
+};
+
+const hslToHex = (h: number, s: number, l: number): string => {
+  const hue = ((h % 1) + 1) % 1;
+  const saturation = clamp(s, 0, 1);
+  const lightness = clamp(l, 0, 1);
+
+  if (saturation === 0) {
+    const gray = Math.round(lightness * 255);
+    return rgbToHex(gray, gray, gray);
+  }
+
+  const q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+  const p = 2 * lightness - q;
+
+  const r = Math.round(hueToRgb(p, q, hue + 1 / 3) * 255);
+  const g = Math.round(hueToRgb(p, q, hue) * 255);
+  const b = Math.round(hueToRgb(p, q, hue - 1 / 3) * 255);
+
+  return rgbToHex(r, g, b);
+};
+
+const adjustColorIntensity = (
+  hex: string,
+  { saturationMultiplier = 1, lightnessMultiplier = 1, lightnessBias = 0 }: {
+    saturationMultiplier?: number;
+    lightnessMultiplier?: number;
+    lightnessBias?: number;
+  },
+): string => {
+  const hsl = hexToHsl(hex);
+  if (!hsl) {
+    return hex;
+  }
+
+  const [h, s, l] = hsl;
+  const adjustedS = clamp(s * saturationMultiplier, 0, 1);
+  const adjustedL = clamp(l * lightnessMultiplier + lightnessBias, 0, 1);
+
+  return hslToHex(h, adjustedS, adjustedL);
+};
+
+// --- Theme Generation Logic ---
+
 const createTeamOverrides = (
   baseColor: string,
   textColor: string,
   mode: ThemeMode,
   defaults: ThemeVariables,
 ): Partial<ThemeVariables> => {
-  const secondary = mixHexColors(baseColor, '#FFFFFF', mode === 'dark' ? 0.35 : 0.65);
-  const accent = mixHexColors(baseColor, textColor, mode === 'dark' ? 0.45 : 0.25);
-  const warning = mixHexColors(baseColor, '#FACC15', mode === 'dark' ? 0.5 : 0.3);
-  const info = mixHexColors(baseColor, '#38BDF8', mode === 'dark' ? 0.5 : 0.35);
-  const success = mixHexColors(baseColor, '#22C55E', mode === 'dark' ? 0.55 : 0.35);
-  const border = mixHexColors(defaults.border, baseColor, mode === 'dark' ? 0.4 : 0.25);
-  const surface = mixHexColors(defaults.surface, baseColor, mode === 'dark' ? 0.12 : 0.08);
-  const surfaceAlt = mixHexColors(defaults.surfaceAlt, baseColor, mode === 'dark' ? 0.16 : 0.12);
+  // 1. Create an emphasised version of the base color
+  const emphasisedBase = adjustColorIntensity(baseColor, {
+    saturationMultiplier: 1.35,
+    lightnessMultiplier: mode === 'dark' ? 1.05 : 0.9,
+  });
 
-  const gradient1 = `linear-gradient(140deg, ${hexToRgba(baseColor, mode === 'dark' ? 0.28 : 0.18)}, ${hexToRgba(accent, mode === 'dark' ? 0.18 : 0.12)})`;
-  const gradient2 = `radial-gradient(circle at 20% 15%, ${hexToRgba(secondary, mode === 'dark' ? 0.24 : 0.16)}, transparent 55%)`;
-  const gradient3 = `radial-gradient(circle at 80% 0%, ${hexToRgba(baseColor, mode === 'dark' ? 0.2 : 0.14)}, transparent 45%)`;
+  // 2. Generate secondary color
+  const secondary = adjustColorIntensity(
+    mixHexColors(emphasisedBase, '#FFFFFF', mode === 'dark' ? 0.22 : 0.42),
+    {
+      saturationMultiplier: 1.2,
+      lightnessMultiplier: mode === 'dark' ? 1 : 0.96,
+    },
+  );
+
+  // 3. Generate accent color
+  const accent = adjustColorIntensity(
+    mixHexColors(emphasisedBase, textColor, mode === 'dark' ? 0.32 : 0.16),
+    {
+      saturationMultiplier: 1.25,
+      lightnessBias: mode === 'dark' ? 0.02 : -0.02,
+    },
+  );
+
+  // 4. Generate system colors (Warning, Info, Success)
+  const warning = adjustColorIntensity(mixHexColors(emphasisedBase, '#FACC15', mode === 'dark' ? 0.44 : 0.24), {
+    saturationMultiplier: 1.1,
+    lightnessBias: 0.02,
+  });
+
+  const info = adjustColorIntensity(mixHexColors(emphasisedBase, '#38BDF8', mode === 'dark' ? 0.48 : 0.28), {
+    saturationMultiplier: 1.2,
+    lightnessMultiplier: 0.95,
+  });
+
+  const success = adjustColorIntensity(mixHexColors(emphasisedBase, '#22C55E', mode === 'dark' ? 0.52 : 0.3), {
+    saturationMultiplier: 1.25,
+    lightnessMultiplier: 0.96,
+  });
+
+  // 5. Generate surface colors
+  const border = adjustColorIntensity(mixHexColors(defaults.border, emphasisedBase, mode === 'dark' ? 0.46 : 0.3), {
+    saturationMultiplier: 1.15,
+    lightnessMultiplier: mode === 'dark' ? 1 : 0.92,
+  });
+
+  const surface = mixHexColors(defaults.surface, emphasisedBase, mode === 'dark' ? 0.16 : 0.12);
+  const surfaceAlt = mixHexColors(defaults.surfaceAlt, emphasisedBase, mode === 'dark' ? 0.2 : 0.16);
+
+  // 6. Generate gradients
+  const gradient1 = `linear-gradient(135deg, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.42 : 0.28)}, ${hexToRgba(accent, mode === 'dark' ? 0.24 : 0.18)})`;
+  const gradient2 = `radial-gradient(circle at 20% 15%, ${hexToRgba(secondary, mode === 'dark' ? 0.32 : 0.22)}, transparent 52%)`;
+  const gradient3 = `radial-gradient(circle at 80% 0%, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.28 : 0.18)}, transparent 42%)`;
 
   return {
-    primary: baseColor,
+    primary: emphasisedBase,
     secondary,
     accent,
-    danger: baseColor,
+    danger: emphasisedBase, // Using primary for danger, as is common
     warning,
     info,
     success,
@@ -187,9 +334,12 @@ export const getThemeVariables = (teamId: string | undefined, mode: ThemeMode): 
     return defaults;
   }
 
+  // Create customized colors using team's base (bg) and text colors
   const overrides = createTeamOverrides(branding.bg, branding.text, mode, defaults);
   return { ...defaults, ...overrides };
 };
+
+// --- Theme Application ---
 
 const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
   if (typeof document === 'undefined') {
@@ -202,6 +352,7 @@ const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
     root.style.setProperty(cssVar, variables[key]);
   });
 
+  // Set color-scheme property for browser hints
   root.style.setProperty('color-scheme', mode);
 };
 
