@@ -70,7 +70,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [pendingName, setPendingName] = useState(user.name ?? '');
   const [isEditable, setIsEditable] = useState(false);
 
-  // Load layout from local storage, or use the initial layout
   const [layouts, setLayouts] = useState(() => {
     try {
       const storedLayouts = localStorage.getItem(LAYOUT_STORAGE_KEY);
@@ -105,7 +104,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     setIsAvatarModalOpen(false);
   };
 
-  // Save layout changes to local storage
   const onLayoutChange = (layout: any, allLayouts: any) => {
     localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
     setLayouts(allLayouts);
@@ -130,7 +128,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         isResizable={isEditable}
         draggableCancel=".no-drag"
       >
-        {/* Profile Tile */}
         <div key="profile" className={`${styles.tile} ${styles.profile_tile}`}>
           <div className={styles.profile_avatar}>
             {user.avatarUrl ? (
@@ -159,7 +156,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </div>
         </div>
 
-        {/* My Team Tile */}
         <div key="team" className={styles.tile}>
           <h3 className={`${styles.tile_title} no-drag`}>My Team</h3>
           {favouriteTeam ? (
@@ -175,7 +171,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </button>
         </div>
         
-        {/* Last Match Stats Tile */}
         <div key="last_match" className={styles.tile}>
           <h3 className={`${styles.tile_title} no-drag`}>Last Match</h3>
           {recentMatch ? (
@@ -188,7 +183,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           )}
         </div>
 
-        {/* Navigation Tiles */}
         <div key="my_matches" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('MY_MATCHES')}>
           <ListBulletIcon className={`${styles.icon} no-drag`} />
           <h4 className="no-drag">My Matches</h4>
