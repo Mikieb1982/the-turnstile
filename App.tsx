@@ -22,6 +22,7 @@ import { DataUploader } from './components/DataUploader';
 import { CommunityView } from './components/CommunityView';
 import { LoginPromptView } from './components/LoginPromptView';
 import { LogoIcon } from './components/Icons';
+import { syncThemeWithFavouriteTeam } from './utils/themeUtils';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('PROFILE');
@@ -33,6 +34,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const initialLoadStarted = useRef(false);
+  const favouriteTeamId = profile?.user.favoriteTeamId;
 
   const loadAppData = useCallback(async () => {
     setLoading(true);
@@ -54,6 +56,10 @@ const App: React.FC = () => {
         loadAppData();
     }
   }, [loadAppData]);
+
+  useEffect(() => {
+    syncThemeWithFavouriteTeam(favouriteTeamId, theme === 'dark' ? 'dark' : 'light');
+  }, [favouriteTeamId, theme]);
 
   const handleAttend = (match: Match) => {
     if (!currentUser) {
