@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LogoIcon } from './Icons';
 
 interface LoginPromptViewProps {
-  onLogin: () => void;
+  onLogin: () => Promise<void>;
 }
 
 export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await onLogin();
+    } catch (err) {
+      console.error('Google sign-in failed', err);
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Google Sign-In failed. Please check your internet connection and try again.';
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-surface p-8 rounded-xl text-center flex flex-col items-center shadow-card max-w-lg mx-auto mt-4 md:mt-10">
         <LogoIcon className="w-20 h-20 mb-4" />
@@ -15,11 +35,13 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
             with the community.
         </p>
         <button
-            onClick={onLogin}
-            className="bg-primary text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-primary/90 transition-transform hover:scale-105 shadow-md focus:outline-none focus:ring-4 focus:ring-primary/50"
+            onClick={handleLogin}
+            disabled={isLoading}
+            className="bg-primary text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-primary/90 transition-transform hover:scale-105 shadow-md focus:outline-none focus:ring-4 focus:ring-primary/50 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-            Continue with Google
+            {isLoading ? 'Connecting...' : 'Continue with Google'}
         </button>
+        {error ? <p className="mt-4 text-sm text-red-500" role="alert">{error}</p> : null}
     </div>
   );
 };
