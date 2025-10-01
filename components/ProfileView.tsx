@@ -1,3 +1,4 @@
+import styles from './ProfileView.module.css';
 import React, { useEffect, useMemo, useState } from 'react';
 import type { AttendedMatch, User, View } from '../types';
 import { allBadges } from '../badges';
