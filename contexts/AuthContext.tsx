@@ -232,7 +232,9 @@ const requestGoogleAccessToken = async (google: GoogleIdentityServices, clientId
           reject(new Error(error.error_description || error.error || 'Google sign-in failed.'));
         },
       });
+
       tokenClient.requestAccessToken({ prompt: 'consent' });
+
     } catch (error) {
       reject(error instanceof Error ? error : new Error('Failed to initialise Google sign-in.'));
     }
