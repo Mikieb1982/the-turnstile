@@ -12,7 +12,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isGoogleConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
-
+main
   const handleLogin = async () => {
     setError(null);
     if (!isGoogleConfigured) {
@@ -45,10 +45,12 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
         <button
             onClick={handleLogin}
             disabled={isLoading || !isGoogleConfigured}
+
             className="bg-primary text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-primary/90 transition-transform hover:scale-105 shadow-md focus:outline-none focus:ring-4 focus:ring-primary/50 disabled:opacity-70 disabled:cursor-not-allowed"
         >
             {isLoading ? 'Connecting...' : 'Continue with Google'}
         </button>
+
         {!isGoogleConfigured ? (
             <p className="mt-4 text-sm text-amber-600" role="alert">
                 {MISSING_CLIENT_ID_MESSAGE}

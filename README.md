@@ -110,11 +110,11 @@ This build runs entirely offline using localStorage. To connect your own Firebas
    # If you have not already created the file:
    cp .env.example .env.local
    # Then edit .env.local and replace the placeholder with your client ID
+
    ```
 
    Restart the dev server after saving the file. Without this value the Google button shows an actionable error instead of opening the consent screen.
 
----
 
 ## Firestore Data Model
 
