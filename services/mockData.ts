@@ -238,18 +238,178 @@ export const mockMatches: Match[] = [
 
 ];
 
-export const mockLeagueTable: LeagueStanding[] = [
-  { rank: 1, teamId: TEAMS.wigan.id, teamName: TEAMS.wigan.name, teamLogoUrl: TEAMS.wigan.logoUrl, played: 20, wins: 16, draws: 0, losses: 4, points: 32, form: 'WWWLW' },
-  { rank: 2, teamId: TEAMS.stHelens.id, teamName: TEAMS.stHelens.name, teamLogoUrl: TEAMS.stHelens.logoUrl, played: 20, wins: 15, draws: 0, losses: 5, points: 30, form: 'WWLWW' },
-  { rank: 3, teamId: TEAMS.leeds.id, teamName: TEAMS.leeds.name, teamLogoUrl: TEAMS.leeds.logoUrl, played: 20, wins: 13, draws: 1, losses: 6, points: 27, form: 'WLWWD' },
-  { rank: 4, teamId: TEAMS.warrington.id, teamName: TEAMS.warrington.name, teamLogoUrl: TEAMS.warrington.logoUrl, played: 20, wins: 12, draws: 1, losses: 7, points: 25, form: 'LWWDW' },
-  { rank: 5, teamId: TEAMS.catalans.id, teamName: TEAMS.catalans.name, teamLogoUrl: TEAMS.catalans.logoUrl, played: 20, wins: 11, draws: 0, losses: 9, points: 22, form: 'WWLLW' },
-  { rank: 6, teamId: TEAMS.leigh.id, teamName: TEAMS.leigh.name, teamLogoUrl: TEAMS.leigh.logoUrl, played: 20, wins: 10, draws: 1, losses: 9, points: 21, form: 'LWLWW' },
-  { rank: 7, teamId: TEAMS.salford.id, teamName: TEAMS.salford.name, teamLogoUrl: TEAMS.salford.logoUrl, played: 20, wins: 9, draws: 0, losses: 11, points: 18, form: 'LLWWL' },
-  { rank: 8, teamId: TEAMS.hullKR.id, teamName: TEAMS.hullKR.name, teamLogoUrl: TEAMS.hullKR.logoUrl, played: 20, wins: 8, draws: 1, losses: 11, points: 17, form: 'WLLDW' },
-  { rank: 9, teamId: TEAMS.huddersfield.id, teamName: TEAMS.huddersfield.name, teamLogoUrl: TEAMS.huddersfield.logoUrl, played: 20, wins: 7, draws: 0, losses: 13, points: 14, form: 'LLWLL' },
-  { rank: 10, teamId: TEAMS.castleford.id, teamName: TEAMS.castleford.name, teamLogoUrl: TEAMS.castleford.logoUrl, played: 20, wins: 6, draws: 0, losses: 14, points: 12, form: 'LWLWL' },
-  { rank: 11, teamId: TEAMS.hullFC.id, teamName: TEAMS.hullFC.name, teamLogoUrl: TEAMS.hullFC.logoUrl, played: 20, wins: 5, draws: 1, losses: 14, points: 11, form: 'DLLWL' },
-  { rank: 12, teamId: TEAMS.london.id, teamName: TEAMS.london.name, teamLogoUrl: TEAMS.london.logoUrl, played: 20, wins: 3, draws: 1, losses: 16, points: 7, form: 'LLLDL' },
-  { rank: 13, teamId: TEAMS.wakefield.id, teamName: TEAMS.wakefield.name, teamLogoUrl: TEAMS.wakefield.logoUrl, played: 20, wins: 2, draws: 0, losses: 18, points: 4, form: 'LLLLL' }
-];
+export const mockLeagueTable: LeagueStanding[] = {
+  "competition": "Betfred Super League 2025",
+  "data_as_of": "End of Regular Season (Round 27)",
+  "columns": [
+    "Position",
+    "Team",
+    "Played",
+    "Wins",
+    "Draws",
+    "Losses",
+    "Points_For",
+    "Points_Against",
+    "Points_Difference",
+    "Points",
+    "Form"
+  ],
+  "standings": [
+    {
+      "Position": 1,
+      "Team": "Hull KR",
+      "Played": 27,
+      "Wins": 22,
+      "Draws": 0,
+      "Losses": 5,
+      "Points_For": 786,
+      "Points_Against": 292,
+      "Points_Difference": 494,
+      "Points": 44,
+      "Form": "L W W W W"
+    },
+    {
+      "Position": 2,
+      "Team": "Wigan Warriors",
+      "Played": 27,
+      "Wins": 21,
+      "Draws": 0,
+      "Losses": 6,
+      "Points_For": 794,
+      "Points_Against": 333,
+      "Points_Difference": 461,
+      "Points": 42,
+      "Form": "W W W W W"
+    },
+    {
+      "Position": 3,
+      "Team": "Leigh Leopards",
+      "Played": 27,
+      "Wins": 19,
+      "Draws": 1,
+      "Losses": 7,
+      "Points_For": 619,
+      "Points_Against": 452,
+      "Points_Difference": 167,
+      "Points": 39,
+      "Form": "W W W W W"
+    },
+    {
+      "Position": 4,
+      "Team": "Leeds Rhinos",
+      "Played": 27,
+      "Wins": 18,
+      "Draws": 0,
+      "Losses": 9,
+      "Points_For": 610,
+      "Points_Against": 310,
+      "Points_Difference": 300,
+      "Points": 36,
+      "Form": "W W W L L"
+    },
+    {
+      "Position": 5,
+      "Team": "St Helens",
+      "Played": 27,
+      "Wins": 17,
+      "Draws": 0,
+      "Losses": 10,
+      "Points_For": 677,
+      "Points_Against": 314,
+      "Points_Difference": 363,
+      "Points": 34,
+      "Form": "W L L L W"
+    },
+    {
+      "Position": 6,
+      "Team": "Wakefield Trinity",
+      "Played": 27,
+      "Wins": 15,
+      "Draws": 0,
+      "Losses": 12,
+      "Points_For": 688,
+      "Points_Against": 458,
+      "Points_Difference": 230,
+      "Points": 30,
+      "Form": "L W L W W"
+    },
+    {
+      "Position": 7,
+      "Team": "Hull FC",
+      "Played": 27,
+      "Wins": 13,
+      "Draws": 1,
+      "Losses": 13,
+      "Points_For": 539,
+      "Points_Against": 461,
+      "Points_Difference": 78,
+      "Points": 27,
+      "Form": "L L L W L"
+    },
+    {
+      "Position": 8,
+      "Team": "Warrington Wolves",
+      "Played": 27,
+      "Wins": 10,
+      "Draws": 0,
+      "Losses": 17,
+      "Points_For": 480,
+      "Points_Against": 641,
+      "Points_Difference": -161,
+      "Points": 20,
+      "Form": "L L L L L"
+    },
+    {
+      "Position": 9,
+      "Team": "Catalans Dragons",
+      "Played": 27,
+      "Wins": 10,
+      "Draws": 0,
+      "Losses": 17,
+      "Points_For": 425,
+      "Points_Against": 652,
+      "Points_Difference": -227,
+      "Points": 20,
+      "Form": "W L W W W"
+    },
+    {
+      "Position": 10,
+      "Team": "Huddersfield Giants",
+      "Played": 27,
+      "Wins": 7,
+      "Draws": 0,
+      "Losses": 20,
+      "Points_For": 347,
+      "Points_Against": 738,
+      "Points_Difference": -391,
+      "Points": 14,
+      "Form": "W L L W L"
+    },
+    {
+      "Position": 11,
+      "Team": "Castleford Tigers",
+      "Played": 27,
+      "Wins": 6,
+      "Draws": 0,
+      "Losses": 21,
+      "Points_For": 396,
+      "Points_Against": 815,
+      "Points_Difference": -419,
+      "Points": 12,
+      "Form": "L L W L L"
+    },
+    {
+      "Position": 12,
+      "Team": "Salford Red Devils",
+      "Played": 27,
+      "Wins": 3,
+      "Draws": 0,
+      "Losses": 24,
+      "Points_For": 234,
+      "Points_Against": 1129,
+      "Points_Difference": -895,
+      "Points": 4,
+      "Form": "L W L L L"
+    }
+  ]
+}
