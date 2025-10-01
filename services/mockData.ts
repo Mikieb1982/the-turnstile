@@ -22,20 +22,26 @@ export const TEAMS = {
 type TeamEntry = (typeof TEAMS)[keyof typeof TEAMS];
 
 // ---------- Team branding ----------
-export const TEAM_BRANDING: Record<string, { bg: string; text: string }> = {
-  '1': { bg: '#A90533', text: '#FFFFFF' },
-  '2': { bg: '#D40404', text: '#FFFFFF' },
-  '3': { bg: '#003366', text: '#FFFFFF' },
-  '4': { bg: '#00559E', text: '#FFFFFF' },
-  '5': { bg: '#E60026', text: '#FFFFFF' },
-  '6': { bg: '#8B0000', text: '#FFFFFF' },
-  '7': { bg: '#ED1C24', text: '#FFFFFF' },
-  '8': { bg: '#1A1A1A', text: '#FFFFFF' },
-  '9': { bg: '#C8102E', text: '#FFFFFF' },
-  '10': { bg: '#1A1A1A', text: '#FFFFFF' },
-  '11': { bg: '#FFA500', text: '#000000' },
-  '12': { bg: '#1A1A1A', text: '#FFFFFF' },
-  '13': { bg: '#0073C0', text: '#FFFFFF' }
+export interface TeamBranding {
+  bg: string;
+  text: string;
+  palette: string[];
+}
+
+export const TEAM_BRANDING: Record<string, TeamBranding> = {
+  '1': { bg: '#862633', text: '#FFFFFF', palette: ['#862633', '#FFFFFF', '#060805'] },
+  '2': { bg: '#B31F1D', text: '#FFFFFF', palette: ['#B31F1D', '#FFFFFF'] },
+  '3': { bg: '#00539F', text: '#FFFFFF', palette: ['#00539F', '#FFB81C'] },
+  '4': { bg: '#015DAA', text: '#FFFFFF', palette: ['#015DAA', '#FFD700', '#FFFFFF'] },
+  '5': { bg: '#E62228', text: '#FFFFFF', palette: ['#E62228', '#FFD700', '#FFFFFF'] },
+  '6': { bg: '#8A0035', text: '#FFFFFF', palette: ['#8A0035', '#FFB81C'] },
+  '7': { bg: '#E6002A', text: '#FFFFFF', palette: ['#E6002A', '#FFFFFF'] },
+  '8': { bg: '#000000', text: '#FFFFFF', palette: ['#000000', '#FFFFFF'] },
+  '9': { bg: '#DA291C', text: '#FFFFFF', palette: ['#DA291C', '#FFFFFF', '#000000'] },
+  '10': { bg: '#000000', text: '#FFFFFF', palette: ['#000000', '#FFFFFF', '#D4AF37'] },
+  '11': { bg: '#F47C10', text: '#000000', palette: ['#F47C10', '#000000'] },
+  '12': { bg: '#000000', text: '#FFFFFF', palette: ['#000000', '#E4032C', '#FFFFFF'] },
+  '13': { bg: '#0073C0', text: '#FFFFFF', palette: ['#0073C0', '#FFFFFF', '#D71920'] }
 };
 
 // ---------- Venues ----------
