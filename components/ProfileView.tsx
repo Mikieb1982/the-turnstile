@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { User, AttendedMatch } from '../types';
 import { TEAMS, teamIdToVenue } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
@@ -135,6 +135,36 @@ const defaultLayout: TileLayoutItem[] = Object.values(tileDefinitions).map(({ id
   id,
   size: defaultSize,
 }));
+const ensureAllTilesPresent = (layout: TileLayoutItem[]): TileLayoutItem[] => {
+  const seen = new Set<TileId>();
+  const result: TileLayoutItem[] = [];
+
+  layout.forEach((item) => {
+    const definition = tileDefinitions[item.id];
+    if (!definition || seen.has(definition.id)) {
+      return;
+    }
+
+    const size = definition.allowedSizes.includes(item.size) ? item.size : definition.defaultSize;
+    result.push({ id: definition.id, size });
+    seen.add(definition.id);
+  });
+
+  Object.values(tileDefinitions).forEach(({ id, defaultSize }) => {
+    if (!seen.has(id)) {
+      result.push({ id, size: defaultSize });
+      seen.add(id);
+    }
+  });
+
+  return result;
+};
+
+const layoutsAreEqual = (a: TileLayoutItem[], b: TileLayoutItem[]) => {
+  if (a === b) return true;
+  if (a.length !== b.length) return false;
+  return a.every((item, index) => item.id === b[index]?.id && item.size === b[index]?.size);
+};
 
 const sizeClassMatrix: Record<TileType, Partial<Record<TileSize, string>>> = {
   'high-emphasis': {
@@ -209,9 +239,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [isCustomisingLayout, setIsCustomisingLayout] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [draggingTileId, setDraggingTileId] = useState<TileId | null>(null);
-  const dragState = useRef<{ tileId: TileId; pointerId: number; startY: number } | null>(null);
   const [tileLayout, setTileLayout] = useState<TileLayoutItem[]>(() => {
     if (typeof window === 'undefined') {
       return defaultLayout;
@@ -222,15 +249,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       if (!saved) {
         return defaultLayout;
       }
-      const parsed = JSON.parse(saved) as TileLayoutItem[];
-      const valid = parsed.filter((tile) => tileDefinitions[tile.id]);
-      if (valid.length) {
-        return valid.map((item) => ({
-          id: item.id,
-          size: tileDefinitions[item.id].allowedSizes.includes(item.size)
-            ? item.size
-            : tileDefinitions[item.id].defaultSize,
-        }));
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return ensureAllTilesPresent(parsed as TileLayoutItem[]);
       }
       return defaultLayout;
     } catch (error) {
@@ -239,26 +260,212 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     }
   });
 
-  const ensureAllTilesPresent = (layout: TileLayoutItem[]) => {
-    const seen = new Set<TileId>();
-    const deduped = layout.filter((item) => {
-      if (!tileDefinitions[item.id] || seen.has(item.id)) {
-        return false;
-      }
-      seen.add(item.id);
-      return true;
+  const currentLayout = useMemo(() => ensureAllTilesPresent(tileLayout), [tileLayout]);
+
+  useEffect(() => {
+    if (!layoutsAreEqual(tileLayout, currentLayout)) {
+      setTileLayout(currentLayout);
+      return;
+    }
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(TILE_LAYOUT_STORAGE_KEY, JSON.stringify(currentLayout));
+    } catch (error) {
+      console.warn('Failed to store tile layout', error);
+    }
+  }, [currentLayout, tileLayout]);
+
+  const favoriteTeam = useMemo(() => {
+    if (!user.favoriteTeamId) return null;
+    return Object.values(TEAMS).find((t) => t.id === user.favoriteTeamId) || null;
+  }, [user.favoriteTeamId]);
+
+  const statsSummary = useMemo(() => {
+    const totalMatches = attendedMatches.length;
+    const currentYear = new Date().getFullYear();
+    const matchesThisSeason = attendedMatches.filter((match) => {
+      const attendedDate = match.attendedOn ? new Date(match.attendedOn) : new Date(match.match.startTime);
+      return attendedDate.getFullYear() === currentYear;
     });
 
-    Object.values(tileDefinitions).forEach(({ id, defaultSize }) => {
-      if (!seen.has(id)) {
-        deduped.push({ id, size: defaultSize });
-      }
-    });
+    const totalPoints = attendedMatches.reduce(
+      (sum, attendedMatch) => sum + attendedMatch.match.scores.home + attendedMatch.match.scores.away,
+      0,
+    );
 
-    return deduped;
+    const uniqueVenues = new Set(attendedMatches.map((am) => am.match.venue));
+    const uniqueVenuesThisSeason = new Set(matchesThisSeason.map((am) => am.match.venue));
+
+    return {
+      totalMatches,
+      matchesThisSeason: matchesThisSeason.length,
+      totalPoints,
+      averagePoints: totalMatches > 0 ? Math.round(totalPoints / totalMatches) : 0,
+      uniqueVenues: uniqueVenues.size,
+      newGroundsThisSeason: uniqueVenuesThisSeason.size,
+    };
+  }, [attendedMatches]);
+
+  const uniqueVenuesCount = statsSummary.uniqueVenues;
+
+  const recentMatches = useMemo(() => {
+    return [...attendedMatches]
+      .sort((a, b) => {
+        const dateA = a.attendedOn ? new Date(a.attendedOn).getTime() : new Date(a.match.startTime).getTime();
+        const dateB = b.attendedOn ? new Date(b.attendedOn).getTime() : new Date(b.match.startTime).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 3);
+  }, [attendedMatches]);
+
+  const favoriteTeamAppearances = useMemo(() => {
+    if (!favoriteTeam) return 0;
+    return attendedMatches.filter(
+      (am) => am.match.homeTeam.id === favoriteTeam.id || am.match.awayTeam.id === favoriteTeam.id,
+    ).length;
+  }, [attendedMatches, favoriteTeam]);
+
+  const earnedBadges = useMemo(() => allBadges.filter((badge) => earnedBadgeIds.includes(badge.id)), [earnedBadgeIds]);
+
+  const dailyScrumTip = useMemo(() => {
+    const tips = [
+      {
+        title: 'Pause, notice, breathe',
+        question: "What's your focus today?",
+        tip: 'Bring the calm of a steady scrum to your day. Slow down, scan the field, and move with purpose.',
+      },
+      {
+        title: 'Lead the defensive line',
+        question: 'Where can you lift a teammate?',
+        tip: 'Great captains communicate early. Send a quick message to keep your squad aligned.',
+      },
+      {
+        title: 'Own the gain line',
+        question: 'What small win are you chasing?',
+        tip: 'Break big goals into short carries. Five metres at a time still gets you over the try line.',
+      },
+      {
+        title: 'Recover like a pro',
+        question: 'What will keep your energy up?',
+        tip: 'Fuel, hydrate, and reset. Even legends take a water break before the next set.',
+      },
+    ];
+    const today = new Date();
+    const index = (today.getFullYear() + today.getMonth() + today.getDate()) % tips.length;
+    return tips[index];
+  }, []);
+
+  const handleSelectTeam = (teamId: string) => {
+    setUser({ favoriteTeamId: teamId });
+    setIsTeamModalOpen(false);
   };
 
-  const currentLayout = ensureAllTilesPresent(tileLayout);
+  const handleSaveAvatar = (avatarUrl: string) => {
+    setUser({ avatarUrl });
+    setIsAvatarModalOpen(false);
+  };
+
+  const handleMoveTile = (tileId: TileId, direction: 'up' | 'down') => {
+    setTileLayout((previous) => {
+      const next = [...previous];
+      const index = next.findIndex((tile) => tile.id === tileId);
+      if (index === -1) return previous;
+      const targetIndex = direction === 'up' ? Math.max(0, index - 1) : Math.min(next.length - 1, index + 1);
+      if (targetIndex === index) return previous;
+      const [moved] = next.splice(index, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+  };
+
+  const handleResizeTile = (tileId: TileId) => {
+    const definition = tileDefinitions[tileId];
+    if (!definition) return;
+    setTileLayout((previous) =>
+      previous.map((tile) => {
+        if (tile.id !== tileId) return tile;
+        const sizes = definition.allowedSizes;
+        const currentIndex = sizes.indexOf(tile.size);
+        const nextSize = sizes[(currentIndex + 1) % sizes.length];
+        return { ...tile, size: nextSize };
+      }),
+    );
+  };
+=======
+
+
+
+  coconst currentLayout = ensureAllTilesPresent(tileLayout);
+
+  const handleViewportChange = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+  }, []);
+
+  useEffect(() => {
+    handleViewportChange();
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.addEventListener('resize', handleViewportChange);
+    return () => window.removeEventListener('resize', handleViewportChange);
+  }, [handleViewportChange]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem(TILE_LAYOUT_STORAGE_KEY, JSON.stringify(currentLayout));
+  }, [currentLayout]);
+
+  const favoriteTeam = useMemo(() => {
+    if (!user.favoriteTeamId) return null;
+    return Object.values(TEAMS).find((t) => t.id === user.favoriteTeamId) || null;
+  }, [user.favoriteTeamId]);
+
+  const statsSummary = useMemo(() => {
+    const totalMatches = attendedMatches.length;
+    const currentYear = new Date().getFullYear();
+    const matchesThisSeason = attendedMatches.filter((match) => {
+      const attendedDate = match.attendedOn ? new Date(match.attendedOn) : new Date(match.match.startTime);
+      return attendedDate.getFullYear() === currentYear;
+    });
+
+    const totalPoints = attendedMatches.reduce(
+      (sum, attendedMatch) => sum + attendedMatch.match.scores.home + attendedMatch.match.scores.away,
+      0,
+    );
+
+    const uniqueVenues = new Set(attendedMatches.map((am) => am.match.venue));
+    const uniqueVenuesThisSeason = new Set(matchesThisSeason.map((am) => am.match.venue));
+
+    return {
+      totalMatches,
+      matchesThisSeason: matchesThisSeason.length,
+      totalPoints,
+      averagePoints: totalMatches > 0 ? Math.round(totalPoints / totalMatches) : 0,
+      uniqueVenues: uniqueVenues.size,
+      newGroundsThisSeason: uniqueVenuesThisSeason.size,
+    };
+  }, [attendedMatches]);
+
+  const uniqueVenuesCount = statsSummary.uniqueVenues;
+
+  const recentMatches = useMemo(() => {
+    return [...attendedMatches]
+      .sort((a, b) => {
+        const dateA = a.attendedOn ? new Date(a.attendedOn).getTime() : new Date(a.match.startTime).getTime();
+        const dateB = b.attendedOn ? new Date(b.attendedOn).getTime() : new Date(b.match.startTime).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 3);nst currentLayout = ensureAllTilesPresent(tileLayout);
 
   const handleViewportChange = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -379,95 +586,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       const next = [...previous];
       const index = next.findIndex((tile) => tile.id === tileId);
       if (index === -1) return previous;
-      const targetIndex = direction === 'up' ? Math.max(0, index - 1) : Math.min(next.length - 1, index + 1);
-      if (targetIndex === index) return previous;
-      const [moved] = next.splice(index, 1);
-      next.splice(targetIndex, 0, moved);
-      return next;
-    });
-  };
-
-  const handleResizeTile = (tileId: TileId) => {
-    const definition = tileDefinitions[tileId];
-    if (!definition) return;
-    setTileLayout((previous) =>
-      previous.map((tile) => {
-        if (tile.id !== tileId) return tile;
-        const sizes = definition.allowedSizes;
-        const currentIndex = sizes.indexOf(tile.size);
-        const nextSize = sizes[(currentIndex + 1) % sizes.length];
-        return { ...tile, size: nextSize };
-      }),
-    );
-  };
-
-  const handleMobileDragPointerDown = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
-    if (!isMobile || !isCustomisingLayout) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-    try {
-      event.currentTarget.setPointerCapture(event.pointerId);
-    } catch (error) {
-      // Ignore failures to capture pointer; dragging will still function using bubbling events.
-    }
-    dragState.current = { tileId, pointerId: event.pointerId, startY: event.clientY };
-    setDraggingTileId(tileId);
-  };
-
-  const handleMobileDragPointerMove = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
-    if (!isMobile || !isCustomisingLayout) {
-      return;
-    }
-    if (!dragState.current || dragState.current.tileId !== tileId) {
-      return;
-    }
-
-    event.preventDefault();
-    const deltaY = event.clientY - dragState.current.startY;
-    if (deltaY <= -40) {
-      handleMoveTile(tileId, 'up');
-      dragState.current.startY = event.clientY;
-    } else if (deltaY >= 40) {
-      handleMoveTile(tileId, 'down');
-      dragState.current.startY = event.clientY;
-    }
-  };
-
-  const clearMobileDragState = useCallback(() => {
-    dragState.current = null;
-    setDraggingTileId(null);
-  }, []);
-
-  const handleMobileDragPointerEnd = (tileId: TileId, event: React.PointerEvent<HTMLButtonElement>) => {
-    if (!isMobile || !isCustomisingLayout) {
-      return;
-    }
-    if (!dragState.current || dragState.current.tileId !== tileId) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-    try {
-      event.currentTarget.releasePointerCapture(dragState.current.pointerId);
-    } catch (error) {
-      // Ignore release failures.
-    }
-    clearMobileDragState();
-  };
-
-  useEffect(() => {
-    if (!isCustomisingLayout) {
-      clearMobileDragState();
-    }
-  }, [isCustomisingLayout, clearMobileDragState]);
-
-  useEffect(() => {
-    if (!isMobile) {
-      clearMobileDragState();
-    }
-  }, [isMobile, clearMobileDragState]);
+       clearMobileDragState])
 
   const firstName = user.name ? user.name.split(' ')[0] : 'there';
 
@@ -806,41 +925,33 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         {currentLayout.map((tile, index) => {
           const definition = tileDefinitions[tile.id];
           const content = renderers[tile.id];
+
+          if (!definition || typeof content !== 'function') {
+            return null;
+          }
+
           const sizeClasses = getTileSizeClasses(definition, tile.size);
 
           return (
             <section
               key={tile.id}
               aria-label={definition.label}
-              className={`${sizeClasses} relative transition ${isMobile ? 'sticky top-24' : ''} ${
-                draggingTileId === tile.id ? 'z-20 scale-[0.98]' : ''
-              }`}
-              style={draggingTileId === tile.id ? { zIndex: 20 } : undefined}
+ 
+              className={`${sizeClasses} relative transition`}
+
             >
               <div className={`h-full rounded-2xl ${isCustomisingLayout ? 'ring-2 ring-primary/60 ring-offset-2' : ''}`}>
                 {content()}
               </div>
 
               {isCustomisingLayout && (
-                <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-col items-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
+              
+                <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap justify-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
                   <span className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-surface-alt/90 px-3 py-1 shadow-sm">
                     {getTileTypeHint(definition)}
                   </span>
-                  <div className="pointer-events-auto flex flex-wrap items-center gap-2">
-                    {isMobile && (
-                      <button
-                        type="button"
-                        onPointerDown={(event) => handleMobileDragPointerDown(tile.id, event)}
-                        onPointerMove={(event) => handleMobileDragPointerMove(tile.id, event)}
-                        onPointerUp={(event) => handleMobileDragPointerEnd(tile.id, event)}
-                        onPointerCancel={(event) => handleMobileDragPointerEnd(tile.id, event)}
-                        onPointerLeave={(event) => handleMobileDragPointerEnd(tile.id, event)}
-                        className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary transition hover:bg-primary/20"
-                      >
-                        <Squares2X2Icon className="h-4 w-4" />
-                        Drag to reorder
-                      </button>
-                    )}
+                  <div className="pointer-events-auto flex items-center gap-2">
+
                     <button
                       type="button"
                       onClick={() => handleMoveTile(tile.id, 'up')}
