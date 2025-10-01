@@ -107,7 +107,11 @@ const getStartedSteps: string[] = [
   'Join the community hub to share tips, photos, and matchday highlights.',
 ];
 
-export const AboutView: React.FC = () => {
+interface AboutViewProps {
+  theme: 'light' | 'dark';
+}
+
+export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
   return (
     <div className="space-y-12">
       <section className="relative overflow-hidden rounded-3xl border border-white/60 bg-surface shadow-card dark:border-white/10">
@@ -115,7 +119,7 @@ export const AboutView: React.FC = () => {
         <div className="relative grid gap-10 px-6 py-12 md:grid-cols-[1.1fr,0.9fr] md:px-12">
           <div>
             <div className="mb-6 flex items-center gap-3 text-primary">
-              <LogoIcon className="h-10 w-10" />
+              <LogoIcon className="h-10 w-10" theme={theme} />
               <span className="text-sm font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
             </div>
             <h1 className="text-4xl font-bold text-text-strong md:text-5xl">
