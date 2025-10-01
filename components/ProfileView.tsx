@@ -15,7 +15,6 @@ import {
   UserCircleIcon,
 } from './Icons';
 import { TEAMS } from '../services/mockData';
-import styles from './ProfileView.module.css'; // Import the CSS module
 
 // Helper to get team details by ID
 const getTeamById = (teamId?: string) => {
@@ -78,26 +77,26 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
   return (
     <>
-      <div className={styles.tile_grid}>
+      <div className="tile-grid">
         {/* Profile Tile */}
-        <div className={`${styles.tile} ${styles.profile_tile} ${styles.color_deep_red}`}>
-          <div className={styles.profile_avatar}>
+        <div className="tile profile-tile color-deep-red">
+          <div className="profile-avatar">
             {user.avatarUrl ? (
-              <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatar_img} />
+              <img src={user.avatarUrl} alt="Profile avatar" className="avatar-img" />
             ) : (
-              <UserCircleIcon className={styles.avatar_placeholder} />
+              <UserCircleIcon className="avatar-placeholder" />
             )}
             <button
               onClick={() => setIsAvatarModalOpen(true)}
-              className={styles.edit_avatar_button}
+              className="edit-avatar-button"
               aria-label="Edit avatar"
             >
               <PencilIcon />
             </button>
           </div>
-          <div className={styles.profile_info}>
+          <div className="profile-info">
             {isEditingName ? (
-              <form onSubmit={handleSaveName} className={styles.name_edit_form}>
+              <form onSubmit={handleSaveName} className="name-edit-form">
                 <input
                   type="text"
                   value={pendingName}
@@ -108,69 +107,69 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 <button type="submit">Save</button>
               </form>
             ) : (
-              <h1 onClick={() => setIsEditingName(true)} className={styles.profile_name}>
-                {user.name} <PencilIcon className={styles.edit_name_icon} />
+              <h1 onClick={() => setIsEditingName(true)} className="profile-name">
+                {user.name} <PencilIcon className="edit-name-icon" />
               </h1>
             )}
-            <p className={styles.profile_status}>
+            <p className="profile-status">
               {attendedMatches.length} matches attended | {earnedBadgeIds.length} badges earned
             </p>
           </div>
         </div>
 
         {/* My Team Tile */}
-        <div className={`${styles.tile} ${styles.color_dark_blue}`}>
-          <h3 className={styles.tile_title}>My Team</h3>
+        <div className="tile color-dark-blue">
+          <h3 className="tile-title">My Team</h3>
           {favouriteTeam ? (
-            <div className={styles.team_info}>
+            <div className="team-info">
               <TeamLogo teamId={favouriteTeam.id} teamName={favouriteTeam.name} />
-              <span className={styles.team_name}>{favouriteTeam.name}</span>
+              <span className="team-name">{favouriteTeam.name}</span>
             </div>
           ) : (
-            <p className={styles.tile_description}>No favorite team selected.</p>
+            <p className="tile-description">No favorite team selected.</p>
           )}
-          <button onClick={() => setIsTeamModalOpen(true)} className={styles.tile_button}>
+          <button onClick={() => setIsTeamModalOpen(true)} className="tile-button">
             {favouriteTeam ? 'Change' : 'Select'} Team
           </button>
         </div>
 
         {/* Last Match Stats Tile */}
-        <div className={`${styles.tile} ${styles.color_deep_red}`}>
-            <h3 className={styles.tile_title}>Last Match</h3>
+        <div className="tile color-deep-red">
+            <h3 className="tile-title">Last Match</h3>
             {recentMatch ? (
-                <div className={styles.match_recap}>
+                <div className="match-recap">
                     <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
-                    <p className={styles.match_score}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
+                    <p className="match-score">{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
                 </div>
             ) : (
-                <p className={styles.tile_description}>No matches attended yet.</p>
+                <p className='tile-description'>No matches attended yet.</p>
             )}
         </div>
 
 
         {/* Navigation Tiles */}
-        <button onClick={() => setView('MY_MATCHES')} className={`${styles.tile} ${styles.nav_tile} ${styles.color_yellow}`}>
-          <ListBulletIcon className={styles.icon} />
+        <button onClick={() => setView('MY_MATCHES')} className="tile nav-tile color-yellow">
+          <ListBulletIcon className="icon" />
           <h4>My Matches</h4>
         </button>
-        <button onClick={() => setView('GROUNDS')} className={`${styles.tile} ${styles.nav_tile} ${styles.color_dark_blue}`}>
-          <BuildingStadiumIcon className={styles.icon} />
+        <button onClick={() => setView('GROUNDS')} className="tile nav-tile color-dark-blue">
+          <BuildingStadiumIcon className="icon" />
           <h4>Grounds</h4>
         </button>
-        <button onClick={() => setView('STATS')} className={`${styles.tile} ${styles.nav_tile} ${styles.color_deep_red}`}>
-          <ChartBarIcon className={styles.icon} />
+        <button onClick={() => setView('STATS')} className="tile nav-tile color-deep-red">
+          <ChartBarIcon className="icon" />
           <h4>My Stats</h4>
         </button>
-        <button onClick={() => setView('BADGES')} className={`${styles.tile} ${styles.nav_tile} ${styles.color_yellow}`}>
-          <TrophyIcon className={styles.icon} />
+        <button onClick={() => setView('BADGES')} className="tile nav-tile color-yellow">
+          <TrophyIcon className="icon" />
           <h4>Badges</h4>
         </button>
-        <button onClick={() => setView('ADMIN')} className={`${styles.tile} ${styles.nav_tile} ${styles.color_dark_blue}`}>
-          <UserCircleIcon className={styles.icon} />
+        <button onClick={() => setView('ADMIN')} className="tile nav-tile color-dark-blue">
+          <UserCircleIcon className="icon" />
           <h4>Admin Tools</h4>
         </button>
-        <button onClick={onLogout} className={`${styles.tile} ${styles.nav_tile} ${styles.color_deep_red}`}>
-          <ArrowRightOnRectangleIcon className={styles.icon} />
+        <button onClick={onLogout} className="tile nav-tile color-deep-red">
+          <ArrowRightOnRectangleIcon className="icon" />
           <h4>Logout</h4>
         </button>
       </div>
