@@ -52,7 +52,19 @@ The Scrum Book is a modern React + Vite application that helps rugby league fans
 npm install
 ````
 
-### 2. Run the dev server
+### 2. Configure Google Sign-In
+
+Copy the example environment file and update the placeholder with your Google OAuth web client ID. The value must match the
+client configured for this project's origin in the Google Cloud Console.
+
+```bash
+cp .env.example .env.local
+# then edit .env.local and replace the placeholder client ID
+```
+
+Restart the dev server after editing `.env.local` so Vite can pick up the new environment variable.
+
+### 3. Run the dev server
 
 ```bash
 npm run dev
@@ -62,7 +74,7 @@ The server prints a local URL you can open in your browser. Hot module replaceme
 
 > ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage.
 
-### 3. Build for production
+### 4. Build for production
 
 ```bash
 npm run build
@@ -92,15 +104,16 @@ This build runs entirely offline using localStorage. To connect your own Firebas
 1. In the Firebase console, open **Build → Authentication → Sign-in method** and enable the **Google** provider. Configure the support email when prompted so users can sign in with their Google account.
 2. Still in **Project settings → General**, scroll to **Your apps** and add the SHA-1 release fingerprint for every Android app that should support Google Sign-In. This step is required for Google to trust the OAuth client.
 3. In **Project settings → General → Your project**, update the **Public-facing name** so it matches `project-99200945430`. Firebase uses this value during the Google account consent screen.
-4. Create an `.env.local` file in the project root and add your web client ID so the frontend can call Google directly:
-
+4. Update your `.env.local` file in the project root with your web client ID so the frontend can call Google directly:
    ```bash
-   echo "VITE_GOOGLE_CLIENT_ID=your-web-client-id.apps.googleusercontent.com" >> .env.local
+   # If you have not already created the file:
+   cp .env.example .env.local
+   # Then edit .env.local and replace the placeholder with your client ID
+
    ```
 
    Restart the dev server after saving the file. Without this value the Google button shows an actionable error instead of opening the consent screen.
 
----
 
 ## Firestore Data Model
 
