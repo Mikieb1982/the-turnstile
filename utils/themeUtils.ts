@@ -1,7 +1,6 @@
 import { TEAM_BRANDING } from '../services/mockData';
 import type { TeamBranding } from '../services/mockData';
 export type ThemeMode = 'light' | 'dark';
-
 interface ThemeVariables {
   primary: string;
   secondary: string;
@@ -58,6 +57,9 @@ const DEFAULT_DARK_THEME: ThemeVariables = {
   gradient2: 'radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%)',
   gradient3: 'radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%)',
 };
+
+
+
 const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   primary: '--clr-primary',
   secondary: '--clr-secondary',
@@ -330,7 +332,6 @@ export const getThemeVariables = (teamId: string | undefined, mode: ThemeMode): 
   return { ...defaults, ...overrides };
 };
 
-
 const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
   if (typeof document === 'undefined') {
     return;
@@ -349,6 +350,5 @@ const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
 export const syncThemeWithFavouriteTeam = (teamId: string | undefined, mode: ThemeMode) => {
   const variables = getThemeVariables(teamId, mode);
   applyVariablesToRoot(variables, mode);
-
 };
 

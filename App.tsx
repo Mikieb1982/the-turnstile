@@ -27,6 +27,7 @@ import { syncThemeWithFavouriteTeam } from './utils/themeUtils';
 const App: React.FC = () => {
   const [view, setView] = useState<View>('PROFILE');
   const [theme, toggleTheme] = useTheme();
+  const themeMode = theme === 'dark' ? 'dark' : 'light';
 
   const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
 
@@ -58,8 +59,9 @@ const App: React.FC = () => {
   }, [loadAppData]);
 
   useEffect(() => {
-    syncThemeWithFavouriteTeam(favouriteTeamId, theme === 'dark' ? 'dark' : 'light');
-  }, [favouriteTeamId, theme]);
+    syncThemeWithFavouriteTeam(favouriteTeamId, themeMode);
+  }, [favouriteTeamId, themeMode]);
+
 
   const handleAttend = (match: Match) => {
     if (!currentUser) {
@@ -90,7 +92,7 @@ const App: React.FC = () => {
 
     const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
     if (!currentUser && protectedViews.includes(view)) {
-      return <LoginPromptView onLogin={login} />;
+      return <LoginPromptView onLogin={login} theme={themeMode} />;
     }
 
     // While authenticating, show a spinner for protected views
@@ -133,7 +135,7 @@ const App: React.FC = () => {
       case 'GROUNDS':
         return <GroundsView />;
       case 'ABOUT':
-        return <AboutView />;
+        return <AboutView theme={themeMode} />;
 
       // Protected Routes
       case 'MY_MATCHES':
@@ -177,7 +179,7 @@ const App: React.FC = () => {
       </main>
       <MobileNav currentView={view} setView={setView} currentUser={currentUser} />
       <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
-        <LogoIcon className="w-12 h-12 mx-auto mb-3" />
+        <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
         <p className="font-semibold text-text">The Scrum Book</p>
         <p className="mt-1">Your ultimate rugby league companion. Track matches, earn badges, and connect with other fans.</p>
       </footer>
