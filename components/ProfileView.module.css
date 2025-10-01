@@ -70,6 +70,7 @@
 /* --- Premium Tile Styling --- */
 .tile {
     position: relative;
+
     background: linear-gradient(
             140deg,
             rgba(134, 38, 51, 0.9) 0%,
@@ -81,6 +82,7 @@
         ),
         radial-gradient(circle at 10% 20%, rgba(218, 41, 28, 0.35), transparent 60%);
     background-blend-mode: multiply, screen;
+
     border-radius: 18px;
     box-shadow: 0 20px 45px -28px rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(148, 163, 184, 0.22);
@@ -92,6 +94,7 @@
     height: 100%;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
+
 .tile::before,
 .tile::after {
     content: '';
@@ -109,6 +112,7 @@
     mix-blend-mode: multiply;
     opacity: 0.35;
 }
+
 .tile:hover {
     transform: translateY(-6px);
     box-shadow: 0 32px 60px -32px rgba(15, 23, 42, 0.9);
@@ -116,6 +120,7 @@
 }
 .tile:hover::before,
 .tile:hover::after {
+
     opacity: 0.85;
 }
 
