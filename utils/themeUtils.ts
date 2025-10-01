@@ -2,7 +2,6 @@ import { TEAM_BRANDING } from '../services/mockData';
 import type { TeamBranding } from '../services/mockData';
 
 export type ThemeMode = 'light' | 'dark';
-
 interface ThemeVariables {
   primary: string;
   secondary: string;
@@ -341,7 +340,6 @@ const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
     const cssVar = VARIABLE_NAME_MAP[key];
     root.style.setProperty(cssVar, variables[key]);
   });
-
   root.style.setProperty('color-scheme', mode);
 };
 

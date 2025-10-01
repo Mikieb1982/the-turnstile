@@ -56,6 +56,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
             className="w-48 h-48 md:w-64 md:h-64 text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
+
         </div>
         <div className="flex items-center gap-2 md:gap-4">
             <nav className="hidden md:flex items-center gap-1">
