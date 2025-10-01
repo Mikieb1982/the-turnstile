@@ -50,10 +50,10 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
 
   return (
     <header className="bg-surface shadow-sm sticky top-0 z-10 border-b border-border">
-      <div className="container mx-auto flex justify-between items-center p-4">
+      <div className="container mx-auto flex justify-between items-center p-2">
         <div className="flex items-center">
           <LogoIcon
-            className="h-14 w-auto text-primary object-contain"
+            className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
 
