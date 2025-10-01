@@ -119,10 +119,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       </div>
 
       <ResponsiveGridLayout
+        className={styles.layout}
         layouts={layouts}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         rowHeight={100}
+        margin={[24, 24]}
+        containerPadding={[0, 24]}
         onLayoutChange={onLayoutChange}
         isDraggable={isEditable}
         isResizable={isEditable}
