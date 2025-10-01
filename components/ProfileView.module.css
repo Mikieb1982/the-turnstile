@@ -13,7 +13,7 @@
 }
 
 /* --- Tile Grid Layout --- */
-.tile-grid {
+.tile_grid {
     display: grid;
     gap: var(--grid-gap);
     grid-template-columns: 1fr; /* Default to single column */
@@ -38,33 +38,33 @@
 }
 
 /* --- Color Utility Classes --- */
-.color-deep-red { background-color: var(--color-deep-red); }
-.color-dark-blue { background-color: var(--color-dark-blue); }
-.color-yellow { background-color: var(--color-yellow); color: var(--color-text-dark); }
+.color_deep_red { background-color: var(--color-deep-red); }
+.color_dark_blue { background-color: var(--color-dark-blue); }
+.color_yellow { background-color: var(--color-yellow); color: var(--color-text-dark); }
 
 /* --- Specific Tile Designs --- */
 
 /* Profile Tile */
-.profile-tile {
+.profile_tile {
     grid-column: 1 / -1; /* Span full width */
     flex-direction: row;
     align-items: center;
     gap: 1.5rem;
 }
 
-.profile-avatar {
+.profile_avatar {
     position: relative;
     flex-shrink: 0;
 }
 
-.avatar-img {
+.avatar_img {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(255, 255, 255, 0.5);
 }
-.avatar-placeholder {
+.avatar_placeholder {
     width: 80px;
     height: 80px;
     color: var(--color-text-light);
@@ -73,7 +73,7 @@
     padding: 0.5rem;
 }
 
-.edit-avatar-button {
+.edit_avatar_button {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -89,16 +89,16 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.edit-avatar-button svg {
+.edit_avatar_button svg {
     width: 14px;
     height: 14px;
 }
 
-.profile-info {
+.profile_info {
     flex-grow: 1;
 }
 
-.profile-name {
+.profile_name {
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
@@ -107,17 +107,17 @@
     align-items: center;
     gap: 0.5rem;
 }
-.edit-name-icon {
+.edit_name_icon {
     width: 16px;
     height: 16px;
     opacity: 0.6;
     transition: opacity 0.2s;
 }
-.profile-name:hover .edit-name-icon {
+.profile_name:hover .edit_name_icon {
     opacity: 1;
 }
 
-.name-edit-form input {
+.name_edit_form input {
     background: rgba(0,0,0,0.2);
     border: 1px solid var(--color-text-light);
     color: var(--color-text-light);
@@ -125,7 +125,7 @@
     border-radius: 8px;
     font-size: 1.25rem;
 }
-.name-edit-form button {
+.name_edit_form button {
     background: var(--color-yellow);
     color: var(--color-text-dark);
     border: none;
@@ -135,41 +135,41 @@
     margin-left: 0.5rem;
 }
 
-.profile-status {
+.profile_status {
     margin: 0.25rem 0 0 0;
     opacity: 0.8;
 }
 
 /* My Team & Last Match Tiles */
-.tile-title {
+.tile_title {
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
     opacity: 0.7;
     margin: 0 0 0.75rem 0;
 }
-.tile-description {
+.tile_description {
     font-size: 1rem;
     margin: auto 0 1rem 0;
 }
-.team-info {
+.team_info {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin: auto 0 1rem 0;
 }
-.team-name {
+.team_name {
     font-size: 1.25rem;
     font-weight: 600;
 }
-.match-recap {
+.match_recap {
     margin: auto 0 1rem 0;
 }
-.match-score {
+.match_score {
     font-size: 1.5rem;
     font-weight: 700;
 }
-.tile-button {
+.tile_button {
     background: rgba(255, 255, 255, 0.15);
     border: none;
     color: inherit;
@@ -179,13 +179,13 @@
     font-weight: 600;
     transition: background-color 0.2s;
 }
-.tile-button:hover {
+.tile_button:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
 
 /* Navigation Tiles */
-.nav-tile {
+.nav_tile {
     text-align: center;
     cursor: pointer;
     min-height: 160px;
@@ -193,11 +193,11 @@
     align-items: center;
     gap: 0.75rem;
 }
-.nav-tile .icon {
+.nav_tile .icon {
     width: 32px;
     height: 32px;
 }
-.nav-tile h4 {
+.nav_tile h4 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
@@ -205,13 +205,13 @@
 
 /* --- Responsive Adjustments --- */
 @media (min-width: 640px) {
-    .tile-grid {
+    .tile_grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (min-width: 1024px) {
-    .tile-grid {
+    .tile_grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
