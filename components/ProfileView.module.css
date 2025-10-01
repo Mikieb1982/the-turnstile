@@ -1,84 +1,70 @@
-/* --- Color Palette and Core Variables --- */
-:root {
-    --color-deep-red: #8B0000;
-    --color-dark-blue: #1A237E;
-    --color-yellow: #FFD700;
-    --color-background: #F4F4F5;
-    --color-text-light: #FFFFFF;
-    --color-text-dark: #1F2937;
-    --tile-border-radius: 16px;
-    --tile-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --tile-padding: 1.5rem;
-    --grid-gap: 1.5rem;
-}
-
-/* --- Tile Grid Layout --- */
-.tile_grid {
-    display: grid;
-    gap: var(--grid-gap);
-    grid-template-columns: 1fr; /* Default to single column */
-}
-
-/* --- Base Tile Styling --- */
+/* --- Glassmorphism Theme & Base Tile --- */
 .tile {
-    border-radius: var(--tile-border-radius);
-    padding: var(--tile-padding);
-    box-shadow: var(--tile-shadow);
-    color: var(--color-text-light);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--clr-text-strong);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* Edit Mode Toggle */
+.edit_mode_toggle {
+    margin-bottom: 1.5rem;
+    text-align: right;
+}
+.edit_mode_toggle button {
+    background: var(--clr-primary);
+    color: white;
     border: none;
-    text-align: left;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.edit_mode_toggle button svg {
+    width: 1.25em;
+    height: 1.25em;
 }
 
-.tile:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* --- Color Utility Classes --- */
-.color_deep_red { background-color: var(--color-deep-red); }
-.color_dark_blue { background-color: var(--color-dark-blue); }
-.color_yellow { background-color: var(--color-yellow); color: var(--color-text-dark); }
-
-/* --- Specific Tile Designs --- */
-
-/* Profile Tile */
+/* --- Profile Tile Specifics --- */
 .profile_tile {
-    grid-column: 1 / -1; /* Span full width */
     flex-direction: row;
     align-items: center;
     gap: 1.5rem;
 }
-
 .profile_avatar {
     position: relative;
     flex-shrink: 0;
 }
-
-.avatar_img {
+.avatar_img, .avatar_placeholder {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    background-color: var(--clr-surface-alt);
 }
 .avatar_placeholder {
-    width: 80px;
-    height: 80px;
-    color: var(--color-text-light);
-    background-color: rgba(0,0,0,0.2);
-    border-radius: 50%;
+    color: var(--clr-text-subtle);
     padding: 0.5rem;
 }
-
 .edit_avatar_button {
     position: absolute;
     bottom: 0;
     right: 0;
-    background: var(--color-yellow);
-    color: var(--color-text-dark);
+    background: var(--clr-surface);
+    color: var(--clr-text-strong);
     border: none;
     border-radius: 50%;
     width: 28px;
@@ -93,11 +79,7 @@
     width: 14px;
     height: 14px;
 }
-
-.profile_info {
-    flex-grow: 1;
-}
-
+.profile_info { flex-grow: 1; }
 .profile_name {
     font-size: 1.75rem;
     font-weight: 700;
@@ -113,64 +95,49 @@
     opacity: 0.6;
     transition: opacity 0.2s;
 }
-.profile_name:hover .edit_name_icon {
-    opacity: 1;
-}
-
+.profile_name:hover .edit_name_icon { opacity: 1; }
 .name_edit_form input {
     background: rgba(0,0,0,0.2);
-    border: 1px solid var(--color-text-light);
-    color: var(--color-text-light);
+    border: 1px solid var(--clr-border);
+    color: var(--clr-text-strong);
     padding: 0.5rem;
     border-radius: 8px;
     font-size: 1.25rem;
 }
-.name_edit_form button {
-    background: var(--color-yellow);
-    color: var(--color-text-dark);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-left: 0.5rem;
-}
-
 .profile_status {
     margin: 0.25rem 0 0 0;
-    opacity: 0.8;
+    color: var(--clr-text);
 }
 
-/* My Team & Last Match Tiles */
+/* --- Content Tiles (Team, Match) --- */
 .tile_title {
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
-    opacity: 0.7;
-    margin: 0 0 0.75rem 0;
+    opacity: 0.8;
+    margin-bottom: 0.75rem;
+    flex-shrink: 0;
 }
-.tile_description {
-    font-size: 1rem;
-    margin: auto 0 1rem 0;
-}
-.team_info {
+.tile_description, .team_info, .match_recap {
+    flex-grow: 1;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: auto 0 1rem 0;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
 }
 .team_name {
     font-size: 1.25rem;
     font-weight: 600;
-}
-.match_recap {
-    margin: auto 0 1rem 0;
+    margin-top: 0.5rem;
 }
 .match_score {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
+    color: var(--clr-primary);
 }
 .tile_button {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.1);
     border: none;
     color: inherit;
     padding: 0.75rem;
@@ -178,13 +145,12 @@
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.2s;
+    margin-top: auto;
+    flex-shrink: 0;
 }
-.tile_button:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
+.tile_button:hover { background: rgba(0, 0, 0, 0.2); }
 
-
-/* Navigation Tiles */
+/* --- Navigation Tiles --- */
 .nav_tile {
     text-align: center;
     cursor: pointer;
@@ -192,25 +158,16 @@
     align-items: center;
     gap: 0.75rem;
 }
+.nav_tile:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
 .nav_tile .icon {
     width: 32px;
     height: 32px;
+    color: var(--clr-primary);
 }
 .nav_tile h4 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
-}
-
-/* --- Responsive Adjustments --- */
-@media (min-width: 640px) {
-    .tile_grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .tile_grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
