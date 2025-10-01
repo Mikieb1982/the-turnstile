@@ -217,7 +217,6 @@ const requestGoogleAccessToken = async (google: GoogleIdentityServices, clientId
       const tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: clientId,
         scope: 'openid email profile',
-        prompt: 'select_account',
         callback: (response) => {
           if (response.error) {
             reject(new Error(response.error_description || 'Google sign-in was cancelled.'));
@@ -233,7 +232,7 @@ const requestGoogleAccessToken = async (google: GoogleIdentityServices, clientId
           reject(new Error(error.error_description || error.error || 'Google sign-in failed.'));
         },
       });
-      tokenClient.requestAccessToken({ prompt: 'select_account' });
+      tokenClient.requestAccessToken();
     } catch (error) {
       reject(error instanceof Error ? error : new Error('Failed to initialise Google sign-in.'));
     }
