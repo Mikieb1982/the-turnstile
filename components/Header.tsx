@@ -51,9 +51,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
   return (
     <header className="bg-surface shadow-sm sticky top-0 z-10 border-b border-border">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <div className="flex items-center gap-3">
-          <LogoIcon className="w-8 h-8 text-primary" />
-          <h1 className="text-xl md:text-2xl font-bold text-text-strong">The Scrum Book</h1>
+        <div className="flex items-center">
+          <LogoIcon
+            className="w-48 h-48 md:w-64 md:h-64 text-primary object-contain"
+            theme={theme === 'dark' ? 'dark' : 'light'}
+          />
         </div>
         <div className="flex items-center gap-2 md:gap-4">
             <nav className="hidden md:flex items-center gap-1">

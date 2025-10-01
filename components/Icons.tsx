@@ -2,7 +2,14 @@ import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement>;
 
+type ThemeMode = 'light' | 'dark';
+
 const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
+const logoDarkSrc = `${import.meta.env.BASE_URL}logodark.png`;
+
+interface LogoIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  theme?: ThemeMode;
+}
 
 export const RugbyBallIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -10,16 +17,19 @@ export const RugbyBallIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
-export const LogoIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({ className, ...props }) => (
-  <img
+export const LogoIcon: React.FC<LogoIconProps> = ({ className, theme = 'light', alt, ...props }) => {
+  const resolvedSrc = theme === 'dark' ? logoDarkSrc : logoSrc;
 
-    src={logoSrc}
-    alt="The Scrum Book logo"
-    className={className}
-    loading="lazy"
-    {...props}
-  />
-);
+  return (
+    <img
+      src={resolvedSrc}
+      alt={alt ?? 'The Scrum Book logo'}
+      className={className}
+      loading="lazy"
+      {...props}
+    />
+  );
+};
 
 export const CalendarIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>

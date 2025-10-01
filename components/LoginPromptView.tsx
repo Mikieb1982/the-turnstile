@@ -3,12 +3,13 @@ import { LogoIcon } from './Icons';
 
 interface LoginPromptViewProps {
   onLogin: () => Promise<void>;
+  theme: 'light' | 'dark';
 }
 
 const MISSING_CLIENT_ID_MESSAGE =
   'Google Sign-In requires configuration. Set VITE_GOOGLE_CLIENT_ID in your .env.local file to your OAuth web client ID.';
 
-export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => {
+export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin, theme }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isGoogleConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
@@ -35,7 +36,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
 
   return (
     <div className="bg-surface p-8 rounded-xl text-center flex flex-col items-center shadow-card max-w-lg mx-auto mt-4 md:mt-10">
-        <LogoIcon className="w-20 h-20 mb-4" />
+        <LogoIcon className="w-20 h-20 mb-4" theme={theme} />
         <h2 className="text-2xl font-bold text-text-strong mb-2">Create a Profile to Continue</h2>
         <p className="text-text-subtle mb-6">
             Sign in with your Google account to track your attended matches, earn badges, view your personal stats, and connect
