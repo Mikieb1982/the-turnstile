@@ -12,7 +12,6 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({ onLogin }) => 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isGoogleConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
-main
   const handleLogin = async () => {
     setError(null);
     if (!isGoogleConfigured) {
