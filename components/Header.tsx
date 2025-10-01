@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
           <LogoIcon
-            className="w-24 h-24 md:w-96 md:h-96 text-primary object-contain"
+            className="h-14 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
 
