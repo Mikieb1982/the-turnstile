@@ -112,7 +112,7 @@ const App: React.FC = () => {
             onAttend={handleAttend}
           />
         );
-      case 'MATCHDAY':
+      case 'MATCH_DAY':
         return (
           <MatchdayView
             matches={matches}
