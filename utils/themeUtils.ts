@@ -1,5 +1,6 @@
 import { TEAM_BRANDING } from '../services/mockData';
 
+// --- Type Definitions ---
 export type ThemeMode = 'light' | 'dark';
 
 interface ThemeVariables {
@@ -21,6 +22,7 @@ interface ThemeVariables {
   gradient3: string;
 }
 
+// --- Default Themes ---
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
   primary: '#7F1028',
   secondary: '#FFD447',
@@ -59,6 +61,7 @@ const DEFAULT_DARK_THEME: ThemeVariables = {
   gradient3: 'radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%)',
 };
 
+// --- Utility Constants ---
 const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   primary: '--clr-primary',
   secondary: '--clr-secondary',
@@ -77,6 +80,8 @@ const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
   gradient2: '--gradient-2',
   gradient3: '--gradient-3',
 };
+
+// --- Color Utility Functions ---
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
@@ -236,17 +241,21 @@ const adjustColorIntensity = (
   return hslToHex(h, adjustedS, adjustedL);
 };
 
+// --- Theme Generation Logic ---
+
 const createTeamOverrides = (
   baseColor: string,
   textColor: string,
   mode: ThemeMode,
   defaults: ThemeVariables,
 ): Partial<ThemeVariables> => {
+  // 1. Create an emphasised version of the base color
   const emphasisedBase = adjustColorIntensity(baseColor, {
     saturationMultiplier: 1.35,
     lightnessMultiplier: mode === 'dark' ? 1.05 : 0.9,
   });
 
+  // 2. Generate secondary color
   const secondary = adjustColorIntensity(
     mixHexColors(emphasisedBase, '#FFFFFF', mode === 'dark' ? 0.22 : 0.42),
     {
@@ -255,6 +264,7 @@ const createTeamOverrides = (
     },
   );
 
+  // 3. Generate accent color
   const accent = adjustColorIntensity(
     mixHexColors(emphasisedBase, textColor, mode === 'dark' ? 0.32 : 0.16),
     {
@@ -263,6 +273,7 @@ const createTeamOverrides = (
     },
   );
 
+  // 4. Generate system colors (Warning, Info, Success)
   const warning = adjustColorIntensity(mixHexColors(emphasisedBase, '#FACC15', mode === 'dark' ? 0.44 : 0.24), {
     saturationMultiplier: 1.1,
     lightnessBias: 0.02,
@@ -278,6 +289,7 @@ const createTeamOverrides = (
     lightnessMultiplier: 0.96,
   });
 
+  // 5. Generate surface colors
   const border = adjustColorIntensity(mixHexColors(defaults.border, emphasisedBase, mode === 'dark' ? 0.46 : 0.3), {
     saturationMultiplier: 1.15,
     lightnessMultiplier: mode === 'dark' ? 1 : 0.92,
@@ -286,6 +298,7 @@ const createTeamOverrides = (
   const surface = mixHexColors(defaults.surface, emphasisedBase, mode === 'dark' ? 0.16 : 0.12);
   const surfaceAlt = mixHexColors(defaults.surfaceAlt, emphasisedBase, mode === 'dark' ? 0.2 : 0.16);
 
+  // 6. Generate gradients
   const gradient1 = `linear-gradient(135deg, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.42 : 0.28)}, ${hexToRgba(accent, mode === 'dark' ? 0.24 : 0.18)})`;
   const gradient2 = `radial-gradient(circle at 20% 15%, ${hexToRgba(secondary, mode === 'dark' ? 0.32 : 0.22)}, transparent 52%)`;
   const gradient3 = `radial-gradient(circle at 80% 0%, ${hexToRgba(emphasisedBase, mode === 'dark' ? 0.28 : 0.18)}, transparent 42%)`;
@@ -294,7 +307,7 @@ const createTeamOverrides = (
     primary: emphasisedBase,
     secondary,
     accent,
-    danger: emphasisedBase,
+    danger: emphasisedBase, // Using primary for danger, as is common
     warning,
     info,
     success,
@@ -321,9 +334,12 @@ export const getThemeVariables = (teamId: string | undefined, mode: ThemeMode): 
     return defaults;
   }
 
+  // Create customized colors using team's base (bg) and text colors
   const overrides = createTeamOverrides(branding.bg, branding.text, mode, defaults);
   return { ...defaults, ...overrides };
 };
+
+// --- Theme Application ---
 
 const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
   if (typeof document === 'undefined') {
@@ -336,6 +352,7 @@ const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
     root.style.setProperty(cssVar, variables[key]);
   });
 
+  // Set color-scheme property for browser hints
   root.style.setProperty('color-scheme', mode);
 };
 
