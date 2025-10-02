@@ -8,6 +8,7 @@ import {
   BuildingStadiumIcon,
   ChartBarIcon,
   ListBulletIcon,
+  LogoIcon,
   PencilIcon,
   SparklesIcon,
   TrophyIcon,
@@ -93,53 +94,58 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           <div className={styles.heroBackdrop} aria-hidden="true" />
           <div className={styles.heroContent}>
             <div className={styles.identityRow}>
-              <div className={styles.avatarWrap}>
-                {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
-                ) : (
-                  <UserCircleIcon className={styles.avatarPlaceholder} />
-                )}
-                <button
-                  onClick={() => setIsAvatarModalOpen(true)}
-                  className={styles.avatarEdit}
-                  aria-label="Edit avatar"
-                >
-                  <PencilIcon />
-                </button>
-              </div>
-              <div className={styles.identityText}>
-                {isEditingName ? (
-                  <form onSubmit={handleSaveName} className={styles.nameForm}>
-                    <input
-                      type="text"
-                      value={pendingName}
-                      onChange={(e) => setPendingName(e.target.value)}
-                      onBlur={handleSaveName}
-                      autoFocus
-                    />
-                    <button type="submit">Save</button>
-                  </form>
-                ) : (
-                  <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
-                    <span>{user.name}</span>
-                    <PencilIcon aria-hidden="true" />
+              <div className={styles.identityMain}>
+                <div className={styles.avatarWrap}>
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
+                  ) : (
+                    <UserCircleIcon className={styles.avatarPlaceholder} />
+                  )}
+                  <button
+                    onClick={() => setIsAvatarModalOpen(true)}
+                    className={styles.avatarEdit}
+                    aria-label="Edit avatar"
+                  >
+                    <PencilIcon />
                   </button>
-                )}
-                <span className={styles.tagline}>
-                  <SparklesIcon aria-hidden="true" />
-                  {profileTagline}
-                </span>
-                {favoriteTeam && (
-                  <span className={styles.teamBadge}>
-                    <TeamLogo
-                      teamId={favoriteTeam.id}
-                      teamName={favoriteTeam.name}
-                      size="small"
-                      className={styles.teamLogoBadge}
-                    />
-                    {favoriteTeam.name}
+                </div>
+                <div className={styles.identityText}>
+                  {isEditingName ? (
+                    <form onSubmit={handleSaveName} className={styles.nameForm}>
+                      <input
+                        type="text"
+                        value={pendingName}
+                        onChange={(e) => setPendingName(e.target.value)}
+                        onBlur={handleSaveName}
+                        autoFocus
+                      />
+                      <button type="submit">Save</button>
+                    </form>
+                  ) : (
+                    <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
+                      <span>{user.name}</span>
+                      <PencilIcon aria-hidden="true" />
+                    </button>
+                  )}
+                  <span className={styles.tagline}>
+                    <SparklesIcon aria-hidden="true" />
+                    {profileTagline}
                   </span>
-                )}
+                  {favoriteTeam && (
+                    <span className={styles.teamBadge}>
+                      <TeamLogo
+                        teamId={favoriteTeam.id}
+                        teamName={favoriteTeam.name}
+                        size="small"
+                        className={styles.teamLogoBadge}
+                      />
+                      {favoriteTeam.name}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className={styles.logoMount}>
+                <LogoIcon className={styles.logoMountIcon} theme="light" />
               </div>
             </div>
 
