@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Scrum Book - Your Rugby League Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-league">
     <style>
       :root {
         color-scheme: light; /* Defaulting to dark, but 'light' is a fallback */
@@ -26,9 +27,11 @@
         --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.15), rgba(0, 82, 204, 0.1));
         --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
         --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
+        --font-heading: "Super League", "Inter", sans-serif;
+        --app-background-image: url('/background.png');
       }
       html.dark {
-         color-scheme: dark;
+        color-scheme: dark;
         --clr-primary: #E21836; /* Super League Red */
         --clr-secondary: #FFDD57;
         --clr-accent: #0074FF;
@@ -42,18 +45,56 @@
         --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.18), transparent 60%);
         --gradient-3: radial-gradient(circle at 90% 10%, rgba(226, 24, 54, 0.18), transparent 55%);
       }
-      body {
-        background: var(--clr-surface-alt);
-      }
-      .app-background {
+      html {
         background-color: var(--clr-surface-alt);
-        background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+        background-image: var(--app-background-image);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
       }
 
-      html.dark .app-background {
+      html.dark {
         background-color: #161719;
-        background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+        background-image: var(--app-background-image);
+      }
+
+      body {
+        background: inherit;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .app-background {
+        background: inherit;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+
+      html.dark body,
+      html.dark .app-background {
+        background-color: transparent;
+      }
+
+      @media (max-width: 768px) {
+        html,
+        body,
+        .app-background {
+          background-attachment: scroll;
+        }
+      }
+
+      h1, h2, h3, h4 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
       }
     </style>
     <script>
@@ -86,6 +127,7 @@
             },
             fontFamily: {
               sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              heading: ['"Super League"', 'Inter', 'sans-serif']
             },
           }
         }
