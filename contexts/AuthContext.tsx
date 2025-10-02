@@ -205,12 +205,16 @@ const persistAuthUser = (user: AuthUser | null) => {
   }
 };
 
-const getDefaultUserDetails = (user: AuthUser | null): Partial<User> => ({
-  name: user?.displayName || user?.email || 'Rugby Fan',
-  avatarUrl: user?.avatarUrl || undefined,
-  avatarSource: user?.avatarUrl ? 'google' : 'generated',
-  avatarUpdatedAt: user?.avatarUrl ? new Date().toISOString() : undefined,
-});
+const getDefaultUserDetails = (user: AuthUser | null): Partial<User> => {
+  const avatarSource: User['avatarSource'] = user?.avatarUrl ? 'google' : 'generated';
+
+  return {
+    name: user?.displayName || user?.email || 'Rugby Fan',
+    avatarUrl: user?.avatarUrl || undefined,
+    avatarSource,
+    avatarUpdatedAt: user?.avatarUrl ? new Date().toISOString() : undefined,
+  };
+};
 
 const loadGoogleIdentityServices = async (): Promise<GoogleIdentityServices> => {
   if (!isBrowser()) {
@@ -303,6 +307,28 @@ const generatePredictionId = () => {
     return cryptoRef.randomUUID();
   }
   return `prediction-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
+const resolveAvatarUpdates = (
+  updates: Partial<User>
+): Partial<Pick<User, 'avatarSource' | 'avatarUpdatedAt'>> => {
+  const avatarChanges: Partial<Pick<User, 'avatarSource' | 'avatarUpdatedAt'>> = {};
+
+  if (Object.prototype.hasOwnProperty.call(updates, 'avatarUrl')) {
+    const nextSource: User['avatarSource'] = updates.avatarUrl ? 'custom' : 'generated';
+    avatarChanges.avatarSource = nextSource;
+    avatarChanges.avatarUpdatedAt = updates.avatarUrl ? new Date().toISOString() : undefined;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(updates, 'avatarSource')) {
+    avatarChanges.avatarSource = updates.avatarSource;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(updates, 'avatarUpdatedAt')) {
+    avatarChanges.avatarUpdatedAt = updates.avatarUpdatedAt;
+  }
+
+  return avatarChanges;
 };
 
 export const useAuth = () => {
@@ -436,15 +462,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const updateUser = async (updatedUser: Partial<User>) => {
     if (!profile) return;
 
-    const avatarFields =
-      Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')
-        ? {
-            avatarSource: updatedUser.avatarUrl ? 'custom' : 'generated',
-            avatarUpdatedAt: updatedUser.avatarUrl ? new Date().toISOString() : undefined,
-          }
-        : {};
+    const avatarFields = resolveAvatarUpdates(updatedUser);
 
-    const newProfileUser = { ...profile.user, ...updatedUser, ...avatarFields };
+    const newProfileUser: User = { ...profile.user, ...updatedUser, ...avatarFields };
     const nextProfile: Profile = { ...profile, user: newProfileUser };
 
     setProfile(nextProfile);
