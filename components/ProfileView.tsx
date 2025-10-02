@@ -103,6 +103,23 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     return [...attendedMatches].sort((a, b) => new Date(b.attendedOn).getTime() - new Date(a.attendedOn).getTime())[0];
   }, [attendedMatches]);
 
+  const profileTagline = useMemo(() => {
+    const matchCount = attendedMatches.length;
+    if (matchCount >= 20) {
+      return 'Stadium Trailblazer';
+    }
+    if (matchCount >= 10) {
+      return 'Matchday Mainstay';
+    }
+    if (matchCount >= 3) {
+      return 'Clubhouse Regular';
+    }
+    if (matchCount > 0) {
+      return 'Fresh on the Pitch';
+    }
+    return 'Ready for Kick-off';
+  }, [attendedMatches.length]);
+
   const handleSaveName = (event: React.FormEvent) => {
     event.preventDefault();
     const trimmed = pendingName.trim();
@@ -174,9 +191,17 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 {user.name} <PencilIcon className={styles.edit_name_icon} />
               </h1>
             )}
-            <p className={styles.profile_status}>
-              {attendedMatches.length} matches attended | {earnedBadgeIds.length} badges earned
-            </p>
+            <span className={styles.profile_tagline}>{profileTagline}</span>
+            <div className={styles.profile_stats}>
+              <div className={styles.stat_chip}>
+                <span className={styles.stat_value}>{attendedMatches.length}</span>
+                <span className={styles.stat_label}>Matches</span>
+              </div>
+              <div className={styles.stat_chip}>
+                <span className={styles.stat_value}>{earnedBadgeIds.length}</span>
+                <span className={styles.stat_label}>Badges</span>
+              </div>
+            </div>
           </div>
         </div>
 
