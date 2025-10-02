@@ -8,6 +8,7 @@ import {
   BuildingStadiumIcon,
   ChartBarIcon,
   ListBulletIcon,
+  LogoIcon,
   PencilIcon,
   SparklesIcon,
   TrophyIcon,
@@ -140,6 +141,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     {favoriteTeam.name}
                   </span>
                 )}
+              </div>
+              <div className={styles.logoMount}>
+                <LogoIcon className={styles.logoMountIcon} theme="light" />
               </div>
             </div>
 
