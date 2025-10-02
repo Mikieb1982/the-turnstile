@@ -87,92 +87,108 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
   return (
     <>
-      <div className={styles.profile_grid}>
-        <section className={`${styles.tile} ${styles.profile_tile}`}>
-          <div className={styles.profile_avatar}>
-            {user.avatarUrl ? (
-              <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatar_img} />
+      <div className={styles.dashboardGrid}>
+
+        {/* Profile Header Tile */}
+        <section className={`${styles.dashboardCard} ${styles.span2}`}>
+          <div className={styles.profileHeader}>
+            <div className={styles.profileAvatar}>
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImg} />
+              ) : (
+                <UserCircleIcon className={styles.avatarPlaceholder} />
+              )}
+              <button onClick={() => setIsAvatarModalOpen(true)} className={styles.editAvatarButton} aria-label="Edit avatar">
+                <PencilIcon />
+              </button>
+            </div>
+            <div className={styles.profileInfo}>
+              {isEditingName ? (
+                <form onSubmit={handleSaveName} className={styles.nameEditForm}>
+                  <input type="text" value={pendingName} onChange={(e) => setPendingName(e.target.value)} onBlur={handleSaveName} autoFocus />
+                  <button type="submit">Save</button>
+                </form>
+              ) : (
+                <h1 onClick={() => setIsEditingName(true)} className={styles.profileName}>
+                  {user.name} <PencilIcon className={styles.editNameIcon} />
+                </h1>
+              )}
+              <span className={styles.profileTagline}>{profileTagline}</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Tiles */}
+        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+            <h2 className={styles.statValue}>{attendedMatches.length}</h2>
+            <p className={styles.statLabel}>Matches Attended</p>
+        </section>
+        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+            <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
+            <p className={styles.statLabel}>Badges Unlocked</p>
+        </section>
+        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+            <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
+            <p className={styles.statLabel}>Grounds Visited</p>
+        </section>
+
+
+        {/* My Team Tile */}
+        <section className={`${styles.dashboardCard} ${styles.teamTile}`}>
+            <h3 className={styles.tileTitle}>My Team</h3>
+            <div className={styles.tileContent}>
+            {favoriteTeam ? (
+                <div className={styles.teamInfo}>
+                <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} />
+                <span className={styles.teamName}>{favoriteTeam.name}</span>
+                </div>
             ) : (
-              <UserCircleIcon className={styles.avatar_placeholder} />
+                <p className={styles.tileDescription}>No favorite team selected.</p>
             )}
-            <button onClick={() => setIsAvatarModalOpen(true)} className={styles.edit_avatar_button} aria-label="Edit avatar">
-              <PencilIcon />
+            </div>
+            <button onClick={() => setIsTeamModalOpen(true)} className={styles.tileButton}>
+                {favoriteTeam ? 'Change Team' : 'Select Team'}
             </button>
-          </div>
-          <div className={styles.profile_info}>
-            {isEditingName ? (
-              <form onSubmit={handleSaveName} className={styles.name_edit_form}>
-                <input type="text" value={pendingName} onChange={(e) => setPendingName(e.target.value)} onBlur={handleSaveName} autoFocus />
-                <button type="submit">Save</button>
-              </form>
+        </section>
+
+        {/* Last Match Tile */}
+        <section className={`${styles.dashboardCard} ${styles.matchTile}`}>
+            <h3 className={styles.tileTitle}>Last Match</h3>
+            <div className={styles.tileContent}>
+            {recentMatch ? (
+                <div className={styles.matchRecap}>
+                <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
+                <p className={styles.matchScore}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
+                </div>
             ) : (
-              <h1 onClick={() => setIsEditingName(true)} className={styles.profile_name}>
-                {user.name} <PencilIcon className={styles.edit_name_icon} />
-              </h1>
+                <p className={styles.tileDescription}>No matches attended yet.</p>
             )}
-            <span className={styles.profile_tagline}>{profileTagline}</span>
-            <div className={styles.profile_stats}>
-              <div className={styles.stat_chip}>
-                <span className={styles.stat_value}>{attendedMatches.length}</span>
-                <span className={styles.stat_label}>Matches</span>
-              </div>
-              <div className={styles.stat_chip}>
-                <span className={styles.stat_value}>{earnedBadgeIds.length}</span>
-                <span className={styles.stat_label}>Badges</span>
-              </div>
             </div>
-          </div>
         </section>
 
-        <section className={`${styles.tile} ${styles.info_tile}`}>
-          <h3 className={styles.tile_title}>My Team</h3>
-          {favoriteTeam ? (
-            <div className={styles.team_info}>
-              <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} />
-              <span className={styles.team_name}>{favoriteTeam.name}</span>
-            </div>
-          ) : (
-            <p className={styles.tile_description}>No favorite team selected.</p>
-          )}
-          <button onClick={() => setIsTeamModalOpen(true)} className={styles.tile_button}>
-            {favoriteTeam ? 'Change' : 'Select'} Team
-          </button>
-        </section>
-
-        <section className={`${styles.tile} ${styles.info_tile}`}>
-          <h3 className={styles.tile_title}>Last Match</h3>
-          {recentMatch ? (
-            <div className={styles.match_recap}>
-              <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
-              <p className={styles.match_score}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
-            </div>
-          ) : (
-            <p className={styles.tile_description}>No matches attended yet.</p>
-          )}
-        </section>
-
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('MY_MATCHES')}>
-          <ListBulletIcon className={styles.icon} />
+        {/* Navigation Tiles */}
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('MY_MATCHES')}>
+          <ListBulletIcon className={styles.navIcon} />
           <h4>My Matches</h4>
         </button>
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('GROUNDS')}>
-          <BuildingStadiumIcon className={styles.icon} />
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('GROUNDS')}>
+          <BuildingStadiumIcon className={styles.navIcon} />
           <h4>Grounds</h4>
         </button>
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('STATS')}>
-          <ChartBarIcon className={styles.icon} />
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('STATS')}>
+          <ChartBarIcon className={styles.navIcon} />
           <h4>My Stats</h4>
         </button>
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('BADGES')}>
-          <TrophyIcon className={styles.icon} />
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('BADGES')}>
+          <TrophyIcon className={styles.navIcon} />
           <h4>Badges</h4>
         </button>
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('ADMIN')}>
-          <UserCircleIcon className={styles.icon} />
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('ADMIN')}>
+          <UserCircleIcon className={styles.navIcon} />
           <h4>Admin Tools</h4>
         </button>
-        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={onLogout}>
-          <ArrowRightOnRectangleIcon className={styles.icon} />
+        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={onLogout}>
+          <ArrowRightOnRectangleIcon className={styles.navIcon} />
           <h4>Logout</h4>
         </button>
       </div>
