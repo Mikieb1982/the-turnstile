@@ -11,19 +11,9 @@ import {
   PencilIcon,
   TrophyIcon,
   UserCircleIcon,
-  LockClosedIcon,
-  LockOpenIcon,
 } from './Icons';
 import { TEAMS } from '../services/mockData';
 import styles from './ProfileView.module.css';
-
-// --- React Grid Layout Imports ---
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import type { Layouts } from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // Helper to get team details by ID
 const getTeamById = (teamId?: string) => {
@@ -40,27 +30,6 @@ interface ProfileViewProps {
   onLogout: () => void;
 }
 
-// Define the initial layout for the tiles
-const initialLayouts: Layouts = {
-  lg: [
-    { i: 'profile', x: 0, y: 0, w: 12, h: 2, static: true },
-    { i: 'team', x: 0, y: 2, w: 4, h: 2 },
-    { i: 'last_match', x: 4, y: 2, w: 4, h: 2 },
-    { i: 'my_matches', x: 8, y: 2, w: 4, h: 1 },
-    { i: 'grounds', x: 8, y: 3, w: 4, h: 1 },
-    { i: 'stats', x: 0, y: 4, w: 4, h: 1 },
-    { i: 'badges', x: 4, y: 4, w: 4, h: 1 },
-    { i: 'admin', x: 8, y: 4, w: 4, h: 1 },
-    { i: 'logout', x: 8, y: 5, w: 4, h: 1 },
-  ],
-  md: [],
-  sm: [],
-  xs: [],
-  xxs: [],
-};
-
-const LAYOUT_STORAGE_KEY = 'profile-tile-layout';
-
 export const ProfileView: React.FC<ProfileViewProps> = ({
   user,
   setUser,
@@ -73,25 +42,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [pendingName, setPendingName] = useState(user.name ?? '');
-  const [isEditable, setIsEditable] = useState(false);
-
-  const [layouts, setLayouts] = useState<Layouts>(initialLayouts);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    try {
-      const storedLayouts = window.localStorage.getItem(LAYOUT_STORAGE_KEY);
-      if (storedLayouts) {
-        const parsedLayouts = JSON.parse(storedLayouts) as Layouts;
-        setLayouts((prevLayouts: Layouts) => ({ ...prevLayouts, ...parsedLayouts }));
-      }
-    } catch (error) {
-      console.warn('Unable to load saved profile layout', error);
-    }
-  }, []);
 
   useEffect(() => {
     setPendingName(user.name ?? '');
@@ -102,6 +52,23 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     if (attendedMatches.length === 0) return null;
     return [...attendedMatches].sort((a, b) => new Date(b.attendedOn).getTime() - new Date(a.attendedOn).getTime())[0];
   }, [attendedMatches]);
+
+  const profileTagline = useMemo(() => {
+    const matchCount = attendedMatches.length;
+    if (matchCount >= 20) {
+      return 'Stadium Trailblazer';
+    }
+    if (matchCount >= 10) {
+      return 'Matchday Mainstay';
+    }
+    if (matchCount >= 3) {
+      return 'Clubhouse Regular';
+    }
+    if (matchCount > 0) {
+      return 'Fresh on the Pitch';
+    }
+    return 'Ready for Kick-off';
+  }, [attendedMatches.length]);
 
   const handleSaveName = (event: React.FormEvent) => {
     event.preventDefault();
@@ -118,52 +85,21 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     setIsAvatarModalOpen(false);
   };
 
-  const onLayoutChange = (_currentLayout: unknown, allLayouts: Layouts) => {
-    if (typeof window !== 'undefined') {
-      try {
-        window.localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(allLayouts));
-      } catch (error) {
-        console.warn('Unable to persist profile layout', error);
-      }
-    }
-
-    setLayouts(allLayouts);
-  };
-
   return (
     <>
-      <div className={styles.edit_mode_toggle}>
-        <button onClick={() => setIsEditable(!isEditable)}>
-          {isEditable ? <LockOpenIcon /> : <LockClosedIcon />}
-          {isEditable ? 'Lock Layout' : 'Edit Layout'}
-        </button>
-      </div>
-
-      <ResponsiveGridLayout
-        className={styles.layout}
-        layouts={layouts}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-        rowHeight={100}
-        margin={[24, 24]}
-        containerPadding={[0, 24]}
-        onLayoutChange={onLayoutChange}
-        isDraggable={isEditable}
-        isResizable={isEditable}
-        draggableCancel=".no-drag"
-      >
-        <div key="profile" className={`${styles.tile} ${styles.profile_tile}`}>
+      <div className={styles.profile_grid}>
+        <section className={`${styles.tile} ${styles.profile_tile}`}>
           <div className={styles.profile_avatar}>
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatar_img} />
             ) : (
               <UserCircleIcon className={styles.avatar_placeholder} />
             )}
-            <button onClick={() => setIsAvatarModalOpen(true)} className={`${styles.edit_avatar_button} no-drag`} aria-label="Edit avatar">
+            <button onClick={() => setIsAvatarModalOpen(true)} className={styles.edit_avatar_button} aria-label="Edit avatar">
               <PencilIcon />
             </button>
           </div>
-          <div className={`${styles.profile_info} no-drag`}>
+          <div className={styles.profile_info}>
             {isEditingName ? (
               <form onSubmit={handleSaveName} className={styles.name_edit_form}>
                 <input type="text" value={pendingName} onChange={(e) => setPendingName(e.target.value)} onBlur={handleSaveName} autoFocus />
@@ -174,64 +110,72 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 {user.name} <PencilIcon className={styles.edit_name_icon} />
               </h1>
             )}
-            <p className={styles.profile_status}>
-              {attendedMatches.length} matches attended | {earnedBadgeIds.length} badges earned
-            </p>
+            <span className={styles.profile_tagline}>{profileTagline}</span>
+            <div className={styles.profile_stats}>
+              <div className={styles.stat_chip}>
+                <span className={styles.stat_value}>{attendedMatches.length}</span>
+                <span className={styles.stat_label}>Matches</span>
+              </div>
+              <div className={styles.stat_chip}>
+                <span className={styles.stat_value}>{earnedBadgeIds.length}</span>
+                <span className={styles.stat_label}>Badges</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div key="team" className={styles.tile}>
-          <h3 className={`${styles.tile_title} no-drag`}>My Team</h3>
+        <section className={`${styles.tile} ${styles.info_tile}`}>
+          <h3 className={styles.tile_title}>My Team</h3>
           {favoriteTeam ? (
-            <div className={`${styles.team_info} no-drag`}>
+            <div className={styles.team_info}>
               <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} />
               <span className={styles.team_name}>{favoriteTeam.name}</span>
             </div>
           ) : (
-            <p className={`${styles.tile_description} no-drag`}>No favorite team selected.</p>
+            <p className={styles.tile_description}>No favorite team selected.</p>
           )}
-          <button onClick={() => setIsTeamModalOpen(true)} className={`${styles.tile_button} no-drag`}>
+          <button onClick={() => setIsTeamModalOpen(true)} className={styles.tile_button}>
             {favoriteTeam ? 'Change' : 'Select'} Team
           </button>
-        </div>
-        
-        <div key="last_match" className={styles.tile}>
-          <h3 className={`${styles.tile_title} no-drag`}>Last Match</h3>
+        </section>
+
+        <section className={`${styles.tile} ${styles.info_tile}`}>
+          <h3 className={styles.tile_title}>Last Match</h3>
           {recentMatch ? (
-            <div className={`${styles.match_recap} no-drag`}>
+            <div className={styles.match_recap}>
               <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
               <p className={styles.match_score}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
             </div>
           ) : (
-            <p className={`${styles.tile_description} no-drag`}>No matches attended yet.</p>
+            <p className={styles.tile_description}>No matches attended yet.</p>
           )}
-        </div>
+        </section>
 
-        <div key="my_matches" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('MY_MATCHES')}>
-          <ListBulletIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">My Matches</h4>
-        </div>
-        <div key="grounds" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('GROUNDS')}>
-          <BuildingStadiumIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">Grounds</h4>
-        </div>
-        <div key="stats" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('STATS')}>
-          <ChartBarIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">My Stats</h4>
-        </div>
-        <div key="badges" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('BADGES')}>
-          <TrophyIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">Badges</h4>
-        </div>
-        <div key="admin" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && setView('ADMIN')}>
-          <UserCircleIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">Admin Tools</h4>
-        </div>
-        <div key="logout" className={`${styles.tile} ${styles.nav_tile}`} onClick={() => !isEditable && onLogout()}>
-          <ArrowRightOnRectangleIcon className={`${styles.icon} no-drag`} />
-          <h4 className="no-drag">Logout</h4>
-        </div>
-      </ResponsiveGridLayout>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('MY_MATCHES')}>
+          <ListBulletIcon className={styles.icon} />
+          <h4>My Matches</h4>
+        </button>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('GROUNDS')}>
+          <BuildingStadiumIcon className={styles.icon} />
+          <h4>Grounds</h4>
+        </button>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('STATS')}>
+          <ChartBarIcon className={styles.icon} />
+          <h4>My Stats</h4>
+        </button>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('BADGES')}>
+          <TrophyIcon className={styles.icon} />
+          <h4>Badges</h4>
+        </button>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={() => setView('ADMIN')}>
+          <UserCircleIcon className={styles.icon} />
+          <h4>Admin Tools</h4>
+        </button>
+        <button className={`${styles.tile} ${styles.nav_tile}`} onClick={onLogout}>
+          <ArrowRightOnRectangleIcon className={styles.icon} />
+          <h4>Logout</h4>
+        </button>
+      </div>
 
       <TeamSelectionModal isOpen={isTeamModalOpen} onClose={() => setIsTeamModalOpen(false)} onSelectTeam={handleTeamSelect} currentTeamId={user.favoriteTeamId} />
       <AvatarModal isOpen={isAvatarModalOpen} onClose={() => setIsAvatarModalOpen(false)} onSave={handleAvatarSave} currentAvatar={user.avatarUrl} />
