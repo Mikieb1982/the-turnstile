@@ -121,7 +121,7 @@ const mergeProfileDefaults = (profile: Partial<Profile> | null, userOverrides?: 
       ? empty.user.avatarSource
       : 'custom'
     : empty.user.avatarSource;
-  const resolvedAvatarUpdatedAt = storedUser.avatarUpdatedAt ?? (avatarMatchesOverride ? empty.user.avatarUpdatedAt : storedUser.avatarUpdatedAt);
+  const resolvedAvatarUpdatedAt = storedUser.avatarUpdatedAt ?? (avatarMatchesOverride ? empty.user.avatarUpdatedAt : undefined);
 
   return {
     ...empty,
