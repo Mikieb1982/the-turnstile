@@ -172,10 +172,8 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans text-text app-background">
       <Header
-        currentView={view}
         setView={setView}
         theme={theme}
-        currentUser={currentUser}
         isMobileNavOpen={isMobileNavOpen}
         onMobileNavToggle={() => setIsMobileNavOpen((open) => !open)}
       />
