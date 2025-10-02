@@ -28,7 +28,6 @@
         --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
         --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
         --font-heading: "Super League", "Inter", sans-serif;
-        --app-background-image: url('/background.png');
       }
       html.dark {
         color-scheme: dark;
@@ -65,6 +64,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
+
         font-family: 'Inter', system-ui, sans-serif;
       }
 
@@ -87,6 +87,14 @@
         .app-background {
           background-attachment: scroll;
         }
+      }
+
+      h1, h2, h3, h4 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
       }
 
       h1, h2, h3, h4 {
