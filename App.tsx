@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<View>('PROFILE');
   const [theme, toggleTheme] = useTheme();
   const themeMode = theme === 'dark' ? 'dark' : 'light';
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
 
@@ -170,13 +171,28 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen font-sans text-text app-background">
-      <Header currentView={view} setView={setView} theme={theme} toggleTheme={toggleTheme} currentUser={currentUser} />
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-12 pb-24 md:pb-16">
+      <Header
+        currentView={view}
+        setView={setView}
+        theme={theme}
+        currentUser={currentUser}
+        isMobileNavOpen={isMobileNavOpen}
+        onMobileNavToggle={() => setIsMobileNavOpen((open) => !open)}
+      />
+      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-12 pb-16">
         <div className="space-y-8">
           {renderContent()}
         </div>
       </main>
-      <MobileNav currentView={view} setView={setView} currentUser={currentUser} />
+      <MobileNav
+        currentView={view}
+        setView={setView}
+        currentUser={currentUser}
+        isOpen={isMobileNavOpen}
+        onClose={() => setIsMobileNavOpen(false)}
+        theme={themeMode}
+        toggleTheme={toggleTheme}
+      />
       <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
         <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
         <p className="font-semibold text-text">The Scrum Book</p>

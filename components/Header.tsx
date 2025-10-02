@@ -3,8 +3,6 @@ import {
   CalendarIcon,
   InformationCircleIcon,
   TableCellsIcon,
-  SunIcon,
-  MoonIcon,
   CalendarDaysIcon,
   UserCircleIcon,
   BuildingStadiumIcon,
@@ -12,6 +10,8 @@ import {
   LocationMarkerIcon,
   UsersIcon,
   ArrowRightOnRectangleIcon,
+  MenuIcon,
+  XMarkIcon,
 } from './Icons';
 import type { View, AuthUser } from '../types';
 import styles from './Header.module.css'; // Import the CSS module
@@ -20,11 +20,12 @@ interface HeaderProps {
   currentView: View;
   setView: (view: View) => void;
   theme: string;
-  toggleTheme: () => void;
   currentUser: AuthUser | null;
+  isMobileNavOpen: boolean;
+  onMobileNavToggle: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, currentUser, isMobileNavOpen, onMobileNavToggle }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -75,49 +76,50 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
   return (
     <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''}`}>
       <div className="container mx-auto flex justify-between items-center p-2">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <LogoIcon
             className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
         </div>
         <div className="flex items-center gap-2 md:gap-4">
-            <nav className="hidden md:flex items-center gap-1">
-              <button
-                onClick={() => setView('PROFILE')}
-                className={`flex items-center gap-2 px-3 py-2 text-sm font-semibold transition-colors duration-200 border-b-[3px] rounded-t-sm ${
-                  isProfileActive
-                    ? 'text-primary border-primary'
-                    : 'text-text-subtle border-transparent hover:text-text hover:bg-surface-alt'
-                }`}
-              >
-                {currentUser ? (
-                  <>
-                    <UserCircleIcon className="w-5 h-5" />
-                    <span>Profile</span>
-                  </>
-                ) : (
-                  <>
-                    <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                    <span>Login</span>
-                  </>
-                )}
-              </button>
-              <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
-              <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
-              <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
-              <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
-              <NavButton view="GROUNDS" label="Grounds" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
-              <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
-              <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
-            </nav>
+          <nav className="hidden md:flex items-center gap-1">
             <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-text-subtle hover:bg-surface-alt transition-colors"
-                aria-label="Toggle theme"
+              onClick={() => setView('PROFILE')}
+              className={`flex items-center gap-2 px-3 py-2 text-sm font-semibold transition-colors duration-200 border-b-[3px] rounded-t-sm ${
+                isProfileActive
+                  ? 'text-primary border-primary'
+                  : 'text-text-subtle border-transparent hover:text-text hover:bg-surface-alt'
+              }`}
             >
-                {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
+              {currentUser ? (
+                <>
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span>Profile</span>
+                </>
+              ) : (
+                <>
+                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                  <span>Login</span>
+                </>
+              )}
             </button>
+            <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
+            <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
+            <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
+            <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
+            <NavButton view="GROUNDS" label="Grounds" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
+            <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
+            <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
+          </nav>
+          <button
+            className="p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+            onClick={onMobileNavToggle}
+            aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMobileNavOpen}
+          >
+            {isMobileNavOpen ? <XMarkIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+          </button>
         </div>
       </div>
     </header>
