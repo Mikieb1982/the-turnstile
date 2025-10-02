@@ -88,128 +88,163 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
   return (
     <>
-      <div className={styles.dashboardGrid}>
+      <div className={styles.profilePage}>
+        <section className={styles.hero}>
+          <div className={styles.heroBackdrop} aria-hidden="true" />
+          <div className={styles.heroContent}>
+            <div className={styles.identityRow}>
+              <div className={styles.avatarWrap}>
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
+                ) : (
+                  <UserCircleIcon className={styles.avatarPlaceholder} />
+                )}
+                <button
+                  onClick={() => setIsAvatarModalOpen(true)}
+                  className={styles.avatarEdit}
+                  aria-label="Edit avatar"
+                >
+                  <PencilIcon />
+                </button>
+              </div>
+              <div className={styles.identityText}>
+                {isEditingName ? (
+                  <form onSubmit={handleSaveName} className={styles.nameForm}>
+                    <input
+                      type="text"
+                      value={pendingName}
+                      onChange={(e) => setPendingName(e.target.value)}
+                      onBlur={handleSaveName}
+                      autoFocus
+                    />
+                    <button type="submit">Save</button>
+                  </form>
+                ) : (
+                  <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
+                    <span>{user.name}</span>
+                    <PencilIcon aria-hidden="true" />
+                  </button>
+                )}
+                <span className={styles.tagline}>
+                  <SparklesIcon aria-hidden="true" />
+                  {profileTagline}
+                </span>
+                {favoriteTeam && (
+                  <span className={styles.teamBadge}>
+                    <TeamLogo
+                      teamId={favoriteTeam.id}
+                      teamName={favoriteTeam.name}
+                      size="small"
+                      className={styles.teamLogoBadge}
+                    />
+                    {favoriteTeam.name}
+                  </span>
+                )}
+              </div>
+            </div>
 
-        {/* Profile Header Tile */}
-        <section className={`${styles.dashboardCard} ${styles.span2}`}>
-          <div className={styles.profileHeader}>
-            <div className={styles.profileAvatar}>
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImg} />
-              ) : (
-                <UserCircleIcon className={styles.avatarPlaceholder} />
-              )}
-              <button onClick={() => setIsAvatarModalOpen(true)} className={styles.editAvatarButton} aria-label="Edit avatar">
-                <PencilIcon />
-              </button>
-            </div>
-            <div className={styles.profileInfo}>
-              {isEditingName ? (
-                <form onSubmit={handleSaveName} className={styles.nameEditForm}>
-                  <input type="text" value={pendingName} onChange={(e) => setPendingName(e.target.value)} onBlur={handleSaveName} autoFocus />
-                  <button type="submit">Save</button>
-                </form>
-              ) : (
-                <h1 onClick={() => setIsEditingName(true)} className={styles.profileName}>
-                  {user.name} <PencilIcon className={styles.editNameIcon} />
-                </h1>
-              )}
-              <span className={styles.profileTagline}>
-                <SparklesIcon className={styles.taglineIcon} aria-hidden="true" />
-                {profileTagline}
-              </span>
-            </div>
+            <dl className={styles.statRow}>
+              <div className={styles.statCard}>
+                <ListBulletIcon aria-hidden="true" />
+                <dt>Matches Attended</dt>
+                <dd>{attendedMatches.length}</dd>
+              </div>
+              <div className={styles.statCard}>
+                <TrophyIcon aria-hidden="true" />
+                <dt>Badges Unlocked</dt>
+                <dd>{earnedBadgeIds.length}</dd>
+              </div>
+              <div className={styles.statCard}>
+                <BuildingStadiumIcon aria-hidden="true" />
+                <dt>Grounds Visited</dt>
+                <dd>{new Set(attendedMatches.map(am => am.match.venue)).size}</dd>
+              </div>
+            </dl>
           </div>
         </section>
 
-        {/* Stats Tiles */}
-        <div className={styles.statGrid}>
-          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-              <div className={styles.statIcon} aria-hidden="true">
-                <ListBulletIcon />
-              </div>
-              <h2 className={styles.statValue}>{attendedMatches.length}</h2>
-              <p className={styles.statLabel}>Matches Attended</p>
-          </section>
-          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-              <div className={styles.statIcon} aria-hidden="true">
-                <TrophyIcon />
-              </div>
-              <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
-              <p className={styles.statLabel}>Badges Unlocked</p>
-          </section>
-          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-              <div className={styles.statIcon} aria-hidden="true">
-                <BuildingStadiumIcon />
-              </div>
-              <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
-              <p className={styles.statLabel}>Grounds Visited</p>
-          </section>
-        </div>
-
-
-        {/* My Team Tile */}
-        <section className={`${styles.dashboardCard} ${styles.teamTile}`}>
-            <h3 className={styles.tileTitle}>My Team</h3>
-            <div className={styles.tileContent}>
-            {favoriteTeam ? (
-                <div className={styles.teamInfo}>
-                <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} />
-                <span className={styles.teamName}>{favoriteTeam.name}</span>
-                </div>
-            ) : (
-                <p className={styles.tileDescription}>No favorite team selected.</p>
-            )}
-            </div>
-            <button onClick={() => setIsTeamModalOpen(true)} className={styles.tileButton}>
+        <main className={styles.mainContent}>
+          <section className={styles.detailCard}>
+            <header className={styles.cardHeader}>
+              <h2>My Team</h2>
+              <button type="button" onClick={() => setIsTeamModalOpen(true)}>
                 {favoriteTeam ? 'Change Team' : 'Select Team'}
-            </button>
-        </section>
-
-        {/* Last Match Tile */}
-        <section className={`${styles.dashboardCard} ${styles.matchTile}`}>
-            <h3 className={styles.tileTitle}>Last Match</h3>
-            <div className={styles.tileContent}>
-            {recentMatch ? (
-                <div className={styles.matchRecap}>
-                <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
-                <p className={styles.matchScore}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</p>
+              </button>
+            </header>
+            <div className={styles.cardBody}>
+              {favoriteTeam ? (
+                <div className={styles.teamSummary}>
+                  <TeamLogo
+                    teamId={favoriteTeam.id}
+                    teamName={favoriteTeam.name}
+                    className={styles.teamLogoSummary}
+                  />
+                  <span>{favoriteTeam.name}</span>
                 </div>
-            ) : (
-                <p className={styles.tileDescription}>No matches attended yet.</p>
-            )}
+              ) : (
+                <p>No favorite team selected yet.</p>
+              )}
             </div>
-        </section>
+          </section>
 
-        {/* Navigation Tiles */}
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('MY_MATCHES')}>
-          <ListBulletIcon className={styles.navIcon} />
-          <h4>My Matches</h4>
-        </button>
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('GROUNDS')}>
-          <BuildingStadiumIcon className={styles.navIcon} />
-          <h4>Grounds</h4>
-        </button>
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('STATS')}>
-          <ChartBarIcon className={styles.navIcon} />
-          <h4>My Stats</h4>
-        </button>
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('BADGES')}>
-          <TrophyIcon className={styles.navIcon} />
-          <h4>Badges</h4>
-        </button>
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={() => setView('ADMIN')}>
-          <UserCircleIcon className={styles.navIcon} />
-          <h4>Admin Tools</h4>
-        </button>
-        <button className={`${styles.dashboardCard} ${styles.navTile}`} onClick={onLogout}>
-          <ArrowRightOnRectangleIcon className={styles.navIcon} />
-          <h4>Logout</h4>
-        </button>
+          <section className={styles.detailCard}>
+            <header className={styles.cardHeader}>
+              <h2>Last Match</h2>
+            </header>
+            <div className={styles.cardBody}>
+              {recentMatch ? (
+                <div className={styles.matchSummary}>
+                  <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
+                  <span className={styles.matchScore}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</span>
+                  <span className={styles.matchMeta}>
+                    {recentMatch.match.venue}
+                    {' · '}
+                    {new Date(recentMatch.attendedOn).toLocaleDateString()}
+                  </span>
+                </div>
+              ) : (
+                <p>No matches attended yet.</p>
+              )}
+            </div>
+          </section>
+
+          <nav className={styles.quickActions} aria-label="Profile navigation">
+            <button type="button" onClick={() => setView('MY_MATCHES')}>
+              <ListBulletIcon aria-hidden="true" />
+              <span>My Matches</span>
+            </button>
+            <button type="button" onClick={() => setView('BADGES')}>
+              <TrophyIcon aria-hidden="true" />
+              <span>Badges</span>
+            </button>
+            <button type="button" onClick={() => setView('ADMIN')}>
+              <UserCircleIcon aria-hidden="true" />
+              <span>Admin Tools</span>
+            </button>
+            <button type="button" onClick={() => setView('STATS')}>
+              <ChartBarIcon aria-hidden="true" />
+              <span>My Stats</span>
+            </button>
+            <button type="button" onClick={onLogout}>
+              <ArrowRightOnRectangleIcon aria-hidden="true" />
+              <span>Logout</span>
+            </button>
+          </nav>
+        </main>
       </div>
 
-      <TeamSelectionModal isOpen={isTeamModalOpen} onClose={() => setIsTeamModalOpen(false)} onSelectTeam={handleTeamSelect} currentTeamId={user.favoriteTeamId} />
-      <AvatarModal isOpen={isAvatarModalOpen} onClose={() => setIsAvatarModalOpen(false)} onSave={handleAvatarSave} currentAvatar={user.avatarUrl} />
+      <TeamSelectionModal
+        isOpen={isTeamModalOpen}
+        onClose={() => setIsTeamModalOpen(false)}
+        onSelectTeam={handleTeamSelect}
+        currentTeamId={user.favoriteTeamId}
+      />
+      <AvatarModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        onSave={handleAvatarSave}
+        currentAvatar={user.avatarUrl}
+      />
     </>
   );
 };

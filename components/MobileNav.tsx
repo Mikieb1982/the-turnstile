@@ -69,8 +69,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
         aria-hidden={!isOpen}
       />
       <nav
-        className={`fixed inset-y-0 left-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-r border-border shadow-2xl transition-transform duration-300 ease-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed inset-y-0 right-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-l border-border shadow-2xl transition-transform duration-300 ease-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         aria-hidden={!isOpen}
         aria-label="Mobile navigation"
