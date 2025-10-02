@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, cur
   const isProfileActive = ['PROFILE', 'MY_MATCHES', 'STATS', 'BADGES', 'GROUNDS', 'ADMIN'].includes(currentView);
 
   return (
-    <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''}`}>
+    <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''} md:hidden`}>
       <div className="container mx-auto flex justify-between items-center p-2">
         <div className="flex items-center gap-2">
           <LogoIcon

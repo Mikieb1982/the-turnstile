@@ -21,7 +21,7 @@ import { NearbyMatchesView } from './components/NearbyMatchesView';
 import { DataUploader } from './components/DataUploader';
 import { CommunityView } from './components/CommunityView';
 import { LoginPromptView } from './components/LoginPromptView';
-import { LogoIcon } from './components/Icons';
+import { LogoIcon, MenuIcon } from './components/Icons';
 import { syncThemeWithFavouriteTeam } from './utils/themeUtils';
 
 const App: React.FC = () => {
@@ -179,6 +179,15 @@ const App: React.FC = () => {
         isMobileNavOpen={isMobileNavOpen}
         onMobileNavToggle={() => setIsMobileNavOpen((open) => !open)}
       />
+      <button
+        type="button"
+        className="hidden md:flex fixed top-6 right-6 z-20 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
+        onClick={() => setIsMobileNavOpen(true)}
+        aria-label="Open navigation menu"
+      >
+        <MenuIcon className="w-5 h-5" />
+        <span>Menu</span>
+      </button>
       <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-12 pb-16">
         <div className="space-y-8">
           {renderContent()}
