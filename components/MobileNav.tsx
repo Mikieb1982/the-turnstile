@@ -172,7 +172,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
               })}
             </ul>
           </div>
-
           <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
             <div className="flex items-center justify-between">
               <div>
@@ -198,7 +197,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
               </button>
             </div>
           </div>
-
           <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
             <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
             <p className="mt-2">
