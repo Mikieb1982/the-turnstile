@@ -26,6 +26,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, currentUser, isMobileNavOpen, onMobileNavToggle }) => {
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -114,6 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, cur
           </nav>
           <button
             className="p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+
             onClick={onMobileNavToggle}
             aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isMobileNavOpen}
