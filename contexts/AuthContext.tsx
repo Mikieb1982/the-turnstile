@@ -80,8 +80,24 @@ const GOOGLE_IDENTITY_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
 
 const isBrowser = () => typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
+const resolveAvatarSource = (overrides?: Partial<User>): User['avatarSource'] => {
+  if (overrides?.avatarSource) {
+    return overrides.avatarSource;
+  }
+  if (overrides?.avatarUrl) {
+    return 'google';
+  }
+  return 'generated';
+};
+
 const createEmptyProfile = (overrides?: Partial<User>): Profile => ({
-  user: { name: overrides?.name ?? 'Guest', favoriteTeamId: overrides?.favoriteTeamId, avatarUrl: overrides?.avatarUrl },
+  user: {
+    name: overrides?.name ?? 'Guest',
+    favoriteTeamId: overrides?.favoriteTeamId,
+    avatarUrl: overrides?.avatarUrl,
+    avatarSource: resolveAvatarSource(overrides),
+    avatarUpdatedAt: overrides?.avatarUpdatedAt,
+  },
   attendedMatches: [],
   earnedBadgeIds: [],
   friendIds: [],
@@ -95,10 +111,27 @@ const mergeProfileDefaults = (profile: Partial<Profile> | null, userOverrides?: 
     return empty;
   }
 
+  const storedUser: Partial<User> = profile.user ?? {};
+  const avatarMatchesOverride =
+    typeof storedUser.avatarUrl === 'string' && storedUser.avatarUrl === userOverrides?.avatarUrl;
+  const resolvedAvatarSource: User['avatarSource'] = storedUser.avatarSource
+    ? storedUser.avatarSource
+    : typeof storedUser.avatarUrl === 'string'
+    ? avatarMatchesOverride
+      ? empty.user.avatarSource
+      : 'custom'
+    : empty.user.avatarSource;
+  const resolvedAvatarUpdatedAt = storedUser.avatarUpdatedAt ?? (avatarMatchesOverride ? empty.user.avatarUpdatedAt : undefined);
+
   return {
     ...empty,
     ...profile,
-    user: { ...empty.user, ...(profile.user ?? {}) },
+    user: {
+      ...empty.user,
+      ...storedUser,
+      avatarSource: resolvedAvatarSource,
+      avatarUpdatedAt: resolvedAvatarUpdatedAt,
+    },
     attendedMatches: profile.attendedMatches ?? [],
     earnedBadgeIds: profile.earnedBadgeIds ?? [],
     friendIds: profile.friendIds ?? [],
@@ -175,6 +208,8 @@ const persistAuthUser = (user: AuthUser | null) => {
 const getDefaultUserDetails = (user: AuthUser | null): Partial<User> => ({
   name: user?.displayName || user?.email || 'Rugby Fan',
   avatarUrl: user?.avatarUrl || undefined,
+  avatarSource: user?.avatarUrl ? 'google' : 'generated',
+  avatarUpdatedAt: user?.avatarUrl ? new Date().toISOString() : undefined,
 });
 
 const loadGoogleIdentityServices = async (): Promise<GoogleIdentityServices> => {
@@ -330,7 +365,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       persistAuthUser(authUser);
       setCurrentUser(authUser);
       const existingProfile = ensureProfileForUser(authUser.uid, getDefaultUserDetails(authUser));
-      setProfile(existingProfile);
+      const shouldSyncGoogleAvatar =
+        !!authUser.avatarUrl &&
+        existingProfile.user.avatarSource !== 'custom' &&
+        existingProfile.user.avatarUrl !== authUser.avatarUrl;
+
+      if (shouldSyncGoogleAvatar) {
+        const syncedProfile: Profile = {
+          ...existingProfile,
+          user: {
+            ...existingProfile.user,
+            avatarUrl: authUser.avatarUrl ?? undefined,
+            avatarSource: 'google',
+            avatarUpdatedAt: new Date().toISOString(),
+          },
+        };
+        setProfile(syncedProfile);
+        persistProfileForUser(authUser.uid, syncedProfile);
+      } else {
+        setProfile(existingProfile);
+      }
     } catch (error) {
       persistAuthUser(null);
       setCurrentUser(null);
@@ -382,11 +436,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const updateUser = async (updatedUser: Partial<User>) => {
     if (!profile) return;
 
-    const newProfileUser = { ...profile.user, ...updatedUser };
+    const avatarFields =
+      Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')
+        ? {
+            avatarSource: updatedUser.avatarUrl ? 'custom' : 'generated',
+            avatarUpdatedAt: updatedUser.avatarUrl ? new Date().toISOString() : undefined,
+          }
+        : {};
+
+    const newProfileUser = { ...profile.user, ...updatedUser, ...avatarFields };
     const nextProfile: Profile = { ...profile, user: newProfileUser };
 
     setProfile(nextProfile);
     persistProfileForUser(activeProfileStorageKey, nextProfile);
+
+    if (currentUser && Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')) {
+      const nextAuthUser: AuthUser = { ...currentUser, avatarUrl: updatedUser.avatarUrl ?? null };
+      setCurrentUser(nextAuthUser);
+      persistAuthUser(nextAuthUser);
+    }
   };
 
   const addPhotoToMatch = async (matchId: string, photoFile: File) => {

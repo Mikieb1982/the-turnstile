@@ -99,6 +99,8 @@ export interface User {
   name: string;
   favoriteTeamId?: string;
   avatarUrl?: string;
+  avatarSource?: 'google' | 'custom' | 'generated';
+  avatarUpdatedAt?: string;
 }
 
 export interface AuthUser {
