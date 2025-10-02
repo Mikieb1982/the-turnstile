@@ -30,7 +30,7 @@
         --font-heading: "Super League", "Inter", sans-serif;
       }
       html.dark {
-         color-scheme: dark;
+        color-scheme: dark;
         --clr-primary: #E21836; /* Super League Red */
         --clr-secondary: #FFDD57;
         --clr-accent: #0074FF;
@@ -44,19 +44,57 @@
         --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.18), transparent 60%);
         --gradient-3: radial-gradient(circle at 90% 10%, rgba(226, 24, 54, 0.18), transparent 55%);
       }
-      body {
-        background: var(--clr-surface-alt);
-        font-family: 'Inter', system-ui, sans-serif;
-      }
-      .app-background {
+      html {
         background-color: var(--clr-surface-alt);
-        background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+        background-image: var(--app-background-image);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
       }
 
-      html.dark .app-background {
+      html.dark {
         background-color: #161719;
-        background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+        background-image: var(--app-background-image);
+      }
+
+      body {
+        background: inherit;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .app-background {
+        background: inherit;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+
+      html.dark body,
+      html.dark .app-background {
+        background-color: transparent;
+      }
+
+      @media (max-width: 768px) {
+        html,
+        body,
+        .app-background {
+          background-attachment: scroll;
+        }
+      }
+
+      h1, h2, h3, h4 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
       }
 
       h1, h2, h3, h4 {

@@ -63,7 +63,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
     <>
       <div
         className={`fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
-
           isOpen ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'
         }`}
         onClick={onClose}
@@ -71,7 +70,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
       />
       <nav
         className={`fixed inset-y-0 left-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-r border-border shadow-2xl transition-transform duration-300 ease-out ${
-
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-hidden={!isOpen}
@@ -200,6 +198,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
               </button>
             </div>
           </div>
+
           <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
             <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
             <p className="mt-2">
