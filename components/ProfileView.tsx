@@ -9,6 +9,7 @@ import {
   ChartBarIcon,
   ListBulletIcon,
   PencilIcon,
+  SparklesIcon,
   TrophyIcon,
   UserCircleIcon,
 } from './Icons';
@@ -113,24 +114,38 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                   {user.name} <PencilIcon className={styles.editNameIcon} />
                 </h1>
               )}
-              <span className={styles.profileTagline}>{profileTagline}</span>
+              <span className={styles.profileTagline}>
+                <SparklesIcon className={styles.taglineIcon} aria-hidden="true" />
+                {profileTagline}
+              </span>
             </div>
           </div>
         </section>
 
         {/* Stats Tiles */}
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{attendedMatches.length}</h2>
-            <p className={styles.statLabel}>Matches Attended</p>
-        </section>
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
-            <p className={styles.statLabel}>Badges Unlocked</p>
-        </section>
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
-            <p className={styles.statLabel}>Grounds Visited</p>
-        </section>
+        <div className={styles.statGrid}>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <div className={styles.statIcon} aria-hidden="true">
+                <ListBulletIcon />
+              </div>
+              <h2 className={styles.statValue}>{attendedMatches.length}</h2>
+              <p className={styles.statLabel}>Matches Attended</p>
+          </section>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <div className={styles.statIcon} aria-hidden="true">
+                <TrophyIcon />
+              </div>
+              <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
+              <p className={styles.statLabel}>Badges Unlocked</p>
+          </section>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <div className={styles.statIcon} aria-hidden="true">
+                <BuildingStadiumIcon />
+              </div>
+              <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
+              <p className={styles.statLabel}>Grounds Visited</p>
+          </section>
+        </div>
 
 
         {/* My Team Tile */}
