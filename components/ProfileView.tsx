@@ -128,6 +128,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               <div className={styles.statIcon} aria-hidden="true">
                 <ListBulletIcon />
               </div>
+
               <h2 className={styles.statValue}>{attendedMatches.length}</h2>
               <p className={styles.statLabel}>Matches Attended</p>
           </section>
