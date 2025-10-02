@@ -1,364 +1,274 @@
-/* --- Grid Layout --- */
-.profile_grid {
-    position: relative;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+/* Inspired by Food Mutiny's dashboard layout */
+.dashboardGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-.profile_grid::before {
-    content: '';
-    position: absolute;
-    inset: -32px -24px 0;
-    background:
-        radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.18), transparent 55%),
-        radial-gradient(circle at 88% 12%, rgba(34, 197, 94, 0.16), transparent 60%),
-        linear-gradient(115deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.65));
-    opacity: 0.22;
-    pointer-events: none;
-    z-index: -1;
-    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.9), transparent 70%);
+.dashboardCard {
+  --card-padding: clamp(1rem, 3vw, 1.5rem);
+  --tile-radius: 1rem;
+  --tile-bg: var(--clr-surface);
+  --tile-border: var(--clr-border);
+  --tile-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tile-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  position: relative;
+  padding: var(--card-padding);
+  border-radius: var(--tile-radius);
+  background: var(--tile-bg);
+  border: 1px solid var(--tile-border);
+  color: var(--clr-text);
+  box-shadow: var(--tile-shadow);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
 }
 
-.profile_tile {
-    grid-column: 1 / -1;
+.dashboardCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--tile-hover-shadow);
+}
+
+.span2 {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+  .span2 {
+    grid-column: span 2 / span 2;
+  }
 }
 
 @media (min-width: 1024px) {
-    .profile_grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+  .dashboardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .span2 {
+    grid-column: span 3 / span 3;
+  }
 }
 
-/* --- Premium Tile Styling --- */
-.tile {
-    position: relative;
-    background:
-        linear-gradient(152deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.92) 55%, rgba(12, 74, 110, 0.9)),
-        radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.22), transparent 55%),
-        radial-gradient(circle at 88% 18%, rgba(34, 197, 94, 0.18), transparent 60%);
-    border-radius: 18px;
-    box-shadow: 0 18px 40px -28px rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(148, 163, 184, 0.18);
 
-    color: #f8fafc;
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 100%;
-
-    backdrop-filter: saturate(140%) blur(4px);
-    transition:
-        transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.35s ease,
-        border-color 0.35s ease;
+/* Profile Header Tile */
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.tile::before,
-.tile::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-.tile::before {
-
-    background: linear-gradient(150deg, rgba(255, 255, 255, 0.15), transparent 62%);
-    opacity: 0.55;
-}
-.tile::after {
-    background: linear-gradient(185deg, rgba(2, 6, 23, 0.25) 0%, rgba(2, 6, 23, 0.45) 88%);
-    mix-blend-mode: multiply;
-    opacity: 0.3;
-}
-.tile:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 28px 55px -28px rgba(15, 23, 42, 0.85);
-    border-color: rgba(56, 189, 248, 0.35);
-}
-.tile:hover::before,
-.tile:hover::after {
-    opacity: 0.75;
-
+.profileAvatar {
+  position: relative;
+  flex-shrink: 0;
 }
 
-/* --- Profile Tile Specifics --- */
-.profile_tile {
-    flex-direction: row;
-    align-items: center;
-    gap: 1.5rem;
+.avatarImg,
+.avatarPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--clr-surface);
+  box-shadow: 0 0 0 1px var(--clr-border);
+  background-color: var(--clr-surface-alt);
 }
-.profile_avatar {
-    position: relative;
-    flex-shrink: 0;
-}
-.avatar_img,
-.avatar_placeholder {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.85);
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.65));
-}
-.avatar_placeholder {
-    color: rgba(241, 245, 249, 0.82);
+
+.avatarPlaceholder {
     padding: 0.5rem;
+    color: var(--clr-text-subtle);
 }
-.edit_avatar_button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(34, 197, 94, 0.95));
-    color: #0f172a;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 8px 18px -8px rgba(14, 165, 233, 0.9);
-    transition: transform 0.25s ease;
+
+.editAvatarButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--clr-primary);
+  color: white;
+  border: 2px solid var(--clr-surface);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--tile-shadow);
+  transition: transform 0.2s ease;
 }
-.edit_avatar_button:hover {
-    transform: scale(1.05);
+.editAvatarButton:hover {
+  transform: scale(1.1);
 }
-.edit_avatar_button svg {
-    width: 14px;
-    height: 14px;
+.editAvatarButton svg {
+  width: 14px;
+  height: 14px;
 }
-.profile_info {
-    flex-grow: 1;
+
+.profileInfo {
+  flex-grow: 1;
 }
-.profile_name {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+
+.profileName {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--clr-text-strong);
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
-.profile_name,
-.tile_title,
-.team_name,
-.match_score,
-.nav_tile h4 {
-    text-shadow: 0 2px 4px rgba(15, 23, 42, 0.45);
+
+.editNameIcon {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.4;
+  transition: opacity 0.2s;
 }
-.edit_name_icon {
-    width: 16px;
-    height: 16px;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+.profileName:hover .editNameIcon {
+  opacity: 1;
 }
-.profile_name:hover .edit_name_icon {
-    opacity: 1;
-}
-.name_edit_form input {
-    background: rgba(15, 23, 42, 0.55);
-    border: 1px solid rgba(148, 163, 184, 0.45);
-    color: #f8fafc;
+
+.nameEditForm input {
+    background: var(--clr-surface-alt);
+    border: 1px solid var(--clr-border);
+    color: var(--clr-text-strong);
     padding: 0.5rem;
     border-radius: 8px;
     font-size: 1.25rem;
 }
-.name_edit_form button {
-    margin-left: 0.75rem;
-    padding: 0.45rem 1rem;
-    border-radius: 9999px;
+
+.nameEditForm button {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
     border: none;
     font-weight: 600;
     cursor: pointer;
-    background: rgba(59, 130, 246, 0.25);
-    color: #e2e8f0;
-    transition: background 0.2s ease;
-}
-.name_edit_form button:hover {
-    background: rgba(56, 189, 248, 0.3);
-}
-.profile_tagline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 0.35rem;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-radius: 9999px;
-    background: linear-gradient(120deg, rgba(56, 189, 248, 0.18), rgba(34, 197, 94, 0.22));
-    color: rgba(226, 232, 240, 0.9);
-    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+    background: var(--clr-primary);
+    color: white;
 }
 
-.profile_stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
+.profileTagline {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background: var(--clr-primary-light);
+  color: var(--clr-primary);
+  background-color: var(--clr-primary-light);
 }
 
-.stat_chip {
-    position: relative;
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    padding: 0.65rem 0.95rem;
-    background: linear-gradient(150deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.85));
-    border-radius: 12px;
-    box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.16), 0 12px 20px -18px rgba(2, 132, 199, 0.65);
-    overflow: hidden;
+/* Stat Cards */
+.statCard {
+    text-align: center;
+    gap: 0.25rem;
 }
-
-.stat_chip::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.statValue {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 800;
+    color: var(--clr-primary);
+    line-height: 1;
 }
-
-.stat_chip:hover::after {
-    opacity: 1;
-}
-
-.stat_value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: rgba(56, 189, 248, 0.95);
-    z-index: 1;
-}
-
-.stat_label {
+.statLabel {
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(226, 232, 240, 0.72);
-    z-index: 1;
-}
-
-/* --- Content Tiles (Team, Match) --- */
-.tile_title {
-    font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    opacity: 0.75;
-    margin-bottom: 0.75rem;
-    flex-shrink: 0;
+    color: var(--clr-text-subtle);
+    letter-spacing: 0.05em;
 }
-.tile_description,
-.team_info,
-.match_recap {
+
+
+/* Content Tiles (Team, Match) */
+.tileTitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--clr-text-subtle);
+    margin-bottom: 0.75rem;
+}
+
+.tileContent {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     text-align: center;
-    width: 100%;
 }
 
-.info_tile {
-    min-height: 220px;
+.teamTile, .matchTile {
+    min-height: 200px;
 }
-.team_name {
+
+.teamInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+.teamName {
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--clr-text-strong);
+}
+
+.matchRecap p {
+    margin: 0;
+}
+.matchScore {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--clr-primary);
     margin-top: 0.5rem;
 }
-.match_score {
-    font-size: 2rem;
-    font-weight: 700;
-    color: rgba(56, 189, 248, 0.9);
-}
-.tile_button {
-    background: rgba(15, 23, 42, 0.55);
-    border: none;
-    color: rgba(241, 245, 249, 0.9);
+
+.tileButton {
+    background: var(--clr-surface-alt);
+    border: 1px solid var(--clr-border);
+    color: var(--clr-text);
     padding: 0.75rem;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     cursor: pointer;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    transition: transform 0.25s ease, background 0.25s ease;
-    margin-top: auto;
-    flex-shrink: 0;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+    width: 100%;
 }
-.tile_button:hover {
-    background: rgba(59, 130, 246, 0.2);
-    transform: translateY(-1px);
+.tileButton:hover {
+    background-color: var(--clr-border);
 }
 
-/* --- Navigation Tiles --- */
-.nav_tile {
+
+/* Navigation Tiles */
+.navTile {
     font: inherit;
     text-align: center;
     cursor: pointer;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
-    position: relative;
-    width: 100%;
-
-}
-.icon {
-
-    width: 32px;
-    height: 32px;
-    color: rgba(56, 189, 248, 0.95);
-    filter: drop-shadow(0 6px 12px rgba(14, 165, 233, 0.45));
-
-}
-.nav_tile::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(160deg, rgba(56, 189, 248, 0.18), rgba(34, 197, 94, 0.18));
-    opacity: 0;
-    transition: opacity 0.25s ease;
+    min-height: 120px;
 }
 
-.nav_tile:hover::after {
-    opacity: 1;
+.navIcon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--clr-primary);
+    margin-bottom: 0.5rem;
 }
 
-.nav_tile > * {
-    position: relative;
-    z-index: 1;
-}
-.nav_tile h4 {
+.navTile h4 {
     margin: 0;
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--clr-text-strong);
 }
 
-/* --- Responsive Tweaks --- */
-@media (max-width: 768px) {
-    .profile_tile {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-    }
-
-    .profile_info {
-        width: 100%;
-    }
-
-    .profile_stats {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .stat_chip {
-        flex: 1 1 calc(50% - 0.75rem);
-        justify-content: space-between;
-    }
+.tileDescription {
+    color: var(--clr-text-subtle);
+    font-size: 0.9rem;
 }
