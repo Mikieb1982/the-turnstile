@@ -164,72 +164,79 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         </section>
 
         <main className={styles.mainContent}>
-          <section className={styles.detailCard}>
-            <header className={styles.cardHeader}>
-              <h2>My Team</h2>
-              <button type="button" onClick={() => setIsTeamModalOpen(true)}>
-                {favoriteTeam ? 'Change Team' : 'Select Team'}
-              </button>
-            </header>
-            <div className={styles.cardBody}>
-              {favoriteTeam ? (
-                <div className={styles.teamSummary}>
-                  <TeamLogo
-                    teamId={favoriteTeam.id}
-                    teamName={favoriteTeam.name}
-                    className={styles.teamLogoSummary}
-                  />
-                  <span>{favoriteTeam.name}</span>
-                </div>
-              ) : (
-                <p>No favorite team selected yet.</p>
-              )}
-            </div>
-          </section>
+          <div className={styles.summaryGrid}>
+            <section className={`${styles.detailCard} ${styles.myTeamCard}`}>
+              <header className={styles.cardHeader}>
+                <h2>My Team</h2>
+                <button type="button" onClick={() => setIsTeamModalOpen(true)}>
+                  {favoriteTeam ? 'Change Team' : 'Select Team'}
+                </button>
+              </header>
+              <div className={styles.cardBody}>
+                {favoriteTeam ? (
+                  <div className={styles.teamSummary}>
+                    <TeamLogo
+                      teamId={favoriteTeam.id}
+                      teamName={favoriteTeam.name}
+                      className={styles.teamLogoSummary}
+                    />
+                    <span>{favoriteTeam.name}</span>
+                  </div>
+                ) : (
+                  <p>No favorite team selected yet.</p>
+                )}
+              </div>
+            </section>
 
-          <section className={styles.detailCard}>
-            <header className={styles.cardHeader}>
-              <h2>Last Match</h2>
-            </header>
-            <div className={styles.cardBody}>
-              {recentMatch ? (
-                <div className={styles.matchSummary}>
-                  <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
-                  <span className={styles.matchScore}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</span>
-                  <span className={styles.matchMeta}>
-                    {recentMatch.match.venue}
-                    {' · '}
-                    {new Date(recentMatch.attendedOn).toLocaleDateString()}
-                  </span>
-                </div>
-              ) : (
-                <p>No matches attended yet.</p>
-              )}
-            </div>
-          </section>
+            <section className={`${styles.detailCard} ${styles.lastMatchCard}`}>
+              <header className={styles.cardHeader}>
+                <h2>Last Match</h2>
+              </header>
+              <div className={styles.cardBody}>
+                {recentMatch ? (
+                  <div className={styles.matchSummary}>
+                    <p>{`${recentMatch.match.homeTeam.name} vs ${recentMatch.match.awayTeam.name}`}</p>
+                    <span className={styles.matchScore}>{`${recentMatch.match.scores.home} - ${recentMatch.match.scores.away}`}</span>
+                    <span className={styles.matchMeta}>
+                      {recentMatch.match.venue}
+                      {' · '}
+                      {new Date(recentMatch.attendedOn).toLocaleDateString()}
+                    </span>
+                  </div>
+                ) : (
+                  <p>No matches attended yet.</p>
+                )}
+              </div>
+            </section>
 
-          <nav className={styles.quickActions} aria-label="Profile navigation">
-            <button type="button" onClick={() => setView('MY_MATCHES')}>
-              <ListBulletIcon aria-hidden="true" />
-              <span>My Matches</span>
-            </button>
-            <button type="button" onClick={() => setView('BADGES')}>
-              <TrophyIcon aria-hidden="true" />
-              <span>Badges</span>
-            </button>
-            <button type="button" onClick={() => setView('ADMIN')}>
-              <UserCircleIcon aria-hidden="true" />
-              <span>Admin Tools</span>
-            </button>
-            <button type="button" onClick={() => setView('STATS')}>
-              <ChartBarIcon aria-hidden="true" />
-              <span>My Stats</span>
-            </button>
-            <button type="button" onClick={onLogout}>
-              <ArrowRightOnRectangleIcon aria-hidden="true" />
-              <span>Logout</span>
-            </button>
-          </nav>
+            <section className={`${styles.detailCard} ${styles.actionCard}`}>
+              <header className={styles.cardHeader}>
+                <h2>Quick Links</h2>
+              </header>
+              <nav className={`${styles.quickActions} ${styles.quickActionsRail}`} aria-label="Profile navigation">
+                <button type="button" onClick={() => setView('MY_MATCHES')}>
+                  <ListBulletIcon aria-hidden="true" />
+                  <span>My Matches</span>
+                </button>
+                <button type="button" onClick={() => setView('BADGES')}>
+                  <TrophyIcon aria-hidden="true" />
+                  <span>Badges</span>
+                </button>
+                <button type="button" onClick={() => setView('ADMIN')}>
+                  <UserCircleIcon aria-hidden="true" />
+                  <span>Admin Tools</span>
+                </button>
+                <button type="button" onClick={() => setView('STATS')}>
+                  <ChartBarIcon aria-hidden="true" />
+                  <span>My Stats</span>
+                </button>
+                <button type="button" onClick={onLogout}>
+                  <ArrowRightOnRectangleIcon aria-hidden="true" />
+                  <span>Logout</span>
+                </button>
+              </nav>
+            </section>
+          </div>
         </main>
       </div>
 
