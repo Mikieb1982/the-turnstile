@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Scrum Book - Your Rugby League Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-league">
     <style>
       :root {
         color-scheme: light; /* Defaulting to dark, but 'light' is a fallback */
@@ -26,6 +27,7 @@
         --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.15), rgba(0, 82, 204, 0.1));
         --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
         --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
+        --font-heading: "Super League", "Inter", sans-serif;
       }
       html.dark {
          color-scheme: dark;
@@ -44,6 +46,7 @@
       }
       body {
         background: var(--clr-surface-alt);
+        font-family: 'Inter', system-ui, sans-serif;
       }
       .app-background {
         background-color: var(--clr-surface-alt);
@@ -54,6 +57,14 @@
       html.dark .app-background {
         background-color: #161719;
         background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+      }
+
+      h1, h2, h3, h4 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
       }
     </style>
     <script>
@@ -86,6 +97,7 @@
             },
             fontFamily: {
               sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              heading: ['"Super League"', 'Inter', 'sans-serif']
             },
           }
         }
