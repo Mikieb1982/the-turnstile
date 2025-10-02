@@ -12,6 +12,8 @@ import {
   LocationMarkerIcon,
   UsersIcon,
   ArrowRightOnRectangleIcon,
+  MenuIcon,
+  XMarkIcon,
 } from './Icons';
 import type { View, AuthUser } from '../types';
 import styles from './Header.module.css'; // Import the CSS module
@@ -22,9 +24,11 @@ interface HeaderProps {
   theme: string;
   toggleTheme: () => void;
   currentUser: AuthUser | null;
+  isMobileNavOpen: boolean;
+  onMobileNavToggle: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser, isMobileNavOpen, onMobileNavToggle }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -75,7 +79,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
   return (
     <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''}`}>
       <div className="container mx-auto flex justify-between items-center p-2">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
+          <button
+            className="md:hidden p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+            onClick={onMobileNavToggle}
+            aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMobileNavOpen}
+          >
+            {isMobileNavOpen ? <XMarkIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+          </button>
           <LogoIcon
             className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
