@@ -439,8 +439,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const avatarFields =
       Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')
         ? {
-            avatarSource: updatedUser.avatarUrl ? 'custom' : profile.user.avatarSource ?? 'generated',
-            avatarUpdatedAt: updatedUser.avatarUrl ? new Date().toISOString() : profile.user.avatarUpdatedAt,
+            avatarSource: updatedUser.avatarUrl ? 'custom' : 'generated',
+            avatarUpdatedAt: updatedUser.avatarUrl ? new Date().toISOString() : undefined,
           }
         : {};
 
