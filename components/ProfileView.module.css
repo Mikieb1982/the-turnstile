@@ -238,9 +238,13 @@
   position: relative;
   margin-top: clamp(-5.5rem, -9vw, -6.5rem);
   padding: clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 3rem) 3.5rem;
+}
+
+.summaryGrid {
   display: grid;
   gap: clamp(1.5rem, 4vw, 2.5rem);
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
 }
 
 .detailCard {
@@ -325,11 +329,28 @@
   color: var(--text-subtle);
 }
 
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .quickActions {
-  grid-column: 1 / -1;
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.quickActionsRail {
+  position: relative;
+}
+
+.quickActionsRail::-webkit-scrollbar {
+  display: none;
+}
+
+.quickActionsRail {
+  scrollbar-width: none;
 }
 
 .quickActions button {
@@ -367,11 +388,76 @@
 
   .mainContent {
     margin-top: -4.5rem;
-    grid-template-columns: 1fr;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'team team'
+      'match quick';
+    gap: 1.25rem;
+  }
+
+  .myTeamCard {
+    grid-area: team;
+  }
+
+  .lastMatchCard {
+    grid-area: match;
+  }
+
+  .actionCard {
+    grid-area: quick;
+  }
+
+  .detailCard {
+    padding: 1.25rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
   .cardBody {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .teamSummary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .teamLogoSummary {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .quickActions {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 1fr);
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    margin: 0 -0.35rem;
+    padding-left: 0.35rem;
+    scroll-snap-type: x mandatory;
+  }
+
+  .quickActions button {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    scroll-snap-align: start;
+  }
+
+  .quickActions svg {
+    width: 24px;
+    height: 24px;
   }
 }
