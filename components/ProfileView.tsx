@@ -9,6 +9,7 @@ import {
   ChartBarIcon,
   ListBulletIcon,
   PencilIcon,
+  SparklesIcon,
   TrophyIcon,
   UserCircleIcon,
 } from './Icons';
@@ -113,7 +114,10 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                   {user.name} <PencilIcon className={styles.editNameIcon} />
                 </h1>
               )}
-              <span className={styles.profileTagline}>{profileTagline}</span>
+              <span className={styles.profileTagline}>
+                <SparklesIcon className={styles.taglineIcon} aria-hidden="true" />
+                {profileTagline}
+              </span>
             </div>
           </div>
         </section>
