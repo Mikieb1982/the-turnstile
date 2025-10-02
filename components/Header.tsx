@@ -87,49 +87,56 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
             aria-expanded={isMobileNavOpen}
           >
             {isMobileNavOpen ? <XMarkIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
-          </button>
           <LogoIcon
             className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
         </div>
         <div className="flex items-center gap-2 md:gap-4">
-            <nav className="hidden md:flex items-center gap-1">
-              <button
-                onClick={() => setView('PROFILE')}
-                className={`flex items-center gap-2 px-3 py-2 text-sm font-semibold transition-colors duration-200 border-b-[3px] rounded-t-sm ${
-                  isProfileActive
-                    ? 'text-primary border-primary'
-                    : 'text-text-subtle border-transparent hover:text-text hover:bg-surface-alt'
-                }`}
-              >
-                {currentUser ? (
-                  <>
-                    <UserCircleIcon className="w-5 h-5" />
-                    <span>Profile</span>
-                  </>
-                ) : (
-                  <>
-                    <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                    <span>Login</span>
-                  </>
-                )}
-              </button>
-              <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
-              <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
-              <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
-              <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
-              <NavButton view="GROUNDS" label="Grounds" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
-              <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
-              <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
-            </nav>
+          <nav className="hidden md:flex items-center gap-1">
             <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-text-subtle hover:bg-surface-alt transition-colors"
-                aria-label="Toggle theme"
+              onClick={() => setView('PROFILE')}
+              className={`flex items-center gap-2 px-3 py-2 text-sm font-semibold transition-colors duration-200 border-b-[3px] rounded-t-sm ${
+                isProfileActive
+                  ? 'text-primary border-primary'
+                  : 'text-text-subtle border-transparent hover:text-text hover:bg-surface-alt'
+              }`}
             >
-                {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
+              {currentUser ? (
+                <>
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span>Profile</span>
+                </>
+              ) : (
+                <>
+                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                  <span>Login</span>
+                </>
+              )}
             </button>
+            <NavButton view="UPCOMING" label="Next 7 Days" icon={<CalendarIcon className="w-5 h-5" />} />
+            <NavButton view="NEARBY" label="Nearby" icon={<LocationMarkerIcon className="w-5 h-5" />} />
+            <NavButton view="MATCH_DAY" label="Fixtures & Results" icon={<CalendarDaysIcon className="w-5 h-5" />} />
+            <NavButton view="LEAGUE_TABLE" label="League Table" icon={<TableCellsIcon className="w-5 h-5" />} />
+            <NavButton view="GROUNDS" label="Grounds" icon={<BuildingStadiumIcon className="w-5 h-5" />} />
+            <NavButton view="COMMUNITY" label="Community" icon={<UsersIcon className="w-5 h-5" />} />
+            <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
+          </nav>
+          <button
+            onClick={toggleTheme}
+            className="hidden md:flex p-2 rounded-full text-text-subtle hover:bg-surface-alt transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
+          </button>
+          <button
+            className="md:hidden p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+            onClick={onMobileNavToggle}
+            aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMobileNavOpen}
+          >
+            {isMobileNavOpen ? <XMarkIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+          </button>
         </div>
       </div>
     </header>

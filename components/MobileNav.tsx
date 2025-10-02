@@ -14,6 +14,8 @@ import {
   ChartBarIcon,
   LogoIcon,
   XMarkIcon,
+  SunIcon,
+  MoonIcon,
 } from './Icons';
 
 interface MobileNavProps {
@@ -23,6 +25,7 @@ interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
   theme: 'light' | 'dark';
+  toggleTheme: () => void;
 }
 
 type NavItem = {
@@ -50,7 +53,7 @@ const supporterItems: NavItem[] = [
   { view: 'PROFILE', label: 'Profile', description: 'Manage your supporter profile', icon: UserCircleIcon, isProtected: true },
 ];
 
-export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, currentUser, isOpen, onClose, theme }) => {
+export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, currentUser, isOpen, onClose, theme, toggleTheme }) => {
   const handleNavigate = (view: View) => {
     setView(view);
     onClose();
@@ -169,7 +172,31 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
               })}
             </ul>
           </div>
-
+          <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-heading text-lg text-text-strong">Appearance</p>
+                <p className="text-xs text-text-subtle">Switch between light and dark themes</p>
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <SunIcon className="h-4 w-4" />
+                    <span>Light</span>
+                  </>
+                ) : (
+                  <>
+                    <MoonIcon className="h-4 w-4" />
+                    <span>Dark</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
           <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
             <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
             <p className="mt-2">
