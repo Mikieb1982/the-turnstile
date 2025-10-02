@@ -119,18 +119,20 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         </section>
 
         {/* Stats Tiles */}
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{attendedMatches.length}</h2>
-            <p className={styles.statLabel}>Matches Attended</p>
-        </section>
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
-            <p className={styles.statLabel}>Badges Unlocked</p>
-        </section>
-        <section className={`${styles.dashboardCard} ${styles.statCard}`}>
-            <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
-            <p className={styles.statLabel}>Grounds Visited</p>
-        </section>
+        <div className={styles.statGrid}>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <h2 className={styles.statValue}>{attendedMatches.length}</h2>
+              <p className={styles.statLabel}>Matches Attended</p>
+          </section>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <h2 className={styles.statValue}>{earnedBadgeIds.length}</h2>
+              <p className={styles.statLabel}>Badges Unlocked</p>
+          </section>
+          <section className={`${styles.dashboardCard} ${styles.statCard}`}>
+              <h2 className={styles.statValue}>{new Set(attendedMatches.map(am => am.match.venue)).size}</h2>
+              <p className={styles.statLabel}>Grounds Visited</p>
+          </section>
+        </div>
 
 
         {/* My Team Tile */}
