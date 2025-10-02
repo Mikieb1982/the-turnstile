@@ -62,14 +62,16 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
   return (
     <>
       <div
-        className={`md:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+
           isOpen ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'
         }`}
         onClick={onClose}
         aria-hidden={!isOpen}
       />
       <nav
-        className={`md:hidden fixed inset-y-0 left-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-r border-border shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 left-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-r border-border shadow-2xl transition-transform duration-300 ease-out ${
+
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-hidden={!isOpen}
@@ -172,6 +174,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
               })}
             </ul>
           </div>
+
           <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
             <div className="flex items-center justify-between">
               <div>

@@ -3,8 +3,6 @@ import {
   CalendarIcon,
   InformationCircleIcon,
   TableCellsIcon,
-  SunIcon,
-  MoonIcon,
   CalendarDaysIcon,
   UserCircleIcon,
   BuildingStadiumIcon,
@@ -22,13 +20,13 @@ interface HeaderProps {
   currentView: View;
   setView: (view: View) => void;
   theme: string;
-  toggleTheme: () => void;
   currentUser: AuthUser | null;
   isMobileNavOpen: boolean;
   onMobileNavToggle: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, toggleTheme, currentUser, isMobileNavOpen, onMobileNavToggle }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, currentUser, isMobileNavOpen, onMobileNavToggle }) => {
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -80,13 +78,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
     <header className={`${styles.header} ${!isVisible ? styles.header_hidden : ''}`}>
       <div className="container mx-auto flex justify-between items-center p-2">
         <div className="flex items-center gap-2">
-          <button
-            className="md:hidden p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
-            onClick={onMobileNavToggle}
-            aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={isMobileNavOpen}
-          >
-            {isMobileNavOpen ? <XMarkIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
           <LogoIcon
             className="h-10 w-auto text-primary object-contain"
             theme={theme === 'dark' ? 'dark' : 'light'}
@@ -123,14 +114,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, setView, theme, tog
             <NavButton view="ABOUT" label="About" icon={<InformationCircleIcon className="w-5 h-5" />} />
           </nav>
           <button
-            onClick={toggleTheme}
-            className="hidden md:flex p-2 rounded-full text-text-subtle hover:bg-surface-alt transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
-          </button>
-          <button
-            className="md:hidden p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+            className="p-2 rounded-full text-text-subtle hover:text-text hover:bg-surface-alt transition-colors"
+
             onClick={onMobileNavToggle}
             aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isMobileNavOpen}
