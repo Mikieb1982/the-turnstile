@@ -8,39 +8,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       :root {
-        color-scheme: light;
-        --clr-primary: #7F1028; /* Deep Red */
-        --clr-secondary: #FFD447; /* Vibrant Yellow */
-        --clr-accent: #0052CC; /* Striking Blue */
-        --clr-danger: #7F1028;
+        color-scheme: light; /* Defaulting to dark, but 'light' is a fallback */
+        --clr-primary: #E21836; /* Super League Red */
+        --clr-secondary: #FFD447; /* Retaining for accents if needed */
+        --clr-accent: #0074FF;
+        --clr-danger: #E21836;
         --clr-warning: #FFD447;
         --clr-info: #0052CC;
-        --clr-success: #00A86B; /* Jade Green */
-        --clr-text-strong: #121212;
-        --clr-text: #333333;
-        --clr-text-subtle: #666666;
-        --clr-border: #DDDDDD;
-        --clr-surface: #FFFFFF;
-        --clr-surface-alt: #F5F5F5;
-
-        --gradient-1: linear-gradient(140deg, rgba(127, 16, 40, 0.12), rgba(0, 82, 204, 0.1));
-        --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.18), transparent 55%);
-        --gradient-3: radial-gradient(circle at 80% 0%, rgba(127, 16, 40, 0.14), transparent 45%);
-      }
-      html.dark {
-        color-scheme: dark;
-        --clr-primary: #B71E3C; /* Deep Red */
-        --clr-secondary: #FFDD57; /* Vibrant Yellow */
-        --clr-accent: #0074FF; /* Striking Blue */
-        --clr-surface: #1A1A1A;
-        --clr-surface-alt: #2C2C2C;
+        --clr-success: #00A86B;
         --clr-text-strong: #FFFFFF;
         --clr-text: #E0E0E0;
         --clr-text-subtle: #A0A0A0;
         --clr-border: #404040;
-        --gradient-1: linear-gradient(140deg, rgba(183, 30, 60, 0.24), rgba(0, 116, 255, 0.18));
-        --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%);
-        --gradient-3: radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%);
+        --clr-surface: #1F2023; /* Slightly lighter than main background */
+        --clr-surface-alt: #161719; /* Main Dark Background */
+
+        --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.15), rgba(0, 82, 204, 0.1));
+        --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
+        --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
+      }
+      html.dark {
+         color-scheme: dark;
+        --clr-primary: #E21836; /* Super League Red */
+        --clr-secondary: #FFDD57;
+        --clr-accent: #0074FF;
+        --clr-surface: #1F2023;
+        --clr-surface-alt: #161719;
+        --clr-text-strong: #FFFFFF;
+        --clr-text: #E0E0E0;
+        --clr-text-subtle: #A0A0A0;
+        --clr-border: #404040;
+        --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.2), rgba(0, 116, 255, 0.15));
+        --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.18), transparent 60%);
+        --gradient-3: radial-gradient(circle at 90% 10%, rgba(226, 24, 54, 0.18), transparent 55%);
       }
       body {
         background: var(--clr-surface-alt);
@@ -52,7 +52,7 @@
       }
 
       html.dark .app-background {
-        background-color: #121212;
+        background-color: #161719;
         background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
       }
     </style>
@@ -82,7 +82,7 @@
             },
             boxShadow: {
               card: '0 1px 2px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06)',
-              focus: '0 0 0 2px rgba(239, 68, 68, .4)'
+              focus: '0 0 0 2px rgba(226, 24, 54, .4)'
             },
             fontFamily: {
               sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
