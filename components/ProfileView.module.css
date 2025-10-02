@@ -162,9 +162,17 @@
 }
 
 /* Stat Cards */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  grid-column: 1 / -1;
+}
+
 .statCard {
     text-align: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    padding-block: clamp(1.5rem, 5vw, 2.25rem);
 }
 .statValue {
     font-size: clamp(2rem, 5vw, 2.5rem);
