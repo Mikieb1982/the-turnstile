@@ -7,10 +7,13 @@ import {
   LocationMarkerIcon,
   MiniSpinnerIcon,
   PlusCircleIcon,
+  ShareIcon,
 } from './Icons';
 import { TeamLogo } from './TeamLogo';
 import { ALL_VENUES } from '../services/mockData';
 import { getDistance } from '../utils/geolocation';
+import { attemptShare, getAppShareUrl } from '../utils/share';
+import type { ShareOutcome } from '../utils/share';
 
 interface MatchListItemProps {
   match: Match;
@@ -39,6 +42,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
     status: 'idle' | 'checking' | 'error_distance' | 'error_location';
     message: string;
   }>({ status: 'idle', message: '' });
+  const [shareFeedback, setShareFeedback] = useState<'idle' | ShareOutcome>('idle');
 
   const isFullTime = match.status === 'FULL-TIME';
   const isScheduled = match.status === 'SCHEDULED';
@@ -133,13 +137,63 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
     );
   };
 
+  const handleShareCheckIn = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    const shareText = `Just checked in at ${match.homeTeam?.name ?? 'Home Team'} vs ${match.awayTeam?.name ?? 'Away Team'} at ${match.venue}.`;
+    const shareUrl = getAppShareUrl();
+
+    const outcome = await attemptShare({
+      title: 'Matchday Check-in',
+      text: shareText,
+      url: shareUrl,
+      clipboardFallbackText: `${shareText} Track every matchday with The Scrum Book: ${shareUrl}`,
+    });
+
+    setShareFeedback(outcome);
+    setTimeout(() => setShareFeedback('idle'), 2500);
+  };
+
+  const renderShareFeedbackMessage = () => {
+    if (shareFeedback === 'copied') {
+      return 'Link copied!';
+    }
+    if (shareFeedback === 'shared') {
+      return 'Share sheet opened';
+    }
+    if (shareFeedback === 'failed') {
+      return 'Sharing unavailable';
+    }
+    return '';
+  };
+
   const renderAttendButton = () => {
     if (isAttended) {
+      const feedbackMessage = renderShareFeedbackMessage();
+
       return (
-        <button className="flex cursor-default items-center gap-1.5 rounded-md bg-secondary px-3 py-1.5 text-xs font-semibold text-white" disabled>
-          <CheckCircleIcon className="h-4 w-4" />
-          <span>Attended</span>
-        </button>
+        <div className="flex flex-col items-stretch gap-1">
+          <div className="flex items-center gap-2">
+            <button className="flex cursor-default items-center gap-1.5 rounded-md bg-secondary px-3 py-1.5 text-xs font-semibold text-white" disabled>
+              <CheckCircleIcon className="h-4 w-4" />
+              <span>Attended</span>
+            </button>
+            <button
+              onClick={handleShareCheckIn}
+              className="flex items-center gap-1.5 rounded-md border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-colors duration-200 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-surface-alt"
+              aria-label="Share check-in"
+            >
+              <ShareIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Share check-in</span>
+              <span className="sm:hidden">Share</span>
+            </button>
+          </div>
+          {feedbackMessage && (
+            <span className="text-[11px] font-semibold text-text-subtle" role="status" aria-live="polite">
+              {feedbackMessage}
+            </span>
+          )}
+        </div>
       );
     }
 
