@@ -11,6 +11,7 @@ import {
 import { TeamLogo } from './TeamLogo';
 import { ALL_VENUES } from '../services/mockData';
 import { getDistance } from '../utils/geolocation';
+import { formatDateUK } from '../utils/date';
 
 interface MatchListItemProps {
   match: Match;
@@ -208,7 +209,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
           </div>
           <div className="flex items-center gap-1.5">
             <ClockIcon className="h-4 w-4" />
-            <span>{new Date(match.startTime).toLocaleDateString()}</span>
+            <span>{formatDateUK(match.startTime)}</span>
           </div>
           {distance !== undefined && (
             <div className="font-semibold text-primary">
