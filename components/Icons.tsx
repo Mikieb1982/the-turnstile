@@ -194,6 +194,13 @@ export const MiniSpinnerIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
+export const EnvelopeIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75l8.954 5.373a1.5 1.5 0 001.592 0L21.75 6.75" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.5h16.5A1.5 1.5 0 0121.75 6v12a1.5 1.5 0 01-1.5 1.5H3.75A1.5 1.5 0 012.25 18V6a1.5 1.5 0 011.5-1.5z" />
+    </svg>
+);
+
 export const PencilIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a1.5 1.5 0 012.121 0l1.53 1.53a1.5 1.5 0 010 2.121l-9.19 9.19-3.712.742.742-3.712z" />
