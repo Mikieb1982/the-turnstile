@@ -23,6 +23,8 @@ import { CommunityView } from './components/CommunityView';
 import { LoginPromptView } from './components/LoginPromptView';
 import { LogoIcon, MenuIcon } from './components/Icons';
 import { syncThemeWithFavouriteTeam } from './utils/themeUtils';
+import { DesktopTopBar } from './components/DesktopTopBar';
+import { MobileBottomBar } from './components/MobileBottomBar';
 
 const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
 
@@ -199,12 +201,15 @@ const App: React.FC = () => {
   };
 
   const mainBaseClasses = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
-  const mainSpacing = shouldShowLoginPrompt ? 'py-16 md:py-20 flex items-center justify-center' : 'py-10 md:py-12 pb-16';
+  const mainSpacing = shouldShowLoginPrompt
+    ? 'py-16 md:py-20 flex items-center justify-center'
+    : 'pt-24 md:pt-28 pb-28 md:pb-16';
 
   return (
     <div className="min-h-screen font-sans text-text app-background">
       {!shouldShowLoginPrompt ? (
         <>
+          <DesktopTopBar currentView={view} setView={setView} />
           <Header
             setView={setView}
             theme={theme}
@@ -241,6 +246,7 @@ const App: React.FC = () => {
             toggleTheme={toggleTheme}
             onLogout={logout}
           />
+          <MobileBottomBar currentView={view} setView={setView} />
           <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
             <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
             <p className="font-semibold text-text">The Scrum Book</p>
