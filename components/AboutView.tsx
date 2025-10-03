@@ -145,7 +145,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
           </div>
           <div className="relative">
             <div className="absolute -top-10 -right-6 h-40 w-40 rounded-full bg-secondary/20 blur-3xl" />
-            <div className="relative rounded-2xl border border-border/70 bg-gradient-to-br from-surface-alt via-white to-surface-alt p-6 shadow-card">
+            <div className="relative rounded-2xl border border-border/70 bg-gradient-to-br from-surface-alt via-surface to-surface-alt p-6 shadow-card">
               <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-text-subtle">Key Features</h2>
               <ul className="mt-4 space-y-3 text-sm text-text">
                 <li className="flex items-start gap-3 rounded-xl border border-border/70 bg-surface/80 p-3">
