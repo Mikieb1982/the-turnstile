@@ -1,6 +1,6 @@
 // fixtures.ts
 
-import type { Match, LeagueStanding, Venue } from 'types';
+import type { Match, LeagueStanding, Team, Venue } from 'types';
 
 // ---------- Teams ----------
 export const TEAMS = {
@@ -19,7 +19,8 @@ export const TEAMS = {
   wakefield: { id: '13', name: 'Wakefield Trinity', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/en323k1599320716.png' }
 } as const;
 
-type TeamEntry = (typeof TEAMS)[keyof typeof TEAMS];
+const WINNER_SF1: Team = { id: 'winner-sf1', name: 'TBC (Winner SF1)', logoUrl: '' };
+const WINNER_SF2: Team = { id: 'winner-sf2', name: 'TBC (Winner SF2)', logoUrl: '' };
 
 // ---------- Team branding ----------
 export interface TeamBranding {
@@ -120,8 +121,8 @@ export const VENUE_LOCATIONS: Record<string, { x: number; y: number; name: strin
 // ---------- Match factory helpers ----------
 const createMatch = (
   id: number,
-  homeTeam: TeamEntry,
-  awayTeam: TeamEntry,
+  homeTeam: Team,
+  awayTeam: Team,
   status: Match['status'],
   daysOffset: number,
   homeScore: number,
@@ -163,8 +164,8 @@ const createMatch = (
 
 const createMatchOnDate = (
   id: number,
-  homeTeam: TeamEntry,
-  awayTeam: TeamEntry,
+  homeTeam: Team,
+  awayTeam: Team,
   status: Match['status'],
   date: Date,
   homeScore: number,
@@ -241,6 +242,9 @@ export const mockMatches: Match[] = [
   createMatchOnDate(110, TEAMS.salford, TEAMS.wakefield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.salford.id]),
   createMatchOnDate(111, TEAMS.hullFC, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
   createMatchOnDate(112, TEAMS.wigan, TEAMS.leeds, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(113, TEAMS.wigan, TEAMS.leigh, 'SCHEDULED', new Date('2024-10-03T20:00:00+01:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(114, TEAMS.hullKR, TEAMS.stHelens, 'SCHEDULED', new Date('2024-10-04T17:30:00+01:00'), 0, 0, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(115, WINNER_SF1, WINNER_SF2, 'SCHEDULED', new Date('2024-10-11T18:00:00+01:00'), 0, 0, VENUES.oldTrafford),
 
 ];
 
