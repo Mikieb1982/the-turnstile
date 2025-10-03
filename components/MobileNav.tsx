@@ -16,6 +16,7 @@ import {
   XMarkIcon,
   SunIcon,
   MoonIcon,
+  ArrowLeftOnRectangleIcon,
 } from './Icons';
 
 interface MobileNavProps {
@@ -26,6 +27,7 @@ interface MobileNavProps {
   onClose: () => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  onLogout: () => void;
 }
 
 type NavItem = {
@@ -53,9 +55,23 @@ const supporterItems: NavItem[] = [
   { view: 'PROFILE', label: 'Profile', description: 'Manage your supporter profile', icon: UserCircleIcon, isProtected: true },
 ];
 
-export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, currentUser, isOpen, onClose, theme, toggleTheme }) => {
+export const MobileNav: React.FC<MobileNavProps> = ({
+  currentView,
+  setView,
+  currentUser,
+  isOpen,
+  onClose,
+  theme,
+  toggleTheme,
+  onLogout,
+}) => {
   const handleNavigate = (view: View) => {
     setView(view);
+    onClose();
+  };
+
+  const handleLogout = () => {
+    onLogout();
     onClose();
   };
 
@@ -75,136 +91,150 @@ export const MobileNav: React.FC<MobileNavProps> = ({ currentView, setView, curr
         aria-hidden={!isOpen}
         aria-label="Mobile navigation"
       >
-        <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt/60 backdrop-blur">
-          <div className="flex items-center gap-3">
-            <LogoIcon className="h-10 w-10" theme={theme} />
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
-              <span className="text-lg font-heading text-text-strong">Matchday Companion</span>
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt/60 backdrop-blur">
+            <div className="flex items-center gap-3">
+              <LogoIcon className="h-10 w-10" theme={theme} />
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
+                <span className="text-lg font-heading text-text-strong">Matchday Companion</span>
+              </div>
             </div>
+            <button
+              onClick={onClose}
+              className="rounded-full p-2 text-text-subtle transition-colors hover:bg-surface hover:text-text"
+              aria-label="Close navigation menu"
+            >
+              <XMarkIcon className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-full p-2 text-text-subtle transition-colors hover:bg-surface hover:text-text"
-            aria-label="Close navigation menu"
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="px-5 py-6 space-y-6 overflow-y-auto h-full pb-24">
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Main Navigation</h2>
-            <ul className="space-y-2">
-              {primaryItems.map(({ view, label, description, icon: Icon }) => {
-                const isActive = currentView === view;
-                return (
-                  <li key={view}>
-                    <button
-                      onClick={() => handleNavigate(view)}
-                      className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
-                        isActive
-                          ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
-                          : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
-                            isActive
-                              ? 'border-primary/40 bg-primary/20 text-primary'
-                              : 'border-border/70 bg-surface text-text-subtle'
-                          }`}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <div>
-                          <p className="font-heading text-lg text-text-strong">{label}</p>
-                          {description && <p className="text-xs text-text-subtle">{description}</p>}
-                        </div>
-                      </div>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Supporter Hub</h2>
-            <ul className="space-y-2">
-              {supporterItems.map(({ view, label, description, icon: Icon, isProtected }) => {
-                const isActive = currentView === view;
-                const disabled = isProtected && !currentUser;
-                return (
-                  <li key={view}>
-                    <button
-                      onClick={() => !disabled && handleNavigate(view)}
-                      className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
-                        disabled
-                          ? 'cursor-not-allowed border-border/40 bg-surface-alt/30 text-text-subtle'
-                          : isActive
+          <div className="flex-1 px-5 py-6 space-y-6 overflow-y-auto">
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Main Navigation</h2>
+              <ul className="space-y-2">
+                {primaryItems.map(({ view, label, description, icon: Icon }) => {
+                  const isActive = currentView === view;
+                  return (
+                    <li key={view}>
+                      <button
+                        onClick={() => handleNavigate(view)}
+                        className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
+                          isActive
                             ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
                             : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
-                      }`}
-                      aria-disabled={disabled}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
-                            isActive
-                              ? 'border-primary/40 bg-primary/20 text-primary'
-                              : 'border-border/70 bg-surface text-text-subtle'
-                          }`}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <div>
-                          <p className="font-heading text-lg text-text-strong">{label}</p>
-                          {description && <p className="text-xs text-text-subtle">{description}</p>}
-                          {disabled && (
-                            <p className="text-[11px] font-medium text-danger mt-1">Login required</p>
-                          )}
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
+                              isActive
+                                ? 'border-primary/40 bg-primary/20 text-primary'
+                                : 'border-border/70 bg-surface text-text-subtle'
+                            }`}
+                          >
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <p className="font-heading text-lg text-text-strong">{label}</p>
+                            {description && <p className="text-xs text-text-subtle">{description}</p>}
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
-          <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-heading text-lg text-text-strong">Appearance</p>
-                <p className="text-xs text-text-subtle">Switch between light and dark themes</p>
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Supporter Hub</h2>
+              <ul className="space-y-2">
+                {supporterItems.map(({ view, label, description, icon: Icon, isProtected }) => {
+                  const isActive = currentView === view;
+                  const disabled = isProtected && !currentUser;
+                  return (
+                    <li key={view}>
+                      <button
+                        onClick={() => !disabled && handleNavigate(view)}
+                        className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
+                          disabled
+                            ? 'cursor-not-allowed border-border/40 bg-surface-alt/30 text-text-subtle'
+                            : isActive
+                              ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
+                              : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+                        }`}
+                        aria-disabled={disabled}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
+                              isActive
+                                ? 'border-primary/40 bg-primary/20 text-primary'
+                                : 'border-border/70 bg-surface text-text-subtle'
+                            }`}
+                          >
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <p className="font-heading text-lg text-text-strong">{label}</p>
+                            {description && <p className="text-xs text-text-subtle">{description}</p>}
+                            {disabled && (
+                              <p className="text-[11px] font-medium text-danger mt-1">Login required</p>
+                            )}
+                          </div>
+                        </div>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-heading text-lg text-text-strong">Appearance</p>
+                  <p className="text-xs text-text-subtle">Switch between light and dark themes</p>
+                </div>
+                <button
+                  onClick={toggleTheme}
+                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <SunIcon className="h-4 w-4" />
+                      <span>Light</span>
+                    </>
+                  ) : (
+                    <>
+                      <MoonIcon className="h-4 w-4" />
+                      <span>Dark</span>
+                    </>
+                  )}
+                </button>
               </div>
-              <button
-                onClick={toggleTheme}
-                className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? (
-                  <>
-                    <SunIcon className="h-4 w-4" />
-                    <span>Light</span>
-                  </>
-                ) : (
-                  <>
-                    <MoonIcon className="h-4 w-4" />
-                    <span>Dark</span>
-                  </>
-                )}
-              </button>
+            </div>
+
+            <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
+              <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
+              <p className="mt-2">
+                Keep your supporter log up to date to unlock new badges and season-long stats. Tap “My Matches” after every game you attend.
+              </p>
             </div>
           </div>
-
-          <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
-            <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
-            <p className="mt-2">
-              Keep your supporter log up to date to unlock new badges and season-long stats. Tap “My Matches” after every game you attend.
-            </p>
-          </div>
+          {currentUser && (
+            <div className="border-t border-border/70 bg-surface/80 px-5 py-4">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border hover:bg-surface-alt/70"
+              >
+                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </div>
       </nav>
     </>

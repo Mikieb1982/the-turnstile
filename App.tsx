@@ -219,6 +219,7 @@ const App: React.FC = () => {
         onClose={() => setIsMobileNavOpen(false)}
         theme={themeMode}
         toggleTheme={toggleTheme}
+        onLogout={logout}
       />
       <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
         <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
