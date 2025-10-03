@@ -49,8 +49,8 @@
   display: flex;
   align-items: center;
   gap: clamp(1.1rem, 3vw, 1.85rem);
-  flex: 1 1 auto;
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 
@@ -59,7 +59,7 @@
   width: clamp(96px, 18vw, 120px);
   height: clamp(96px, 18vw, 120px);
   flex-shrink: 0;
-  flex: 0 0 auto;
+  flex-grow: 0;
 }
 
 .avatarImage,
@@ -405,15 +405,13 @@
   color: var(--clr-primary);
 }
 
-@media (max-width: 1024px) {
-  .heroContent {
-    padding-right: 0;
-  }
-}
-
 @media (max-width: 640px) {
   .hero {
     border-bottom-left-radius: 2.5rem;
+  }
+
+  .heroContent {
+    padding-right: 0;
   }
 
   .mainContent {
