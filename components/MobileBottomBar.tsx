@@ -24,10 +24,11 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentView, s
                 onClick={() => setView(view)}
                 className={`w-full rounded-full px-2.5 py-1.5 text-[10px] font-semibold leading-tight transition-colors ${
                   isActive
-                    ? 'bg-primary/15 text-primary border border-primary/40 shadow-sm'
+                    ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm'
                     : 'text-text-subtle hover:text-text hover:bg-surface-alt/80 border border-transparent'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
+                aria-label={label}
               >
                 <span className="relative flex flex-col items-center justify-center gap-1 text-center">
                   <span
