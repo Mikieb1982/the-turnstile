@@ -31,17 +31,57 @@
   opacity: 0.25;
 }
 
+.heroLogo {
+  position: absolute;
+  top: clamp(1.2rem, 5vw, 2.75rem);
+  right: clamp(1rem, 5vw, 3rem);
+  width: clamp(8.25rem, 20vw, 10.5rem);
+  height: clamp(8.25rem, 20vw, 10.5rem);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at top, rgba(255, 250, 240, 0.96) 0%, rgba(247, 225, 188, 0.96) 60%, rgba(238, 203, 152, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 22px 38px -24px rgba(5, 16, 45, 0.9),
+    0 18px 30px -18px rgba(12, 19, 48, 0.55),
+    inset 0 10px 22px rgba(255, 255, 255, 0.55),
+    inset 0 -14px 24px rgba(214, 168, 109, 0.38);
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.heroLogo::after {
+  content: '';
+  position: absolute;
+  inset: -18px 12px 16px;
+  border-radius: 50%;
+  background: rgba(7, 13, 34, 0.55);
+  filter: blur(26px);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.heroLogoIcon {
+  width: clamp(3.75rem, 9vw, 4.75rem);
+  height: clamp(3.75rem, 9vw, 4.75rem);
+  display: block;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
+}
+
 .heroContent {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: clamp(2rem, 5vw, 3rem);
+  padding-right: clamp(7rem, 18vw, 10rem);
 }
 
 .identityRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: clamp(1.5rem, 4vw, 3rem);
   flex-wrap: wrap;
 }
@@ -53,62 +93,6 @@
   flex: 1 1 auto;
   min-width: 0;
   flex-wrap: wrap;
-}
-
-.logoMount {
-  position: relative;
-  margin-left: auto;
-  padding: clamp(0.9rem, 2vw, 1.1rem) clamp(1.7rem, 3.5vw, 2.6rem);
-  border-radius: 140px;
-  background: radial-gradient(ellipse at top, rgba(255, 250, 240, 0.96) 0%, rgba(247, 225, 188, 0.96) 60%, rgba(238, 203, 152, 0.96) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow:
-    0 22px 38px -24px rgba(5, 16, 45, 0.9),
-    0 18px 30px -18px rgba(12, 19, 48, 0.55),
-    inset 0 10px 22px rgba(255, 255, 255, 0.55),
-    inset 0 -14px 24px rgba(214, 168, 109, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: clamp(150px, 32vw, 190px);
-  flex-shrink: 0;
-
-  z-index: 1;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
-.logoMount::before {
-  content: '';
-  position: absolute;
-  inset: -18px 10px 16px;
-  border-radius: 160px;
-  background: rgba(7, 13, 34, 0.65);
-  filter: blur(24px);
-  opacity: 0.55;
-  z-index: -1;
-}
-
-.logoMount:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 26px 44px -26px rgba(5, 16, 45, 0.95),
-    0 22px 32px -18px rgba(12, 19, 48, 0.65),
-    inset 0 12px 22px rgba(255, 255, 255, 0.6),
-    inset 0 -14px 26px rgba(214, 168, 109, 0.45);
-}
-
-.logoMountIcon {
-  width: clamp(3.75rem, 9vw, 4.75rem);
-
-  height: clamp(3.75rem, 9vw, 4.75rem);
-  display: block;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
-}
-
-@media (max-width: 768px) {
-  .logoMount {
-    margin-top: 0.5rem;
-  }
 }
 
 
@@ -449,9 +433,32 @@
   color: var(--clr-primary);
 }
 
+@media (max-width: 1024px) {
+  .heroContent {
+    padding-right: clamp(3rem, 12vw, 6rem);
+  }
+
+  .heroLogo {
+    width: clamp(6.75rem, 18vw, 8.5rem);
+    height: clamp(6.75rem, 18vw, 8.5rem);
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
     border-bottom-left-radius: 2.5rem;
+  }
+
+  .heroLogo {
+    width: clamp(5.5rem, 24vw, 6.75rem);
+    height: clamp(5.5rem, 24vw, 6.75rem);
+    top: clamp(0.75rem, 3vw, 1.5rem);
+    right: clamp(0.75rem, 4vw, 1.5rem);
+    opacity: 0.85;
+  }
+
+  .heroContent {
+    padding-right: 0;
   }
 
   .mainContent {
