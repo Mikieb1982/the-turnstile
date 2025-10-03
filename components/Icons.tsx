@@ -17,7 +17,7 @@ export const RugbyBallIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
-export const LogoIcon: React.FC<LogoIconProps> = ({ className, theme = 'light', alt, ...props }) => {
+export const LogoIcon: React.FC<LogoIconProps> = ({ className, theme = 'light', alt, style, ...props }) => {
   const resolvedSrc = theme === 'dark' ? logoDarkSrc : logoSrc;
 
   return (
@@ -26,6 +26,11 @@ export const LogoIcon: React.FC<LogoIconProps> = ({ className, theme = 'light', 
       alt={alt ?? 'The Scrum Book logo'}
       className={className}
       loading="lazy"
+      style={{
+        objectFit: 'contain',
+        objectPosition: 'center',
+        ...style,
+      }}
       {...props}
     />
   );
