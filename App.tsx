@@ -27,9 +27,40 @@ import { DesktopTopBar } from './components/DesktopTopBar';
 import { MobileBottomBar } from './components/MobileBottomBar';
 
 const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
+const VIEW_STORAGE_KEY = 'scrum-book:last-view';
+const allViews: View[] = [
+  'UPCOMING',
+  'MATCH_DAY',
+  'LEAGUE_TABLE',
+  'GROUNDS',
+  'MY_MATCHES',
+  'STATS',
+  'ABOUT',
+  'BADGES',
+  'PROFILE',
+  'TEAM_STATS',
+  'NEARBY',
+  'PREDICTION_GAMES',
+  'ADMIN',
+  'COMMUNITY',
+];
+
+const isValidView = (value: string | null): value is View =>
+  typeof value === 'string' && allViews.includes(value as View);
 
 const App: React.FC = () => {
-  const [view, setView] = useState<View>('PROFILE');
+  const [view, setView] = useState<View>(() => {
+    if (typeof window === 'undefined') {
+      return 'PROFILE';
+    }
+
+    const storedView = window.localStorage.getItem(VIEW_STORAGE_KEY);
+    if (isValidView(storedView)) {
+      return storedView;
+    }
+
+    return 'PROFILE';
+  });
   const [theme, toggleTheme] = useTheme();
   const themeMode = theme === 'dark' ? 'dark' : 'light';
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -96,6 +127,12 @@ const App: React.FC = () => {
   };
 
   const shouldShowLoginPrompt = !currentUser && protectedViews.includes(view);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+    }
+  }, [view]);
 
   useEffect(() => {
     if (shouldShowLoginPrompt) {
