@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { AttendedMatch, User } from '../types';
 import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
@@ -72,6 +72,38 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         };
     }, [attendedMatches]);
 
+    const [shareFeedback, setShareFeedback] = useState<'idle' | ShareOutcome>('idle');
+
+    const handleShareStats = async () => {
+        if (!stats) return;
+
+        const shareUrl = getAppShareUrl();
+        const shareText = `I've logged ${stats.totalMatches} matches, ${stats.totalGrounds} grounds and ${stats.totalPoints} total points this season on The Scrum Book.`;
+
+        const outcome = await attemptShare({
+            title: `${user.name}'s rugby league stats`,
+            text: shareText,
+            url: shareUrl,
+            clipboardFallbackText: `${shareText} Keep up with me at ${shareUrl}`,
+        });
+
+        setShareFeedback(outcome);
+        setTimeout(() => setShareFeedback('idle'), 2500);
+    };
+
+    const renderShareFeedbackMessage = () => {
+        if (shareFeedback === 'copied') {
+            return 'Link copied!';
+        }
+        if (shareFeedback === 'shared') {
+            return 'Share sheet opened';
+        }
+        if (shareFeedback === 'failed') {
+            return 'Sharing unavailable';
+        }
+        return '';
+    };
+
     if (!stats) {
         return (
             <div className="text-center py-20 bg-surface rounded-xl">
@@ -81,13 +113,27 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         );
     }
 
+    const shareFeedbackMessage = renderShareFeedbackMessage();
+
     return (
         <div className="space-y-6 text-text-strong">
-             <div className="flex justify-between items-center">
+             <div className="flex justify-between items-center gap-3">
                 <h1 className="text-xl font-bold">The Scrum Book</h1>
-                <button className="p-2 text-text-subtle hover:text-primary">
-                    <ShareIcon className="w-6 h-6"/>
-                </button>
+                <div className="flex flex-col items-end gap-1">
+                    <button
+                        type="button"
+                        onClick={handleShareStats}
+                        className="p-2 text-text-subtle hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+                        aria-label="Share my stats"
+                    >
+                        <ShareIcon className="w-6 h-6"/>
+                    </button>
+                    {shareFeedbackMessage && (
+                        <span className="text-[11px] font-semibold text-text-subtle" role="status" aria-live="polite">
+                            {shareFeedbackMessage}
+                        </span>
+                    )}
+                </div>
             </div>
 
             <div className="flex items-center gap-4">
