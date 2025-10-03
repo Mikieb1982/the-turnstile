@@ -56,11 +56,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     return [...attendedMatches].sort((a, b) => new Date(b.attendedOn).getTime() - new Date(a.attendedOn).getTime())[0];
   }, [attendedMatches]);
 
-  const displayName = useMemo(() => {
-    const trimmed = (user.name ?? '').trim();
-    return trimmed.length > 0 ? trimmed : 'Rugby Fan';
-  }, [user.name]);
-
   const profileTagline = useMemo(() => {
     const matchCount = attendedMatches.length;
     if (matchCount >= 20) {
@@ -99,64 +94,63 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         <section className={styles.hero}>
           <div className={styles.heroBackdrop} aria-hidden="true" />
           <div className={styles.heroContent}>
-            <div className={styles.identityRow}>
-              <div className={styles.identityMain}>
-                <div className={styles.avatarWrap}>
-                  {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
-                  ) : (
-                    <UserCircleIcon className={styles.avatarPlaceholder} />
-                  )}
-                  <button
-                    onClick={() => setIsAvatarModalOpen(true)}
-                    className={styles.avatarEdit}
-                    aria-label="Edit avatar"
-                  >
-                    <PencilIcon />
-                  </button>
-                </div>
-                <div className={styles.identityText}>
-                  {isEditingName ? (
-                    <form onSubmit={handleSaveName} className={styles.nameForm}>
-                      <input
-                        type="text"
-                        value={pendingName}
-                        onChange={(e) => setPendingName(e.target.value)}
-                        onBlur={handleSaveName}
-                        placeholder="Enter your name"
-                        autoFocus
-                      />
-                      <button type="submit">Save</button>
-                    </form>
-                  ) : (
-                    <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
-                      <span>{displayName}</span>
-                      <PencilIcon aria-hidden="true" />
-                    </button>
-                  )}
-                  <span className={styles.tagline}>
-                    <SparklesIcon aria-hidden="true" />
-                    {profileTagline}
-                  </span>
-                  {favoriteTeam && (
-                    <span className={styles.teamBadge}>
-                      <TeamLogo
-                        teamId={favoriteTeam.id}
-                        teamName={favoriteTeam.name}
-                        size="small"
-                        className={styles.teamLogoBadge}
-                      />
-                      {favoriteTeam.name}
-                    </span>
-                  )}
-                </div>
+
+            <div className={styles.topRow}>
+              <div className={styles.avatarWrap}>
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
+                ) : (
+                  <UserCircleIcon className={styles.avatarPlaceholder} />
+                )}
+                <button
+                  onClick={() => setIsAvatarModalOpen(true)}
+                  className={styles.avatarEdit}
+                  aria-label="Edit avatar"
+                >
+                  <PencilIcon />
+                </button>
               </div>
               <div className={styles.logoWrap} aria-hidden="true">
                 <LogoIcon className={styles.logoImage} theme="light" />
               </div>
             </div>
 
-            <dl className={styles.statRow} aria-label="Profile highlights">
+            <div className={styles.identityText}>
+              {isEditingName ? (
+                <form onSubmit={handleSaveName} className={styles.nameForm}>
+                  <input
+                    type="text"
+                    value={pendingName}
+                    onChange={(e) => setPendingName(e.target.value)}
+                    onBlur={handleSaveName}
+                    autoFocus
+                  />
+                  <button type="submit">Save</button>
+                </form>
+              ) : (
+                <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
+                  <span>{user.name}</span>
+                  <PencilIcon aria-hidden="true" />
+                </button>
+              )}
+              <span className={styles.tagline}>
+                <SparklesIcon aria-hidden="true" />
+                {profileTagline}
+              </span>
+              {favoriteTeam && (
+                <span className={styles.teamBadge}>
+                  <TeamLogo
+                    teamId={favoriteTeam.id}
+                    teamName={favoriteTeam.name}
+                    size="small"
+                    className={styles.teamLogoBadge}
+                  />
+                  {favoriteTeam.name}
+                </span>
+              )}
+            </div>
+
+            <dl className={styles.statRow}>
               <div className={styles.statCard}>
                 <ListBulletIcon aria-hidden="true" />
                 <dt>Matches Attended</dt>
@@ -196,7 +190,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     <span>{favoriteTeam.name}</span>
                   </div>
                 ) : (
-                  <p className={styles.emptyState}>No favorite team selected yet.</p>
+                  <p>No favorite team selected yet.</p>
                 )}
               </div>
             </section>
@@ -216,9 +210,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                       {formatDateUK(recentMatch.attendedOn)}
                     </span>
                   </div>
-                  ) : (
-                    <p className={styles.emptyState}>No matches attended yet.</p>
-                  )}
+                ) : (
+                  <p>No matches attended yet.</p>
+                )}
               </div>
             </section>
 
