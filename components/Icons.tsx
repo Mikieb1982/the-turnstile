@@ -128,6 +128,93 @@ export const LocationMarkerIcon: React.FC<IconProps> = (props) => (
     </svg>
 );
 
+export const NextSevenDaysIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" d="M8.25 7.5v2" />
+    <path strokeLinecap="round" d="M15.75 7.5v2" />
+    <rect x="7" y="9" width="10" height="7.5" rx="1.25" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M10 11h3l-1.75 3" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.25 11.75l1.75 1.75-1.75 1.75" />
+    <path strokeLinecap="round" d="M17.5 13.5h-2.5" />
+  </svg>
+);
+
+export const NearbyIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.5c3.3-3.51 5.5-6.21 5.5-8.75a5.5 5.5 0 10-11 0c0 2.54 2.2 5.24 5.5 8.75z" />
+    <circle cx="12" cy="9.75" r="1.75" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 20.25h5" />
+  </svg>
+);
+
+export const FixturesResultsIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <rect x="6.75" y="8" width="10.5" height="8" rx="1.5" />
+    <path strokeLinecap="round" d="M12 8v8" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 10.5h2M13 13.5h2" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 13.5l1.25-1.25" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5l-1.25 1.25" />
+    <circle cx="12" cy="12" r="1.35" />
+  </svg>
+);
+
+export const LeagueTableChartIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" d="M7.25 15.5v-3.75M10.5 15.5v-6M13.75 15.5V9M17 15.5V11" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 17.5h12" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7.25 11.75l2.5-2.5 2.25 2.25 3-3 2.75 2.25" />
+  </svg>
+);
+
+export const GroundsIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <rect x="6.75" y="7.75" width="10.5" height="8.5" rx="1.75" />
+    <path strokeLinecap="round" d="M6.75 12h10.5" />
+    <circle cx="12" cy="12" r="1.75" />
+    <path strokeLinecap="round" d="M9 7.75v8.5M15 7.75v8.5" />
+  </svg>
+);
+
+export const CommunityIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5c-2.35 0-4.25 1.14-4.25 2.5v.5" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5c2.35 0 4.25 1.14 4.25 2.5v.5" />
+    <circle cx="12" cy="11" r="2.5" />
+    <circle cx="7.75" cy="10" r="1.75" />
+    <circle cx="16.25" cy="10" r="1.75" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7.75 17.5v-1.25c0-1.1.75-2.1 1.85-2.45" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.25 17.5v-1.25c0-1.1-.75-2.1-1.85-2.45" />
+  </svg>
+);
+
+export const CommunityHeartIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8 16.75c0-1.38 1.3-2.75 2.9-2.75.92 0 1.66.47 2.1 1.07.44-.6 1.18-1.07 2.1-1.07 1.6 0 2.9 1.37 2.9 2.75 0 2.23-2.34 3.65-5 5.25-2.66-1.6-5-3.02-5-5.25z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7.25 11.75l1.25-2.25M16.75 11.75l-1.25-2.25" />
+    <circle cx="9" cy="9" r="1.5" />
+    <circle cx="15" cy="9" r="1.5" />
+  </svg>
+);
+
+export const AboutIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5c-1.24 0-2.25.86-2.25 1.92 0 .7.41 1.28 1.05 1.61l.6.31c.58.3.9.76.9 1.31 0 .83-.67 1.5-1.5 1.5" />
+    <path strokeLinecap="round" d="M12 16.5h.01" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 18.5h5" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.5 12a3.5 3.5 0 10-5.74-3.85" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14.5 5.75l.75-1.75" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 5.75L8.75 4" />
+  </svg>
+);
+
 export const UsersIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75c-3.728 0-6.75 1.77-6.75 3.25V21c0-2.485 3.022-4.5 6.75-4.5s6.75 2.015 6.75 4.5v1c0-1.48-3.022-3.25-6.75-3.25z" />

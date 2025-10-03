@@ -1,22 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import type { Match } from '../types';
 import { MatchListItem } from './MatchListItem';
+import { formatDateUK } from '../utils/date';
 
 interface MatchdayViewProps {
   matches: Match[];
   attendedMatchIds: string[];
   onAttend: (match: Match) => void;
 }
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
 
 type ActiveTab = 'fixtures' | 'results';
 
@@ -89,7 +80,7 @@ export const MatchdayView: React.FC<MatchdayViewProps> = ({ matches, attendedMat
         {sortedDateKeys.map(dateKey => (
           <div key={dateKey}>
             <h2 className="mb-4 border-b-2 border-primary pb-2 text-xl font-bold text-text-strong">
-              {formatDate(dateKey)}
+              {formatDateUK(dateKey)}
             </h2>
             <div className="space-y-4">
               {groupedMatches[dateKey].map(match => (

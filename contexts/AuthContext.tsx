@@ -90,6 +90,9 @@ interface StoredAccount {
   name: string;
   createdAt: string;
   updatedAt: string;
+  avatarUrl?: string;
+  avatarSource?: User['avatarSource'];
+  avatarUpdatedAt?: string;
 }
 
 const isBrowser = () => typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
@@ -538,12 +541,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         displayName: account.name,
         email: account.identifier.includes('@') ? account.identifier : null,
         isAnonymous: false,
+        avatarUrl: account.avatarUrl ?? null,
       };
 
       persistAuthUser(authUser);
       setCurrentUser(authUser);
       const existingProfile = ensureProfileForUser(authUser.uid, {
         name: account.name,
+        avatarUrl: account.avatarUrl,
+        avatarSource: account.avatarSource,
+        avatarUpdatedAt: account.avatarUpdatedAt,
       });
       setProfile(existingProfile);
     } catch (error) {
@@ -591,11 +598,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         displayName: name,
         email: identifier.includes('@') ? identifier : null,
         isAnonymous: false,
+        avatarUrl: account.avatarUrl ?? null,
       };
 
       persistAuthUser(authUser);
       setCurrentUser(authUser);
-      const newProfile = ensureProfileForUser(authUser.uid, { name });
+      const newProfile = ensureProfileForUser(authUser.uid, {
+        name,
+        avatarUrl: account.avatarUrl,
+        avatarSource: account.avatarSource,
+        avatarUpdatedAt: account.avatarUpdatedAt,
+      });
       setProfile(newProfile);
     } catch (error) {
       setProfile((prev) => prev ?? ensureProfileForUser('offline-user', { name: 'Guest' }));
@@ -676,19 +689,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (currentUser) {
       let shouldPersistAuthUser = false;
       let nextAuthUser: AuthUser = currentUser;
+      const accountChanges: Partial<StoredAccount> = {};
+      let hasAccountChanges = false;
 
       if (Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')) {
         nextAuthUser = { ...nextAuthUser, avatarUrl: updatedUser.avatarUrl ?? null };
         shouldPersistAuthUser = true;
+        accountChanges.avatarUrl = updatedUser.avatarUrl ?? undefined;
+        accountChanges.avatarSource = newProfileUser.avatarSource;
+        accountChanges.avatarUpdatedAt = newProfileUser.avatarUpdatedAt;
+        hasAccountChanges = true;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(updatedUser, 'avatarSource')) {
+        accountChanges.avatarSource = newProfileUser.avatarSource;
+        hasAccountChanges = true;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUpdatedAt')) {
+        accountChanges.avatarUpdatedAt = newProfileUser.avatarUpdatedAt;
+        hasAccountChanges = true;
       }
 
       if (Object.prototype.hasOwnProperty.call(updatedUser, 'name')) {
         nextAuthUser = { ...nextAuthUser, displayName: newProfileUser.name };
         shouldPersistAuthUser = true;
+        accountChanges.name = newProfileUser.name;
+        hasAccountChanges = true;
+      }
+
+      if (hasAccountChanges) {
         updateStoredAccounts((prev) =>
           prev.map((account) =>
             account.id === currentUser.uid
-              ? { ...account, name: newProfileUser.name, updatedAt: new Date().toISOString() }
+              ? { ...account, ...accountChanges, updatedAt: new Date().toISOString() }
               : account
           )
         );
