@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import type {
   User,
   AttendedMatch,
@@ -61,6 +61,9 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   login: () => Promise<void>;
+  loginWithCredentials: (identifier: string, password: string) => Promise<void>;
+  signup: (input: { name: string; email: string; password: string }) => Promise<void>;
+  requestPasswordReset: (identifier: string) => Promise<void>;
   logout: () => Promise<void>;
   addAttendedMatch: (match: AttendedMatch['match']) => Promise<void>;
   removeAttendedMatch: (matchId: string) => Promise<void>;
@@ -77,6 +80,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const LOCAL_PROFILE_KEY = 'scrum-book:profile';
 const LOCAL_AUTH_KEY = 'scrum-book:auth-user';
 const GOOGLE_IDENTITY_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
+const LOCAL_ACCOUNTS_KEY = 'scrum-book:accounts';
+const LOCAL_PASSWORD_RESET_PREFIX = 'scrum-book:password-reset-requested';
+
+interface StoredAccount {
+  id: string;
+  identifier: string;
+  password: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const isBrowser = () => typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
@@ -216,6 +230,56 @@ const getDefaultUserDetails = (user: AuthUser | null): Partial<User> => {
   };
 };
 
+const normaliseIdentifier = (identifier: string) => identifier.trim().toLowerCase();
+
+const hashPassword = (password: string) => {
+  try {
+    if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
+      return window.btoa(password);
+    }
+  } catch (error) {
+    console.warn('Falling back to deterministic password hashing.', error);
+  }
+  return Array.from(password)
+    .map((char) => char.charCodeAt(0).toString(16))
+    .join('-');
+};
+
+const loadStoredAccounts = (): StoredAccount[] => {
+  if (!isBrowser()) {
+    return [];
+  }
+  const raw = window.localStorage.getItem(LOCAL_ACCOUNTS_KEY);
+  if (!raw) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(raw) as StoredAccount[];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed;
+  } catch (error) {
+    console.warn('Failed to parse stored accounts. Clearing saved credentials.', error);
+    window.localStorage.removeItem(LOCAL_ACCOUNTS_KEY);
+    return [];
+  }
+};
+
+const persistStoredAccounts = (accounts: StoredAccount[]) => {
+  if (!isBrowser()) {
+    return;
+  }
+  window.localStorage.setItem(LOCAL_ACCOUNTS_KEY, JSON.stringify(accounts));
+};
+
+const createAccountId = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `scrum-user-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
 const loadGoogleIdentityServices = async (): Promise<GoogleIdentityServices> => {
   if (!isBrowser()) {
     throw new Error('Google Sign-In requires a browser environment.');
@@ -347,6 +411,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [accounts, setAccounts] = useState<StoredAccount[]>(() => (isBrowser() ? loadStoredAccounts() : []));
+
+  const updateStoredAccounts = useCallback(
+    (updater: (previous: StoredAccount[]) => StoredAccount[]) => {
+      setAccounts((prev) => {
+        const next = updater(prev);
+        persistStoredAccounts(next);
+        return next;
+      });
+    },
+    []
+  );
+
+  const getAccountByIdentifier = useCallback(
+    (identifier: string) => {
+      const normalised = normaliseIdentifier(identifier);
+      return accounts.find((account) => account.identifier === normalised) ?? null;
+    },
+    [accounts]
+  );
 
   const activeProfileStorageKey = useMemo(() => currentUser?.uid ?? 'offline-user', [currentUser?.uid]);
 
@@ -421,6 +505,125 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const loginWithCredentials = async (identifier: string, password: string) => {
+    const trimmedIdentifier = identifier.trim();
+    if (!trimmedIdentifier) {
+      throw new Error('Please enter your email or phone number.');
+    }
+    if (!password) {
+      throw new Error('Please enter your password.');
+    }
+
+    setLoading(true);
+    try {
+      const account = getAccountByIdentifier(trimmedIdentifier);
+      if (!account) {
+        throw new Error('We couldn\'t find an account with those details.');
+      }
+      const hashedInput = hashPassword(password);
+      if (account.password !== hashedInput) {
+        throw new Error('Incorrect password. Please try again.');
+      }
+
+      updateStoredAccounts((prev) =>
+        prev.map((existing) =>
+          existing.id === account.id
+            ? { ...existing, updatedAt: new Date().toISOString() }
+            : existing
+        )
+      );
+
+      const authUser: AuthUser = {
+        uid: account.id,
+        displayName: account.name,
+        email: account.identifier.includes('@') ? account.identifier : null,
+        isAnonymous: false,
+      };
+
+      persistAuthUser(authUser);
+      setCurrentUser(authUser);
+      const existingProfile = ensureProfileForUser(authUser.uid, {
+        name: account.name,
+      });
+      setProfile(existingProfile);
+    } catch (error) {
+      setProfile((prev) => prev ?? ensureProfileForUser('offline-user', { name: 'Guest' }));
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signup = async (input: { name: string; email: string; password: string }) => {
+    const name = input.name.trim();
+    const email = input.email.trim();
+    if (!name) {
+      throw new Error('Please tell us your name.');
+    }
+    if (!email) {
+      throw new Error('Email is required to create an account.');
+    }
+    if (input.password.length < 6) {
+      throw new Error('Passwords need to be at least 6 characters long.');
+    }
+
+    const identifier = normaliseIdentifier(email);
+    if (getAccountByIdentifier(identifier)) {
+      throw new Error('An account already exists with that email address.');
+    }
+
+    setLoading(true);
+    try {
+      const now = new Date().toISOString();
+      const account: StoredAccount = {
+        id: createAccountId(),
+        identifier,
+        password: hashPassword(input.password),
+        name,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      updateStoredAccounts((prev) => [...prev, account]);
+
+      const authUser: AuthUser = {
+        uid: account.id,
+        displayName: name,
+        email: identifier.includes('@') ? identifier : null,
+        isAnonymous: false,
+      };
+
+      persistAuthUser(authUser);
+      setCurrentUser(authUser);
+      const newProfile = ensureProfileForUser(authUser.uid, { name });
+      setProfile(newProfile);
+    } catch (error) {
+      setProfile((prev) => prev ?? ensureProfileForUser('offline-user', { name: 'Guest' }));
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const requestPasswordReset = async (identifier: string) => {
+    const trimmed = identifier.trim();
+    if (!trimmed) {
+      throw new Error('Enter the email associated with your account.');
+    }
+
+    const account = getAccountByIdentifier(trimmed);
+    if (!account) {
+      throw new Error('We couldn\'t find an account with that email.');
+    }
+
+    if (isBrowser()) {
+      const storageKey = `${LOCAL_PASSWORD_RESET_PREFIX}:${account.id}`;
+      window.localStorage.setItem(storageKey, new Date().toISOString());
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 600));
+  };
+
   const logout = async () => {
     setLoading(true);
     persistAuthUser(null);
@@ -470,10 +673,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setProfile(nextProfile);
     persistProfileForUser(activeProfileStorageKey, nextProfile);
 
-    if (currentUser && Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')) {
-      const nextAuthUser: AuthUser = { ...currentUser, avatarUrl: updatedUser.avatarUrl ?? null };
-      setCurrentUser(nextAuthUser);
-      persistAuthUser(nextAuthUser);
+    if (currentUser) {
+      let shouldPersistAuthUser = false;
+      let nextAuthUser: AuthUser = currentUser;
+
+      if (Object.prototype.hasOwnProperty.call(updatedUser, 'avatarUrl')) {
+        nextAuthUser = { ...nextAuthUser, avatarUrl: updatedUser.avatarUrl ?? null };
+        shouldPersistAuthUser = true;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(updatedUser, 'name')) {
+        nextAuthUser = { ...nextAuthUser, displayName: newProfileUser.name };
+        shouldPersistAuthUser = true;
+        updateStoredAccounts((prev) =>
+          prev.map((account) =>
+            account.id === currentUser.uid
+              ? { ...account, name: newProfileUser.name, updatedAt: new Date().toISOString() }
+              : account
+          )
+        );
+      }
+
+      if (shouldPersistAuthUser) {
+        setCurrentUser(nextAuthUser);
+        persistAuthUser(nextAuthUser);
+      }
     }
   };
 
@@ -566,6 +790,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     profile,
     loading,
     login,
+    loginWithCredentials,
+    signup,
+    requestPasswordReset,
     logout,
     addAttendedMatch,
     removeAttendedMatch,

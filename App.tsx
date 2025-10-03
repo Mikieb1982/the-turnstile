@@ -30,7 +30,19 @@ const App: React.FC = () => {
   const themeMode = theme === 'dark' ? 'dark' : 'light';
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  const { currentUser, profile, loading: authLoading, login, logout, addAttendedMatch, removeAttendedMatch, updateUser } = useAuth();
+  const {
+    currentUser,
+    profile,
+    loading: authLoading,
+    login,
+    loginWithCredentials,
+    signup,
+    requestPasswordReset,
+    logout,
+    addAttendedMatch,
+    removeAttendedMatch,
+    updateUser,
+  } = useAuth();
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -92,7 +104,15 @@ const App: React.FC = () => {
 
     const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
     if (!currentUser && protectedViews.includes(view)) {
-      return <LoginPromptView onLogin={login} theme={themeMode} />;
+      return (
+        <LoginPromptView
+          onLogin={login}
+          onEmailLogin={loginWithCredentials}
+          onSignup={signup}
+          onPasswordReset={requestPasswordReset}
+          theme={themeMode}
+        />
+      );
     }
 
     // While authenticating, show a spinner for protected views
