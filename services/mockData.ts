@@ -1,6 +1,6 @@
 // fixtures.ts
 
-import type { Match, LeagueStanding, Venue } from 'types';
+import type { Match, LeagueStanding, Team, Venue } from 'types';
 
 // ---------- Teams ----------
 export const TEAMS = {
@@ -19,7 +19,8 @@ export const TEAMS = {
   wakefield: { id: '13', name: 'Wakefield Trinity', logoUrl: 'https://www.thesportsdb.com/images/media/team/badge/en323k1599320716.png' }
 } as const;
 
-type TeamEntry = (typeof TEAMS)[keyof typeof TEAMS];
+const WINNER_SF1: Team = { id: 'winner-sf1', name: 'TBC (Winner SF1)', logoUrl: '' };
+const WINNER_SF2: Team = { id: 'winner-sf2', name: 'TBC (Winner SF2)', logoUrl: '' };
 
 // ---------- Team branding ----------
 export interface TeamBranding {
@@ -120,8 +121,8 @@ export const VENUE_LOCATIONS: Record<string, { x: number; y: number; name: strin
 // ---------- Match factory helpers ----------
 const createMatch = (
   id: number,
-  homeTeam: TeamEntry,
-  awayTeam: TeamEntry,
+  homeTeam: Team,
+  awayTeam: Team,
   status: Match['status'],
   daysOffset: number,
   homeScore: number,
@@ -163,8 +164,8 @@ const createMatch = (
 
 const createMatchOnDate = (
   id: number,
-  homeTeam: TeamEntry,
-  awayTeam: TeamEntry,
+  homeTeam: Team,
+  awayTeam: Team,
   status: Match['status'],
   date: Date,
   homeScore: number,
@@ -227,6 +228,23 @@ export const mockMatches: Match[] = [
   createMatch(16, TEAMS.huddersfield, TEAMS.stHelens, 'FULL-TIME', -40, 12, 24, VENUES.johnSmiths),
   createMatch(17, TEAMS.warrington, TEAMS.stHelens, 'FULL-TIME', -50, 6, 18, VENUES.halliwellJones),
   createMatch(18, TEAMS.leigh, TEAMS.stHelens, 'FULL-TIME', -25, 10, 30, VENUES.leighSportsVillage),
+
+  // 2024 fixtures
+  createMatchOnDate(101, TEAMS.leeds, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-11T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leeds.id]),
+  createMatchOnDate(102, TEAMS.wigan, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(103, TEAMS.leigh, TEAMS.stHelens, 'SCHEDULED', new Date('2024-09-12T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(104, TEAMS.wakefield, TEAMS.hullKR, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.wakefield.id]),
+  createMatchOnDate(105, TEAMS.hullFC, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-13T17:30:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
+  createMatchOnDate(106, TEAMS.huddersfield, TEAMS.salford, 'SCHEDULED', new Date('2024-09-14T15:00:00'), 0, 0, teamIdToVenue[TEAMS.huddersfield.id]),
+  createMatchOnDate(107, TEAMS.hullKR, TEAMS.warrington, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(108, TEAMS.stHelens, TEAMS.castleford, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.stHelens.id]),
+  createMatchOnDate(109, TEAMS.leigh, TEAMS.huddersfield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.leigh.id]),
+  createMatchOnDate(110, TEAMS.salford, TEAMS.wakefield, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.salford.id]),
+  createMatchOnDate(111, TEAMS.hullFC, TEAMS.catalans, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.hullFC.id]),
+  createMatchOnDate(112, TEAMS.wigan, TEAMS.leeds, 'SCHEDULED', new Date('2024-09-19T20:00:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(113, TEAMS.wigan, TEAMS.leigh, 'SCHEDULED', new Date('2024-10-03T20:00:00+01:00'), 0, 0, teamIdToVenue[TEAMS.wigan.id]),
+  createMatchOnDate(114, TEAMS.hullKR, TEAMS.stHelens, 'SCHEDULED', new Date('2024-10-04T17:30:00+01:00'), 0, 0, teamIdToVenue[TEAMS.hullKR.id]),
+  createMatchOnDate(115, WINNER_SF1, WINNER_SF2, 'SCHEDULED', new Date('2024-10-11T18:00:00+01:00'), 0, 0, VENUES.oldTrafford),
 
   // 2025 results
   createMatchOnDate(201, TEAMS.wigan, TEAMS.leigh, 'FULL-TIME', new Date('2025-02-13T13:00:00'), 0, 1, teamIdToVenue[TEAMS.wigan.id]),
