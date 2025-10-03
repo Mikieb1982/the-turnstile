@@ -92,6 +92,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       <div className={styles.profilePage}>
         <section className={styles.hero}>
           <div className={styles.heroBackdrop} aria-hidden="true" />
+          <div className={styles.heroLogo} aria-hidden="true">
+            <LogoIcon className={styles.heroLogoIcon} theme="light" />
+          </div>
           <div className={styles.heroContent}>
             <div className={styles.identityRow}>
               <div className={styles.identityMain}>
@@ -143,12 +146,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     </span>
                   )}
                 </div>
-              </div>
-              <div className={styles.logoMount}>
-                <LogoIcon className={styles.logoMountIcon} theme="light" />
-              </div>
-              <div className={styles.logoMount}>
-                <LogoIcon className={styles.logoMountIcon} theme="light" />
               </div>
             </div>
 
