@@ -147,6 +147,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               <div className={styles.logoMount}>
                 <LogoIcon className={styles.logoMountIcon} theme="light" />
               </div>
+              <div className={styles.logoMount}>
+                <LogoIcon className={styles.logoMountIcon} theme="light" />
+              </div>
             </div>
 
             <dl className={styles.statRow}>

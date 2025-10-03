@@ -72,6 +72,7 @@
   justify-content: center;
   min-width: clamp(150px, 32vw, 190px);
   flex-shrink: 0;
+
   z-index: 1;
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
@@ -98,9 +99,8 @@
 
 .logoMountIcon {
   width: clamp(3.75rem, 9vw, 4.75rem);
-  max-width: 100%;
-  aspect-ratio: 1 / 1;
-  height: auto;
+
+  height: clamp(3.75rem, 9vw, 4.75rem);
   display: block;
   filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
 }
@@ -110,6 +110,7 @@
     margin-top: 0.5rem;
   }
 }
+
 
 .avatarWrap {
   position: relative;
