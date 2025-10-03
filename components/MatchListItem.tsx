@@ -11,6 +11,7 @@ import {
 import { TeamLogo } from './TeamLogo';
 import { ALL_VENUES } from '../services/mockData';
 import { getDistance } from '../utils/geolocation';
+import { formatDateUK } from '../utils/date';
 
 interface MatchListItemProps {
   match: Match;
@@ -32,7 +33,7 @@ const isToday = (dateString: string): boolean => {
   );
 };
 
-const formatICalDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+const formatCalendarDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
 export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended, onAttend, distance }) => {
   const [checkinState, setCheckinState] = useState<{
@@ -63,33 +64,22 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
 
     const startDate = new Date(match.startTime);
     const endDate = new Date(startDate.getTime() + 105 * 60 * 1000);
+    const summary = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
+    const details = `Betfred Super League: ${summary}`;
 
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'BEGIN:VEVENT',
-      `UID:${match.id}@thescrumbook.com`,
-      `DTSTAMP:${formatICalDate(new Date())}`,
-      `DTSTART:${formatICalDate(startDate)}`,
-      `DTEND:${formatICalDate(endDate)}`,
-      `SUMMARY:${match.homeTeam.name} vs ${match.awayTeam.name}`,
-      `DESCRIPTION:Betfred Super League: ${match.homeTeam.name} vs ${match.awayTeam.name}`,
-      `LOCATION:${match.venue}`,
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].join('\r\n');
+    const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+    calendarUrl.searchParams.set('action', 'TEMPLATE');
+    calendarUrl.searchParams.set('text', summary);
+    calendarUrl.searchParams.set('dates', `${formatCalendarDate(startDate)}/${formatCalendarDate(endDate)}`);
+    calendarUrl.searchParams.set('details', details);
+    calendarUrl.searchParams.set('location', match.venue);
+    calendarUrl.searchParams.set('sf', 'true');
+    calendarUrl.searchParams.set('output', 'xml');
 
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    const fileName = `${match.homeTeam.name.replace(/\s/g, '_')}-vs-${match.awayTeam.name.replace(/\s/g, '_')}.ics`;
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const newWindow = window.open(calendarUrl.toString(), '_blank');
+    if (!newWindow) {
+      window.location.href = calendarUrl.toString();
+    }
   };
 
   const handleCheckIn = (event: React.MouseEvent) => {
@@ -219,7 +209,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
           </div>
           <div className="flex items-center gap-1.5">
             <ClockIcon className="h-4 w-4" />
-            <span>{new Date(match.startTime).toLocaleDateString()}</span>
+            <span>{formatDateUK(match.startTime)}</span>
           </div>
           {distance !== undefined && (
             <div className="font-semibold text-primary">

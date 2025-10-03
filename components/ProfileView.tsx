@@ -16,6 +16,7 @@ import {
 } from './Icons';
 import { TEAMS } from '../services/mockData';
 import styles from './ProfileView.module.css';
+import { formatDateUK } from '../utils/date';
 
 // Helper to get team details by ID
 const getTeamById = (teamId?: string) => {
@@ -206,7 +207,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     <span className={styles.matchMeta}>
                       {recentMatch.match.venue}
                       {' · '}
-                      {new Date(recentMatch.attendedOn).toLocaleDateString()}
+                      {formatDateUK(recentMatch.attendedOn)}
                     </span>
                   </div>
                 ) : (
