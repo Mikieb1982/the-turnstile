@@ -13,6 +13,7 @@ import { TeamLogo } from './TeamLogo';
 import { ALL_VENUES } from '../services/mockData';
 import { getDistance } from '../utils/geolocation';
 import { formatDateUK } from '../utils/date';
+import { attemptShare, getAppShareUrl, type ShareOutcome } from '../utils/share';
 
 interface MatchListItemProps {
   match: Match;
@@ -264,8 +265,8 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
             <span>{formatDateUK(match.startTime)}</span>
           </div>
           {distance !== undefined && (
-            <div className="font-semibold text-primary">
-              <span>{distance.toFixed(1)} mi away</span>
+            <div className="flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 text-xs font-semibold text-text-strong shadow-sm ring-1 ring-border/60">
+              <span className="tracking-tight">{distance.toFixed(1)} mi away</span>
             </div>
           )}
         </div>

@@ -5,6 +5,7 @@ import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
 import { ShareIcon, ShieldCheckIcon, UserCircleIcon } from './Icons';
 import { formatDateUK } from '../utils/date';
+import { attemptShare, getAppShareUrl, type ShareOutcome } from '../utils/share';
 
 interface StatsViewProps {
     attendedMatches: AttendedMatch[];
