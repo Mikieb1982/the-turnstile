@@ -16,10 +16,7 @@ export const CommunityView: React.FC = () => {
       </div>
 
       <div className="bg-surface rounded-xl shadow-card p-8 text-center space-y-4 border border-dashed border-border">
-        <p className="text-lg text-text-subtle">
-          Community features are unavailable in offline mode. Link a Firebase project to browse other fans, add friends, and share
-          your matchday moments across devices.
-        </p>
+        <p className="text-lg text-text-subtle">Coming Soon.</p>
         {!currentUser && (
           <div className="flex items-center justify-center gap-3 text-text-subtle">
             <ArrowRightOnRectangleIcon className="w-5 h-5" />
