@@ -5,6 +5,7 @@ import { TeamLogo } from './TeamLogo';
 import { useAuth } from '../contexts/AuthContext';
 import { PhotoUploadModal } from './PhotoUploadModal';
 import { PhotoViewerModal } from './PhotoViewerModal';
+import { formatDateUK } from '../utils/date';
 
 interface MyMatchesViewProps {
     attendedMatches: AttendedMatch[];
@@ -162,7 +163,7 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
                                     <div className="flex justify-between items-start mb-3">
                                         <p className="text-sm text-primary font-semibold">{match.competition?.name || 'Super League'}</p>
                                         <p className="text-xs text-text-subtle">
-                                            Attended: {new Date(attendedOn).toLocaleDateString()}
+                                            Attended: {formatDateUK(attendedOn)}
                                         </p>
                                     </div>
 
@@ -195,7 +196,7 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <CalendarIcon className="w-3 h-3"/>
-                                            <span>Match Date: {new Date(match.startTime).toLocaleDateString()}</span>
+                                            <span>Match Date: {formatDateUK(match.startTime)}</span>
                                         </div>
                                     </div>
                                 </div>

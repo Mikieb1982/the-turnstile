@@ -2,6 +2,7 @@ import React from 'react';
 import type { AttendedMatch } from '../types';
 import { XMarkIcon } from './Icons';
 import { TeamLogo } from './TeamLogo';
+import { formatDateUK } from '../utils/date';
 
 interface PhotoViewerModalProps {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
             </div>
           </div>
           <p className="text-xs text-text-subtle text-center mt-2">
-            {match.venue} &bull; Attended on {new Date(attendedOn).toLocaleDateString()}
+            {match.venue} &bull; Attended on {formatDateUK(attendedOn)}
           </p>
         </div>
       </div>
