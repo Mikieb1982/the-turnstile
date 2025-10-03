@@ -82,6 +82,11 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
     event.preventDefault();
     if (activeRequest) return;
 
+    if (!loginForm.identifier.trim() || !loginForm.password.trim()) {
+      setFeedback({ type: 'error', message: 'Enter your email (or phone) and password to continue.' });
+      return;
+    }
+
     setRequest('login');
     try {
       await onEmailLogin(loginForm.identifier, loginForm.password);
@@ -133,6 +138,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
         password: signupForm.password,
       });
       setFeedback({ type: 'success', message: 'Account created! Setting up your experience…' });
+      setSignupForm({ name: '', email: '', password: '', confirmPassword: '', acceptsTerms: false });
     } catch (error) {
       setFeedback({
         type: 'error',
@@ -207,9 +213,18 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
   const renderLoginCard = () => (
     <div className="mx-auto w-full max-w-[420px]">
-      <div className="overflow-hidden rounded-[36px] bg-gradient-to-b from-[#08304a] via-[#062436] to-[#03131f] px-8 pb-12 pt-14 text-white shadow-2xl">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-white/10 shadow-[0px_15px_35px_rgba(3,19,31,0.45)]">
+      <div className="relative overflow-hidden rounded-[36px] bg-[#031a29] px-8 pb-12 pt-14 text-white shadow-[0px_25px_60px_rgba(3,26,41,0.55)]">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-[#103852] opacity-50 blur-3xl" />
+          <LogoIcon
+            className="absolute -top-28 left-1/2 h-60 w-60 -translate-x-1/2 opacity-[0.08]"
+            theme="dark"
+            aria-hidden
+          />
+        </div>
+
+        <div className="relative flex flex-col items-center text-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-white/5 shadow-[0px_15px_35px_rgba(3,19,31,0.45)]">
             <LogoIcon className="h-12 w-12 drop-shadow" theme={theme} />
           </div>
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Scrum Book</p>
@@ -219,12 +234,12 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
           </p>
         </div>
 
-        <form className="mt-8 space-y-5" onSubmit={handleCredentialLogin}>
+        <form className="relative mt-8 space-y-5" onSubmit={handleCredentialLogin}>
           <div>
             <label className="sr-only" htmlFor="auth-identifier">
               Email or phone number
             </label>
-            <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-base transition focus-within:border-white focus-within:bg-white/10">
+            <div className="flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-base transition focus-within:border-white/60 focus-within:bg-white/10">
               <EnvelopeIcon className="h-5 w-5 text-white/70" />
               <input
                 id="auth-identifier"
@@ -243,7 +258,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
             <label className="sr-only" htmlFor="auth-password">
               Password
             </label>
-            <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-base transition focus-within:border-white focus-within:bg-white/10">
+            <div className="flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-base transition focus-within:border-white/60 focus-within:bg-white/10">
               <LockClosedIcon className="h-5 w-5 text-white/70" />
               <input
                 id="auth-password"
@@ -270,7 +285,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-[#032130] shadow-[0px_10px_30px_rgba(3,23,34,0.4)] transition hover:bg-white/90 disabled:opacity-70"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-[#032130] shadow-[0px_12px_35px_rgba(3,19,31,0.45)] transition hover:bg-white/90 disabled:opacity-70"
             disabled={busy('login')}
           >
             {busy('login') ? (
@@ -321,8 +336,9 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   );
 
   const renderSignupCard = () => (
-    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-[36px] bg-white shadow-2xl">
-      <div className="bg-[#031d2c] px-10 pb-12 pt-16 text-white">
+    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-[36px] bg-white shadow-[0px_25px_60px_rgba(3,26,41,0.35)]">
+      <div className="relative bg-[#031d2c] px-10 pb-12 pt-16 text-white">
+        <LogoIcon className="absolute -right-14 -top-14 h-40 w-40 opacity-[0.08]" theme="dark" aria-hidden />
         <p className="text-lg font-semibold uppercase tracking-[0.35em] text-white/60">Let&apos;s</p>
         <h2 className="mt-3 text-4xl font-heading leading-[1.15]">
           Create
@@ -434,7 +450,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   );
 
   const renderForgotCard = () => (
-    <div className="mx-auto w-full max-w-[420px] overflow-hidden rounded-[36px] bg-white text-[#0B2A2F] shadow-2xl">
+    <div className="mx-auto w-full max-w-[420px] overflow-hidden rounded-[36px] bg-white text-[#0B2A2F] shadow-[0px_25px_60px_rgba(3,26,41,0.35)]">
       <div className="px-10 pb-8 pt-12 text-center">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#0B2A2F]/10 text-[#0B2A2F]">
           <LockClosedIcon className="h-7 w-7" />
@@ -443,7 +459,8 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
         <p className="mt-3 text-sm text-[#375566]">No worries, we&apos;ll send you reset instructions.</p>
       </div>
 
-      <div className="bg-[#031d2c] px-10 pb-10 pt-10 text-white">
+      <div className="relative bg-[#031d2c] px-10 pb-10 pt-10 text-white">
+        <LogoIcon className="pointer-events-none absolute -bottom-10 right-8 h-28 w-28 opacity-[0.08]" theme="dark" aria-hidden />
         <form className="space-y-6" onSubmit={handleForgotPassword}>
           <div>
             <label className="sr-only" htmlFor="forgot-email">
@@ -489,12 +506,15 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
             Back to Login
           </button>
         </form>
+        <div className="mt-8 flex justify-center">
+          <LogoIcon className="h-8 w-8 opacity-80" theme="dark" />
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div className="py-6 sm:py-10">
+    <div className="flex flex-col items-center justify-center py-10 sm:py-12">
       {mode === 'login' ? renderLoginCard() : null}
       {mode === 'signup' ? renderSignupCard() : null}
       {mode === 'forgot' ? renderForgotCard() : null}
