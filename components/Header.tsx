@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogoIcon, MenuIcon, XMarkIcon } from './Icons';
+import { ArrowLeftIcon, LogoIcon, MenuIcon, XMarkIcon } from './Icons';
 import type { View } from '../types';
 import styles from './Header.module.css';
 
@@ -13,9 +13,24 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = (props) => {
   const { setView, theme, isMobileNavOpen, onMobileNavToggle } = props;
   const themeMode = theme === 'dark' ? 'dark' : 'light';
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      setView('UPCOMING');
+    }
+  };
 
   return (
     <>
+      <button
+        type="button"
+        className={`md:hidden ${styles.backButton}`}
+        onClick={handleBack}
+        aria-label="Go back"
+      >
+        <ArrowLeftIcon className={styles.backIcon} />
+      </button>
       <button
         type="button"
         className={`md:hidden ${styles.logoButton}`}
