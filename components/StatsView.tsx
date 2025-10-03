@@ -4,8 +4,7 @@ import type { AttendedMatch, User } from '../types';
 import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
 import { ShareIcon, ShieldCheckIcon, UserCircleIcon } from './Icons';
-import { attemptShare, getAppShareUrl } from '../utils/share';
-import type { ShareOutcome } from '../utils/share';
+import { formatDateUK } from '../utils/date';
 
 interface StatsViewProps {
     attendedMatches: AttendedMatch[];
@@ -183,7 +182,7 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
                         <h3 className="absolute top-2 left-4 text-white font-bold text-sm">BEST MATCH OF 2024</h3>
                     </div>
                     <div className="p-4">
-                        <p className="text-xs font-semibold text-text-subtle">{new Date(stats.bestMatchOfSeason.match.startTime).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric'})}</p>
+                        <p className="text-xs font-semibold text-text-subtle">{formatDateUK(stats.bestMatchOfSeason.match.startTime)}</p>
                         <p className="font-bold">{stats.bestMatchOfSeason.match.venue}</p>
                         <div className="flex items-center justify-between mt-2">
                              <div className="flex items-center gap-2">

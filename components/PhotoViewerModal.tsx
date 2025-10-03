@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import type { AttendedMatch } from '../types';
 import { ShareIcon, XMarkIcon } from './Icons';
 import { TeamLogo } from './TeamLogo';
+import { formatDateUK } from '../utils/date';
 
 interface PhotoViewerModalProps {
   isOpen: boolean;
@@ -64,45 +65,10 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
     }
   };
 
-  const handleOpenShareTarget = useCallback((url: string, { sameTab = false } = {}) => {
+  const handleOpenShareTarget = useCallback((url: string) => {
     if (typeof window === 'undefined') return;
-    if (sameTab) {
-      window.location.href = url;
-    } else {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
-    setIsShareMenuOpen(false);
-  }, [setIsShareMenuOpen]);
-
-  const handleDownloadPhoto = useCallback(() => {
-    if (typeof document === 'undefined') {
-      return;
-    }
-
-    const normalizedName = shareDetails.shareTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'matchday-memory';
-    let extension = 'jpg';
-
-    try {
-      const url = new URL(shareDetails.shareUrl);
-      const pathSegment = url.pathname.split('.').pop();
-      if (pathSegment && /^[a-z0-9]{3,5}$/i.test(pathSegment)) {
-        extension = pathSegment.toLowerCase();
-      }
-    } catch {
-      const inlineMatch = shareDetails.shareUrl.match(/\.([a-z0-9]{3,5})(?:\?|$)/i);
-      if (inlineMatch) {
-        extension = inlineMatch[1].toLowerCase();
-      }
-    }
-
-    const link = document.createElement('a');
-    link.href = shareDetails.shareUrl;
-    link.download = `${normalizedName}.${extension}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setIsShareMenuOpen(false);
-  }, [shareDetails.shareTitle, shareDetails.shareUrl]);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }, []);
 
   const handleCopyLink = async () => {
     if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
@@ -126,7 +92,6 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
     const encodedUrl = encodeURIComponent(shareDetails.shareUrl);
     const encodedQuote = encodeURIComponent(shareDetails.shareText);
     const encodedEmailBody = encodeURIComponent(shareDetails.emailBody);
-    const encodedTitle = encodeURIComponent(shareDetails.shareTitle);
 
     return [
       {
@@ -142,28 +107,12 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
         action: () => handleOpenShareTarget(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedQuote}`),
       },
       {
-        label: 'X (Twitter)',
-        action: () => handleOpenShareTarget(`https://twitter.com/intent/tweet?text=${encodedQuote}&url=${encodedUrl}`),
-      },
-      {
-        label: 'Telegram',
-        action: () => handleOpenShareTarget(`https://t.me/share/url?url=${encodedUrl}&text=${encodedQuote}`),
-      },
-      {
-        label: 'Messenger',
-        action: () => handleOpenShareTarget(`https://www.messenger.com/t/?link=${encodedUrl}&text=${encodedQuote}`),
-      },
-      {
         label: 'Snapchat',
         action: () => handleOpenShareTarget(`https://www.snapchat.com/scan?attachmentUrl=${encodedUrl}`),
       },
       {
         label: 'Email',
-        action: () => handleOpenShareTarget(`mailto:?subject=${encodedTitle}&body=${encodedEmailBody}`, { sameTab: true }),
-      },
-      {
-        label: 'SMS',
-        action: () => handleOpenShareTarget(`sms:?&body=${encodedMessage}`, { sameTab: true }),
+        action: () => handleOpenShareTarget(`mailto:?subject=${encodeURIComponent(shareDetails.shareTitle)}&body=${encodedEmailBody}`),
       },
     ];
   }, [handleOpenShareTarget, shareDetails]);
@@ -212,12 +161,12 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
             </div>
           </div>
           <p className="text-xs text-text-subtle text-center mt-2">
-            {match.venue} &bull; Attended on {new Date(attendedOn).toLocaleDateString()}
+            {match.venue} &bull; Attended on {formatDateUK(attendedOn)}
           </p>
           {(isShareMenuOpen || copyState === 'copied' || copyState === 'error') && (
             <div className="mt-4 border-t border-border pt-4">
               <p className="text-sm font-semibold text-text">Share this memory</p>
-              <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 {shareTargets.map(target => (
                   <button
                     key={target.label}
@@ -232,12 +181,6 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
                   className="rounded-lg border border-dashed border-border px-3 py-2 text-sm font-medium text-text hover:border-primary/60 hover:text-primary transition-colors"
                 >
                   {copyState === 'copied' ? 'Link copied!' : copyState === 'error' ? 'Copy failed' : 'Copy link'}
-                </button>
-                <button
-                  onClick={handleDownloadPhoto}
-                  className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-text hover:border-primary/60 hover:text-primary transition-colors"
-                >
-                  Download photo
                 </button>
               </div>
             </div>

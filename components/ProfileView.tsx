@@ -16,6 +16,7 @@ import {
 } from './Icons';
 import { TEAMS } from '../services/mockData';
 import styles from './ProfileView.module.css';
+import { formatDateUK } from '../utils/date';
 
 // Helper to get team details by ID
 const getTeamById = (teamId?: string) => {
@@ -92,61 +93,61 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       <div className={styles.profilePage}>
         <section className={styles.hero}>
           <div className={styles.heroBackdrop} aria-hidden="true" />
-          <div className={styles.heroLogo} aria-hidden="true">
-            <LogoIcon className={styles.heroLogoIcon} theme="light" />
-          </div>
           <div className={styles.heroContent}>
-            <div className={styles.identityRow}>
-              <div className={styles.identityMain}>
-                <div className={styles.avatarWrap}>
-                  {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
-                  ) : (
-                    <UserCircleIcon className={styles.avatarPlaceholder} />
-                  )}
-                  <button
-                    onClick={() => setIsAvatarModalOpen(true)}
-                    className={styles.avatarEdit}
-                    aria-label="Edit avatar"
-                  >
-                    <PencilIcon />
-                  </button>
-                </div>
-                <div className={styles.identityText}>
-                  {isEditingName ? (
-                    <form onSubmit={handleSaveName} className={styles.nameForm}>
-                      <input
-                        type="text"
-                        value={pendingName}
-                        onChange={(e) => setPendingName(e.target.value)}
-                        onBlur={handleSaveName}
-                        autoFocus
-                      />
-                      <button type="submit">Save</button>
-                    </form>
-                  ) : (
-                    <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
-                      <span>{user.name}</span>
-                      <PencilIcon aria-hidden="true" />
-                    </button>
-                  )}
-                  <span className={styles.tagline}>
-                    <SparklesIcon aria-hidden="true" />
-                    {profileTagline}
-                  </span>
-                  {favoriteTeam && (
-                    <span className={styles.teamBadge}>
-                      <TeamLogo
-                        teamId={favoriteTeam.id}
-                        teamName={favoriteTeam.name}
-                        size="small"
-                        className={styles.teamLogoBadge}
-                      />
-                      {favoriteTeam.name}
-                    </span>
-                  )}
-                </div>
+
+            <div className={styles.topRow}>
+              <div className={styles.avatarWrap}>
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Profile avatar" className={styles.avatarImage} />
+                ) : (
+                  <UserCircleIcon className={styles.avatarPlaceholder} />
+                )}
+                <button
+                  onClick={() => setIsAvatarModalOpen(true)}
+                  className={styles.avatarEdit}
+                  aria-label="Edit avatar"
+                >
+                  <PencilIcon />
+                </button>
               </div>
+              <div className={styles.logoWrap} aria-hidden="true">
+                <LogoIcon className={styles.logoImage} theme="light" />
+              </div>
+            </div>
+
+            <div className={styles.identityText}>
+              {isEditingName ? (
+                <form onSubmit={handleSaveName} className={styles.nameForm}>
+                  <input
+                    type="text"
+                    value={pendingName}
+                    onChange={(e) => setPendingName(e.target.value)}
+                    onBlur={handleSaveName}
+                    autoFocus
+                  />
+                  <button type="submit">Save</button>
+                </form>
+              ) : (
+                <button type="button" onClick={() => setIsEditingName(true)} className={styles.nameButton}>
+                  <span>{user.name}</span>
+                  <PencilIcon aria-hidden="true" />
+                </button>
+              )}
+              <span className={styles.tagline}>
+                <SparklesIcon aria-hidden="true" />
+                {profileTagline}
+              </span>
+              {favoriteTeam && (
+                <span className={styles.teamBadge}>
+                  <TeamLogo
+                    teamId={favoriteTeam.id}
+                    teamName={favoriteTeam.name}
+                    size="small"
+                    className={styles.teamLogoBadge}
+                  />
+                  {favoriteTeam.name}
+                </span>
+              )}
             </div>
 
             <dl className={styles.statRow}>
@@ -206,7 +207,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     <span className={styles.matchMeta}>
                       {recentMatch.match.venue}
                       {' · '}
-                      {new Date(recentMatch.attendedOn).toLocaleDateString()}
+                      {formatDateUK(recentMatch.attendedOn)}
                     </span>
                   </div>
                 ) : (
