@@ -206,20 +206,20 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   const busy = (request: ActiveRequest) => activeRequest === request;
 
   const renderLoginCard = () => (
-    <div className="relative mx-auto w-full max-w-[420px]">
-      <div className="relative overflow-hidden rounded-[36px] bg-gradient-to-b from-[#08304a] via-[#062436] to-[#03131f] px-8 pb-12 pt-32 text-white shadow-2xl">
-        <div className="absolute inset-x-0 -top-24 flex justify-center">
-          <div className="flex h-44 w-44 items-center justify-center rounded-full border border-white/10 bg-gradient-to-b from-[#0f4460] to-[#03111b] shadow-[0px_25px_60px_rgba(0,0,0,0.45)]">
-            <LogoIcon className="h-24 w-24 drop-shadow-lg" theme={theme} />
+    <div className="mx-auto w-full max-w-[420px]">
+      <div className="overflow-hidden rounded-[36px] bg-gradient-to-b from-[#08304a] via-[#062436] to-[#03131f] px-8 pb-12 pt-14 text-white shadow-2xl">
+        <div className="flex flex-col items-center text-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-white/10 shadow-[0px_15px_35px_rgba(3,19,31,0.45)]">
+            <LogoIcon className="h-12 w-12 drop-shadow" theme={theme} />
           </div>
-        </div>
-
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Scrum Book</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Scrum Book</p>
           <h1 className="mt-3 text-3xl font-heading font-bold leading-snug">Rugby League Check In</h1>
+          <p className="mt-3 max-w-xs text-sm text-white/60">
+            Sign in to manage your matchdays, track your stats, and stay connected with the rugby league community.
+          </p>
         </div>
 
-        <form className="mt-10 space-y-5" onSubmit={handleCredentialLogin}>
+        <form className="mt-8 space-y-5" onSubmit={handleCredentialLogin}>
           <div>
             <label className="sr-only" htmlFor="auth-identifier">
               Email or phone number
@@ -494,7 +494,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   );
 
   return (
-    <div className="py-10">
+    <div className="py-6 sm:py-10">
       {mode === 'login' ? renderLoginCard() : null}
       {mode === 'signup' ? renderSignupCard() : null}
       {mode === 'forgot' ? renderForgotCard() : null}

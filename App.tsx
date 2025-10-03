@@ -24,6 +24,8 @@ import { LoginPromptView } from './components/LoginPromptView';
 import { LogoIcon, MenuIcon } from './components/Icons';
 import { syncThemeWithFavouriteTeam } from './utils/themeUtils';
 
+const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
+
 const App: React.FC = () => {
   const [view, setView] = useState<View>('PROFILE');
   const [theme, toggleTheme] = useTheme();
@@ -66,8 +68,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (!initialLoadStarted.current) {
-        initialLoadStarted.current = true;
-        loadAppData();
+      initialLoadStarted.current = true;
+      loadAppData();
     }
   }, [loadAppData]);
 
@@ -91,6 +93,14 @@ const App: React.FC = () => {
     }
   };
 
+  const shouldShowLoginPrompt = !currentUser && protectedViews.includes(view);
+
+  useEffect(() => {
+    if (shouldShowLoginPrompt) {
+      setIsMobileNavOpen(false);
+    }
+  }, [shouldShowLoginPrompt]);
+
   const renderContent = () => {
     if (error) {
       return <ErrorDisplay message={error} onRetry={loadAppData} />;
@@ -102,8 +112,7 @@ const App: React.FC = () => {
       </div>;
     }
 
-    const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
-    if (!currentUser && protectedViews.includes(view)) {
+    if (shouldShowLoginPrompt) {
       return (
         <LoginPromptView
           onLogin={login}
@@ -189,43 +198,56 @@ const App: React.FC = () => {
     }
   };
 
+  const mainBaseClasses = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
+  const mainSpacing = shouldShowLoginPrompt ? 'py-16 md:py-20 flex items-center justify-center' : 'py-10 md:py-12 pb-16';
+
   return (
     <div className="min-h-screen font-sans text-text app-background">
-      <Header
-        setView={setView}
-        theme={theme}
-        isMobileNavOpen={isMobileNavOpen}
-        onMobileNavToggle={() => setIsMobileNavOpen((open) => !open)}
-      />
-      <button
-        type="button"
-        className="hidden md:flex fixed top-6 right-6 z-20 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
-        onClick={() => setIsMobileNavOpen(true)}
-        aria-label="Open navigation menu"
-      >
-        <MenuIcon className="w-5 h-5" />
-        <span>Menu</span>
-      </button>
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 md:py-12 pb-16">
-        <div className="space-y-8">
-          {renderContent()}
-        </div>
+      {!shouldShowLoginPrompt ? (
+        <>
+          <Header
+            setView={setView}
+            theme={theme}
+            isMobileNavOpen={isMobileNavOpen}
+            onMobileNavToggle={() => setIsMobileNavOpen((open) => !open)}
+          />
+          <button
+            type="button"
+            className="hidden md:flex fixed top-6 right-6 z-20 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
+            onClick={() => setIsMobileNavOpen(true)}
+            aria-label="Open navigation menu"
+          >
+            <MenuIcon className="w-5 h-5" />
+            <span>Menu</span>
+          </button>
+        </>
+      ) : null}
+      <main className={`${mainBaseClasses} ${mainSpacing}`}>
+        {shouldShowLoginPrompt ? (
+          <div className="w-full">{renderContent()}</div>
+        ) : (
+          <div className="space-y-8">{renderContent()}</div>
+        )}
       </main>
-      <MobileNav
-        currentView={view}
-        setView={setView}
-        currentUser={currentUser}
-        isOpen={isMobileNavOpen}
-        onClose={() => setIsMobileNavOpen(false)}
-        theme={themeMode}
-        toggleTheme={toggleTheme}
-        onLogout={logout}
-      />
-      <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
-        <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
-        <p className="font-semibold text-text">The Scrum Book</p>
-        <p className="mt-1">Your ultimate rugby league companion. Track matches, earn badges, and connect with other fans.</p>
-      </footer>
+      {!shouldShowLoginPrompt ? (
+        <>
+          <MobileNav
+            currentView={view}
+            setView={setView}
+            currentUser={currentUser}
+            isOpen={isMobileNavOpen}
+            onClose={() => setIsMobileNavOpen(false)}
+            theme={themeMode}
+            toggleTheme={toggleTheme}
+            onLogout={logout}
+          />
+          <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
+            <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
+            <p className="font-semibold text-text">The Scrum Book</p>
+            <p className="mt-1">Your ultimate rugby league companion. Track matches, earn badges, and connect with other fans.</p>
+          </footer>
+        </>
+      ) : null}
     </div>
   );
 };
