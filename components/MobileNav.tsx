@@ -14,8 +14,6 @@ import {
   ChartBarIcon,
   LogoIcon,
   XMarkIcon,
-  SunIcon,
-  MoonIcon,
   ArrowLeftOnRectangleIcon,
 } from './Icons';
 
@@ -26,7 +24,6 @@ interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
   theme: 'light' | 'dark';
-  toggleTheme: () => void;
   onLogout: () => void;
 }
 
@@ -62,7 +59,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   isOpen,
   onClose,
   theme,
-  toggleTheme,
   onLogout,
 }) => {
   const handleNavigate = (view: View) => {
@@ -188,32 +184,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   );
                 })}
               </ul>
-            </div>
-
-            <div className="rounded-xl border border-border/70 bg-surface-alt/40 px-4 py-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-heading text-lg text-text-strong">Appearance</p>
-                  <p className="text-xs text-text-subtle">Switch between light and dark themes</p>
-                </div>
-                <button
-                  onClick={toggleTheme}
-                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border"
-                  aria-label="Toggle theme"
-                >
-                  {theme === 'dark' ? (
-                    <>
-                      <SunIcon className="h-4 w-4" />
-                      <span>Light</span>
-                    </>
-                  ) : (
-                    <>
-                      <MoonIcon className="h-4 w-4" />
-                      <span>Dark</span>
-                    </>
-                  )}
-                </button>
-              </div>
             </div>
 
             <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">

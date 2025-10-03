@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
 export const useTheme = (): [string, () => void] => {
-  // Default to light, but user's preference in localStorage will override it.
-  const [theme, setTheme] = useLocalStorage<string>('theme', 'light');
+  // Default to dark, but the user's preference in localStorage will override it.
+  const [theme, setTheme] = useLocalStorage<string>('theme', 'dark');
 
   useEffect(() => {
     const root = window.document.documentElement;
