@@ -275,7 +275,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
           {isScheduled && (
             <button
               onClick={handleAddToCalendar}
-              className="flex items-center gap-1.5 rounded-md border border-info bg-info px-3 py-1.5 text-xs font-semibold text-white transition-colors duration-200 hover:bg-info/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-surface-alt"
+              className="flex items-center gap-1.5 rounded-md bg-info px-3 py-1.5 text-xs font-semibold text-white transition-colors duration-200 hover:bg-info/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-surface-alt"
               aria-label="Add match to calendar"
             >
               <CalendarPlusIcon className="h-4 w-4" />
