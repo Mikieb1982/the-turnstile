@@ -61,7 +61,7 @@ const App: React.FC = () => {
 
     return 'PROFILE';
   });
-  const [theme, toggleTheme] = useTheme();
+  const [theme] = useTheme();
   const themeMode = theme === 'dark' ? 'dark' : 'light';
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
@@ -280,7 +280,6 @@ const App: React.FC = () => {
             isOpen={isMobileNavOpen}
             onClose={() => setIsMobileNavOpen(false)}
             theme={themeMode}
-            toggleTheme={toggleTheme}
             onLogout={logout}
           />
           <MobileBottomBar currentView={view} setView={setView} />
