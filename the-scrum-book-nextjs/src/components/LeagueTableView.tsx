@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import type { LeagueStanding, Venue } from '@/types';
-import { fetchLeagueTable } from '@/services/apiService';
+import { fetchLeagueTable, type ApiDataSource } from '@/services/apiService';
 import { LoadingSpinner } from './LoadingSpinner';
 import { ErrorDisplay } from './ErrorDisplay';
 import { RefreshIcon, AlertTriangleIcon } from './Icons';
@@ -32,13 +32,15 @@ export const LeagueTableView: React.FC = () => {
     const [table, setTable] = useState<LeagueStanding[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [dataSource, setDataSource] = useState<ApiDataSource | null>(null);
 
     const loadTable = async () => {
         setLoading(true);
         setError(null);
         try {
-            const leagueTable = await fetchLeagueTable();
+            const { data: leagueTable, source } = await fetchLeagueTable();
             setTable(leagueTable);
+            setDataSource(source);
         } catch (err) {
             setError("Could not load the league table. Please try again later.");
         } finally {
@@ -67,7 +69,7 @@ export const LeagueTableView: React.FC = () => {
         <div className="space-y-6">
             <div className="flex items-center gap-3 border-b border-border pb-4">
                 <h1 className="text-3xl font-bold text-text-strong">Betfred Super League Table</h1>
-                <button 
+                <button
                     onClick={loadTable}
                     className="p-2 rounded-full text-text-subtle hover:bg-surface-alt transition-colors"
                     aria-label="Refresh league table"
@@ -75,6 +77,19 @@ export const LeagueTableView: React.FC = () => {
                     <RefreshIcon className="w-6 h-6"/>
                 </button>
             </div>
+            {dataSource && dataSource !== 'firestore' ? (
+                <div className="flex items-start gap-3 rounded-xl border border-amber-400/40 bg-amber-500/10 p-4 text-sm text-amber-100">
+                    <AlertTriangleIcon className="mt-0.5 h-5 w-5 text-amber-200" />
+                    <div className="space-y-1">
+                        <p className="font-semibold text-amber-100">Live standings unavailable</p>
+                        <p className="text-amber-100/80">
+                            {dataSource === 'api-mock'
+                                ? 'The API could not reach your Firestore leagueTable collection, so the built-in standings are shown instead.'
+                                : 'The league table endpoint is offline, so the bundled standings are being displayed. Start the API or update NEXT_PUBLIC_API_BASE_URL to see the latest data.'}
+                        </p>
+                    </div>
+                </div>
+            ) : null}
             <div className="bg-surface rounded-md shadow-card overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-text">
