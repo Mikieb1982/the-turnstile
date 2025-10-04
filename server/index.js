@@ -22,10 +22,12 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 const attendedMatchSchema = z.object({
-  matchId: z
-    .string({ required_error: 'matchId is required' })
-    .trim()
-    .min(1, 'matchId must be a non-empty string')
+  match: z.object({
+    id: z
+      .string({ required_error: 'match.id is required' })
+      .trim()
+      .min(1, 'match.id must be a non-empty string')
+  })
 });
 
 app.get('/', (req, res) => {
@@ -85,7 +87,9 @@ app.post('/api/users/:userId/attended-matches', async (req, res) => {
     });
   }
 
-  const { matchId } = result.data;
+  const {
+    match: { id: matchId }
+  } = result.data;
 
   try {
     const userRef = db.collection('users').doc(userId);
