@@ -88,6 +88,7 @@ const respondWithMockData = (res, collection, error) => {
     console.info(`Firestore not configured. Serving mock ${collection} data.`);
   }
 
+  res.set('x-data-source', 'mock');
   const payload = collection === 'matches' ? getMockMatches() : getMockLeagueTable();
   res.status(200).json(payload);
 };
@@ -124,6 +125,7 @@ app.get('/api/matches', async (req, res) => {
     async () => {
       const snapshot = await db.collection('matches').get();
       const matches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      res.set('x-data-source', 'firestore');
       res.json(matches);
     },
     (error) => respondWithMockData(res, 'matches', error)
@@ -137,6 +139,7 @@ app.get('/api/league-table', async (req, res) => {
     async () => {
       const snapshot = await db.collection('leagueTable').get();
       const leagueTable = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      res.set('x-data-source', 'firestore');
       res.json(leagueTable);
     },
     (error) => respondWithMockData(res, 'league table', error)
