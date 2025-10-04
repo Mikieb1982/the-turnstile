@@ -74,7 +74,15 @@ const getProjectIdFromEnv = () =>
   getProjectIdFromCredentialsFile() ||
   admin.app().options.projectId;
 
-let firestoreAvailable = Boolean(process.env.FIRESTORE_EMULATOR_HOST || getProjectIdFromEnv());
+const hasConfiguredProjectId = Boolean(process.env.FIRESTORE_EMULATOR_HOST || getProjectIdFromEnv());
+
+if (!hasConfiguredProjectId) {
+  console.warn(
+    'Firestore project ID not detected from environment. Will attempt to query using application default credentials.'
+  );
+}
+
+let firestoreAvailable = true;
 
 const respondWithMockData = (res, collection, error) => {
   if (error) {
