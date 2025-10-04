@@ -3,17 +3,11 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "dist",
+    "source": "the-scrum-book-nextjs",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   }
 }
