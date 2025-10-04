@@ -158,6 +158,41 @@ This repository includes a GitHub Actions workflow (`.github/workflows/firebase-
    - `FIREBASE_SERVICE_ACCOUNT` — the full JSON of the service account credentials.
    - `FIREBASE_PROJECT_ID` — the target Firebase project ID (for example, `the-scrum-book`).
 3. Update `.firebaserc` so the `default` project matches the value of `FIREBASE_PROJECT_ID`.
+
+---
+
+## Managing secrets for Firebase Hosting (Next.js)
+
+Firebase Hosting now supports secure environment variables that are scoped to the Hosting site. These values are encrypted at rest, surfaced only to backend runtimes (for example, the Cloud Function that renders your Next.js pages), and never bundled into client-side JavaScript unless you deliberately expose them with the `NEXT_PUBLIC_` prefix.
+
+1. **Set the secret with the Firebase CLI.** Replace `<your-project-id>` with the Firebase project that backs this site. If you have multiple Hosting sites in the same project, pass `--site <site-id>` as well.
+
+   ```bash
+   firebase hosting:secret:set MY_API_KEY "super-secret-value" --project <your-project-id>
+   ```
+
+   You can confirm the value was recorded by running `firebase hosting:secret:list`.
+
+2. **Read the secret from server-side Next.js code.** During deployment the Firebase web framework integration injects Hosting secrets into `process.env` for the server runtime. Access them in API routes, `getServerSideProps`, server components, or other code that never runs in the browser:
+
+   ```ts
+   // Example: app/api/external/route.ts or pages/api/external.ts
+   export default async function handler() {
+     const apiKey = process.env.MY_API_KEY;
+
+     if (!apiKey) {
+       throw new Error('Missing MY_API_KEY secret');
+     }
+
+     const response = await fetch('https://example.com/secure-endpoint', {
+       headers: { Authorization: `Bearer ${apiKey}` },
+     });
+
+     return new Response(await response.text());
+   }
+   ```
+
+   Because the secret is resolved on the server, the browser never sees the value. If you need a value on the client, create a dedicated API route that proxies the request instead of exposing the secret itself.
 4. Push to `main` (or trigger the workflow manually from the **Actions** tab) to build the project and deploy to Firebase Hosting.
 
 The workflow uses `npm ci` and `npm run build` to ensure the production bundle is valid before publishing. Deployment status is reported directly in the pull request or commit checks.
