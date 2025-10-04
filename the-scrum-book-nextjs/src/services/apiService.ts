@@ -1,34 +1,35 @@
 import type { Match, LeagueStanding } from '@/types';
 import { mockMatches, mockLeagueTable } from './mockData';
 
-const logOfflineFallback = (collection: string) => {
-  console.info(`Using local mock data for ${collection}.`);
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
+
+const logOfflineFallback = (collection: string, reason?: string) => {
+  const suffix = reason ? ` (${reason})` : '';
+  console.info(`Using local mock data for ${collection}.${suffix}`);
 };
 
-export const fetchMatches = async (): Promise<Match[]> => {
+const fetchFromApi = async <T>(path: string, fallback: () => T, collection: string): Promise<T> => {
+  if (!API_BASE_URL) {
+    logOfflineFallback(collection, 'API base URL not configured');
+    return fallback();
+  }
+
   try {
-    const response = await fetch('http://localhost:3001/api/matches');
+    const response = await fetch(`${API_BASE_URL}${path}`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch matches: ${response.statusText}`);
+      throw new Error(response.statusText);
     }
 
-    return (await response.json()) as Match[];
+    return (await response.json()) as T;
   } catch (error) {
-    logOfflineFallback('matches');
-    return mockMatches;
+    console.error(`Failed to fetch ${collection}:`, error);
+    logOfflineFallback(collection);
+    return fallback();
   }
 };
 
-export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
-  try {
-    const response = await fetch('http://localhost:3001/api/league-table');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch league table: ${response.statusText}`);
-    }
+export const fetchMatches = async (): Promise<Match[]> =>
+  fetchFromApi<Match[]>('/matches', () => mockMatches, 'matches');
 
-    return (await response.json()) as LeagueStanding[];
-  } catch (error) {
-    logOfflineFallback('league table');
-    return mockLeagueTable;
-  }
-};
+export const fetchLeagueTable = async (): Promise<LeagueStanding[]> =>
+  fetchFromApi<LeagueStanding[]>('/league-table', () => mockLeagueTable, 'league table');

@@ -6,8 +6,9 @@ type IconProps = React.SVGProps<SVGSVGElement>;
 
 type ThemeMode = 'light' | 'dark';
 
-const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
-const logoDarkSrc = `${import.meta.env.BASE_URL}logodark.png`;
+const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/$/, '');
+const logoSrc = `${basePath}/logo-light.svg`;
+const logoDarkSrc = `${basePath}/logo-dark.svg`;
 
 interface LogoIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   theme?: ThemeMode;
