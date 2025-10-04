@@ -9,49 +9,56 @@ type ServiceAccountConfig = {
 
 const normalisePrivateKey = (key: string) => key.replace(/\\n/g, "\n");
 
-const readServiceAccountConfig = (): ServiceAccountConfig => {
+const parseServiceAccountConfig = (): ServiceAccountConfig | null => {
   const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
   if (serviceAccountJson) {
-    const parsed = JSON.parse(serviceAccountJson) as {
-      project_id: string;
-      client_email: string;
-      private_key: string;
-    };
+    try {
+      const parsed = JSON.parse(serviceAccountJson) as {
+        project_id: string;
+        client_email: string;
+        private_key: string;
+      };
 
-    return {
-      projectId: parsed.project_id,
-      clientEmail: parsed.client_email,
-      privateKey: parsed.private_key,
-    };
+      if (!parsed.project_id || !parsed.client_email || !parsed.private_key) {
+        throw new Error("FIREBASE_SERVICE_ACCOUNT is missing required fields");
+      }
+
+      return {
+        projectId: parsed.project_id,
+        clientEmail: parsed.client_email,
+        privateKey: parsed.private_key,
+      };
+    } catch (error) {
+      console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT:", error);
+      throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT environment variable");
+    }
   }
 
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error(
-      "Firestore configuration is missing. Provide FIREBASE_SERVICE_ACCOUNT or FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, and FIREBASE_PRIVATE_KEY environment variables."
-    );
+  if (projectId && clientEmail && privateKey) {
+    return {
+      projectId,
+      clientEmail,
+      privateKey,
+    };
   }
 
-  return {
-    projectId,
-    clientEmail,
-    privateKey,
-  };
+  return null;
 };
 
 let firestoreInstance: Firestore | null = null;
 
-export const getServerFirestore = (): Firestore => {
-  if (firestoreInstance) {
-    return firestoreInstance;
+const initialiseFirebaseAdmin = () => {
+  if (getApps().length) {
+    return;
   }
 
-  const apps = getApps();
-  if (!apps.length) {
-    const config = readServiceAccountConfig();
+  const config = parseServiceAccountConfig();
+
+  if (config) {
     initializeApp({
       credential: cert({
         projectId: config.projectId,
@@ -59,7 +66,18 @@ export const getServerFirestore = (): Firestore => {
         privateKey: normalisePrivateKey(config.privateKey),
       }),
     });
+  } else {
+    // Fall back to the default credentials resolution strategy used by firebase-admin.
+    initializeApp();
   }
+};
+
+export const getServerFirestore = (): Firestore => {
+  if (firestoreInstance) {
+    return firestoreInstance;
+  }
+
+  initialiseFirebaseAdmin();
 
   firestoreInstance = getFirestore();
   return firestoreInstance;
