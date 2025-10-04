@@ -24,7 +24,12 @@
 .heroBackdrop {
   position: absolute;
   inset: 0;
-  background-image: url('../background.png');
+  /*
+    Use the public asset so the deployed site resolves the background
+    correctly. Relative paths inside CSS modules point to the module
+    directory, which breaks once the app is built and deployed.
+  */
+  background-image: url('/background.png');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: left top;
