@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --require ./tests/register.js --test tests/utils/formatDateUK.test.ts tests/components/TeamLogo.test.tsx"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.59.7",
