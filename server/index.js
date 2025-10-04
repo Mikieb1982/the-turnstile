@@ -3,14 +3,36 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 const { z } = require('zod');
 
+const { mockLeagueTable, mockMatches } = require('./mockData');
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const getMockMatches = () => clone(mockMatches);
+const getMockLeagueTable = () => clone(mockLeagueTable);
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const safeJsonParse = (value, description) => {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.warn(`Failed to parse ${description}:`, error.message);
+    return null;
+  }
+};
+
+let serviceAccountProjectId;
+
 if (!admin.apps.length) {
-  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  const serviceAccount = safeJsonParse(process.env.FIREBASE_SERVICE_ACCOUNT, 'FIREBASE_SERVICE_ACCOUNT');
+
+  if (serviceAccount) {
+    serviceAccountProjectId = serviceAccount.project_id;
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
     });
@@ -20,6 +42,46 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+
+const firebaseConfig = safeJsonParse(process.env.FIREBASE_CONFIG, 'FIREBASE_CONFIG');
+
+const getProjectIdFromEnv = () =>
+  serviceAccountProjectId ||
+  firebaseConfig?.projectId ||
+  firebaseConfig?.project_id ||
+  process.env.GOOGLE_CLOUD_PROJECT ||
+  process.env.GCLOUD_PROJECT ||
+  admin.app().options.projectId;
+
+let firestoreAvailable = Boolean(process.env.FIRESTORE_EMULATOR_HOST || getProjectIdFromEnv());
+
+const respondWithMockData = (res, collection, error) => {
+  if (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`Falling back to mock ${collection} data: ${message}`);
+
+    if (message.includes('Unable to detect a Project Id')) {
+      firestoreAvailable = false;
+    }
+  } else {
+    console.info(`Firestore not configured. Serving mock ${collection} data.`);
+  }
+
+  const payload = collection === 'matches' ? getMockMatches() : getMockLeagueTable();
+  res.status(200).json(payload);
+};
+
+const withFirestore = async (res, collectionName, handler, fallback) => {
+  if (!firestoreAvailable) {
+    return respondWithMockData(res, collectionName);
+  }
+
+  try {
+    await handler();
+  } catch (error) {
+    fallback(error);
+  }
+};
 
 const attendedMatchSchema = z.object({
   match: z.object({
@@ -35,28 +97,36 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/matches', async (req, res) => {
-  try {
-    const snapshot = await db.collection('matches').get();
-    const matches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    res.json(matches);
-  } catch (error) {
-    console.error('Error fetching matches:', error);
-    res.status(500).json({ error: 'Failed to fetch matches' });
-  }
+  await withFirestore(
+    res,
+    'matches',
+    async () => {
+      const snapshot = await db.collection('matches').get();
+      const matches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      res.json(matches);
+    },
+    (error) => respondWithMockData(res, 'matches', error)
+  );
 });
 
 app.get('/api/league-table', async (req, res) => {
-  try {
-    const snapshot = await db.collection('leagueTable').get();
-    const leagueTable = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    res.json(leagueTable);
-  } catch (error) {
-    console.error('Error fetching league table:', error);
-    res.status(500).json({ error: 'Failed to fetch league table' });
-  }
+  await withFirestore(
+    res,
+    'league table',
+    async () => {
+      const snapshot = await db.collection('leagueTable').get();
+      const leagueTable = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      res.json(leagueTable);
+    },
+    (error) => respondWithMockData(res, 'league table', error)
+  );
 });
 
 app.get('/api/users/:userId/profile', async (req, res) => {
+  if (!firestoreAvailable) {
+    return res.status(503).json({ error: 'Firestore is not configured' });
+  }
+
   const { userId } = req.params;
 
   try {
@@ -74,6 +144,10 @@ app.get('/api/users/:userId/profile', async (req, res) => {
 });
 
 app.post('/api/users/:userId/attended-matches', async (req, res) => {
+  if (!firestoreAvailable) {
+    return res.status(503).json({ error: 'Firestore is not configured' });
+  }
+
   const { userId } = req.params;
   const result = attendedMatchSchema.safeParse(req.body);
 
