@@ -6,11 +6,29 @@ const logOfflineFallback = (collection: string) => {
 };
 
 export const fetchMatches = async (): Promise<Match[]> => {
-  logOfflineFallback('matches');
-  return mockMatches;
+  try {
+    const response = await fetch('http://localhost:3001/api/matches');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch matches: ${response.statusText}`);
+    }
+
+    return (await response.json()) as Match[];
+  } catch (error) {
+    logOfflineFallback('matches');
+    return mockMatches;
+  }
 };
 
 export const fetchLeagueTable = async (): Promise<LeagueStanding[]> => {
-  logOfflineFallback('league table');
-  return mockLeagueTable;
+  try {
+    const response = await fetch('http://localhost:3001/api/league-table');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch league table: ${response.statusText}`);
+    }
+
+    return (await response.json()) as LeagueStanding[];
+  } catch (error) {
+    logOfflineFallback('league table');
+    return mockLeagueTable;
+  }
 };
