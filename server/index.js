@@ -1,52 +1,53 @@
 const express = require('express');
 const cors = require('cors');
-const admin = require('firebase-admin');
-
-const serviceAccountEnv = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-
-if (!serviceAccountEnv) {
-  throw new Error(
-    'Missing required Firebase credentials. Set FIREBASE_SERVICE_ACCOUNT_KEY in the environment.',
-  );
-}
-
-let serviceAccount;
-
-try {
-  const rawJson = serviceAccountEnv.trim().startsWith('{')
-    ? serviceAccountEnv
-    : Buffer.from(serviceAccountEnv, 'base64').toString('utf8');
-
-  serviceAccount = JSON.parse(rawJson);
-} catch (error) {
-  throw new Error(
-    `Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY. Ensure it contains valid JSON. ${(error && error.message) || error}`,
-  );
-}
-
-if (serviceAccount.private_key) {
-  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-}
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID || serviceAccount.project_id,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL || serviceAccount.client_email,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY
-        ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-        : serviceAccount.private_key,
-    }),
-  });
-}
+const fs = require('fs');
+const path = require('path');
+const ts = require('typescript');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const loadMockData = () => {
+  const mockDataPath = path.resolve(__dirname, '../services/mockData.ts');
+  const tsSource = fs.readFileSync(mockDataPath, 'utf8');
+  const { outputText } = ts.transpileModule(tsSource, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true }
+  });
+
+  const module = { exports: {} };
+  const exports = module.exports;
+  const loader = new Function('require', 'module', 'exports', outputText);
+  loader(require, module, exports);
+
+  return module.exports;
+};
+
+const { mockMatches, mockLeagueTable } = loadMockData();
+
 app.get('/', (req, res) => {
   res.send('Server is running');
+});
+
+app.get('/api/matches', (req, res) => {
+  res.json(mockMatches);
+});
+
+app.get('/api/league-table', (req, res) => {
+  res.json(mockLeagueTable);
+});
+
+app.get('/api/users/:userId/profile', (req, res) => {
+  const { userId } = req.params;
+
+  res.json({
+    id: userId,
+    name: 'Placeholder User',
+    email: 'placeholder@example.com',
+    favouriteTeamId: null,
+    bio: 'This is a placeholder profile returned by the mock API.'
+  });
 });
 
 const PORT = process.env.PORT || 3001;
