@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The Scrum Book logo</title>
+  <desc id="desc">A rugby ball icon on a crimson and gold gradient circle.</desc>
+  <defs>
+    <linearGradient id="logoLightGradient" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7F1028" />
+      <stop offset="50%" stop-color="#B71E3C" />
+      <stop offset="100%" stop-color="#FFD447" />
+    </linearGradient>
+    <linearGradient id="ballLight" x1="40" y1="40" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F0F4FF" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#logoLightGradient)" />
+  <g transform="rotate(-20 64 64)">
+    <ellipse cx="64" cy="64" rx="40" ry="28" fill="url(#ballLight)" stroke="#1F2937" stroke-width="4" />
+    <path d="M36 64h56" stroke="#1F2937" stroke-width="4" stroke-linecap="round" />
+    <path d="M48 49l-6-12" stroke="#B71E3C" stroke-width="4" stroke-linecap="round" />
+    <path d="M80 49l6-12" stroke="#B71E3C" stroke-width="4" stroke-linecap="round" />
+    <path d="M48 79l-6 12" stroke="#B71E3C" stroke-width="4" stroke-linecap="round" />
+    <path d="M80 79l6 12" stroke="#B71E3C" stroke-width="4" stroke-linecap="round" />
+  </g>
+</svg>

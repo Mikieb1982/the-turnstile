@@ -64,7 +64,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   });
   const [forgotForm, setForgotForm] = useState({ email: '' });
 
-  const isGoogleConfigured = useMemo(() => Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID), []);
+  const isGoogleConfigured = useMemo(() => Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID), []);
   const canUseGoogle = Boolean(onLogin) && isGoogleConfigured;
 
   useEffect(() => {
@@ -327,7 +327,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
           {!canUseGoogle && onLogin && !isGoogleConfigured ? (
             <p className="text-center text-xs text-white/50">
-              Google Sign-In isn&apos;t configured. Set <code className="rounded bg-black/30 px-1">VITE_GOOGLE_CLIENT_ID</code> to enable it.
+              Google Sign-In isn&apos;t configured. Set <code className="rounded bg-black/30 px-1">NEXT_PUBLIC_GOOGLE_CLIENT_ID</code> to enable it.
             </p>
           ) : null}
 

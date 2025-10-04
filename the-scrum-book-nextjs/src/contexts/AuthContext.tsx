@@ -458,10 +458,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async () => {
     setLoading(true);
     try {
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
       if (!clientId) {
         throw new Error(
-          'Google Sign-In is not configured. Set the VITE_GOOGLE_CLIENT_ID environment variable to your OAuth client ID.'
+          'Google Sign-In is not configured. Set the NEXT_PUBLIC_GOOGLE_CLIENT_ID environment variable to your OAuth client ID.'
         );
       }
 
