@@ -1,0 +1,12 @@
+{
+  "name": "the-scrum-book",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "cd the-scrum-book-nextjs && npm run dev",
+    "build": "cd the-scrum-book-nextjs && npm run build",
+    "start": "cd the-scrum-book-nextjs && npm run start",
+    "lint": "cd the-scrum-book-nextjs && npm run lint",
+    "dev:server": "node server/index.js"
+  }
+}
