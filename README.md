@@ -66,7 +66,7 @@ Restart the dev server after editing `.env.local` so Vite can pick up the new en
 
 ### 3. Run the frontend and API servers
 
-Start the Vite dev server in one terminal:
+Start the Next.js dev server in one terminal:
 
 ```bash
 npm run dev
@@ -78,7 +78,7 @@ Then, in a **second** terminal window, start the API server so the frontend can 
 npm run dev:server
 ```
 
-Leave both commands running during development. The Vite server prints a local URL you can open in your browser, and hot module replacement is enabled for rapid iteration on copy and layout tweaks.
+Leave both commands running during development. The Next.js server prints a local URL you can open in your browser, and hot module replacement is enabled for rapid iteration on copy and layout tweaks.
 
 > ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage if the API server is not running.
 
@@ -94,7 +94,7 @@ The bundled assets are output to `dist/`. Use `npm run preview` to run the produ
 
 ## Available Scripts
 
-* `npm run dev` — start the Vite dev server with HMR
+* `npm run dev` — start the Next.js dev server with HMR
 * `npm run dev:server` — start the local API server used by the frontend during development
 * `npm run build` — bundle production assets
 * `npm run preview` — serve production build locally
