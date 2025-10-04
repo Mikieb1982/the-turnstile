@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-// ...
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "700"], // Specify the weights you need
-  variable: "--font-inter", // Keep the variable name the same for simplicity
-});
 import type { ReactNode } from "react";
 import "./globals.css";
 import { SentryErrorBoundary } from "./SentryErrorBoundary";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// Initialize Roboto, keeping the CSS variable name the same for simplicity
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"], // Specify the weights you need
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "The Scrum Book",
@@ -28,19 +27,17 @@ export default function RootLayout({
     // is added on the client, which can cause a mismatch with the server-rendered HTML.
     <html lang="en" className="h-full" suppressHydrationWarning>
       {/*
-        The hardcoded dark-mode classes (`bg-slate-950`, `text-slate-100`) have been removed.
-        Styling is now fully controlled by your dynamic theme system (via the `useTheme` hook)
-        and the base styles defined in `globals.css`.
+        The hardcoded dark-mode classes have been removed. Styling is now fully
+        controlled by your dynamic theme system and globals.css.
       */}
-      <body className={`${inter.variable} h-full font-sans antialiased`}>
+      <body className={`${roboto.variable} h-full font-sans antialiased`}>
         {/*
-          The static <header>, <main>, and <footer> elements have been removed from this file.
-          Your main application component (loaded via page.tsx) is now responsible for rendering the
-          entire page layout. This fixes the issue of having duplicate headers and allows
-          the dynamic theme to apply correctly to the whole UI.
+          The static layout elements have been removed. Your main application component
+          (page.tsx) now controls the entire page layout.
         */}
         <SentryErrorBoundary>{children}</SentryErrorBoundary>
       </body>
     </html>
   );
 }
+
