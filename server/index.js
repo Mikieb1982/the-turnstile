@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
+const fs = require('fs');
 const { z } = require('zod');
 
 const { mockLeagueTable, mockMatches } = require('./mockData');
@@ -45,12 +46,32 @@ const db = admin.firestore();
 
 const firebaseConfig = safeJsonParse(process.env.FIREBASE_CONFIG, 'FIREBASE_CONFIG');
 
+const getProjectIdFromCredentialsFile = () => {
+  const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+  if (!credentialsPath) {
+    return null;
+  }
+
+  try {
+    const fileContents = fs.readFileSync(credentialsPath, 'utf8');
+    const parsed = JSON.parse(fileContents);
+
+    return parsed.project_id || parsed.projectId || null;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`Failed to read GOOGLE_APPLICATION_CREDENTIALS: ${message}`);
+    return null;
+  }
+};
+
 const getProjectIdFromEnv = () =>
   serviceAccountProjectId ||
   firebaseConfig?.projectId ||
   firebaseConfig?.project_id ||
   process.env.GOOGLE_CLOUD_PROJECT ||
   process.env.GCLOUD_PROJECT ||
+  getProjectIdFromCredentialsFile() ||
   admin.app().options.projectId;
 
 let firestoreAvailable = Boolean(process.env.FIRESTORE_EMULATOR_HOST || getProjectIdFromEnv());
