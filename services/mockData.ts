@@ -224,6 +224,7 @@ const createKickoffDate = (dateString: string, index: number): Date => {
 };
 
 const RAW_2025_RESULTS: RawResult[] = [
+  { date: '2025-10-03', home_team: 'Wigan Warriors', away_team: 'Leigh Leopards', home_score: 18, away_score: 6 },
   { date: '2025-09-27', home_team: 'Leeds Rhinos', away_team: 'St Helens', home_score: 14, away_score: 16 },
   { date: '2025-09-26', home_team: 'Leigh Leopards', away_team: 'Wakefield Trinity', home_score: 26, away_score: 10 },
   { date: '2025-09-19', home_team: 'Leigh Leopards', away_team: 'Huddersfield Giants', home_score: 30, away_score: 16 },
@@ -419,16 +420,6 @@ const pastResults2025 = RAW_2025_RESULTS.reduce<Match[]>((accumulator, result, i
 // ---------- Mock data ----------
 export const mockMatches: Match[] = [
   // Upcoming play-off fixtures
-  createMatchOnDate(
-    113,
-    TEAMS.wigan,
-    TEAMS.leigh,
-    'SCHEDULED',
-    new Date('2025-10-03T20:00:00+01:00'),
-    0,
-    0,
-    teamIdToVenue[TEAMS.wigan.id]
-  ),
   createMatchOnDate(
     114,
     TEAMS.hullKR,
