@@ -53,8 +53,11 @@ body {
   It applies the dynamic gradients as a background.
 */
 .app-background {
-    background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
-    background-color: var(--clr-surface);
+  background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3), url('/background.png');
+  background-color: var(--clr-surface);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: auto, auto, auto, cover;
+  background-position: center, center, center, center;
 }
 
 a {
