@@ -1,7 +1,19 @@
 import type { Match, LeagueStanding } from '@/types';
 import { mockMatches, mockLeagueTable } from './mockData';
 
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
+const normaliseBaseUrl = (value: string | undefined | null) => {
+  if (!value) {
+    return '';
+  }
+
+  const trimmed = value.trim();
+  return trimmed.replace(/\/$/, '');
+};
+
+const resolvedEnvBaseUrl = normaliseBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL);
+const API_BASE_URL = resolvedEnvBaseUrl || '/api';
+
+const isRelativeApi = API_BASE_URL === '/api';
 
 const logOfflineFallback = (collection: string, reason?: string) => {
   const suffix = reason ? ` (${reason})` : '';
@@ -9,11 +21,6 @@ const logOfflineFallback = (collection: string, reason?: string) => {
 };
 
 const fetchFromApi = async <T>(path: string, fallback: () => T, collection: string): Promise<T> => {
-  if (!API_BASE_URL) {
-    logOfflineFallback(collection, 'API base URL not configured');
-    return fallback();
-  }
-
   try {
     const response = await fetch(`${API_BASE_URL}${path}`);
     if (!response.ok) {
@@ -22,8 +29,12 @@ const fetchFromApi = async <T>(path: string, fallback: () => T, collection: stri
 
     return (await response.json()) as T;
   } catch (error) {
-    console.error(`Failed to fetch ${collection}:`, error);
-    logOfflineFallback(collection);
+    const reason = error instanceof Error ? error.message : undefined;
+    const isFetchError = reason ? reason.toLowerCase().includes('fetch') : false;
+    if (!isRelativeApi || !isFetchError) {
+      console.error(`Failed to fetch ${collection}:`, error);
+    }
+    logOfflineFallback(collection, isRelativeApi ? 'internal API unavailable' : undefined);
     return fallback();
   }
 };
