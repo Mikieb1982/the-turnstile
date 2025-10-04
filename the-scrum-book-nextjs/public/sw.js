@@ -1,26 +1,17 @@
-const CACHE_NAME = "scrum-book-cache-v2";
-const CORE_ASSETS = ["/", "/manifest.webmanifest"];
+ const CACHE_NAME = "scrum-book-cache-v1";
+const ASSETS_TO_CACHE = [
+  "/",
+  "/manifest.webmanifest",
+  "/icon-192x192.png",
+  "/icon-512x512.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    (async () => {
-      const cache = await caches.open(CACHE_NAME);
-
-      await Promise.all(
-        CORE_ASSETS.map(async (asset) => {
-          try {
-            const response = await fetch(asset, { cache: "no-store" });
-            if (response.ok) {
-              await cache.put(asset, response.clone());
-            }
-          } catch (error) {
-            console.warn(`Failed to precache ${asset}`, error);
-          }
-        })
-      );
-
-      await self.skipWaiting();
-    })()
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(ASSETS_TO_CACHE))
+      .then(() => self.skipWaiting())
   );
 });
 
