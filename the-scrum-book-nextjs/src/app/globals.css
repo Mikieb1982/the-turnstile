@@ -3,59 +3,98 @@
 @tailwind utilities;
 
 :root {
-  /* Define light theme defaults that can be overridden by your themeUtils */
-  --clr-primary: #7F1028;
-  --clr-secondary: #FFD447;
-  --clr-accent: #0052CC;
-  --clr-danger: #7F1028;
-  --clr-warning: #FFD447;
-  --clr-info: #0052CC;
-  --clr-success: #00A86B;
-  --clr-text-strong: #121212;
-  --clr-text: #333333;
-  --clr-text-subtle: #666666;
-  --clr-border: #DDDDDD;
-  --clr-surface: #FFFFFF;
-  --clr-surface-alt: #F5F5F5;
-  --gradient-1: linear-gradient(140deg, rgba(127, 16, 40, 0.12), rgba(0, 82, 204, 0.1));
-  --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.18), transparent 55%);
-  --gradient-3: radial-gradient(circle at 80% 0%, rgba(127, 16, 40, 0.14), transparent 45%);
+  /* Refined light theme tuned for a modern rugby league aesthetic */
+  --clr-primary: #0b1d3a;
+  --clr-secondary: #ffb703;
+  --clr-accent: #0ea5e9;
+  --clr-danger: #ef233c;
+  --clr-warning: #f59e0b;
+  --clr-info: #0284c7;
+  --clr-success: #0ead69;
+  --clr-text-strong: #0f172a;
+  --clr-text: #1f2937;
+  --clr-text-subtle: #4b5563;
+  --clr-border: rgba(15, 23, 42, 0.16);
+  --clr-surface: #f8fafc;
+  --clr-surface-alt: rgba(248, 250, 252, 0.85);
+  --gradient-1: radial-gradient(circle at 12% 15%, rgba(14, 165, 233, 0.22), transparent 55%);
+  --gradient-2: radial-gradient(circle at 85% 10%, rgba(239, 35, 60, 0.28), transparent 60%);
+  --gradient-3: linear-gradient(160deg, rgba(11, 29, 58, 0.88), rgba(11, 29, 58, 0.35));
+  --grid-overlay: linear-gradient(120deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
   color-scheme: light;
 }
 
 html.dark {
-  /* Define dark theme defaults */
-  --clr-primary: #B71E3C;
-  --clr-secondary: #FFDD57;
-  --clr-accent: #0074FF;
-  --clr-danger: #B71E3C;
-  --clr-warning: #FFDD57;
-  --clr-info: #3B82F6;
-  --clr-success: #22C55E;
-  --clr-text-strong: #FFFFFF;
-  --clr-text: #E0E0E0;
-  --clr-text-subtle: #A0A0A0;
-  --clr-border: #404040;
-  --clr-surface: #1A1A1A;
-  --clr-surface-alt: #2C2C2C;
-  --gradient-1: linear-gradient(140deg, rgba(183, 30, 60, 0.24), rgba(0, 116, 255, 0.18));
-  --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%);
-  --gradient-3: radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%);
+  /* High-contrast dark theme with illuminated accents */
+  --clr-primary: #1d4ed8;
+  --clr-secondary: #f97316;
+  --clr-accent: #38bdf8;
+  --clr-danger: #f87171;
+  --clr-warning: #fb923c;
+  --clr-info: #60a5fa;
+  --clr-success: #4ade80;
+  --clr-text-strong: #e2e8f0;
+  --clr-text: #cbd5f5;
+  --clr-text-subtle: #94a3b8;
+  --clr-border: rgba(148, 163, 184, 0.24);
+  --clr-surface: #0b1220;
+  --clr-surface-alt: rgba(15, 23, 42, 0.85);
+  --gradient-1: radial-gradient(circle at 10% 18%, rgba(59, 130, 246, 0.35), transparent 58%);
+  --gradient-2: radial-gradient(circle at 90% 8%, rgba(249, 115, 22, 0.32), transparent 65%);
+  --gradient-3: linear-gradient(150deg, rgba(3, 7, 18, 0.95), rgba(17, 24, 39, 0.7));
+  --grid-overlay: linear-gradient(120deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
   color-scheme: dark;
 }
 
 body {
   color: var(--clr-text);
   background-color: var(--clr-surface);
+  background-image: var(--gradient-3);
+  min-height: 100vh;
 }
 
 /* This class should be applied to your main container in page.tsx.
-  It applies the dynamic gradients as a background.
-*/
+  It applies the dynamic gradients as a background and adds a subtle pitch grid. */
 .app-background {
-    background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
-    background-color: var(--clr-surface);
-} 
+  position: relative;
+  isolation: isolate;
+  background-color: var(--clr-surface);
+  background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.app-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--grid-overlay);
+  background-size: 320px 220px;
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+  transform: skewY(-3deg);
+  z-index: 0;
+}
+
+.app-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.18), transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 0.65;
+  z-index: 0;
+}
+
+.app-background > * {
+  position: relative;
+  z-index: 1;
+}
 
 a {
   color: inherit;

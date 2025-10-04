@@ -12,7 +12,7 @@ const config: Config = {
       fontFamily: {
         // Use the new, clearer variable name
         sans: "var(--font-roboto)",
-        heading: "var(--font-roboto)",
+        heading: "var(--font-heading)",
       },
       colors: {
         // These are CSS variables that will be dynamically set

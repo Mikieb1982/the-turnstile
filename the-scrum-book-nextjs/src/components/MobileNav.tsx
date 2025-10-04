@@ -76,31 +76,31 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 z-30 bg-[rgba(3,7,18,0.78)] backdrop-blur-sm transition-opacity duration-300 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'
         }`}
         onClick={onClose}
         aria-hidden={!isOpen}
       />
       <nav
-        className={`fixed inset-y-0 right-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-surface border-l border-border shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 right-0 z-40 w-80 max-w-[calc(100%-4rem)] transform bg-[rgba(8,15,34,0.92)] border-l border-white/10 shadow-[0_35px_120px_-60px_rgba(2,6,23,0.9)] backdrop-blur-xl transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         aria-hidden={!isOpen}
         aria-label="Mobile navigation"
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt/60 backdrop-blur">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-white/10 bg-gradient-to-r from-white/5 via-white/10 to-white/5">
             <div className="flex items-center gap-3">
               <LogoIcon className="h-10 w-10" theme={theme} />
               <div className="flex flex-col">
-                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
-                <span className="text-lg font-heading text-text-strong">Matchday Companion</span>
+                <span className="text-[11px] font-heading uppercase tracking-[0.4em] text-white/60">The Scrum Book</span>
+                <span className="text-xl font-heading uppercase tracking-[0.35em] text-white">Matchday Hub</span>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="rounded-full p-2 text-text-subtle transition-colors hover:bg-surface hover:text-text"
+              className="rounded-full border border-white/10 bg-white/10 p-2 text-white/70 transition-colors hover:text-white hover:bg-white/20"
               aria-label="Close navigation menu"
             >
               <XMarkIcon className="h-5 w-5" />
@@ -108,7 +108,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           </div>
           <div className="flex-1 px-5 py-6 space-y-6 overflow-y-auto">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Main Navigation</h2>
+              <h2 className="text-[11px] font-heading uppercase tracking-[0.4em] text-white/60 mb-4">Main Navigation</h2>
               <ul className="space-y-2">
                 {primaryItems.map(({ view, label, description, icon: Icon }) => {
                   const isActive = currentView === view;
@@ -116,25 +116,25 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                     <li key={view}>
                       <button
                         onClick={() => handleNavigate(view)}
-                        className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
+                        className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-200 ${
                           isActive
-                            ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
-                            : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+                            ? 'border-white/20 bg-gradient-to-r from-primary/80 via-primary/60 to-secondary/70 text-white shadow-[0_25px_60px_-30px_rgba(14,165,233,0.9)]'
+                            : 'border-white/5 bg-white/5 text-white/80 hover:border-white/20 hover:bg-white/10'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <span
-                            className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
+                            className={`flex h-11 w-11 items-center justify-center rounded-xl border ${
                               isActive
-                                ? 'border-primary/40 bg-primary/20 text-primary'
-                                : 'border-border/70 bg-surface text-text-subtle'
+                                ? 'border-white/40 bg-white/20 text-white'
+                                : 'border-white/10 bg-white/5 text-white/60'
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="font-heading text-lg text-text-strong">{label}</p>
-                            {description && <p className="text-xs text-text-subtle">{description}</p>}
+                            <p className="font-heading text-lg uppercase tracking-[0.2em] text-white">{label}</p>
+                            {description && <p className="text-[11px] text-white/70">{description}</p>}
                           </div>
                         </div>
                       </button>
@@ -145,7 +145,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             </div>
 
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle mb-4">Supporter Hub</h2>
+              <h2 className="text-[11px] font-heading uppercase tracking-[0.4em] text-white/60 mb-4">Supporter Hub</h2>
               <ul className="space-y-2">
                 {supporterItems.map(({ view, label, description, icon: Icon, isProtected }) => {
                   const isActive = currentView === view;
@@ -154,30 +154,30 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                     <li key={view}>
                       <button
                         onClick={() => !disabled && handleNavigate(view)}
-                        className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
+                        className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-200 ${
                           disabled
-                            ? 'cursor-not-allowed border-border/40 bg-surface-alt/30 text-text-subtle'
+                            ? 'cursor-not-allowed border-white/10 bg-white/5 text-white/50'
                             : isActive
-                              ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
-                              : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+                              ? 'border-white/20 bg-gradient-to-r from-primary/80 via-primary/60 to-secondary/70 text-white shadow-[0_25px_60px_-30px_rgba(14,165,233,0.9)]'
+                              : 'border-white/5 bg-white/5 text-white/80 hover:border-white/20 hover:bg-white/10'
                         }`}
                         aria-disabled={disabled}
                       >
                         <div className="flex items-center gap-3">
                           <span
-                            className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
+                            className={`flex h-11 w-11 items-center justify-center rounded-xl border ${
                               isActive
-                                ? 'border-primary/40 bg-primary/20 text-primary'
-                                : 'border-border/70 bg-surface text-text-subtle'
+                                ? 'border-white/40 bg-white/20 text-white'
+                                : 'border-white/10 bg-white/5 text-white/60'
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="font-heading text-lg text-text-strong">{label}</p>
-                            {description && <p className="text-xs text-text-subtle">{description}</p>}
+                            <p className="font-heading text-lg uppercase tracking-[0.2em] text-white">{label}</p>
+                            {description && <p className="text-[11px] text-white/70">{description}</p>}
                             {disabled && (
-                              <p className="text-[11px] font-medium text-danger mt-1">Login required</p>
+                              <p className="text-[11px] font-medium text-secondary mt-1">Login required</p>
                             )}
                           </div>
                         </div>
@@ -188,19 +188,19 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
-              <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
-              <p className="mt-2">
+            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-4 text-sm text-white/80 backdrop-blur">
+              <p className="font-heading text-lg uppercase tracking-[0.2em] text-white">Matchday Tip</p>
+              <p className="mt-2 text-[13px] leading-relaxed">
                 Keep your supporter log up to date to unlock new badges and season-long stats. Tap “My Matches” after every game you attend.
               </p>
             </div>
           </div>
           {currentUser && (
-            <div className="border-t border-border/70 bg-surface/80 px-5 py-4">
+            <div className="border-t border-white/10 bg-white/5 px-5 py-4">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border hover:bg-surface-alt/70"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-heading uppercase tracking-[0.3em] text-white/80 transition-all hover:text-white hover:border-white/30 hover:bg-white/20"
               >
                 <ArrowLeftOnRectangleIcon className="h-5 w-5" />
                 <span>Logout</span>
