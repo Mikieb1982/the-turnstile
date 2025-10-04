@@ -55,7 +55,7 @@ body {
 .app-background {
     background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
     background-color: var(--clr-surface);
-}
+} 
 
 a {
   color: inherit;
