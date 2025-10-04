@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
+// ...
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"], // Specify the weights you need
+  variable: "--font-inter", // Keep the variable name the same for simplicity
+});
 import type { ReactNode } from "react";
 import "./globals.css";
 import { SentryErrorBoundary } from "./SentryErrorBoundary";
