@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto, Barlow_Condensed } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { SentryErrorBoundary } from "./SentryErrorBoundary";
@@ -9,6 +9,12 @@ const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-roboto", // Changed from --font-inter for clarity
+});
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-heading",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={`${roboto.variable} h-full font-sans antialiased`}>
+      <body className={`${roboto.variable} ${barlowCondensed.variable} h-full font-sans antialiased`}>
         <SentryErrorBoundary>{children}</SentryErrorBoundary>
       </body>
     </html>

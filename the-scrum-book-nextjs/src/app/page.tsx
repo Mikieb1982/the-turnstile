@@ -232,10 +232,14 @@ const MainApp = () => {
   };
 
   const mainBaseClasses = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
-  const mainSpacing = shouldShowLoginPrompt ? 'py-16 md:py-20 flex items-center justify-center' : 'pt-24 md:pt-28 pb-28 md:pb-16';
+  const mainSpacing = shouldShowLoginPrompt ? 'py-16 md:py-20 flex items-center justify-center' : 'pt-28 md:pt-32 pb-32 md:pb-20';
+  const panelPadding = shouldShowLoginPrompt
+    ? 'px-6 py-8 sm:px-10 sm:py-12'
+    : 'px-4 py-6 sm:px-8 sm:py-10';
+  const panelClasses = `relative overflow-hidden rounded-3xl border border-border/70 bg-surface/90 backdrop-blur-xl shadow-[0_45px_120px_-60px_rgba(11,29,58,0.8)] ring-1 ring-white/10 ${panelPadding}`;
 
   return (
-    <div className="min-h-screen font-sans text-text app-background">
+    <div className="min-h-screen font-sans text-text app-background text-base">
       {!shouldShowLoginPrompt ? (
         <>
           <DesktopTopBar currentView={view} setView={setView} />
@@ -247,7 +251,7 @@ const MainApp = () => {
           />
           <button
             type="button"
-            className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
+            className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full bg-gradient-to-r from-primary via-primary/90 to-accent/80 px-5 py-2 text-sm font-semibold text-white shadow-[0_18px_40px_-15px_rgba(2,6,23,0.8)] transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
             onClick={() => setIsMobileNavOpen(true)}
             aria-label="Open navigation menu"
           >
@@ -257,7 +261,17 @@ const MainApp = () => {
         </>
       ) : null}
       <main className={`${mainBaseClasses} ${mainSpacing}`}>
-        {shouldShowLoginPrompt ? <div className="w-full">{renderContent()}</div> : <div className="space-y-8">{renderContent()}</div>}
+        <div className={`w-full ${shouldShowLoginPrompt ? 'max-w-4xl mx-auto' : ''}`}>
+          <div className={panelClasses}>
+            <div
+              className="pointer-events-none absolute inset-x-10 -top-24 h-40 rounded-full bg-primary/35 blur-3xl"
+              aria-hidden="true"
+            />
+            <div className="relative z-10">
+              {shouldShowLoginPrompt ? renderContent() : <div className="space-y-8">{renderContent()}</div>}
+            </div>
+          </div>
+        </div>
       </main>
       {!shouldShowLoginPrompt ? (
         <>
@@ -271,10 +285,12 @@ const MainApp = () => {
             onLogout={logout}
           />
           <MobileBottomBar currentView={view} setView={setView} />
-          <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
-            <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
-            <p className="font-semibold text-text">The Scrum Book</p>
-            <p className="mt-1">Your ultimate rugby league companion. Track matches, earn badges, and connect with other fans.</p>
+          <footer className="hidden md:block mt-6 rounded-3xl border border-border/70 bg-surface/80 px-10 py-8 text-center text-sm text-text-subtle/90 backdrop-blur-xl shadow-[0_35px_120px_-70px_rgba(11,29,58,0.9)]">
+            <div className="flex flex-col items-center gap-2">
+              <LogoIcon className="w-14 h-14" theme={themeMode} />
+              <p className="font-heading text-2xl tracking-[0.32em] uppercase text-text-strong">The Scrum Book</p>
+              <p className="text-base text-text">Your elite rugby league companion. Track fixtures, unlock supporter milestones, and own matchday.</p>
+            </div>
           </footer>
         </>
       ) : null}
