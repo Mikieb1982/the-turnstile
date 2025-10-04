@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
+import { SentryErrorBoundary } from "./SentryErrorBoundary";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -75,7 +76,7 @@ export default function RootLayout({
             <main className="flex-1">
               <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-6 lg:px-8">
                 <div className="rounded-3xl border border-white/10 bg-slate-950/60 p-6 shadow-[0_20px_60px_-25px_rgba(15,118,110,0.65)] backdrop-blur md:p-10">
-                  {children}
+                  <SentryErrorBoundary>{children}</SentryErrorBoundary>
                 </div>
               </div>
             </main>
