@@ -64,15 +64,23 @@ cp .env.example .env.local
 
 Restart the dev server after editing `.env.local` so Vite can pick up the new environment variable.
 
-### 3. Run the dev server
+### 3. Run the frontend and API servers
+
+Start the Vite dev server in one terminal:
 
 ```bash
 npm run dev
 ```
 
-The server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on copy and layout tweaks.
+Then, in a **second** terminal window, start the API server so the frontend can fetch live data instead of falling back to the mocked fixtures:
 
-> ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage.
+```bash
+npm run dev:server
+```
+
+Leave both commands running during development. The Vite server prints a local URL you can open in your browser, and hot module replacement is enabled for rapid iteration on copy and layout tweaks.
+
+> ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage if the API server is not running.
 
 ### 4. Build for production
 
@@ -86,7 +94,8 @@ The bundled assets are output to `dist/`. Use `npm run preview` to run the produ
 
 ## Available Scripts
 
-* `npm run dev` — start dev server with HMR
+* `npm run dev` — start the Vite dev server with HMR
+* `npm run dev:server` — start the local API server used by the frontend during development
 * `npm run build` — bundle production assets
 * `npm run preview` — serve production build locally
 * `npm run firebase:login` — authenticate with the Firebase CLI before your first deploy
