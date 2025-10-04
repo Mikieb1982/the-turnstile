@@ -46,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className={`${roboto.variable} ${barlowCondensed.variable} h-full font-sans antialiased`}>
+        <ServiceWorkerRegister />
         <SentryErrorBoundary>{children}</SentryErrorBoundary>
       </body>
     </html>
