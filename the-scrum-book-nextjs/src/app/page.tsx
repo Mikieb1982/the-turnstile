@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Providers } from './providers';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/Header';
 import { MobileNav } from '@/components/MobileNav';
@@ -284,11 +283,9 @@ const MainApp = () => {
 };
 
 const HomePage = () => (
-  <Providers>
-    <AuthProvider>
-      <MainApp />
-    </AuthProvider>
-  </Providers>
+  <AuthProvider>
+    <MainApp />
+  </AuthProvider>
 );
 
 export default HomePage;
