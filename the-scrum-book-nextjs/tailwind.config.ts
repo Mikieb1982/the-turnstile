@@ -10,8 +10,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: "var(--font-inter)",
-        heading: "var(--font-inter)",
+        // Use the new, clearer variable name
+        sans: "var(--font-roboto)",
+        heading: "var(--font-roboto)",
       },
       colors: {
         // These are CSS variables that will be dynamically set
