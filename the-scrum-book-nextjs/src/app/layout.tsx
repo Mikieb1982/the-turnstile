@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "The Scrum Book",
   description:
     "Your ultimate rugby league companion for fixtures, stats, and matchday planning.",
-  applicationName: "The Scrum Book",
+ applicationName: "The Scrum Book",
   manifest: "/manifest.webmanifest",
   themeColor: "#0c4b5a",
   icons: [

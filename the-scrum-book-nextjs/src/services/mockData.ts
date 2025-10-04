@@ -424,10 +424,10 @@ export const mockMatches: Match[] = [
     114,
     TEAMS.hullKR,
     TEAMS.stHelens,
-    'SCHEDULED',
+    'FULL-TIME',
     new Date('2025-10-04T17:30:00+01:00'),
-    0,
-    0,
+    20,
+    12,
     teamIdToVenue[TEAMS.hullKR.id]
   ),
   createMatchOnDate(
