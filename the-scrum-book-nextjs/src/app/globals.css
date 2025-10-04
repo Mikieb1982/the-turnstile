@@ -3,25 +3,58 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Define light theme defaults that can be overridden by your themeUtils */
+  --clr-primary: #7F1028;
+  --clr-secondary: #FFD447;
+  --clr-accent: #0052CC;
+  --clr-danger: #7F1028;
+  --clr-warning: #FFD447;
+  --clr-info: #0052CC;
+  --clr-success: #00A86B;
+  --clr-text-strong: #121212;
+  --clr-text: #333333;
+  --clr-text-subtle: #666666;
+  --clr-border: #DDDDDD;
+  --clr-surface: #FFFFFF;
+  --clr-surface-alt: #F5F5F5;
+  --gradient-1: linear-gradient(140deg, rgba(127, 16, 40, 0.12), rgba(0, 82, 204, 0.1));
+  --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.18), transparent 55%);
+  --gradient-3: radial-gradient(circle at 80% 0%, rgba(127, 16, 40, 0.14), transparent 45%);
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  /* Define dark theme defaults */
+  --clr-primary: #B71E3C;
+  --clr-secondary: #FFDD57;
+  --clr-accent: #0074FF;
+  --clr-danger: #B71E3C;
+  --clr-warning: #FFDD57;
+  --clr-info: #3B82F6;
+  --clr-success: #22C55E;
+  --clr-text-strong: #FFFFFF;
+  --clr-text: #E0E0E0;
+  --clr-text-subtle: #A0A0A0;
+  --clr-border: #404040;
+  --clr-surface: #1A1A1A;
+  --clr-surface-alt: #2C2C2C;
+  --gradient-1: linear-gradient(140deg, rgba(183, 30, 60, 0.24), rgba(0, 116, 255, 0.18));
+  --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%);
+  --gradient-3: radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%);
+  color-scheme: dark;
 }
 
 body {
-  /* Apply the new background image with a semi-transparent dark overlay */
-  background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), url('/background.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: var(--foreground);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--clr-text);
+  background-color: var(--clr-surface);
+}
+
+/* This class should be applied to your main container in page.tsx.
+  It applies the dynamic gradients as a background.
+*/
+.app-background {
+    background-image: var(--gradient-1), var(--gradient-2), var(--gradient-3);
+    background-color: var(--clr-surface);
 }
 
 a {
