@@ -270,7 +270,7 @@ const MainApp = () => {
               aria-hidden="true"
             />
             <div className="relative z-10 space-y-4">
-              {matchDataSource && matchDataSource !== 'firestore' ? (
+              {matchDataSource && matchDataSource !== ApiDataSource.FIRESTORE ? (
                 <div className="flex items-start gap-3 rounded-2xl border border-amber-400/40 bg-amber-500/10 p-4 text-sm text-amber-100">
                   <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full border border-amber-300/60 bg-amber-400/20 text-xs font-semibold uppercase tracking-wide text-amber-100">
                     FYI
@@ -280,7 +280,7 @@ const MainApp = () => {
                       Showing seeded fixture data
                     </p>
                     <p className="text-amber-100/80">
-                      {matchDataSource === 'api-mock'
+                      {matchDataSource === ApiDataSource.API_MOCK
                         ? 'The API could not reach Firestore, so the built-in Betfred Super League fixtures are being displayed instead. Connect your Firebase credentials and refresh to see live updates.'
                         : 'The app could not reach the API, so it is running entirely on the bundled fixtures. Check that the development server is running and your NEXT_PUBLIC_API_BASE_URL is correct to pick up new data.'}
                     </p>
