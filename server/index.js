@@ -1,4 +1,20 @@
-require('dotenv').config();
+// START: New Debugging Code
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
+
+const envPath = path.resolve(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  console.log('✅ Found .env file, loading credentials...');
+  dotenv.config({ path: envPath });
+} else {
+  console.error('❌ CRITICAL: Could not find the .env file in the /server directory.');
+}
+// END: New Debugging Code
+
+const express = require('express');
+const cors = require('cors');
+// ... the rest of the file continues below
 const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
