@@ -3,7 +3,7 @@
     "source": "functions"
   },
   "hosting": {
-    "source": "the-scrum-book-nextjs",
+    "source": "the-turnstile-nextjs",
     "ignore": [
       "firebase.json",
       "**/.*",
