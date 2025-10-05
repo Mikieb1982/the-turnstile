@@ -1,4 +1,4 @@
-name: Deploy staging to Firebase Hosting
+name: Deploy staging branch to Firebase Hosting
 
 on:
   push:
@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
   id-token: write
+
+concurrency:
+  group: staging-deployment
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
