@@ -79,11 +79,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const LOCAL_PROFILE_KEY = 'scrum-book:profile';
-const LOCAL_AUTH_KEY = 'scrum-book:auth-user';
+const LOCAL_PROFILE_KEY = 'turnstile:profile';
+const LOCAL_AUTH_KEY = 'turnstile:auth-user';
 const GOOGLE_IDENTITY_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
-const LOCAL_ACCOUNTS_KEY = 'scrum-book:accounts';
-const LOCAL_PASSWORD_RESET_PREFIX = 'scrum-book:password-reset-requested';
+const LOCAL_ACCOUNTS_KEY = 'turnstile:accounts';
+const LOCAL_PASSWORD_RESET_PREFIX = 'turnstile:password-reset-requested';
 
 interface StoredAccount {
   id: string;
@@ -282,7 +282,7 @@ const createAccountId = () => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
-  return `scrum-user-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  return `turnstile-user-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
 const loadGoogleIdentityServices = async (): Promise<GoogleIdentityServices> => {

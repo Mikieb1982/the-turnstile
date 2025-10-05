@@ -19,10 +19,10 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "The Scrum Book",
+  title: "The Turnstile - The Rugby League Matchday Companion",
   description:
     "Your ultimate rugby league companion for fixtures, stats, and matchday planning.",
- applicationName: "The Scrum Book",
+  applicationName: "The Turnstile",
   manifest: "/manifest.webmanifest",
   themeColor: "#0c4b5a",
   icons: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "The Scrum Book",
+    title: "The Turnstile",
   },
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "The Scrum Book",
-   "description": "A web application for rugby league fans to track fixtures, log the games they've attended, and sync progress with Firebase when configured.",
+  "name": "The Turnstile",
+  "description": "A web application for rugby league fans to track fixtures, log the games they've attended, and sync progress with Firebase when configured.",
   "requestFramePermissions": []
 }

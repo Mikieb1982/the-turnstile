@@ -138,7 +138,7 @@ export const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended,
       title: 'Matchday Check-in',
       text: shareText,
       url: shareUrl,
-      clipboardFallbackText: `${shareText} Track every matchday with The Scrum Book: ${shareUrl}`,
+      clipboardFallbackText: `${shareText} Track every matchday with The Turnstile: ${shareUrl}`,
     });
 
     setShareFeedback(outcome);

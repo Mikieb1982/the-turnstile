@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "API server for The Scrum Book",
+  "description": "API server for The Turnstile",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {

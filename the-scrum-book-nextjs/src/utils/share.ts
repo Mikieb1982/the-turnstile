@@ -52,5 +52,5 @@ export const getAppShareUrl = () => {
     return window.location.origin;
   }
 
-  return 'https://thescrumbook.com';
+  return 'https://theturnstile.com';
 };

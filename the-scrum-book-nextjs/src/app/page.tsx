@@ -29,7 +29,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { syncThemeWithFavouriteTeam } from '@/utils/themeUtils';
 
 const protectedViews: View[] = ['MY_MATCHES', 'STATS', 'BADGES', 'PROFILE', 'COMMUNITY', 'ADMIN'];
-const VIEW_STORAGE_KEY = 'scrum-book:last-view';
+const VIEW_STORAGE_KEY = 'turnstile:last-view';
 const allViews: View[] = [
   'UPCOMING',
   'MATCH_DAY',
@@ -307,8 +307,8 @@ const MainApp = () => {
           <footer className="hidden md:block mt-6 rounded-3xl border border-border/70 bg-surface/80 px-10 py-8 text-center text-sm text-text-subtle/90 backdrop-blur-xl shadow-[0_35px_120px_-70px_rgba(11,29,58,0.9)]">
             <div className="flex flex-col items-center gap-2">
               <LogoIcon className="w-14 h-14" theme={themeMode} />
-              <p className="font-heading text-2xl tracking-[0.32em] uppercase text-text-strong">The Scrum Book</p>
-              <p className="text-base text-text">Your elite rugby league companion. Track fixtures, unlock supporter milestones, and own matchday.</p>
+              <p className="font-heading text-2xl tracking-[0.32em] uppercase text-text-strong">The Turnstile</p>
+              <p className="text-base text-text">The Rugby League Matchday Companion. Track fixtures, unlock supporter milestones, and own matchday.</p>
             </div>
           </footer>
         </>

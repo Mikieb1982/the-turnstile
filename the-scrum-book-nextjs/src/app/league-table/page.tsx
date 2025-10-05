@@ -5,7 +5,7 @@ import { getServerFirestore } from "@/lib/firebaseAdmin";
 import { mockLeagueTable } from "@/services/mockData";
 
 export const metadata: Metadata = {
-  title: "Betfred Super League Table | The Scrum Book",
+  title: "Betfred Super League Table | The Turnstile",
   description: "Server-rendered snapshot of the latest Betfred Super League standings pulled directly from Firestore.",
 };
 

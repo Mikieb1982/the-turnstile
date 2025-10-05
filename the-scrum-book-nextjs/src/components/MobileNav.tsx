@@ -44,7 +44,7 @@ const primaryItems: NavItem[] = [
   { view: 'LEAGUE_TABLE', label: 'League Table', description: 'Track club standings', icon: TableCellsIcon },
   { view: 'GROUNDS', label: 'Grounds', description: 'Explore Super League stadiums', icon: BuildingStadiumIcon },
   { view: 'COMMUNITY', label: 'Community', description: 'Connect with fellow supporters', icon: UsersIcon },
-  { view: 'ABOUT', label: 'About', description: 'Learn about The Scrum Book', icon: InformationCircleIcon },
+  { view: 'ABOUT', label: 'About', description: 'Learn about The Turnstile', icon: InformationCircleIcon },
 ];
 
 const supporterItems: NavItem[] = [
@@ -94,7 +94,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             <div className="flex items-center gap-3">
               <LogoIcon className="h-10 w-10" theme={theme} />
               <div className="flex flex-col">
-                <span className="text-[11px] font-heading uppercase tracking-[0.4em] text-white/60">The Scrum Book</span>
+                <span className="text-[11px] font-heading uppercase tracking-[0.4em] text-white/60">The Turnstile</span>
                 <span className="text-xl font-heading uppercase tracking-[0.35em] text-white">Matchday Hub</span>
               </div>
             </div>

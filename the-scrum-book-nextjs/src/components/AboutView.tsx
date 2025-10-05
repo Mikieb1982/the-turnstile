@@ -20,7 +20,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
           <div>
             <div className="mb-6 flex items-center gap-3 text-primary">
               <LogoIcon className="h-10 w-10" theme={theme} />
-              <span className="text-sm font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
+              <span className="text-sm font-semibold uppercase tracking-[0.3em] text-text-subtle">The Turnstile</span>
             </div>
             <h1 className="text-4xl font-bold text-text-strong md:text-5xl">{hero.title}</h1>
             <p className="mt-5 max-w-2xl text-lg text-text">{hero.description}</p>
@@ -155,9 +155,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
       </section>
 
       <section className="rounded-3xl border border-border/80 bg-surface-alt/80 p-8 text-center shadow-card">
-        <h2 className="text-2xl font-bold text-text-strong">Join The Scrum Book Community</h2>
+        <h2 className="text-2xl font-bold text-text-strong">Join The Turnstile Community</h2>
         <p className="mt-2 text-text">
-          Start building your fan legacy today. The Scrum Book is your home for all your rugby league memories and connections.
+          Start building your fan legacy today. The Turnstile is your home for all your rugby league memories and connections.
         </p>
         <p className="mt-4 text-sm font-medium uppercase tracking-[0.2em] text-text-subtle">
           Track. Share. Celebrate.
