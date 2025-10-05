@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "The Scrum Book",
-    short_name: "Scrum Book",
+    name: "The Turnstile - The Rugby League Matchday Companion",
+    short_name: "The Turnstile",
     description:
       "Your ultimate rugby league companion for fixtures, stats, and matchday planning.",
     start_url: "/",

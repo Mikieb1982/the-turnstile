@@ -81,7 +81,7 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         if (!stats) return;
 
         const shareUrl = getAppShareUrl();
-        const shareText = `I've logged ${stats.totalMatches} matches, ${stats.totalGrounds} grounds and ${stats.totalPoints} total points this season on The Scrum Book.`;
+        const shareText = `I've logged ${stats.totalMatches} matches, ${stats.totalGrounds} grounds and ${stats.totalPoints} total points this season on The Turnstile.`;
 
         const outcome = await attemptShare({
             title: `${user.name}'s rugby league stats`,
@@ -121,7 +121,7 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
     return (
         <div className="space-y-6 text-text-strong">
              <div className="flex justify-between items-center gap-3">
-                <h1 className="text-xl font-bold">The Scrum Book</h1>
+                <h1 className="text-xl font-bold">The Turnstile</h1>
                 <div className="flex flex-col items-end gap-1">
                     <button
                         type="button"

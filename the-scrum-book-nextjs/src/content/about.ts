@@ -46,7 +46,7 @@ export const aboutContent: AboutContent = {
   hero: {
     title: 'Your Ultimate Rugby League Companion',
     description:
-      'The Scrum Book is a dedicated space for rugby league fans to record their match-going history, celebrate their support, and connect with a community of fellow enthusiasts.',
+      'The Turnstile is a dedicated space for rugby league fans to record their match-going history, celebrate their support, and connect with a community of fellow enthusiasts.',
     badges: [
       {
         icon: 'sparkles',
@@ -72,7 +72,7 @@ export const aboutContent: AboutContent = {
     {
       title: 'Your Digital Match Day Diary',
       description:
-        'The Scrum Book is your personal companion for tracking every rugby league match you attend, creating a digital diary of your support.',
+        'The Turnstile is your personal companion for tracking every rugby league match you attend, creating a digital diary of your support.',
       icon: 'sparkles',
       accent: 'from-primary/80 to-secondary/70',
       footer: 'Never forget a match day memory.',

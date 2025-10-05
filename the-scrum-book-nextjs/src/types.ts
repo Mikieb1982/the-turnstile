@@ -155,7 +155,7 @@ export interface Profile {
   predictions: Prediction[];
 }
 
-export interface ScrumBookData {
+export interface TurnstileData {
   profiles: Record<string, Profile>;
   activeProfileId: string | null;
 }
