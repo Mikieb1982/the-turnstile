@@ -1,4 +1,5 @@
- const CACHE_NAME = "scrum-book-cache-v1";
+ const CACHE_NAME = "scrum-book-cache-v2"; // Changed from v1
+
 const ASSETS_TO_CACHE = [
   "/",
   "/manifest.webmanifest",
