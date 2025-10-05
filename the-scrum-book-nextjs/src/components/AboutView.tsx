@@ -1,113 +1,11 @@
 'use client';
 
 import React from 'react';
-import {
-  LogoIcon,
-  SparklesIcon,
-  UsersIcon,
-  ListBulletIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  PencilIcon,
-  TrophyIcon,
-  } from './Icons';
+import { aboutContent } from '@/content/about';
+import { resolveIcon } from '@/content/icons';
+import { LogoIcon } from './Icons';
 
-interface HighlightCard {
-  title: string;
-  description: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  accent: string;
-  footer?: string;
-}
-
-interface FeatureColumn {
-  title:string;
-  items: string[];
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}
-
-interface FeatureCard {
-  title: string;
-  summary: string;
-  focus: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}
-
-const highlightCards: HighlightCard[] = [
-  {
-    title: 'Your Digital Match Day Diary',
-    description: 'The Scrum Book is your personal companion for tracking every rugby league match you attend, creating a digital diary of your support.',
-    icon: SparklesIcon,
-    accent: 'from-primary/80 to-secondary/70',
-    footer: 'Never forget a match day memory.',
-  },
-  {
-    title: 'Connect with the Community',
-    description: 'Find and connect with other fans, see their match history, and share your passion for the game.',
-    icon: UsersIcon,
-    accent: 'from-secondary/70 to-accent/80',
-    footer: 'Build your network of fellow supporters.',
-  },
-  {
-    title: 'Unlock Achievements',
-    description: 'Earn badges for your dedication, from visiting new grounds to attending classic derby clashes and major finals.',
-    icon: TrophyIcon,
-    accent: 'from-accent/80 to-primary/80',
-    footer: 'Show off your commitment as a super fan.',
-  },
-];
-
-const featureColumns: FeatureColumn[] = [
-  {
-    title: 'Core Features',
-    icon: PencilIcon,
-    items: [
-      'Log every match you attend with a single click.',
-      'View upcoming fixtures and past results for the season.',
-      'See the live Super League table with team form guides.',
-      'Explore community insights shared by fellow supporters.',
-    ],
-  },
-  {
-    title: 'Personalized Experience',
-    icon: ChartBarIcon,
-    items: [
-      'Track your personal stats, including total matches and unique venues.',
-      'Find nearby matches based on your current location.',
-      'Set your favorite team for a more tailored experience.',
-      'Upload photos to your attended matches to create a visual diary.',
-    ],
-  },
-];
-
-const featureCards: FeatureCard[] = [
-  {
-    title: 'My Matches',
-    summary: 'A complete history of every game you’ve attended, with the ability to add photos and relive the memories.',
-    focus: 'Filter by year or competition to easily find past games.',
-    icon: ListBulletIcon,
-  },
-  {
-    title: 'Stats & Badges',
-    summary: 'See a detailed breakdown of your support, from your most-visited grounds to your most-watched teams.',
-    focus: 'Unlock a variety of badges that celebrate your dedication as a fan.',
-    icon: ChartBarIcon,
-  },
-  {
-    title: 'Community Hub',
-    summary: 'Connect with other rugby league fans, swap match stories, and compare attendance streaks.',
-    focus: 'Discover new grounds and fixtures through the crowd’s recommendations.',
-    icon: UsersIcon,
-  },
-];
-
-const getStartedSteps: string[] = [
-  'Create your profile with a single click to start your collection.',
-  'Browse the fixtures and mark any matches you have attended in the past.',
-  'Upload photos to your attended matches to create a visual diary.',
-  'Check out the "Grounds" view to see which stadiums are closest to you.',
-  'Join the community hub to share tips, photos, and matchday highlights.',
-];
+const { hero, highlightCards, featureColumns, featureCards, getStartedSteps } = aboutContent;
 
 interface AboutViewProps {
   theme: 'light' | 'dark';
@@ -124,25 +22,21 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
               <LogoIcon className="h-10 w-10" theme={theme} />
               <span className="text-sm font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
             </div>
-            <h1 className="text-4xl font-bold text-text-strong md:text-5xl">
-              Your Ultimate Rugby League Companion
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg text-text">
-              The Scrum Book is a dedicated space for rugby league fans to record their match-going history, celebrate their support, and connect with a community of fellow enthusiasts.
-            </p>
+            <h1 className="text-4xl font-bold text-text-strong md:text-5xl">{hero.title}</h1>
+            <p className="mt-5 max-w-2xl text-lg text-text">{hero.description}</p>
             <div className="mt-8 flex flex-wrap gap-4 text-sm">
-              <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 font-semibold text-primary">
-                <SparklesIcon className="h-4 w-4" />
-                Track Attended Matches
-              </div>
-              <div className="flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 font-semibold text-secondary">
-                <CalendarIcon className="h-4 w-4" />
-                Explore Fixtures &amp; Results
-              </div>
-              <div className="flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 font-semibold text-accent">
-                <TrophyIcon className="h-4 w-4" />
-                Earn Fan Badges
-              </div>
+              {hero.badges.map((badge) => {
+                const Icon = resolveIcon(badge.icon);
+                return (
+                  <div
+                    key={badge.label}
+                    className={`flex items-center gap-2 rounded-full px-4 py-2 font-semibold ${badge.backgroundClass} ${badge.textClass}`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {badge.label}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="relative">
@@ -183,7 +77,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
 
       <section className="grid gap-6 md:grid-cols-3">
         {highlightCards.map((card) => {
-          const Icon = card.icon;
+          const Icon = resolveIcon(card.icon);
           return (
             <article
               key={card.title}
@@ -202,7 +96,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
 
       <section className="grid gap-6 md:grid-cols-2">
         {featureColumns.map((column) => {
-          const Icon = column.icon;
+          const Icon = resolveIcon(column.icon);
           return (
             <div key={column.title} className="rounded-3xl border border-border/70 bg-surface-alt/60 p-6 shadow-card">
               <div className="flex items-center gap-3">
@@ -231,7 +125,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
         </p>
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {featureCards.map((feature) => {
-            const Icon = feature.icon;
+            const Icon = resolveIcon(feature.icon);
             return (
               <div key={feature.title} className="rounded-2xl border border-border/70 bg-surface-alt/60 p-5">
                 <div className="flex items-center gap-3">
