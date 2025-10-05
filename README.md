@@ -37,6 +37,24 @@ The Scrum Book is a modern React + Vite application that helps rugby league fans
 
 ---
 
+## Editing site content safely
+
+The copy that powers the marketing-style **About** view now lives in `src/content`. Editors can adjust text, reorder sections,
+or add new highlights without touching React component logic.
+
+- `src/content/about.ts` defines the hero message, highlight cards, feature lists, and "get started" steps. Update the strings
+  in this file to change the visible text.
+- Icons are referenced by name (for example, `'sparkles'` or `'calendar'`). When you need a new icon, add it once to the
+  registry in `src/content/icons.ts` and re-use the key throughout the content files.
+- To surface new photography or artwork, drop the assets into `public/` (for example `public/images/your-photo.jpg`) and use
+  the relative path inside the content file. Assets served from `public/` are still handled by Next.js and remain static files,
+  keeping the site secure by default.
+
+The React components simply consume the structured content, so the UI remains type-safe while copy updates stay approachable
+for non-developers.
+
+---
+
 ## Prerequisites
 
 - Node.js 18 or newer  
