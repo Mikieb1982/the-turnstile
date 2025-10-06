@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import type { Match } from '@/types';
 import { MatchListItem } from './MatchListItem';
 import { RefreshIcon, SearchIcon } from './Icons';
+import { EmptyState } from './EmptyState';
 
 interface MatchListProps {
   matches: Match[];
@@ -73,19 +74,17 @@ export const MatchList: React.FC<MatchListProps> = ({ matches, attendedMatchIds,
       </div>
 
       {showNoMatchesMessage && (
-        <div className="rounded-md bg-surface py-20 text-center text-text">
-          <h2 className="text-2xl font-bold text-text-strong">No Matches Scheduled</h2>
-          <p className="mt-2 text-text-subtle">There are no matches scheduled in the next 7 days.</p>
-        </div>
+        <EmptyState
+          title="No Matches Scheduled"
+          message="There are no matches scheduled in the next 7 days."
+        />
       )}
 
       {showNoResultsMessage && (
-        <div className="rounded-md bg-surface py-20 text-center text-text">
-          <h2 className="text-2xl font-bold text-text-strong">No Matches Found</h2>
-          <p className="mt-2 text-text-subtle">
-            No upcoming matches found for "{searchQuery}". Try a different search.
-          </p>
-        </div>
+        <EmptyState
+          title="No Matches Found"
+          message={`No upcoming matches found for "${searchQuery}". Try a different search.`}
+        />
       )}
 
       {!showNoMatchesMessage && !showNoResultsMessage && (
