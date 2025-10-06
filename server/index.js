@@ -1,25 +1,39 @@
-// START: New Debugging Code
-const fs = require('fs');
-const path = require('path');
-const dotenv = require('dotenv');
+// --- START: New Firebase Initialization ---
 
-const envPath = path.resolve(__dirname, '.env');
-if (fs.existsSync(envPath)) {
-  console.log('✅ Found .env file, loading credentials...');
-  dotenv.config({ path: envPath });
-} else {
-  console.error('❌ CRITICAL: Could not find the .env file in the /server directory.');
-}
-// END: New Debugging Code
-
-const express = require('express');
-const cors = require('cors');
-// ... the rest of the file continues below
 const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
 const fs = require('fs');
+const path = require('path');
 const { z } = require('zod');
+
+// IMPORTANT: Replace this with the real name of your downloaded JSON file
+const SERVICE_ACCOUNT_FILE = 'the-scrum-book-firebase-adminsdk-your-file-name.json';
+
+const serviceAccountKeyPath = path.resolve(__dirname, SERVICE_ACCOUNT_FILE);
+
+if (!admin.apps.length) {
+  try {
+    if (!fs.existsSync(serviceAccountKeyPath)) {
+      throw new Error(`Service account file not found at: ${serviceAccountKeyPath}`);
+    }
+
+    const serviceAccount = require(serviceAccountKeyPath);
+    console.log(`✅ Initializing Firebase with service account: ${serviceAccount.project_id}`);
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+  } catch (error) {
+    console.error('❌ CRITICAL: Firebase Admin SDK initialization failed.', error.message);
+    // Fallback initialization for when the key is missing
+    admin.initializeApp();
+  }
+}
+
+// --- END: New Firebase Initialization ---
+
+const db = admin.firestore();
 
 const { mockLeagueTable, mockMatches } = require('./mockData');
 const clone = (value) => JSON.parse(JSON.stringify(value));
@@ -31,72 +45,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const safeJsonParse = (value, description) => {
-  if (!value) {
-    return null;
-  }
+const firestoreProjectId = admin.app().options?.projectId;
 
-  try {
-    return JSON.parse(value);
-  } catch (error) {
-    console.warn(`Failed to parse ${description}:`, error.message);
-    return null;
-  }
-};
-
-let serviceAccountProjectId;
-
-if (!admin.apps.length) {
-  const serviceAccount = safeJsonParse(process.env.FIREBASE_SERVICE_ACCOUNT, 'FIREBASE_SERVICE_ACCOUNT');
-
-  if (serviceAccount) {
-    serviceAccountProjectId = serviceAccount.project_id;
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-  } else {
-    admin.initializeApp();
-  }
-}
-
-const db = admin.firestore();
-
-const firebaseConfig = safeJsonParse(process.env.FIREBASE_CONFIG, 'FIREBASE_CONFIG');
-
-const getProjectIdFromCredentialsFile = () => {
-  const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-
-  if (!credentialsPath) {
-    return null;
-  }
-
-  try {
-    const fileContents = fs.readFileSync(credentialsPath, 'utf8');
-    const parsed = JSON.parse(fileContents);
-
-    return parsed.project_id || parsed.projectId || null;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.warn(`Failed to read GOOGLE_APPLICATION_CREDENTIALS: ${message}`);
-    return null;
-  }
-};
-
-const getProjectIdFromEnv = () =>
-  serviceAccountProjectId ||
-  firebaseConfig?.projectId ||
-  firebaseConfig?.project_id ||
-  process.env.GOOGLE_CLOUD_PROJECT ||
-  process.env.GCLOUD_PROJECT ||
-  getProjectIdFromCredentialsFile() ||
-  admin.app().options.projectId;
-
-const hasConfiguredProjectId = Boolean(process.env.FIRESTORE_EMULATOR_HOST || getProjectIdFromEnv());
-
-if (!hasConfiguredProjectId) {
-  console.warn(
-    'Firestore project ID not detected from environment. Will attempt to query using application default credentials.'
-  );
+if (!firestoreProjectId) {
+  console.warn('Firestore project ID not detected. Firestore queries may fail; serving mock data if needed.');
 }
 
 let firestoreAvailable = true;
