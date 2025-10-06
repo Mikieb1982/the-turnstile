@@ -81,7 +81,7 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         if (!stats) return;
 
         const shareUrl = getAppShareUrl();
-        const shareText = `I've logged ${stats.totalMatches} matches, ${stats.totalGrounds} grounds and ${stats.totalPoints} total points this season on The Turnstile.`;
+        const shareText = 'Track every matchday with The Turnstile.';
 
         const outcome = await attemptShare({
             title: `${user.name}'s rugby league stats`,

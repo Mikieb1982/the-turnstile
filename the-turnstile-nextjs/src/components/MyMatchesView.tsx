@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { PhotoUploadModal } from './PhotoUploadModal';
 import { PhotoViewerModal } from './PhotoViewerModal';
 import { formatDateUK } from '@/utils/date';
+import { EmptyState } from './EmptyState';
 
 interface MyMatchesViewProps {
     attendedMatches: AttendedMatch[];
@@ -82,10 +83,10 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
 
     if (attendedMatches.length === 0) {
         return (
-            <div className="text-center py-20 bg-surface rounded-md">
-                <h2 className="text-2xl font-bold text-text-strong">No Matches Attended Yet</h2>
-                <p className="text-text-subtle mt-2">Go to "Fixtures & Results" and click "I was there" to build your collection of attended games!</p>
-            </div>
+            <EmptyState
+                title="No Matches Attended Yet"
+                message='Go to "Fixtures & Results" and click "I was there" to build your collection of attended games!'
+            />
         );
     }
 
@@ -136,10 +137,10 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
             </div>
 
             {filteredAndSortedMatches.length === 0 ? (
-                 <div className="text-center py-20 bg-surface rounded-md">
-                    <h2 className="text-2xl font-bold text-text-strong">No Matches Found</h2>
-                    <p className="text-text-subtle mt-2">Try adjusting your filters to find the matches you're looking for.</p>
-                </div>
+                <EmptyState
+                    title="No Matches Found"
+                    message="Try adjusting your filters to find the matches you're looking for."
+                />
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredAndSortedMatches.map((attendedMatch) => {
