@@ -8,7 +8,7 @@
   "start": "next start",
   "lint": "next lint",
   "test": "jest",
-  "clean": "rm -rf .next"
+  "clean": "rimraf ./.next"
 },
   "dependencies": {
     "@sentry/react": "^7.119.0",
