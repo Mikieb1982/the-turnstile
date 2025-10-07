@@ -1,13 +1,12 @@
 {
-  "functions": {
-    "source": "functions"
-  },
   "hosting": {
-    "source": "the-turnstile-nextjs",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }

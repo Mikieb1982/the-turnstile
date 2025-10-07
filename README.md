@@ -1,10 +1,10 @@
 
 ```md
-# The Turnstile - The Rugby League Matchday Companion
+# The Scrum Book
 
-![The Turnstile logo](public/logo.png)
+![The Scrum Book logo](public/logo.png)
 
-The Turnstile is a modern React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
+The Scrum Book is a modern React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
 ---
 
@@ -12,7 +12,7 @@ The Turnstile is a modern React + Vite application that helps rugby league fans 
 
 - **Match Browser** — search and filter the full season fixture list and mark games you attended.
 - **Match Day dashboards** — jump to the fixtures happening soon or near you with tailored views.
-- **My Turnstile Log** — track total matches, unique venues, and revisit the games you have already logged.
+- **My Scrum Book** — track total matches, unique venues, and revisit the games you have already logged.
 - **Offline-friendly seed data** — local fixtures and venues power the UI until you wire up Firestore.
 
 ---
@@ -34,24 +34,6 @@ The Turnstile is a modern React + Vite application that helps rugby league fans 
 └── vite.config.ts         # Vite build configuration
 
 ```
-
----
-
-## Editing site content safely
-
-The copy that powers the marketing-style **About** view now lives in `src/content`. Editors can adjust text, reorder sections,
-or add new highlights without touching React component logic.
-
-- `src/content/about.ts` defines the hero message, highlight cards, feature lists, and "get started" steps. Update the strings
-  in this file to change the visible text.
-- Icons are referenced by name (for example, `'sparkles'` or `'calendar'`). When you need a new icon, add it once to the
-  registry in `src/content/icons.ts` and re-use the key throughout the content files.
-- To surface new photography or artwork, drop the assets into `public/` (for example `public/images/your-photo.jpg`) and use
-  the relative path inside the content file. Assets served from `public/` are still handled by Next.js and remain static files,
-  keeping the site secure by default.
-
-The React components simply consume the structured content, so the UI remains type-safe while copy updates stay approachable
-for non-developers.
 
 ---
 
@@ -82,23 +64,15 @@ cp .env.example .env.local
 
 Restart the dev server after editing `.env.local` so Vite can pick up the new environment variable.
 
-### 3. Run the frontend and API servers
-
-Start the Next.js dev server in one terminal:
+### 3. Run the dev server
 
 ```bash
 npm run dev
 ```
 
-Then, in a **second** terminal window, start the API server so the frontend can fetch live data instead of falling back to the mocked fixtures:
+The server prints a local URL you can open in your browser. Hot module replacement is enabled for rapid iteration on copy and layout tweaks.
 
-```bash
-npm run dev:server
-```
-
-Leave both commands running during development. The Next.js server prints a local URL you can open in your browser, and hot module replacement is enabled for rapid iteration on copy and layout tweaks.
-
-> ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage if the API server is not running.
+> ✅ No Firebase account is required to run the MVP. The app works entirely offline using the seeded fixtures and localStorage.
 
 ### 4. Build for production
 
@@ -112,8 +86,7 @@ The bundled assets are output to `dist/`. Use `npm run preview` to run the produ
 
 ## Available Scripts
 
-* `npm run dev` — start the Next.js dev server with HMR
-* `npm run dev:server` — start the local API server used by the frontend during development
+* `npm run dev` — start dev server with HMR
 * `npm run build` — bundle production assets
 * `npm run preview` — serve production build locally
 * `npm run firebase:login` — authenticate with the Firebase CLI before your first deploy
@@ -183,43 +156,8 @@ This repository includes a GitHub Actions workflow (`.github/workflows/firebase-
 1. Create a Firebase service account with the **Firebase Hosting Admin** role and download the JSON credentials file.
 2. In your GitHub repository settings, add the following secrets:
    - `FIREBASE_SERVICE_ACCOUNT` — the full JSON of the service account credentials.
-    - `FIREBASE_PROJECT_ID` — the target Firebase project ID (for example, `the-turnstile`).
+   - `FIREBASE_PROJECT_ID` — the target Firebase project ID (for example, `the-scrum-book`).
 3. Update `.firebaserc` so the `default` project matches the value of `FIREBASE_PROJECT_ID`.
-
----
-
-## Managing secrets for Firebase Hosting (Next.js)
-
-Firebase Hosting now supports secure environment variables that are scoped to the Hosting site. These values are encrypted at rest, surfaced only to backend runtimes (for example, the Cloud Function that renders your Next.js pages), and never bundled into client-side JavaScript unless you deliberately expose them with the `NEXT_PUBLIC_` prefix.
-
-1. **Set the secret with the Firebase CLI.** Replace `<your-project-id>` with the Firebase project that backs this site. If you have multiple Hosting sites in the same project, pass `--site <site-id>` as well.
-
-   ```bash
-   firebase hosting:secret:set MY_API_KEY "super-secret-value" --project <your-project-id>
-   ```
-
-   You can confirm the value was recorded by running `firebase hosting:secret:list`.
-
-2. **Read the secret from server-side Next.js code.** During deployment the Firebase web framework integration injects Hosting secrets into `process.env` for the server runtime. Access them in API routes, `getServerSideProps`, server components, or other code that never runs in the browser:
-
-   ```ts
-   // Example: app/api/external/route.ts or pages/api/external.ts
-   export default async function handler() {
-     const apiKey = process.env.MY_API_KEY;
-
-     if (!apiKey) {
-       throw new Error('Missing MY_API_KEY secret');
-     }
-
-     const response = await fetch('https://example.com/secure-endpoint', {
-       headers: { Authorization: `Bearer ${apiKey}` },
-     });
-
-     return new Response(await response.text());
-   }
-   ```
-
-   Because the secret is resolved on the server, the browser never sees the value. If you need a value on the client, create a dedicated API route that proxies the request instead of exposing the secret itself.
 4. Push to `main` (or trigger the workflow manually from the **Actions** tab) to build the project and deploy to Firebase Hosting.
 
 The workflow uses `npm ci` and `npm run build` to ensure the production bundle is valid before publishing. Deployment status is reported directly in the pull request or commit checks.
