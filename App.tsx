@@ -285,7 +285,7 @@ const App: React.FC = () => {
           <MobileBottomBar currentView={view} setView={setView} />
           <footer className="hidden md:block text-center py-8 text-sm text-text-subtle/90 border-t border-border mt-4 bg-surface/70 backdrop-blur">
             <LogoIcon className="w-12 h-12 mx-auto mb-3" theme={themeMode} />
-            <p className="font-semibold text-text">The Scrum Book</p>
+            <p className="font-semibold text-text">The Turnstile</p>
             <p className="mt-1">Your ultimate rugby league companion. Track matches, earn badges, and connect with other fans.</p>
           </footer>
         </>
