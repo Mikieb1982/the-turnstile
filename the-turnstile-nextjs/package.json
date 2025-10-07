@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "npm run clean && next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "test": "jest",
-  "clean": "rimraf ./.next"
-},
+    "dev": "npm run clean && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest",
+    "clean": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\""
+  },
   "dependencies": {
     "@sentry/react": "^7.119.0",
     "firebase-admin": "12.2.0",
