@@ -55,7 +55,8 @@ npm install
 ### 2. Configure Google Sign-In
 
 Copy the example environment file and update the placeholder with your Google OAuth web client ID. The value must match the
-client configured for this project's origin in the Google Cloud Console.
+client configured for this project's origin in the Google Cloud Console. If you are using the hosted demo credentials,
+set `VITE_GOOGLE_CLIENT_ID` to `99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com`.
 
 ```bash
 cp .env.example .env.local
