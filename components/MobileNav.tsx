@@ -42,7 +42,7 @@ const primaryItems: NavItem[] = [
   { view: 'LEAGUE_TABLE', label: 'League Table', description: 'Track club standings', icon: TableCellsIcon },
   { view: 'GROUNDS', label: 'Grounds', description: 'Explore Super League stadiums', icon: BuildingStadiumIcon },
   { view: 'COMMUNITY', label: 'Community', description: 'Connect with fellow supporters', icon: UsersIcon },
-  { view: 'ABOUT', label: 'About', description: 'Learn about The Scrum Book', icon: InformationCircleIcon },
+  { view: 'ABOUT', label: 'About', description: 'Learn about The Turnstile', icon: InformationCircleIcon },
 ];
 
 const supporterItems: NavItem[] = [
@@ -71,6 +71,16 @@ export const MobileNav: React.FC<MobileNavProps> = ({
     onClose();
   };
 
+  const isDarkMode = theme === 'dark';
+  const inactiveButtonClasses = isDarkMode
+    ? 'border-border/60 bg-surface text-text hover:border-primary/50 hover:bg-surface-alt'
+    : 'border-border/50 bg-surface text-brand-navy hover:border-primary/50 hover:bg-surface-alt';
+  const inactiveIconClasses = isDarkMode
+    ? 'border-border/60 bg-surface-alt text-text'
+    : 'border-border/50 bg-surface-alt text-brand-navy';
+  const inactiveLabelClass = isDarkMode ? 'text-text' : 'text-brand-navy';
+  const logoutTextClass = isDarkMode ? 'text-text' : 'text-brand-navy';
+
   return (
     <>
       <div
@@ -88,11 +98,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         aria-label="Mobile navigation"
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt/60 backdrop-blur">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt backdrop-blur">
             <div className="flex items-center gap-3">
               <LogoIcon className="h-10 w-10" theme={theme} />
               <div className="flex flex-col">
-                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle">The Scrum Book</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-text-subtle">The Turnstile</span>
                 <span className="text-lg font-heading text-text-strong">Matchday Companion</span>
               </div>
             </div>
@@ -116,8 +126,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         onClick={() => handleNavigate(view)}
                         className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
                           isActive
-                            ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
-                            : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+                            ? 'border-primary/50 bg-primary/20 text-primary shadow-card'
+                            : inactiveButtonClasses
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -125,13 +135,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                             className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
                               isActive
                                 ? 'border-primary/40 bg-primary/20 text-primary'
-                                : 'border-border/70 bg-surface text-text-subtle'
+                                : inactiveIconClasses
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="font-heading text-lg text-text-strong">{label}</p>
+                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : inactiveLabelClass}`}>{label}</p>
                             {description && <p className="text-xs text-text-subtle">{description}</p>}
                           </div>
                         </div>
@@ -154,10 +164,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         onClick={() => !disabled && handleNavigate(view)}
                         className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
                           disabled
-                            ? 'cursor-not-allowed border-border/40 bg-surface-alt/30 text-text-subtle'
+                            ? 'cursor-not-allowed border-border/40 bg-surface-alt text-text-subtle'
                             : isActive
-                              ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
-                              : 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+                              ? 'border-primary/50 bg-primary/20 text-primary shadow-card'
+                              : inactiveButtonClasses
                         }`}
                         aria-disabled={disabled}
                       >
@@ -166,13 +176,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                             className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
                               isActive
                                 ? 'border-primary/40 bg-primary/20 text-primary'
-                                : 'border-border/70 bg-surface text-text-subtle'
+                                : inactiveIconClasses
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className="font-heading text-lg text-text-strong">{label}</p>
+                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : inactiveLabelClass}`}>{label}</p>
                             {description && <p className="text-xs text-text-subtle">{description}</p>}
                             {disabled && (
                               <p className="text-[11px] font-medium text-danger mt-1">Login required</p>
@@ -186,7 +196,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
+            <div className="rounded-xl border border-border/60 bg-surface-alt px-4 py-4 text-sm text-text-subtle">
               <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
               <p className="mt-2">
                 Keep your supporter log up to date to unlock new badges and season-long stats. Tap “My Matches” after every game you attend.
@@ -194,11 +204,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             </div>
           </div>
           {currentUser && (
-            <div className="border-t border-border/70 bg-surface/80 px-5 py-4">
+            <div className="border-t border-border/70 bg-surface px-5 py-4">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle transition-colors hover:text-text hover:border-border hover:bg-surface-alt/70"
+                className={`w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold transition-colors hover:text-primary hover:border-border hover:bg-surface-alt ${logoutTextClass}`}
               >
                 <ArrowLeftOnRectangleIcon className="h-5 w-5" />
                 <span>Logout</span>

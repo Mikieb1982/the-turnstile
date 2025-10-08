@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Scrum Book - Your Rugby League Companion</title>
+    <title>The Turnstile - Your Rugby League Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-league">
   <style>
@@ -21,6 +21,7 @@
         --clr-text-strong: #FFFFFF;
         --clr-text: #F3F4F6;
         --clr-text-subtle: #CDD2D9;
+        --clr-brand-navy: #0A1D4D;
         --clr-border: #404040;
         --clr-surface: #1F2023;
         --clr-surface-alt: #161719;
@@ -28,7 +29,8 @@
         --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
         --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
         --font-heading: "Super League", "Inter", sans-serif;
-        --app-background-image: url('/background.png'); 
+        --app-background-image: url('/background.png');
+        --app-background-overlay: linear-gradient(180deg, rgba(10, 29, 77, 0.88), rgba(10, 29, 77, 0.92));
       }
       html.dark {
         color-scheme: dark;
@@ -41,14 +43,16 @@
         --clr-text-strong: #FFFFFF;
         --clr-text: #F3F4F6;
         --clr-text-subtle: #CDD2D9;
+        --clr-brand-navy: #0A1D4D;
         --clr-border: #404040;
         --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.2), rgba(0, 116, 255, 0.15));
         --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.18), transparent 60%);
         --gradient-3: radial-gradient(circle at 90% 10%, rgba(226, 24, 54, 0.18), transparent 55%);
+        --app-background-overlay: linear-gradient(180deg, rgba(4, 12, 31, 0.75), rgba(4, 12, 31, 0.85));
       }
      html {
-        background-color: var(--clr-surface-alt);
-        background-image: var(--app-background-image);
+        background-color: #040C1F;
+        background-image: var(--app-background-overlay), var(--app-background-image);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -56,11 +60,12 @@
       }
 
       html.dark {
-        background-color: #161719;
-        background-image: var(--app-background-image);
+        background-color: #040C1F;
+        background-image: var(--app-background-overlay), var(--app-background-image);
       }
 
       body {
+        position: relative;
         background: inherit;
         background-size: cover;
         background-position: center;
@@ -125,6 +130,7 @@
               'text-strong': 'var(--clr-text-strong)',
               'text': 'var(--clr-text)',
               'text-subtle': 'var(--clr-text-subtle)',
+              'brand-navy': 'var(--clr-brand-navy)',
               border: 'var(--clr-border)',
             },
             borderRadius: {
