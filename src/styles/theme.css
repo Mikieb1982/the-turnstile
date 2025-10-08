@@ -1,18 +1,50 @@
 :root {
-  --bg-0: #0B1020;
-  --bg-1: #0F172A;
+  --bg-0: #070b17;
+  --bg-1: #0f172a;
   --bg-2: #111827;
-  --text-hi: #F8FAFC;
-  --text-lo: #CBD5E1;
-  --brand: #1E3A8A;
-  --brand-600: #2563EB;
-  --field: #15803D;   /* green */
-  --try: #DC2626;     /* red */
-  --accent: #F59E0B;  /* amber */
+  --text-hi: #f8fafc;
+  --text-lo: #cbd5e1;
+  --brand: #1e3a8a;
+  --brand-600: #2563eb;
+  --field: #15803d; /* green */
+  --try: #dc2626;   /* red */
+  --accent: #f59e0b; /* amber */
   --border: #334155;
 }
 
-html, body, #root {
-  background: var(--bg-0);
+html,
+body,
+#root {
+  background:
+    radial-gradient(circle at 10% -10%, rgba(37, 99, 235, 0.38), transparent 55%),
+    radial-gradient(circle at 90% 0%, rgba(15, 118, 110, 0.3), transparent 60%),
+    var(--bg-0);
   color: var(--text-hi);
+  min-height: 100%;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto;
+  width: 38rem;
+  height: 38rem;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::before {
+  top: -18rem;
+  left: -12rem;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.6), transparent 70%);
+}
+
+body::after {
+  bottom: -22rem;
+  right: -8rem;
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.4), transparent 70%);
 }
