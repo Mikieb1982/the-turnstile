@@ -56,9 +56,7 @@ npm install
 
 Copy the example environment file and update the placeholder with your Google OAuth web client ID (it looks like
 `1234567890-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com`). The value must match the client configured for
-this project's origin in the Google Cloud Console. If you do not have your own credentials yet, the hosted demo client ID
-(`99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com`) is bundled in `.env.example` so Google Sign-In
-works out of the box. Replace it with your own before deploying to production.
+this project's origin in the Google Cloud Console. Without a valid ID the Google button stays disabled in the UI.
 
 ```bash
 cp .env.example .env.local
