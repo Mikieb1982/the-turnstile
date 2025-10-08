@@ -1,24 +1,25 @@
 import React from 'react'
 
-export default function Header() {
+export default function Hero() {
   return (
-    <header className="sticky top-0 z-40 backdrop-blur bg-[color:var(--bg-0)]/80 border-b border-[color:var(--border)]">
-      <div className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img src="/public/assets/logo.svg" alt="The Scrum Book logo" className="h-7 w-7" />
-          <span className="font-semibold tracking-wide">The Scrum Book</span>
-        </div>
-        <nav className="flex items-center gap-3">
-          <a className="text-sm text-[color:var(--text-lo)] hover:text-white" href="/">Matches</a>
-          <a className="text-sm text-[color:var(--text-lo)] hover:text-white" href="/book">My Book</a>
-          <button
-            className="px-3 py-1.5 rounded-lg bg-brand-700 hover:bg-brand-600 text-white text-sm shadow-soft"
-            onClick={() => window.dispatchEvent(new CustomEvent('open-install'))}
+    <section className="mx-auto max-w-6xl px-4 py-6">
+      <div className="rounded-2xl xl:rounded-xl2 bg-[color:var(--bg-1)] shadow-soft border border-[color:var(--border)] p-6 md:p-8">
+        <h2 className="text-2xl md:text-3xl font-semibold">Log your season</h2>
+        <p className="text-[color:var(--text-lo)] mt-2 max-w-prose">
+          Track matches you attend, venues you visit, and your personal stats.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a href="#fixtures" className="px-4 py-2 rounded-lg bg-brand-700 hover:bg-brand-600 text-white shadow-soft">
+            Browse fixtures
+          </a>
+          <a
+            href="/book"
+            className="px-4 py-2 rounded-lg bg-[color:var(--bg-2)] border border-[color:var(--border)] hover:border-brand-600"
           >
-            Install
-          </button>
-        </nav>
+            Open my book
+          </a>
+        </div>
       </div>
-    </header>
+    </section>
   )
 }
