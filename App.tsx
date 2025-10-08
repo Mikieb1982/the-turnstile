@@ -1,4 +1,4 @@
-// @ts-nocheck`r`nimport React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from './components/Header';
 import { MobileNav } from './components/MobileNav';
 import { MatchList } from './components/MatchList';
@@ -48,7 +48,7 @@ const allViews: View[] = [
 const isValidView = (value: string | null): value is View =>
   typeof value === 'string' && allViews.includes(value as View);
 
-const App: React.FC = () => {
+const App = () => {
   const [view, setView] = useState<View>(() => {
     if (typeof window === 'undefined') {
       return 'PROFILE';
@@ -102,7 +102,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!initialLoadStarted.current) {
       initialLoadStarted.current = true;
-      loadAppData();
+      void loadAppData();
     }
   }, [loadAppData]);
 
@@ -112,7 +112,7 @@ const App: React.FC = () => {
 
   const handleAttend = (match: Match) => {
     if (!currentUser) {
-      setView('PROFILE'); // Will be caught by the protected view logic and show the prompt
+      setView('PROFILE');
     } else {
       addAttendedMatch(match);
     }
@@ -120,7 +120,7 @@ const App: React.FC = () => {
 
   const handleUnattend = (matchId: string) => {
     if (!currentUser) {
-      setView('PROFILE'); // Will be caught by the protected view logic and show the prompt
+      setView('PROFILE');
     } else {
       removeAttendedMatch(matchId);
     }
@@ -145,10 +145,12 @@ const App: React.FC = () => {
       return <ErrorDisplay message={error} onRetry={loadAppData} />;
     }
     if (loading && !error) {
-      return <div className="flex flex-col items-center justify-center h-64">
-        <LoadingSpinner />
-        <p className="mt-4 text-text-subtle">Fetching season fixtures...</p>
-      </div>;
+      return (
+        <div className="flex flex-col items-center justify-center h-64">
+          <LoadingSpinner />
+          <p className="mt-4 text-text-subtle">Fetching season fixtures...</p>
+        </div>
+      );
     }
 
     if (shouldShowLoginPrompt) {
@@ -163,12 +165,16 @@ const App: React.FC = () => {
       );
     }
 
-    // While authenticating, show a spinner for protected views
     if (authLoading && protectedViews.includes(view)) {
-      return <div className="flex flex-col items-center justify-center h-64"><LoadingSpinner /><p className="mt-4 text-text-subtle">Connecting...</p></div>;
+      return (
+        <div className="flex flex-col items-center justify-center h-64">
+          <LoadingSpinner />
+          <p className="mt-4 text-text-subtle">Connecting...</p>
+        </div>
+      );
     }
 
-    const attendedMatchIds = profile?.attendedMatches.map(am => am.match.id) || [];
+    const attendedMatchIds = profile?.attendedMatches.map((am) => am.match.id) ?? [];
 
     switch (view) {
       case 'UPCOMING':
@@ -204,25 +210,39 @@ const App: React.FC = () => {
         return <GroundsView />;
       case 'ABOUT':
         return <AboutView theme={themeMode} />;
-
-      // Protected Routes
       case 'MY_MATCHES':
-        return profile ? <MyMatchesView attendedMatches={profile.attendedMatches} onRemove={handleUnattend} /> : <LoadingSpinner />;
+        return profile ? (
+          <MyMatchesView attendedMatches={profile.attendedMatches} onRemove={handleUnattend} />
+        ) : (
+          <LoadingSpinner />
+        );
       case 'STATS':
-        return profile ? <StatsView user={profile.user} attendedMatches={profile.attendedMatches} /> : <LoadingSpinner />;
+        return profile ? (
+          <StatsView user={profile.user} attendedMatches={profile.attendedMatches} />
+        ) : (
+          <LoadingSpinner />
+        );
       case 'BADGES':
-        return profile ? <BadgesView allBadges={allBadges} earnedBadgeIds={profile.earnedBadgeIds} /> : <LoadingSpinner />;
+        return profile ? (
+          <BadgesView allBadges={allBadges} earnedBadgeIds={profile.earnedBadgeIds} />
+        ) : (
+          <LoadingSpinner />
+        );
       case 'COMMUNITY':
         return <CommunityView />;
       case 'PROFILE':
-        return profile ? <ProfileView
-                  user={profile.user}
-                  setUser={(updatedUser) => updateUser(updatedUser)}
-                  setView={setView}
-                  attendedMatches={profile.attendedMatches}
-                  earnedBadgeIds={profile.earnedBadgeIds}
-                  onLogout={logout}
-                /> : <LoadingSpinner />;
+        return profile ? (
+          <ProfileView
+            user={profile.user}
+            setUser={(updatedUser) => updateUser(updatedUser)}
+            setView={setView}
+            attendedMatches={profile.attendedMatches}
+            earnedBadgeIds={profile.earnedBadgeIds}
+            onLogout={logout}
+          />
+        ) : (
+          <LoadingSpinner />
+        );
       case 'ADMIN':
         return <DataUploader />;
       default:
@@ -295,4 +315,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
