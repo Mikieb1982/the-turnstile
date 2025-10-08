@@ -54,9 +54,11 @@ npm install
 
 ### 2. Configure Google Sign-In
 
-Copy the example environment file and update the placeholder with your Google OAuth web client ID. The value must match the
-client configured for this project's origin in the Google Cloud Console. If you are using the hosted demo credentials,
-set `VITE_GOOGLE_CLIENT_ID` to `99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com`.
+Copy the example environment file and update the placeholder with your Google OAuth web client ID (it looks like
+`1234567890-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com`). The value must match the client configured for
+this project's origin in the Google Cloud Console. If you do not have your own credentials yet, the hosted demo client ID
+(`99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com`) is bundled in `.env.example` so Google Sign-In
+works out of the box. Replace it with your own before deploying to production.
 
 ```bash
 cp .env.example .env.local
@@ -104,7 +106,7 @@ This build runs entirely offline using localStorage. To connect your own Firebas
 
 1. In the Firebase console, open **Build → Authentication → Sign-in method** and enable the **Google** provider. Configure the support email when prompted so users can sign in with their Google account.
 2. Still in **Project settings → General**, scroll to **Your apps** and add the SHA-1 release fingerprint for every Android app that should support Google Sign-In. This step is required for Google to trust the OAuth client.
-3. In **Project settings → General → Your project**, update the **Public-facing name** so it matches `project-99200945430`. Firebase uses this value during the Google account consent screen.
+3. In **Project settings → General → Your project**, update the **Public-facing name** so it matches the project configured for your OAuth client. Firebase uses this value during the Google account consent screen.
 4. Update your `.env.local` file in the project root with your web client ID so the frontend can call Google directly:
 
    ```bash
