@@ -20,8 +20,8 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
 
   const isDarkMode = theme === 'dark';
   const inactiveNavClasses = isDarkMode
-    ? 'text-text hover:text-primary hover:bg-surface-alt border border-transparent'
-    : 'text-brand-navy hover:text-primary hover:bg-surface-alt border border-transparent';
+    ? 'text-text hover:text-primary hover:bg-surface-alt/80 border border-transparent'
+    : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent';
 
   return (
     <nav className="hidden md:flex fixed inset-x-0 top-0 z-30 border-b border-border/70 bg-surface shadow-md backdrop-blur">
@@ -29,9 +29,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
         <button
           type="button"
           onClick={handleBack}
-          className={`flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt px-3 py-2 text-sm font-semibold transition-colors hover:border-border hover:text-primary ${
-            isDarkMode ? 'text-text' : 'text-brand-navy'
-          }`}
+          className="flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt/70 px-3 py-2 text-sm font-semibold text-brand-navy transition-colors hover:border-border hover:text-primary"
           aria-label="Go back"
         >
           <ArrowLeftIcon className="h-4 w-4" />
@@ -48,8 +46,8 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
                   onClick={() => setView(view)}
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     isActive
-                      ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm'
-                      : inactiveNavClasses
+                      ? 'bg-primary/15 text-primary border border-primary/40 shadow-sm'
+                      : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent'
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
