@@ -13,7 +13,7 @@ export const DataUploader: React.FC = () => {
       </div>
 
       <p className="text-text-subtle mb-6">
-        The Scrum Book runs in offline mode by default. Configure Firebase before attempting to upload the seeded data set.
+        The Turnstile runs in offline mode by default. Configure Firebase before attempting to upload the seeded data set.
       </p>
 
       <div className="rounded-md border border-warning/30 bg-warning/10 p-4 text-warning flex items-center gap-3">
