@@ -266,7 +266,7 @@ const App = () => {
     <div className="min-h-screen font-sans text-text app-background">
       {!shouldShowLoginPrompt ? (
         <>
-          <DesktopTopBar currentView={view} setView={setView} />
+          <DesktopTopBar currentView={view} setView={setView} theme={themeMode} />
           <Header
             setView={setView}
             theme={theme}

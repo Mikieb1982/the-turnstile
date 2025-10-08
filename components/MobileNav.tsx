@@ -71,6 +71,16 @@ export const MobileNav: React.FC<MobileNavProps> = ({
     onClose();
   };
 
+  const isDarkMode = theme === 'dark';
+  const inactiveButtonClasses = isDarkMode
+    ? 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+    : 'border-transparent bg-surface-alt/50 text-brand-navy hover:border-border/80 hover:bg-surface';
+  const inactiveIconClasses = isDarkMode
+    ? 'border-border/70 bg-surface text-text'
+    : 'border-border/70 bg-surface text-brand-navy';
+  const inactiveLabelClass = isDarkMode ? 'text-text' : 'text-brand-navy';
+  const logoutTextClass = isDarkMode ? 'text-text' : 'text-brand-navy';
+
   return (
     <>
       <div
