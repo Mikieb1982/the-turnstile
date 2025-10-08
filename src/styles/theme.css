@@ -1,0 +1,19 @@
+/* src/styles/theme.css */
+:root {
+  --bg-0: #0B1020;
+  --bg-1: #0F172A;
+  --bg-2: #111827;
+  --text-hi: #F8FAFC;
+  --text-lo: #CBD5E1;
+  --brand: #1E3A8A;
+  --brand-600: #2563EB;
+  --field: #15803D;  /* green */
+  --try: #DC2626;    /* red */
+  --accent: #F59E0B; /* amber */
+  --border: #334155;
+}
+
+html, body, #root {
+  background: var(--bg-0);
+  color: var(--text-hi);
+}
