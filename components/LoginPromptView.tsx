@@ -7,6 +7,9 @@ import {
   MiniSpinnerIcon,
 } from './Icons';
 
+const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ??
+  '99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com').trim();
+
 type AuthMode = 'login' | 'signup' | 'forgot';
 
 interface LoginPromptViewProps {
@@ -62,7 +65,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   });
   const [forgotForm, setForgotForm] = useState({ email: '' });
 
-  const isGoogleConfigured = useMemo(() => Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID), []);
+  const isGoogleConfigured = useMemo(() => Boolean(GOOGLE_CLIENT_ID), []);
   const canUseGoogle = Boolean(onLogin) && isGoogleConfigured;
 
   useEffect(() => {

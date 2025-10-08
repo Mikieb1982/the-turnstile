@@ -82,6 +82,8 @@ const LOCAL_AUTH_KEY = 'scrum-book:auth-user';
 const GOOGLE_IDENTITY_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
 const LOCAL_ACCOUNTS_KEY = 'scrum-book:accounts';
 const LOCAL_PASSWORD_RESET_PREFIX = 'scrum-book:password-reset-requested';
+const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ??
+  '99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com').trim();
 
 interface StoredAccount {
   id: string;
@@ -456,7 +458,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async () => {
     setLoading(true);
     try {
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      const clientId = GOOGLE_CLIENT_ID;
       if (!clientId) {
         throw new Error(
           'Google Sign-In is not configured. Set the VITE_GOOGLE_CLIENT_ID environment variable to your OAuth client ID.'
