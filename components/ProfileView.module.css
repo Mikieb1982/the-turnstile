@@ -1,14 +1,14 @@
 .profilePage {
-  --hero-overlay: linear-gradient(135deg, rgba(17, 46, 114, 0.96), rgba(20, 31, 67, 0.92));
-  --hero-highlight: rgba(30, 139, 255, 0.85);
+  --hero-overlay: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(15, 23, 42, 0.9));
+  --hero-highlight: rgba(245, 158, 11, 0.85);
   --card-bg: var(--clr-surface);
-  --card-border: rgba(15, 23, 42, 0.08);
-  --card-shadow: 0 32px 60px -30px rgba(15, 23, 42, 0.55);
+  --card-border: rgba(51, 65, 85, 0.18);
+  --card-shadow: 0 32px 60px -30px rgba(11, 16, 32, 0.55);
   --text-strong: var(--clr-text-strong);
   --text-subtle: var(--clr-text-subtle);
 
   min-height: 100%;
-  background: linear-gradient(180deg, rgba(7, 11, 23, 0.15) 0%, rgba(7, 11, 23, 0) 30%), #f5f7fb;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0) 30%), var(--clr-surface);
   color: var(--text-strong);
 }
 
@@ -16,7 +16,7 @@
   position: relative;
   padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1.5rem, 5vw, 3rem) clamp(7rem, 12vw, 9rem);
   overflow: hidden;
-  color: #ecf5ff;
+  color: #F8FAFC;
   background: var(--hero-overlay);
   border-bottom-left-radius: clamp(3rem, 10vw, 5rem);
 }
@@ -79,15 +79,15 @@
   justify-content: center;
   background: var(--hero-highlight);
   border: 3px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 18px 30px -12px rgba(30, 139, 255, 0.9);
-  color: #fff;
+  box-shadow: 0 18px 30px -12px rgba(37, 99, 235, 0.6);
+  color: #F8FAFC;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .avatarEdit:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 24px 40px -16px rgba(30, 139, 255, 0.9);
+  box-shadow: 0 24px 40px -16px rgba(37, 99, 235, 0.65);
 }
 
 .avatarEdit svg {
@@ -138,8 +138,8 @@
   border-radius: 16px;
   padding: 0.65rem 1.5rem;
   font-weight: 700;
-  background: #fff;
-  color: #0a1e4a;
+  background: var(--clr-surface);
+  color: var(--clr-primary);
   cursor: pointer;
 }
 
@@ -172,7 +172,7 @@
   gap: 0.4rem;
   padding: 0.4rem 1.1rem;
   border-radius: 999px;
-  background: rgba(12, 28, 74, 0.55);
+  background: rgba(30, 58, 138, 0.55);
   backdrop-filter: blur(4px);
   font-size: 0.95rem;
   font-weight: 600;
@@ -182,7 +182,7 @@
 .tagline svg {
   width: 1rem;
   height: 1rem;
-  color: rgba(255, 199, 78, 1);
+  color: #F59E0B;
 }
 
 .teamBadge {
@@ -193,7 +193,7 @@
   padding: 0.55rem 1.1rem;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+  color: #F8FAFC;
   font-weight: 600;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
@@ -242,7 +242,7 @@
   margin: 0;
   font-size: clamp(1.9rem, 5vw, 2.4rem);
   font-weight: 800;
-  color: #fff;
+  color: #F8FAFC;
 }
 
 .mainContent {
