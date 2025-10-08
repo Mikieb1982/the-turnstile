@@ -258,7 +258,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ theme }) => {
         </ul>
       </section>
 
-      <section className="rounded-3xl border border-border/80 bg-surface-alt p-8 text-center shadow-card">
+      <section className="rounded-3xl border border-border/80 bg-surface-alt/80 p-8 text-center shadow-card">
         <h2 className="text-2xl font-bold text-text-strong">Join The Turnstile Community</h2>
         <p className="mt-2 text-text">
           Start building your fan legacy today. The Turnstile is your home for all your rugby league memories and connections.

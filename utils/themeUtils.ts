@@ -22,22 +22,22 @@ interface ThemeVariables {
 }
 
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
-  primary: '#1E3A8A',
-  secondary: '#2563EB',
-  accent: '#F59E0B',
-  danger: '#EF4444',
-  warning: '#F59E0B',
-  info: '#2563EB',
-  success: '#06B6D4',
-  textStrong: '#0B1020',
-  text: '#1E3A8A',
-  textSubtle: '#334155',
-  border: '#334155',
-  surface: '#F8FAFC',
-  surfaceAlt: '#E2E8F0',
-  gradient1: 'linear-gradient(140deg, rgba(30, 58, 138, 0.12), rgba(37, 99, 235, 0.08))',
-  gradient2: 'radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.16), transparent 56%)',
-  gradient3: 'radial-gradient(circle at 78% -10%, rgba(30, 58, 138, 0.14), transparent 48%)',
+  primary: '#7F1028',
+  secondary: '#FFD447',
+  accent: '#0052CC',
+  danger: '#7F1028',
+  warning: '#FFD447',
+  info: '#0052CC',
+  success: '#00A86B',
+  textStrong: '#0A1D4D',
+  text: '#152A63',
+  textSubtle: '#31406F',
+  border: '#DDDDDD',
+  surface: '#FFFFFF',
+  surfaceAlt: '#F5F5F5',
+  gradient1: 'linear-gradient(140deg, rgba(127, 16, 40, 0.12), rgba(0, 82, 204, 0.1))',
+  gradient2: 'radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.18), transparent 55%)',
+  gradient3: 'radial-gradient(circle at 80% 0%, rgba(127, 16, 40, 0.14), transparent 45%)',
 };
 
 const DEFAULT_DARK_THEME: ThemeVariables = {

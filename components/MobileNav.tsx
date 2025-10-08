@@ -73,11 +73,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 
   const isDarkMode = theme === 'dark';
   const inactiveButtonClasses = isDarkMode
-    ? 'border-border/60 bg-surface text-text hover:border-primary/50 hover:bg-surface-alt'
-    : 'border-border/50 bg-surface text-brand-navy hover:border-primary/50 hover:bg-surface-alt';
+    ? 'border-transparent bg-surface-alt/50 text-text hover:border-border/80 hover:bg-surface'
+    : 'border-transparent bg-surface-alt/50 text-brand-navy hover:border-border/80 hover:bg-surface';
   const inactiveIconClasses = isDarkMode
-    ? 'border-border/60 bg-surface-alt text-text'
-    : 'border-border/50 bg-surface-alt text-brand-navy';
+    ? 'border-border/70 bg-surface text-text'
+    : 'border-border/70 bg-surface text-brand-navy';
   const inactiveLabelClass = isDarkMode ? 'text-text' : 'text-brand-navy';
   const logoutTextClass = isDarkMode ? 'text-text' : 'text-brand-navy';
 
@@ -126,8 +126,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         onClick={() => handleNavigate(view)}
                         className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
                           isActive
-                            ? 'border-primary/50 bg-primary/20 text-primary shadow-card'
-                            : inactiveButtonClasses
+                            ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
+                            : 'border-transparent bg-surface-alt/50 text-brand-navy hover:border-border/80 hover:bg-surface'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -135,13 +135,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                             className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
                               isActive
                                 ? 'border-primary/40 bg-primary/20 text-primary'
-                                : inactiveIconClasses
+                                : 'border-border/70 bg-surface text-brand-navy'
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : inactiveLabelClass}`}>{label}</p>
+                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : 'text-brand-navy'}`}>{label}</p>
                             {description && <p className="text-xs text-text-subtle">{description}</p>}
                           </div>
                         </div>
@@ -166,8 +166,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                           disabled
                             ? 'cursor-not-allowed border-border/40 bg-surface-alt text-text-subtle'
                             : isActive
-                              ? 'border-primary/50 bg-primary/20 text-primary shadow-card'
-                              : inactiveButtonClasses
+                              ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
+                              : 'border-transparent bg-surface-alt/50 text-brand-navy hover:border-border/80 hover:bg-surface'
                         }`}
                         aria-disabled={disabled}
                       >
@@ -176,13 +176,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                             className={`flex h-10 w-10 items-center justify-center rounded-lg border ${
                               isActive
                                 ? 'border-primary/40 bg-primary/20 text-primary'
-                                : inactiveIconClasses
+                                : 'border-border/70 bg-surface text-brand-navy'
                             }`}
                           >
                             <Icon className="h-5 w-5" />
                           </span>
                           <div>
-                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : inactiveLabelClass}`}>{label}</p>
+                            <p className={`font-heading text-lg ${isActive ? 'text-primary' : 'text-brand-navy'}`}>{label}</p>
                             {description && <p className="text-xs text-text-subtle">{description}</p>}
                             {disabled && (
                               <p className="text-[11px] font-medium text-danger mt-1">Login required</p>
@@ -208,7 +208,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               <button
                 type="button"
                 onClick={handleLogout}
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold transition-colors hover:text-primary hover:border-border hover:bg-surface-alt ${logoutTextClass}`}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:text-primary hover:border-border hover:bg-surface-alt/70"
               >
                 <ArrowLeftOnRectangleIcon className="h-5 w-5" />
                 <span>Logout</span>
