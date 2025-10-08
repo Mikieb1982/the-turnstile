@@ -275,7 +275,7 @@ const App = () => {
           />
           <button
             type="button"
-            className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
+            className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-brand-navy shadow-lg transition-colors hover:text-primary hover:border-border hover:bg-surface-alt/80"
             onClick={() => setIsMobileNavOpen(true)}
             aria-label="Open navigation menu"
           >
