@@ -23,7 +23,7 @@ export const LogoIcon: React.FC<LogoIconProps> = ({ className, theme = 'light', 
   return (
     <img
       src={resolvedSrc}
-      alt={alt ?? 'The Scrum Book logo'}
+      alt={alt ?? 'The Turnstile logo'}
       className={className}
       loading="lazy"
       style={{

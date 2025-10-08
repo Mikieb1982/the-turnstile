@@ -266,7 +266,7 @@ const App = () => {
     <div className="min-h-screen font-sans text-text app-background">
       {!shouldShowLoginPrompt ? (
         <>
-          <DesktopTopBar currentView={view} setView={setView} />
+          <DesktopTopBar currentView={view} setView={setView} theme={themeMode} />
           <Header
             setView={setView}
             theme={theme}
@@ -275,7 +275,9 @@ const App = () => {
           />
           <button
             type="button"
-            className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold text-text-subtle shadow-lg transition-colors hover:text-text hover:border-border hover:bg-surface-alt/80"
+            className={`hidden md:flex fixed top-6 right-6 z-40 items-center gap-2 rounded-full border border-border/70 bg-surface px-4 py-2 text-sm font-semibold shadow-lg transition-colors hover:text-primary hover:border-border hover:bg-surface-alt/80 ${
+              themeMode === 'dark' ? 'text-text' : 'text-brand-navy'
+            }`}
             onClick={() => setIsMobileNavOpen(true)}
             aria-label="Open navigation menu"
           >

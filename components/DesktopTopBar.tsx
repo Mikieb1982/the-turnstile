@@ -6,9 +6,10 @@ import { ArrowLeftIcon } from './Icons';
 interface DesktopTopBarProps {
   currentView: View;
   setView: (view: View) => void;
+  theme: 'light' | 'dark';
 }
 
-export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setView }) => {
+export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setView, theme }) => {
   const handleBack = () => {
     if (window.history.length > 1) {
       window.history.back();
@@ -17,13 +18,20 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
     }
   };
 
+  const isDarkMode = theme === 'dark';
+  const inactiveNavClasses = isDarkMode
+    ? 'text-text hover:text-primary hover:bg-surface-alt/80 border border-transparent'
+    : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent';
+
   return (
     <nav className="hidden md:flex fixed inset-x-0 top-0 z-30 border-b border-border/70 bg-surface/80 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-6 py-3">
         <button
           type="button"
           onClick={handleBack}
-          className="flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt/70 px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:border-border hover:text-text"
+          className={`flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt/70 px-3 py-2 text-sm font-semibold transition-colors hover:border-border hover:text-primary ${
+            isDarkMode ? 'text-text' : 'text-brand-navy'
+          }`}
           aria-label="Go back"
         >
           <ArrowLeftIcon className="h-4 w-4" />
@@ -41,7 +49,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     isActive
                       ? 'bg-primary/15 text-primary border border-primary/40 shadow-sm'
-                      : 'text-text-subtle hover:text-text hover:bg-surface-alt/80 border border-transparent'
+                      : inactiveNavClasses
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                 >

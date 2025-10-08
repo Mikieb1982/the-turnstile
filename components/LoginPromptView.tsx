@@ -231,7 +231,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
           <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-white/5 shadow-[0px_15px_35px_rgba(3,19,31,0.45)]">
             <LogoIcon className="h-12 w-12 drop-shadow" theme={theme} />
           </div>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Scrum Book</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Turnstile</p>
           <h1 className="mt-3 text-3xl font-heading font-bold leading-snug">Rugby League Check In</h1>
           <p className="mt-3 max-w-xs text-sm text-white/60">
             Sign in to manage your matchdays, track your stats, and stay connected with the rugby league community.

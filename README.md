@@ -1,10 +1,10 @@
 
 ```md
-# The Scrum Book
+# The Turnstile
 
-![The Scrum Book logo](public/logo.png)
+![The Turnstile logo](public/logo.png)
 
-The Scrum Book is a modern React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
+The Turnstile is a modern React + Vite application that helps rugby league fans build a personal log of matches they have attended. The MVP focuses on a single competition (the 2026 Betfred Super League), ships with a seeded fixture list, and is ready to connect to your own Firebase project for persistence.
 
 ---
 
@@ -12,7 +12,7 @@ The Scrum Book is a modern React + Vite application that helps rugby league fans
 
 - **Match Browser** — search and filter the full season fixture list and mark games you attended.
 - **Match Day dashboards** — jump to the fixtures happening soon or near you with tailored views.
-- **My Scrum Book** — track total matches, unique venues, and revisit the games you have already logged.
+- **My Turnstile** — track total matches, unique venues, and revisit the games you have already logged.
 - **Offline-friendly seed data** — local fixtures and venues power the UI until you wire up Firestore.
 
 ---

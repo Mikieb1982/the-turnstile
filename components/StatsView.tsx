@@ -83,7 +83,7 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
     return (
         <div className="space-y-6 text-text-strong">
              <div className="flex justify-between items-center">
-                <h1 className="text-xl font-bold">The Scrum Book</h1>
+                <h1 className="text-xl font-bold">The Turnstile</h1>
                 <button className="p-2 text-text-subtle hover:text-primary">
                     <ShareIcon className="w-6 h-6"/>
                 </button>
