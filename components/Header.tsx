@@ -1,57 +1,24 @@
-import React from 'react';
-import { ArrowLeftIcon, LogoIcon, MenuIcon, XMarkIcon } from './Icons';
-import type { View } from '../types';
-import styles from './Header.module.css';
+import React from 'react'
 
-interface HeaderProps {
-  setView: (view: View) => void;
-  theme: string;
-  isMobileNavOpen: boolean;
-  onMobileNavToggle: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = (props) => {
-  const { setView, theme, isMobileNavOpen, onMobileNavToggle } = props;
-  const themeMode = theme === 'dark' ? 'dark' : 'light';
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      setView('UPCOMING');
-    }
-  };
-
+export default function Header() {
   return (
-    <>
-      <button
-        type="button"
-        className={`md:hidden ${styles.backButton}`}
-        onClick={handleBack}
-        aria-label="Go back"
-      >
-        <ArrowLeftIcon className={styles.backIcon} />
-      </button>
-      <button
-        type="button"
-        className={`md:hidden ${styles.logoButton}`}
-        onClick={() => setView('PROFILE')}
-        aria-label="Go to profile"
-      >
-        <LogoIcon className={styles.logoIcon} theme={themeMode} />
-      </button>
-      <button
-        type="button"
-        className={`md:hidden ${styles.menuButton}`}
-        onClick={onMobileNavToggle}
-        aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        aria-expanded={isMobileNavOpen}
-      >
-        {isMobileNavOpen ? (
-          <XMarkIcon className={styles.menuIcon} />
-        ) : (
-          <MenuIcon className={styles.menuIcon} />
-        )}
-      </button>
-    </>
-  );
-};
+    <header className="sticky top-0 z-40 backdrop-blur bg-[color:var(--bg-0)]/80 border-b border-[color:var(--border)]">
+      <div className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <img src="/public/assets/logo.svg" alt="The Scrum Book logo" className="h-7 w-7" />
+          <span className="font-semibold tracking-wide">The Scrum Book</span>
+        </div>
+        <nav className="flex items-center gap-3">
+          <a className="text-sm text-[color:var(--text-lo)] hover:text-white" href="/">Matches</a>
+          <a className="text-sm text-[color:var(--text-lo)] hover:text-white" href="/book">My Book</a>
+          <button
+            className="px-3 py-1.5 rounded-lg bg-brand-700 hover:bg-brand-600 text-white text-sm shadow-soft"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-install'))}
+          >
+            Install
+          </button>
+        </nav>
+      </div>
+    </header>
+  )
+}
