@@ -12,8 +12,6 @@ import {
   Squares2X2Icon,
   TrophyIcon,
   ArrowLeftOnRectangleIcon,
-  ServerIcon,
-  SparklesIcon,
   BuildingStadiumIcon,
   LocationMarkerIcon,
   CalendarIcon,
@@ -23,7 +21,7 @@ import { allBadges } from '../badges';
 type TileSize = 'small' | 'medium' | 'large';
 type TileType = 'high-emphasis' | 'cta' | 'user-input' | 'data-grid' | 'navigational' | 'progress' | 'icon-link';
 
-type TileId = 'hero' | 'matches' | 'stats' | 'grounds' | 'badges' | 'team' | 'daily' | 'admin' | 'logout';
+type TileId = 'hero' | 'matches' | 'stats' | 'grounds' | 'badges' | 'team' | 'logout';
 
 interface TileLayoutItem {
   id: TileId;
@@ -89,20 +87,6 @@ const tileDefinitions: Record<TileId, TileDefinition> = {
     id: 'team',
     label: 'Team information',
     type: 'navigational',
-    allowedSizes: ['medium', 'small'],
-    defaultSize: 'medium',
-  },
-  daily: {
-    id: 'daily',
-    label: 'Daily scrum',
-    type: 'icon-link',
-    allowedSizes: ['small'],
-    defaultSize: 'small',
-  },
-  admin: {
-    id: 'admin',
-    label: 'Admin tools',
-    type: 'cta',
     allowedSizes: ['medium', 'small'],
     defaultSize: 'medium',
   },
@@ -329,34 +313,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   }, [attendedMatches, favoriteTeam]);
 
   const earnedBadges = useMemo(() => allBadges.filter((badge) => earnedBadgeIds.includes(badge.id)), [earnedBadgeIds]);
-
-  const dailyScrumTip = useMemo(() => {
-    const tips = [
-      {
-        title: 'Pause, notice, breathe',
-        question: "What's your focus today?",
-        tip: 'Bring the calm of a steady scrum to your day. Slow down, scan the field, and move with purpose.',
-      },
-      {
-        title: 'Lead the defensive line',
-        question: 'Where can you lift a teammate?',
-        tip: 'Great captains communicate early. Send a quick message to keep your squad aligned.',
-      },
-      {
-        title: 'Own the gain line',
-        question: 'What small win are you chasing?',
-        tip: 'Break big goals into short carries. Five metres at a time still gets you over the try line.',
-      },
-      {
-        title: 'Recover like a pro',
-        question: 'What will keep your energy up?',
-        tip: 'Fuel, hydrate, and reset. Even legends take a water break before the next set.',
-      },
-    ];
-    const today = new Date();
-    const index = (today.getFullYear() + today.getMonth() + today.getDate()) % tips.length;
-    return tips[index];
-  }, []);
 
   const handleSelectTeam = (teamId: string) => {
     setUser({ favoriteTeamId: teamId });
@@ -658,38 +614,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             Team stats
           </button>
         </div>
-      </div>
-    ),
-    daily: () => (
-      <div className="flex h-full flex-col justify-between rounded-2xl bg-surface p-6 shadow-card">
-        <div className="flex items-start gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <SparklesIcon className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Daily Scrum</p>
-            <h3 className="text-lg font-semibold text-text-strong">{dailyScrumTip.title}</h3>
-            <p className="mt-2 text-sm text-text-subtle">{dailyScrumTip.question}</p>
-            <p className="mt-2 text-sm text-text-strong">{dailyScrumTip.tip}</p>
-          </div>
-        </div>
-      </div>
-    ),
-    admin: () => (
-      <div className="flex h-full flex-col justify-between rounded-2xl bg-surface p-6 shadow-card">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-text-strong">Admin Tools</h2>
-            <p className="text-sm text-text-subtle">Quick actions for data updates</p>
-          </div>
-          <ServerIcon className="h-6 w-6 text-primary" />
-        </div>
-        <button
-          onClick={() => setView('ADMIN')}
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
-        >
-          Open admin panel
-        </button>
       </div>
     ),
     logout: () => (
