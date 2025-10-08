@@ -29,16 +29,16 @@ const getErrorMessage = (error: unknown, fallback: string) =>
 const getFeedbackClasses = (mode: AuthMode, type: 'success' | 'error') => {
   const palette = {
     login: {
-      success: 'bg-emerald-400/10 text-emerald-100 border-emerald-300/60',
-      error: 'bg-rose-500/10 text-rose-100 border-rose-400/60',
+      success: 'bg-[color:rgba(6,182,212,0.16)] text-white border-[color:rgba(6,182,212,0.45)]',
+      error: 'bg-[color:rgba(239,68,68,0.18)] text-white border-[color:rgba(239,68,68,0.5)]',
     },
     signup: {
-      success: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-      error: 'bg-rose-50 text-rose-600 border-rose-200',
+      success: 'bg-[color:rgba(6,182,212,0.12)] text-brand-navy border-[color:rgba(6,182,212,0.35)]',
+      error: 'bg-[color:rgba(239,68,68,0.12)] text-brand-navy border-[color:rgba(239,68,68,0.35)]',
     },
     forgot: {
-      success: 'bg-emerald-400/10 text-emerald-100 border-emerald-300/60',
-      error: 'bg-rose-500/10 text-rose-100 border-rose-400/60',
+      success: 'bg-[color:rgba(6,182,212,0.16)] text-white border-[color:rgba(6,182,212,0.45)]',
+      error: 'bg-[color:rgba(239,68,68,0.18)] text-white border-[color:rgba(239,68,68,0.5)]',
     },
   } as const;
 
@@ -217,9 +217,9 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
   const renderLoginCard = () => (
     <div className="mx-auto w-full max-w-[420px]">
-      <div className="relative overflow-hidden rounded-[36px] bg-[#031a29] px-8 pb-12 pt-14 text-white shadow-[0px_25px_60px_rgba(3,26,41,0.55)]">
+      <div className="relative overflow-hidden rounded-[36px] bg-[color:var(--clr-surface-0)] px-8 pb-12 pt-14 text-white shadow-[0px_25px_60px_rgba(11,16,32,0.55)]">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-[#103852] opacity-50 blur-3xl" />
+          <div className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-[rgba(30,58,138,0.5)] blur-3xl" />
           <LogoIcon
             className="absolute -top-28 left-1/2 h-60 w-60 -translate-x-1/2 opacity-[0.08]"
             theme="dark"
@@ -228,10 +228,10 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
         </div>
 
         <div className="relative flex flex-col items-center text-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-white/5 shadow-[0px_15px_35px_rgba(3,19,31,0.45)]">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-white/5 shadow-[0px_15px_35px_rgba(11,16,32,0.45)]">
             <LogoIcon className="h-12 w-12 drop-shadow" theme={theme} />
           </div>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Scrum Book</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.55em] text-white/70">The Turnstile</p>
           <h1 className="mt-3 text-3xl font-heading font-bold leading-snug">Rugby League Check In</h1>
           <p className="mt-3 max-w-xs text-sm text-white/60">
             Sign in to manage your matchdays, track your stats, and stay connected with the rugby league community.
@@ -289,12 +289,12 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-[#032130] shadow-[0px_12px_35px_rgba(3,19,31,0.45)] transition hover:bg-white/90 disabled:opacity-70"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-brand-navy shadow-[0px_12px_35px_rgba(11,16,32,0.45)] transition hover:bg-white/90 disabled:opacity-70"
             disabled={busy('login')}
           >
             {busy('login') ? (
               <>
-                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-[#032130]" />
+                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-brand-navy" />
                 Logging in…
               </>
             ) : (
@@ -340,8 +340,8 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   );
 
   const renderSignupCard = () => (
-    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-[36px] bg-white shadow-[0px_25px_60px_rgba(3,26,41,0.35)]">
-      <div className="relative bg-[#031d2c] px-10 pb-12 pt-16 text-white">
+    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-[36px] bg-white shadow-[0px_25px_60px_rgba(11,16,32,0.35)]">
+      <div className="relative bg-[color:var(--clr-surface-1)] px-10 pb-12 pt-16 text-white">
         <LogoIcon className="absolute -right-14 -top-14 h-40 w-40 opacity-[0.08]" theme="dark" aria-hidden />
         <p className="text-lg font-semibold uppercase tracking-[0.35em] text-white/60">Let&apos;s</p>
         <h2 className="mt-3 text-4xl font-heading leading-[1.15]">
@@ -356,79 +356,79 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
       <form className="bg-white px-10 py-10" onSubmit={handleSignup}>
         <div className="space-y-5">
-          <div className="flex items-center gap-3 rounded-full border border-[#0b2a2f1f] bg-[#f5f7fa] px-5 py-3 transition focus-within:border-[#0B2A2F]">
-            <UserCircleIcon className="h-5 w-5 text-[#0B2A2F]/60" />
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+            <UserCircleIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="text"
               placeholder="Full Name"
               autoComplete="name"
-              className="w-full bg-transparent text-base text-[#0B2A2F] placeholder:text-[#0B2A2F]/40 focus:outline-none"
+              className="w-full bg-transparent text-base text-brand-navy placeholder:text-brand-navy/40 focus:outline-none"
               value={signupForm.name}
               onChange={(event) => setSignupForm((prev) => ({ ...prev, name: event.target.value }))}
               disabled={busy('signup')}
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[#0b2a2f1f] bg-[#f5f7fa] px-5 py-3 transition focus-within:border-[#0B2A2F]">
-            <EnvelopeIcon className="h-5 w-5 text-[#0B2A2F]/60" />
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+            <EnvelopeIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="email"
               placeholder="Email Address"
               autoComplete="email"
-              className="w-full bg-transparent text-base text-[#0B2A2F] placeholder:text-[#0B2A2F]/40 focus:outline-none"
+              className="w-full bg-transparent text-base text-brand-navy placeholder:text-brand-navy/40 focus:outline-none"
               value={signupForm.email}
               onChange={(event) => setSignupForm((prev) => ({ ...prev, email: event.target.value }))}
               disabled={busy('signup')}
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[#0b2a2f1f] bg-[#f5f7fa] px-5 py-3 transition focus-within:border-[#0B2A2F]">
-            <LockClosedIcon className="h-5 w-5 text-[#0B2A2F]/60" />
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+            <LockClosedIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="password"
               placeholder="Password"
               autoComplete="new-password"
-              className="w-full bg-transparent text-base text-[#0B2A2F] placeholder:text-[#0B2A2F]/40 focus:outline-none"
+              className="w-full bg-transparent text-base text-brand-navy placeholder:text-brand-navy/40 focus:outline-none"
               value={signupForm.password}
               onChange={(event) => setSignupForm((prev) => ({ ...prev, password: event.target.value }))}
               disabled={busy('signup')}
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[#0b2a2f1f] bg-[#f5f7fa] px-5 py-3 transition focus-within:border-[#0B2A2F]">
-            <LockClosedIcon className="h-5 w-5 text-[#0B2A2F]/60" />
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+            <LockClosedIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="password"
               placeholder="Retype Password"
               autoComplete="new-password"
-              className="w-full bg-transparent text-base text-[#0B2A2F] placeholder:text-[#0B2A2F]/40 focus:outline-none"
+              className="w-full bg-transparent text-base text-brand-navy placeholder:text-brand-navy/40 focus:outline-none"
               value={signupForm.confirmPassword}
               onChange={(event) => setSignupForm((prev) => ({ ...prev, confirmPassword: event.target.value }))}
               disabled={busy('signup')}
             />
           </div>
 
-          <label className="flex items-center gap-3 text-sm text-[#0B2A2F]/70">
+          <label className="flex items-center gap-3 text-sm text-brand-navy/70">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border border-[#0B2A2F]/30 text-[#0B2A2F] focus:ring-[#0B2A2F]"
+              className="h-4 w-4 rounded border border-brand-navy/30 text-brand-navy focus:ring-brand-navy"
               checked={signupForm.acceptsTerms}
               onChange={(event) => setSignupForm((prev) => ({ ...prev, acceptsTerms: event.target.checked }))}
               disabled={busy('signup')}
             />
             <span>
-              I agree to the <span className="font-semibold text-[#0B2A2F]">Terms &amp; Privacy</span>
+              I agree to the <span className="font-semibold text-brand-navy">Terms &amp; Privacy</span>
             </span>
           </label>
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#d9e4ec] py-3 text-base font-semibold text-[#0B2A2F] transition hover:bg-[#c8d7e2] disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-navy/10 py-3 text-base font-semibold text-brand-navy transition hover:bg-brand-navy/20 disabled:opacity-60"
             disabled={busy('signup')}
           >
             {busy('signup') ? (
               <>
-                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-[#0B2A2F]" />
+                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-brand-navy" />
                 Signing you up…
               </>
             ) : (
@@ -438,11 +438,11 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
           {renderFeedback()}
 
-          <p className="mt-6 text-center text-sm text-[#0B2A2F]/70">
+          <p className="mt-6 text-center text-sm text-brand-navy/70">
             Have an account?
             <button
               type="button"
-              className="ml-1 font-semibold text-[#0B2A2F] underline decoration-dotted underline-offset-4"
+              className="ml-1 font-semibold text-brand-navy underline decoration-dotted underline-offset-4"
               onClick={() => setMode('login')}
             >
               Sign In
@@ -454,16 +454,16 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
   );
 
   const renderForgotCard = () => (
-    <div className="mx-auto w-full max-w-[420px] overflow-hidden rounded-[36px] bg-white text-[#0B2A2F] shadow-[0px_25px_60px_rgba(3,26,41,0.35)]">
+    <div className="mx-auto w-full max-w-[420px] overflow-hidden rounded-[36px] bg-white text-brand-navy shadow-[0px_25px_60px_rgba(11,16,32,0.35)]">
       <div className="px-10 pb-8 pt-12 text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#0B2A2F]/10 text-[#0B2A2F]">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-navy/10 text-brand-navy">
           <LockClosedIcon className="h-7 w-7" />
         </div>
-        <h2 className="text-3xl font-heading font-semibold text-[#133347]">Forgot Password?</h2>
-        <p className="mt-3 text-sm text-[#375566]">No worries, we&apos;ll send you reset instructions.</p>
+        <h2 className="text-3xl font-heading font-semibold text-brand-navy">Forgot Password?</h2>
+        <p className="mt-3 text-sm text-brand-navy/80">No worries, we&apos;ll send you reset instructions.</p>
       </div>
 
-      <div className="relative bg-[#031d2c] px-10 pb-10 pt-10 text-white">
+      <div className="relative bg-[color:var(--clr-surface-1)] px-10 pb-10 pt-10 text-white">
         <LogoIcon className="pointer-events-none absolute -bottom-10 right-8 h-28 w-28 opacity-[0.08]" theme="dark" aria-hidden />
         <form className="space-y-6" onSubmit={handleForgotPassword}>
           <div>
@@ -487,12 +487,12 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-[#031d2c] shadow-[0px_10px_40px_rgba(0,0,0,0.35)] transition hover:bg-white/95 disabled:opacity-70"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-3 text-base font-semibold text-brand-navy shadow-[0px_10px_40px_rgba(11,16,32,0.35)] transition hover:bg-white/95 disabled:opacity-70"
             disabled={busy('forgot')}
           >
             {busy('forgot') ? (
               <>
-                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-[#031d2c]" />
+                <MiniSpinnerIcon className="h-5 w-5 animate-spin text-brand-navy" />
                 Sending reset link…
               </>
             ) : (

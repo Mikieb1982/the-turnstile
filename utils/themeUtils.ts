@@ -22,41 +22,41 @@ interface ThemeVariables {
 }
 
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
-  primary: '#7F1028',
-  secondary: '#FFD447',
-  accent: '#0052CC',
-  danger: '#7F1028',
-  warning: '#FFD447',
-  info: '#0052CC',
-  success: '#00A86B',
-  textStrong: '#121212',
-  text: '#333333',
-  textSubtle: '#666666',
-  border: '#DDDDDD',
-  surface: '#FFFFFF',
-  surfaceAlt: '#F5F5F5',
-  gradient1: 'linear-gradient(140deg, rgba(127, 16, 40, 0.12), rgba(0, 82, 204, 0.1))',
-  gradient2: 'radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.18), transparent 55%)',
-  gradient3: 'radial-gradient(circle at 80% 0%, rgba(127, 16, 40, 0.14), transparent 45%)',
+  primary: '#1E3A8A',
+  secondary: '#2563EB',
+  accent: '#F59E0B',
+  danger: '#EF4444',
+  warning: '#F59E0B',
+  info: '#2563EB',
+  success: '#06B6D4',
+  textStrong: '#0B1020',
+  text: '#1E3A8A',
+  textSubtle: '#334155',
+  border: '#334155',
+  surface: '#F8FAFC',
+  surfaceAlt: '#E2E8F0',
+  gradient1: 'linear-gradient(140deg, rgba(30, 58, 138, 0.12), rgba(37, 99, 235, 0.08))',
+  gradient2: 'radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.16), transparent 56%)',
+  gradient3: 'radial-gradient(circle at 78% -10%, rgba(30, 58, 138, 0.14), transparent 48%)',
 };
 
 const DEFAULT_DARK_THEME: ThemeVariables = {
-  primary: '#B71E3C',
-  secondary: '#FFDD57',
-  accent: '#0074FF',
-  danger: '#B71E3C',
-  warning: '#FFDD57',
-  info: '#3B82F6',
-  success: '#22C55E',
-  textStrong: '#FFFFFF',
-  text: '#E0E0E0',
-  textSubtle: '#A0A0A0',
-  border: '#404040',
-  surface: '#1A1A1A',
-  surfaceAlt: '#2C2C2C',
-  gradient1: 'linear-gradient(140deg, rgba(183, 30, 60, 0.24), rgba(0, 116, 255, 0.18))',
-  gradient2: 'radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.22), transparent 60%)',
-  gradient3: 'radial-gradient(circle at 90% 10%, rgba(183, 30, 60, 0.2), transparent 55%)',
+  primary: '#1E3A8A',
+  secondary: '#2563EB',
+  accent: '#F59E0B',
+  danger: '#EF4444',
+  warning: '#F59E0B',
+  info: '#2563EB',
+  success: '#06B6D4',
+  textStrong: '#F8FAFC',
+  text: '#F8FAFC',
+  textSubtle: '#CBD5E1',
+  border: '#334155',
+  surface: '#0F172A',
+  surfaceAlt: '#111827',
+  gradient1: 'linear-gradient(140deg, rgba(30, 58, 138, 0.24), rgba(37, 99, 235, 0.16))',
+  gradient2: 'radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.22), transparent 58%)',
+  gradient3: 'radial-gradient(circle at 78% -10%, rgba(11, 16, 32, 0.24), transparent 48%)',
 };
 
 const VARIABLE_NAME_MAP: Record<keyof ThemeVariables, string> = {
@@ -252,7 +252,7 @@ const createTeamOverrides = (
 
   const primary = emphasisePrimaryColor(rawPrimary ?? branding.bg, mode);
 
-  const secondaryBase = rawSecondary ?? mixHexColors(primary, '#FFFFFF', mode === 'dark' ? 0.18 : 0.28);
+  const secondaryBase = rawSecondary ?? mixHexColors(primary, defaults.surface, mode === 'dark' ? 0.2 : 0.24);
   const accentBase = rawTertiary ?? rawSecondary ?? adjustColorIntensity(primary, {
     saturationMultiplier: 0.95,
     lightnessMultiplier: mode === 'dark' ? 1.22 : 0.88,
@@ -268,17 +268,17 @@ const createTeamOverrides = (
     lightnessMultiplier: mode === 'dark' ? 1.02 : 0.96,
   });
 
-  const warning = adjustColorIntensity(rawSecondary ?? mixHexColors(primary, '#F97316', 0.45), {
+  const warning = adjustColorIntensity(rawSecondary ?? mixHexColors(primary, defaults.warning, 0.4), {
     saturationMultiplier: 1.05,
     lightnessMultiplier: mode === 'dark' ? 1 : 0.98,
   });
 
-  const info = adjustColorIntensity(mixHexColors(accent, '#2563EB', 0.35), {
+  const info = adjustColorIntensity(mixHexColors(accent, defaults.info, 0.35), {
     saturationMultiplier: 1.05,
     lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
   });
 
-  const success = adjustColorIntensity(mixHexColors(accent, '#16A34A', 0.4), {
+  const success = adjustColorIntensity(mixHexColors(accent, defaults.success, 0.4), {
     saturationMultiplier: 1.08,
     lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
   });
@@ -288,8 +288,8 @@ const createTeamOverrides = (
     lightnessMultiplier: mode === 'dark' ? 1 : 0.92,
   });
 
-  const surface = mixHexColors(defaults.surface, primary, mode === 'dark' ? 0.12 : 0.07);
-  const surfaceAlt = mixHexColors(defaults.surfaceAlt, primary, mode === 'dark' ? 0.16 : 0.1);
+  const surface = mixHexColors(defaults.surface, primary, mode === 'dark' ? 0.12 : 0.04);
+  const surfaceAlt = mixHexColors(defaults.surfaceAlt, primary, mode === 'dark' ? 0.16 : 0.08);
 
   const gradient1 = `linear-gradient(135deg, ${hexToRgba(primary, mode === 'dark' ? 0.65 : 0.5)}, ${hexToRgba(accent, mode === 'dark' ? 0.52 : 0.35)})`;
   const gradient2 = `radial-gradient(circle at 18% 20%, ${hexToRgba(secondary, mode === 'dark' ? 0.5 : 0.32)}, transparent 56%)`;
@@ -299,7 +299,7 @@ const createTeamOverrides = (
     primary,
     secondary,
     accent,
-    danger: primary,
+    danger: defaults.danger,
     warning,
     info,
     success,

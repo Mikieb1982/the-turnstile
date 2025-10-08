@@ -92,7 +92,7 @@ export const LeagueTableView: React.FC = () => {
                             {table.map(standing => (
                                 <tr 
                                     key={standing.teamId} 
-                                    className="hover:bg-surface-alt even:bg-surface-alt/50 transition-colors"
+                                    className="hover:bg-surface-alt even:bg-surface-alt transition-colors"
                                     style={{ borderLeft: `4px solid ${TEAM_BRANDING[standing.teamId]?.bg || 'transparent'}` }}
                                 >
                                     <td className="px-4 h-12 font-bold text-center text-text-strong">{standing.rank}</td>

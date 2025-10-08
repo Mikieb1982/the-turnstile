@@ -749,7 +749,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
               {isCustomisingLayout && (
                 <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap justify-end gap-2 text-xs font-semibold uppercase tracking-wide text-text-subtle">
-                  <span className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-surface-alt/90 px-3 py-1 shadow-sm">
+                  <span className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-surface-alt px-3 py-1 shadow-sm">
                     {getTileTypeHint(definition)}
                   </span>
                   <div className="pointer-events-auto flex items-center gap-2">

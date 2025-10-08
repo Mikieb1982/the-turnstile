@@ -4,51 +4,58 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Scrum Book - Your Rugby League Companion</title>
+    <title>The Turnstile - Your Rugby League Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-league">
   <style>
       :root {
         color-scheme: light;
-        --clr-primary: #E21836;
-        --clr-primary-bright: #FF4D6D;
-        --clr-secondary: #FFD447;
-        --clr-accent: #0074FF;
-        --clr-danger: #E21836;
-        --clr-warning: #FFD447;
-        --clr-info: #0052CC;
-        --clr-success: #00A86B;
-        --clr-text-strong: #FFFFFF;
-        --clr-text: #F3F4F6;
-        --clr-text-subtle: #CDD2D9;
-        --clr-border: #404040;
-        --clr-surface: #1F2023;
-        --clr-surface-alt: #161719;
-        --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.15), rgba(0, 82, 204, 0.1));
-        --gradient-2: radial-gradient(circle at 20% 15%, rgba(255, 212, 71, 0.1), transparent 55%);
-        --gradient-3: radial-gradient(circle at 80% 0%, rgba(226, 24, 54, 0.12), transparent 45%);
+        --clr-primary: #1E3A8A;
+        --clr-primary-600: #2563EB;
+        --clr-secondary: #2563EB;
+        --clr-accent: #F59E0B;
+        --clr-danger: #EF4444;
+        --clr-warning: #F59E0B;
+        --clr-info: #2563EB;
+        --clr-success: #06B6D4;
+        --clr-text-strong: #0B1020;
+        --clr-text: #1E3A8A;
+        --clr-text-subtle: #334155;
+        --clr-brand-navy: #1E3A8A;
+        --clr-border: #334155;
+        --clr-surface-0: #0B1020;
+        --clr-surface-1: #0F172A;
+        --clr-surface-2: #111827;
+        --clr-surface: #F8FAFC;
+        --clr-surface-alt: #E2E8F0;
+        --gradient-1: linear-gradient(140deg, rgba(30, 58, 138, 0.12), rgba(37, 99, 235, 0.08));
+        --gradient-2: radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.16), transparent 56%);
+        --gradient-3: radial-gradient(circle at 78% -10%, rgba(30, 58, 138, 0.14), transparent 48%);
         --font-heading: "Super League", "Inter", sans-serif;
-        --app-background-image: url('/background.png'); 
+        --app-background-image: url('/background.png');
+        --app-background-overlay: linear-gradient(180deg, rgba(11, 16, 32, 0.82), rgba(11, 16, 32, 0.92));
       }
       html.dark {
         color-scheme: dark;
-        --clr-primary: #E21836; /* Super League Red */
-        --clr-primary-bright: #FF4D6D;
-        --clr-secondary: #FFDD57;
-        --clr-accent: #0074FF;
-        --clr-surface: #1F2023;
-        --clr-surface-alt: #161719;
-        --clr-text-strong: #FFFFFF;
-        --clr-text: #F3F4F6;
-        --clr-text-subtle: #CDD2D9;
-        --clr-border: #404040;
-        --gradient-1: linear-gradient(140deg, rgba(226, 24, 54, 0.2), rgba(0, 116, 255, 0.15));
-        --gradient-2: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.18), transparent 60%);
-        --gradient-3: radial-gradient(circle at 90% 10%, rgba(226, 24, 54, 0.18), transparent 55%);
+        --clr-primary: #1E3A8A;
+        --clr-primary-600: #2563EB;
+        --clr-secondary: #2563EB;
+        --clr-accent: #F59E0B;
+        --clr-surface: #0F172A;
+        --clr-surface-alt: #111827;
+        --clr-text-strong: #F8FAFC;
+        --clr-text: #F8FAFC;
+        --clr-text-subtle: #CBD5E1;
+        --clr-brand-navy: #1E3A8A;
+        --clr-border: #334155;
+        --gradient-1: linear-gradient(140deg, rgba(30, 58, 138, 0.24), rgba(37, 99, 235, 0.16));
+        --gradient-2: radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.22), transparent 58%);
+        --gradient-3: radial-gradient(circle at 78% -10%, rgba(11, 16, 32, 0.24), transparent 48%);
+        --app-background-overlay: linear-gradient(180deg, rgba(11, 16, 32, 0.9), rgba(11, 16, 32, 0.96));
       }
      html {
-        background-color: var(--clr-surface-alt);
-        background-image: var(--app-background-image);
+        background-color: var(--clr-surface-0);
+        background-image: var(--app-background-overlay), var(--app-background-image);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -56,11 +63,12 @@
       }
 
       html.dark {
-        background-color: #161719;
-        background-image: var(--app-background-image);
+        background-color: var(--clr-surface-0);
+        background-image: var(--app-background-overlay), var(--app-background-image);
       }
 
       body {
+        position: relative;
         background: inherit;
         background-size: cover;
         background-position: center;
@@ -114,6 +122,7 @@
           extend: {
             colors: {
               primary: 'var(--clr-primary)',
+              'primary-600': 'var(--clr-primary-600)',
               secondary: 'var(--clr-secondary)',
               accent: 'var(--clr-accent)',
               danger: 'var(--clr-danger)',
@@ -122,9 +131,13 @@
               success: 'var(--clr-success)',
               surface: 'var(--clr-surface)',
               'surface-alt': 'var(--clr-surface-alt)',
+              'surface-0': 'var(--clr-surface-0)',
+              'surface-1': 'var(--clr-surface-1)',
+              'surface-2': 'var(--clr-surface-2)',
               'text-strong': 'var(--clr-text-strong)',
-              'text': 'var(--clr-text)',
+              text: 'var(--clr-text)',
               'text-subtle': 'var(--clr-text-subtle)',
+              'brand-navy': 'var(--clr-brand-navy)',
               border: 'var(--clr-border)',
             },
             borderRadius: {
@@ -133,7 +146,7 @@
             },
             boxShadow: {
               card: '0 1px 2px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06)',
-              focus: '0 0 0 2px rgba(226, 24, 54, .4)'
+              focus: '0 0 0 2px rgba(37, 99, 235, .45)'
             },
             fontFamily: {
               sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
