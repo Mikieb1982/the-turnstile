@@ -82,8 +82,9 @@ const LOCAL_AUTH_KEY = 'scrum-book:auth-user';
 const GOOGLE_IDENTITY_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
 const LOCAL_ACCOUNTS_KEY = 'scrum-book:accounts';
 const LOCAL_PASSWORD_RESET_PREFIX = 'scrum-book:password-reset-requested';
-const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ??
-  '99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com').trim();
+const GOOGLE_CLIENT_ID = typeof import.meta.env.VITE_GOOGLE_CLIENT_ID === 'string'
+  ? import.meta.env.VITE_GOOGLE_CLIENT_ID.trim()
+  : '';
 
 interface StoredAccount {
   id: string;

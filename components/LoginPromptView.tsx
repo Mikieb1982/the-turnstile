@@ -7,8 +7,9 @@ import {
   MiniSpinnerIcon,
 } from './Icons';
 
-const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ??
-  '99200945430-kr928f1b59vma8d9ulck20un5mqw6sfl.apps.googleusercontent.com').trim();
+const GOOGLE_CLIENT_ID = typeof import.meta.env.VITE_GOOGLE_CLIENT_ID === 'string'
+  ? import.meta.env.VITE_GOOGLE_CLIENT_ID.trim()
+  : '';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
 
