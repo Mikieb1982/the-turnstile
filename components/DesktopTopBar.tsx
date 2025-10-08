@@ -23,7 +23,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
         <button
           type="button"
           onClick={handleBack}
-          className="flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt/70 px-3 py-2 text-sm font-semibold text-text-subtle transition-colors hover:border-border hover:text-text"
+          className="flex items-center gap-2 rounded-full border border-border/70 bg-surface-alt/70 px-3 py-2 text-sm font-semibold text-brand-navy transition-colors hover:border-border hover:text-primary"
           aria-label="Go back"
         >
           <ArrowLeftIcon className="h-4 w-4" />
@@ -41,7 +41,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     isActive
                       ? 'bg-primary/15 text-primary border border-primary/40 shadow-sm'
-                      : 'text-text-subtle hover:text-text hover:bg-surface-alt/80 border border-transparent'
+                      : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent'
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
