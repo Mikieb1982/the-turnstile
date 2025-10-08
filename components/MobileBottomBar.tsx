@@ -9,7 +9,7 @@ interface MobileBottomBarProps {
 
 export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentView, setView }) => {
   return (
-    <nav className="md:hidden fixed inset-x-0 bottom-0 z-20 border-t border-border/70 bg-surface/95 backdrop-blur">
+    <nav className="md:hidden fixed inset-x-0 bottom-0 z-20 border-t border-border/70 bg-surface backdrop-blur">
       <div className="mx-auto w-full max-w-2xl px-1.5 pb-[calc(env(safe-area-inset-bottom)+6px)] pt-1">
         {/* Changed from a grid to a flexbox for a single row layout */}
         <div className="flex items-center justify-around">
@@ -24,7 +24,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentView, s
                 className={`flex h-12 w-16 items-center justify-center rounded-lg transition-colors ${
                   isActive
                     ? 'bg-primary/20 text-primary'
-                    : 'text-text-subtle hover:text-text hover:bg-surface-alt/80'
+                    : 'text-text-subtle hover:text-text hover:bg-surface-alt'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
                 aria-label={label}

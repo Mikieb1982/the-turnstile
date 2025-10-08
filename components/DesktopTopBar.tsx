@@ -24,7 +24,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
     : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent';
 
   return (
-    <nav className="hidden md:flex fixed inset-x-0 top-0 z-30 border-b border-border/70 bg-surface/80 backdrop-blur">
+    <nav className="hidden md:flex fixed inset-x-0 top-0 z-30 border-b border-border/70 bg-surface shadow-md backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-6 py-3">
         <button
           type="button"

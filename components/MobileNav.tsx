@@ -98,7 +98,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         aria-label="Mobile navigation"
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt/60 backdrop-blur">
+          <div className="flex items-center justify-between px-5 py-5 border-b border-border/70 bg-surface-alt backdrop-blur">
             <div className="flex items-center gap-3">
               <LogoIcon className="h-10 w-10" theme={theme} />
               <div className="flex flex-col">
@@ -164,7 +164,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         onClick={() => !disabled && handleNavigate(view)}
                         className={`w-full rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
                           disabled
-                            ? 'cursor-not-allowed border-border/40 bg-surface-alt/30 text-text-subtle'
+                            ? 'cursor-not-allowed border-border/40 bg-surface-alt text-text-subtle'
                             : isActive
                               ? 'border-primary/50 bg-primary/15 text-primary shadow-card'
                               : 'border-transparent bg-surface-alt/50 text-brand-navy hover:border-border/80 hover:bg-surface'
@@ -196,7 +196,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-surface-alt/60 px-4 py-4 text-sm text-text-subtle">
+            <div className="rounded-xl border border-border/60 bg-surface-alt px-4 py-4 text-sm text-text-subtle">
               <p className="font-heading text-text-strong text-lg">Matchday Tip</p>
               <p className="mt-2">
                 Keep your supporter log up to date to unlock new badges and season-long stats. Tap “My Matches” after every game you attend.
@@ -204,7 +204,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             </div>
           </div>
           {currentUser && (
-            <div className="border-t border-border/70 bg-surface/80 px-5 py-4">
+            <div className="border-t border-border/70 bg-surface px-5 py-4">
               <button
                 type="button"
                 onClick={handleLogout}
