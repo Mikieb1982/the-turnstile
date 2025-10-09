@@ -1,7 +1,8 @@
 :root {
+  /* Legacy tokens kept for backwards compatibility */
   --bg-0: #070b17;
-  --bg-1: #0f172a;
-  --bg-2: #111827;
+  --bg-1: rgba(15, 23, 42, 0.78);
+  --bg-2: rgba(15, 23, 42, 0.6);
   --text-hi: #f8fafc;
   --text-lo: #cbd5e1;
   --brand: #1e3a8a;
@@ -9,17 +10,45 @@
   --field: #15803d; /* green */
   --try: #dc2626;   /* red */
   --accent: #f59e0b; /* amber */
-  --border: #334155;
+  --border: rgba(148, 163, 184, 0.35);
+
+  /* Shared login + app theme */
+  --clr-background: #f3f6ff;
+  --clr-background-muted: #e6edff;
+  --clr-background-accent: #dae4ff;
+  --clr-surface: #ffffff;
+  --clr-surface-alt: #f1f5ff;
+  --clr-surface-strong: #e2ecff;
+  --clr-surface-0: rgba(240, 246, 255, 0.92);
+  --clr-surface-1: #162347;
+  --clr-form-surface: rgba(239, 246, 255, 0.88);
+  --clr-text-strong: #0b1020;
+  --clr-text: #1e2a44;
+  --clr-text-subtle: rgba(30, 42, 68, 0.66);
+  --clr-primary: #1e3a8a;
+  --clr-secondary: #2563eb;
+  --clr-accent: #f59e0b;
+  --clr-danger: #ef4444;
+  --clr-warning: #f59e0b;
+  --clr-info: #38bdf8;
+  --clr-success: #22d3ee;
+  --clr-border: rgba(15, 23, 42, 0.12);
+  --clr-border-strong: rgba(15, 23, 42, 0.24);
+
+  --glow-primary: radial-gradient(circle at 18% 0%, rgba(30, 64, 175, 0.22), transparent 60%);
+  --glow-accent: radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.18), transparent 70%);
+  --glow-amber: radial-gradient(circle at 30% 90%, rgba(245, 158, 11, 0.16), transparent 74%);
 }
 
 html,
 body,
 #root {
   background:
-    radial-gradient(circle at 10% -10%, rgba(37, 99, 235, 0.38), transparent 55%),
-    radial-gradient(circle at 90% 0%, rgba(15, 118, 110, 0.3), transparent 60%),
-    var(--bg-0);
-  color: var(--text-hi);
+    var(--glow-primary),
+    var(--glow-accent),
+    var(--glow-amber),
+    linear-gradient(135deg, var(--clr-background) 0%, var(--clr-background-muted) 50%, var(--clr-background-accent) 100%);
+  color: var(--clr-text);
   min-height: 100%;
 }
 
@@ -32,19 +61,19 @@ body::after {
   height: 38rem;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.45;
+  opacity: 0.35;
   pointer-events: none;
   z-index: -1;
 }
 
 body::before {
-  top: -18rem;
-  left: -12rem;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.6), transparent 70%);
+  top: -14rem;
+  left: -8rem;
+  background: radial-gradient(circle, rgba(30, 64, 175, 0.35), transparent 72%);
 }
 
 body::after {
-  bottom: -22rem;
-  right: -8rem;
-  background: radial-gradient(circle, rgba(15, 118, 110, 0.4), transparent 70%);
+  bottom: -18rem;
+  right: -6rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.32), transparent 74%);
 }
