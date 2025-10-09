@@ -9,23 +9,23 @@ const statHighlights = [
 
 export default function Hero() {
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-text">
-      <div className="relative overflow-hidden rounded-[40px] border border-border/20 bg-white px-6 pb-10 pt-12 shadow-[0_35px_80px_-55px_rgba(15,23,42,0.45)] md:px-12 md:pt-14">
+    <section className="mx-auto max-w-6xl px-4 pb-12 pt-10 text-text">
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-surface p-8 shadow-card md:p-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_center,rgba(30,64,175,0.22),transparent_68%)] blur-3xl"
+          className="pointer-events-none absolute -right-24 top-12 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.32),transparent_70%)] blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-40 left-1/4 h-80 w-80 rounded-full bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_72%)] blur-[120px]"
+          className="pointer-events-none absolute -bottom-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(15,118,110,0.28),transparent_70%)] blur-3xl"
         />
 
         <div className="relative grid gap-12 lg:grid-cols-[1.7fr_1fr]">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border/30 bg-surface-alt px-4 py-1 text-[11px] uppercase tracking-[0.28em] text-text-subtle">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-alt/70 px-4 py-1 text-xs uppercase tracking-[0.2em] text-text-subtle">
               Season 2026 ready
             </span>
-            <h1 className="mt-6 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-text-strong sm:text-4xl lg:text-[2.8rem]">
+            <h1 className="mt-6 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-text-strong sm:text-4xl lg:text-5xl">
               Chronicle every try, journey, and roar from the terraces.
             </h1>
             <p className="mt-4 max-w-xl text-base text-text-subtle sm:text-lg">
@@ -34,35 +34,35 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <a
                 href="#fixtures"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3 text-sm font-semibold text-white shadow-[0_24px_50px_-28px_rgba(11,16,32,0.55)] transition hover:-translate-y-[1px] hover:bg-brand-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-text-strong shadow-[0_24px_48px_-26px_rgba(37,99,235,0.8)] transition hover:-translate-y-[1px] hover:bg-primary/90"
               >
                 Browse fixtures
-                <span aria-hidden="true" className="text-white/70">
+                <span aria-hidden="true" className="text-text-subtle">
                   →
                 </span>
               </a>
               <a
                 href="/book"
-                className="inline-flex items-center gap-2 rounded-full border border-border/30 bg-white px-6 py-3 text-sm font-semibold text-text transition hover:border-border/50 hover:text-text-strong"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-alt px-5 py-3 text-sm font-medium text-text-subtle transition hover:border-primary/50 hover:text-text-strong"
               >
                 Open my book
               </a>
-              <span className="text-xs font-medium uppercase tracking-[0.3em] text-text-subtle">
-                No paywall • Syncs across devices
+              <span className="text-xs text-text-subtle">
+                No paywall. Syncs automatically across devices.
               </span>
             </div>
           </div>
 
-          <div className="relative flex flex-col gap-5 rounded-[28px] border border-border/20 bg-surface-alt/70 p-6 shadow-[0_25px_60px_-48px_rgba(15,23,42,0.4)] backdrop-blur-sm">
-            <span className="text-sm font-semibold text-text">This week at a glance</span>
-            <div className="space-y-4 text-sm text-text-subtle">
-              <div className="rounded-2xl border border-border/20 bg-white px-5 py-5 text-text">
-                <p className="text-[11px] uppercase tracking-[0.32em] text-text-subtle/80">Upcoming</p>
+          <div className="relative flex flex-col gap-4 rounded-2xl border border-border bg-surface-alt/80 p-6 backdrop-blur">
+            <span className="text-sm font-medium text-text-subtle">This week at a glance</span>
+            <div className="space-y-3 text-sm text-text-subtle">
+              <div className="rounded-xl border border-border bg-surface px-4 py-4 text-text-strong">
+                <p className="text-xs uppercase tracking-[0.3em] text-text-subtle">Upcoming</p>
                 <p className="mt-2 text-lg font-semibold text-text-strong">Wigan vs St Helens</p>
                 <p className="text-xs text-text-subtle">Fri 06 Mar • DW Stadium</p>
               </div>
-              <div className="flex items-center gap-3 rounded-2xl border border-border/10 bg-white/80 px-4 py-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 text-base font-semibold text-primary">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/20 text-center leading-10 text-sm font-semibold text-text-strong">
                   12
                 </div>
                 <p className="flex-1 text-xs text-text-subtle">
@@ -73,10 +73,10 @@ export default function Hero() {
 
             <dl className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-3">
               {statHighlights.map((stat) => (
-                <div key={stat.label} className="rounded-2xl border border-border/10 bg-white p-4 text-text-subtle">
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.32em] text-text-subtle/80">{stat.label}</dt>
+                <div key={stat.label} className="rounded-xl border border-border bg-surface p-4 text-text-subtle">
+                  <dt className="text-xs uppercase tracking-[0.2em] text-text-subtle/80">{stat.label}</dt>
                   <dd className="mt-2 text-2xl font-semibold text-text-strong">{stat.value}</dd>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-primary">{stat.delta}</p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-primary/80">{stat.delta}</p>
                 </div>
               ))}
             </dl>
