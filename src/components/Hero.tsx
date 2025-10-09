@@ -20,7 +20,7 @@ export default function Hero() {
           className="pointer-events-none absolute -bottom-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(15,118,110,0.28),transparent_70%)] blur-3xl"
         />
 
-        <div className="relative grid gap-10 lg:grid-cols-[1.8fr_1fr]">
+        <div className="relative grid gap-12 lg:grid-cols-[1.7fr_1fr]">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-alt/70 px-4 py-1 text-xs uppercase tracking-[0.2em] text-text-subtle">
               Season 2026 ready
@@ -31,7 +31,7 @@ export default function Hero() {
             <p className="mt-4 max-w-xl text-base text-text-subtle sm:text-lg">
               The Scrum Book is your digital matchday companion. Capture the fixtures you&apos;re chasing, celebrate the grounds you&apos;ve conquered, and build the ultimate scrapbook of rugby league memories.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <a
                 href="#fixtures"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-text-strong shadow-[0_24px_48px_-26px_rgba(37,99,235,0.8)] transition hover:-translate-y-[1px] hover:bg-primary/90"
@@ -71,7 +71,7 @@ export default function Hero() {
               </div>
             </div>
 
-            <dl className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-3">
+            <dl className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-3">
               {statHighlights.map((stat) => (
                 <div key={stat.label} className="rounded-xl border border-border bg-surface p-4 text-text-subtle">
                   <dt className="text-xs uppercase tracking-[0.2em] text-text-subtle/80">{stat.label}</dt>

@@ -31,7 +31,7 @@ export default function FixtureTile({ home, away, date, venue, attended, onClick
         </span>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4">
+      <div className="mt-5 flex items-center justify-between gap-4">
         <div className="space-y-2">
           <p className="text-sm text-text-subtle">{date}</p>
           <h3 className="text-xl font-semibold leading-tight text-text-strong sm:text-2xl">

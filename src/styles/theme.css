@@ -59,19 +59,19 @@ body::after {
   height: 38rem;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.45;
+  opacity: 0.35;
   pointer-events: none;
   z-index: -1;
 }
 
 body::before {
-  top: -18rem;
-  left: -12rem;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.6), transparent 70%);
+  top: -14rem;
+  left: -8rem;
+  background: radial-gradient(circle, rgba(30, 64, 175, 0.35), transparent 72%);
 }
 
 body::after {
-  bottom: -22rem;
-  right: -8rem;
-  background: radial-gradient(circle, rgba(15, 118, 110, 0.4), transparent 70%);
+  bottom: -18rem;
+  right: -6rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.32), transparent 74%);
 }
