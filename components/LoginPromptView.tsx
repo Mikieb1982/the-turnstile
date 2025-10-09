@@ -356,7 +356,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
 
       <form className="bg-white px-10 py-10" onSubmit={handleSignup}>
         <div className="space-y-5">
-          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-form-surface)] px-5 py-3 transition focus-within:border-brand-navy">
             <UserCircleIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="text"
@@ -369,7 +369,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-form-surface)] px-5 py-3 transition focus-within:border-brand-navy">
             <EnvelopeIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="email"
@@ -382,7 +382,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-form-surface)] px-5 py-3 transition focus-within:border-brand-navy">
             <LockClosedIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="password"
@@ -395,7 +395,7 @@ export const LoginPromptView: React.FC<LoginPromptViewProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-surface)] px-5 py-3 transition focus-within:border-brand-navy">
+          <div className="flex items-center gap-3 rounded-full border border-[rgba(30,58,138,0.14)] bg-[color:var(--clr-form-surface)] px-5 py-3 transition focus-within:border-brand-navy">
             <LockClosedIcon className="h-5 w-5 text-brand-navy/60" />
             <input
               type="password"

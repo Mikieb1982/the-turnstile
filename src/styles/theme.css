@@ -1,7 +1,8 @@
 :root {
+  /* Legacy tokens kept for backwards compatibility */
   --bg-0: #070b17;
-  --bg-1: #0f172a;
-  --bg-2: #111827;
+  --bg-1: rgba(15, 23, 42, 0.78);
+  --bg-2: rgba(15, 23, 42, 0.6);
   --text-hi: #f8fafc;
   --text-lo: #cbd5e1;
   --brand: #1e3a8a;
@@ -9,17 +10,43 @@
   --field: #15803d; /* green */
   --try: #dc2626;   /* red */
   --accent: #f59e0b; /* amber */
-  --border: #334155;
+  --border: rgba(148, 163, 184, 0.35);
+
+  /* Shared login + app theme */
+  --clr-background: #070b17;
+  --clr-background-muted: #0f172a;
+  --clr-background-accent: #111827;
+  --clr-surface: rgba(15, 23, 42, 0.78);
+  --clr-surface-alt: rgba(15, 23, 42, 0.6);
+  --clr-surface-strong: rgba(7, 11, 23, 0.95);
+  --clr-surface-0: rgba(13, 22, 45, 0.92);
+  --clr-surface-1: #162347;
+  --clr-form-surface: rgba(239, 246, 255, 0.88);
+  --clr-text-strong: #f8fafc;
+  --clr-text: #e2e8f0;
+  --clr-text-subtle: rgba(226, 232, 240, 0.72);
+  --clr-primary: #2563eb;
+  --clr-secondary: #1e3a8a;
+  --clr-accent: #f59e0b;
+  --clr-danger: #ef4444;
+  --clr-warning: #f59e0b;
+  --clr-info: #38bdf8;
+  --clr-success: #22d3ee;
+  --clr-border: rgba(148, 163, 184, 0.35);
+  --clr-border-strong: rgba(148, 163, 184, 0.55);
+
+  --glow-primary: radial-gradient(circle at 20% -10%, rgba(37, 99, 235, 0.42), transparent 65%);
+  --glow-accent: radial-gradient(circle at 85% 110%, rgba(15, 118, 110, 0.32), transparent 68%);
 }
 
 html,
 body,
 #root {
   background:
-    radial-gradient(circle at 10% -10%, rgba(37, 99, 235, 0.38), transparent 55%),
-    radial-gradient(circle at 90% 0%, rgba(15, 118, 110, 0.3), transparent 60%),
-    var(--bg-0);
-  color: var(--text-hi);
+    var(--glow-primary),
+    var(--glow-accent),
+    var(--clr-background);
+  color: var(--clr-text);
   min-height: 100%;
 }
 
