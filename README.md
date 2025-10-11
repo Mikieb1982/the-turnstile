@@ -11,8 +11,8 @@ browser.
   Genkit dev server.
 - 📅 **Fixture selector** – browse the included mock data and send the selected match to your action
   payload in one click.
-- 🧪 **Environment-friendly** – no Tailwind or PostCSS dependencies required; the build works in
-  constrained environments.
+- 🧪 **Environment-friendly** – no Tailwind dependencies or PostCSS configuration required; the
+  build works in constrained environments.
 
 ## Getting started
 
