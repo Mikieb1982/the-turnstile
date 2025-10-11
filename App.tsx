@@ -1,86 +1,209 @@
-import React from 'react'
-import Header from './src/components/Header'
-import Hero from './src/components/Hero'
-import FixtureTile from './src/components/FixtureTile'
+import { useEffect, useMemo, useState } from 'react';
+import { fetchMatches } from './services/apiService';
+import type { Match } from './types';
+import { useGenkitAction } from './genkit/useGenkitAction';
 
-const featuredFixtures = [
-  {
-    home: 'Northern Stallions',
-    away: 'Steel City Vipers',
-    date: '24 Jun 2024 • 19:45',
-    venue: 'Trident Stadium',
-    attended: true,
-    result: 'W 32 – 18',
-    highlight: '3 Wins Logged',
-    round: 'Tour Stop',
-  },
-  {
-    home: 'Coastal Raiders',
-    away: 'Harbor Hawks',
-    date: '28 Jun 2024 • 18:10',
-    venue: 'Fortress Field',
-    attended: false,
-    highlight: '8 Tries Witnessed',
-    round: 'Wishlist',
-  },
-  {
-    home: 'Fountain Vipers',
-    away: 'Mountain Giants',
-    date: '02 Jul 2024 • 16:00',
-    venue: 'Ironlight Arena',
-    attended: false,
-    highlight: 'Badge Progress',
-    round: 'On Tour',
-  },
-]
+interface MatchInsightResponse {
+  summary?: string;
+  talkingPoints?: string[];
+  headline?: string;
+  [key: string]: unknown;
+}
 
-export default function App() {
+interface MatchInsightInput {
+  matchId: string;
+  homeTeam: string;
+  awayTeam: string;
+  venue: string;
+  startTime: string;
+}
+
+const formatDateTime = (iso: string): string => {
+  const date = new Date(iso);
+  return new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date);
+};
+
+const MATCH_ACTION = 'actions/matchInsights';
+
+const App = () => {
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [matchesError, setMatchesError] = useState<string | null>(null);
+  const [loadingMatches, setLoadingMatches] = useState(true);
+  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
+
+  const { status, data, error, run, lastUpdatedAt, reset } = useGenkitAction<
+    MatchInsightInput,
+    MatchInsightResponse
+  >(MATCH_ACTION, {
+    transform: (payload) => (payload ?? {}) as MatchInsightResponse,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      setLoadingMatches(true);
+      setMatchesError(null);
+      try {
+        const response = await fetchMatches();
+        if (!cancelled) {
+          setMatches(response);
+          setSelectedMatchId((current) => current ?? response[0]?.id ?? null);
+        }
+      } catch (err) {
+        console.error('Failed to fetch matches', err);
+        if (!cancelled) {
+          setMatchesError('We were unable to load fixtures. Try again shortly.');
+          setMatches([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingMatches(false);
+        }
+      }
+    };
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selectedMatch = useMemo(
+    () => matches.find((match) => match.id === selectedMatchId) ?? null,
+    [matches, selectedMatchId]
+  );
+
+  const handleSelectMatch = (matchId: string) => {
+    setSelectedMatchId(matchId);
+    reset();
+  };
+
+  const handleGenerateInsight = () => {
+    if (!selectedMatch) {
+      return;
+    }
+
+    void run({
+      matchId: selectedMatch.id,
+      homeTeam: selectedMatch.homeTeam.name,
+      awayTeam: selectedMatch.awayTeam.name,
+      venue: selectedMatch.venue,
+      startTime: selectedMatch.startTime,
+    });
+  };
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-text">
-      <div className="pointer-events-none absolute inset-0">
-        <img
-          src="/background.png"
-          alt="Floodlit rugby league crowd celebrating"
-          className="h-full w-full object-cover object-center opacity-30"
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(8,11,22,0.85),transparent_65%)]" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-background/80 to-background" aria-hidden />
-      </div>
+    <div className="app-shell">
+      <header className="app-header">
+        <h1>The Turnstile</h1>
+        <p>
+          Prepare your Firebase Hosting front-end for Genkit experiments. Pick a fixture and send
+          its details to a Genkit action without wiring up the full production dashboard.
+        </p>
+      </header>
 
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">
-          <Hero />
-          <section
-            id="fixtures"
-            className="mx-auto mb-16 grid max-w-6xl gap-4 px-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
-          >
-            {featuredFixtures.map((fx, i) => (
-              <FixtureTile key={i} {...fx} onClick={() => {}} />
-            ))}
-          </section>
-        </main>
-        <footer className="border-t border-border/60 bg-surface/80 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 text-sm text-text-subtle/90 md:h-20 md:flex-row md:items-center md:justify-between">
-            <span>
-              © {new Date().getFullYear()} The Turnstile. Built for rugby league die-hards, powered by live match feeds.
-            </span>
-            <div className="flex flex-wrap items-center gap-3">
-              <a href="/privacy" className="transition-colors hover:text-text-strong">
-                Privacy
-              </a>
-              <span className="h-1 w-1 rounded-full bg-text-subtle/40" aria-hidden="true" />
-              <a href="/feedback" className="transition-colors hover:text-text-strong">
-                Feedback
-              </a>
-              <span className="h-1 w-1 rounded-full bg-text-subtle/40" aria-hidden="true" />
-              <a href="mailto:hello@turnstile.app" className="transition-colors hover:text-text-strong">
-                Contact
-              </a>
+      <div className="content-grid">
+        <section className="panel">
+          <h2>Fixture selector</h2>
+          {matchesError ? (
+            <div className="error-banner">
+              <strong>Unable to load fixtures.</strong>
+              <div>{matchesError}</div>
             </div>
+          ) : loadingMatches ? (
+            <div className="empty-state">Loading fixtures…</div>
+          ) : matches.length === 0 ? (
+            <div className="empty-state">No fixtures available.</div>
+          ) : (
+            <div className="matches-list">
+              {matches.map((match) => {
+                const isSelected = match.id === selectedMatchId;
+                return (
+                  <button
+                    key={match.id}
+                    type="button"
+                    className={`match-card${isSelected ? ' selected' : ''}`}
+                    onClick={() => handleSelectMatch(match.id)}
+                  >
+                    <strong>
+                      {match.homeTeam.name} vs {match.awayTeam.name}
+                    </strong>
+                    <div className="match-meta">
+                      <span>{match.venue}</span>
+                      <span>{formatDateTime(match.startTime)}</span>
+                    </div>
+                    {isSelected ? <span className="status-chip success">Selected</span> : null}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        <section className="panel">
+          <h2>Genkit action runner</h2>
+          <small className="helper-text">
+            The UI calls <code>{MATCH_ACTION}</code> with the selected fixture as the request payload.
+            Update the action name or fields to match your Genkit workflow.
+          </small>
+
+          <div className={`status-chip ${status}`}>Status: {status}</div>
+
+          <div className="match-actions">
+            <button
+              className="button"
+              type="button"
+              onClick={handleGenerateInsight}
+              disabled={!selectedMatch || status === 'loading'}
+            >
+              {status === 'loading' ? 'Requesting insight…' : 'Generate with Genkit'}
+            </button>
+            <button
+              className="button secondary-button"
+              type="button"
+              onClick={reset}
+              disabled={status === 'idle'}
+            >
+              Reset
+            </button>
           </div>
-        </footer>
+
+          {error ? <div className="error-banner">{error}</div> : null}
+
+          {data ? (
+            <div className="insights-output">
+              <h3>{data.headline ?? 'Insight summary'}</h3>
+              {data.summary ? <p>{data.summary}</p> : null}
+              {Array.isArray(data.talkingPoints) && data.talkingPoints.length > 0 ? (
+                <div>
+                  <strong>Talking points</strong>
+                  <ul>
+                    {data.talkingPoints.map((point, index) => (
+                      <li key={point ?? index}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              <small className="helper-text">
+                Updated {lastUpdatedAt ? new Date(lastUpdatedAt).toLocaleTimeString() : 'just now'}.
+              </small>
+            </div>
+          ) : (
+            <div className="empty-state">
+              {selectedMatch
+                ? 'Run the action to preview your Genkit integration.'
+                : 'Choose a fixture to connect it to your Genkit action.'}
+            </div>
+          )}
+        </section>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default App;

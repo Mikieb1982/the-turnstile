@@ -1,32 +1,102 @@
-The TurnstileThe Turnstile is a modern React application designed for rugby league fans to track match attendance, view fixtures, and log their support. It's built to work offline-first with local data and offers seamless integration with Firebase for cloud features like authentication and database persistence.FeaturesMatch Browser: Search and filter the full season fixture list.Attendance Logging: Mark games you've attended with a single click.Personalized Dashboards: Get tailored views for upcoming fixtures or matches near your location.Fan Profile: Track stats like total matches attended and unique venues visited.Offline-First: The app works out of the box with local data, no backend configuration required.Tech StackFramework: React 19 with ViteLanguage: TypeScriptStyling: Tailwind CSSBackend (Optional): Firebase (Authentication, Firestore, Hosting)Getting StartedPrerequisitesNode.js version 20.x or highernpm (usually comes with Node.js)1. Clone & Install DependenciesFirst, clone the repository to your local machine and install the required npm packages.git clone [https://github.com/mikieb1982/the-turnstile.git](https://github.com/mikieb1982/the-turnstile.git)
-cd the-turnstile
+# The Turnstile
+
+A lightweight React shell that lets Firebase Hosting teams plug Genkit actions into a match-day
+workflow without carrying the weight of the previous full dashboard. The UI ships with mock fixture
+data so it works out of the box and exposes a clean hook for invoking Genkit actions from the
+browser.
+
+## Features
+
+- 🔌 **Genkit-ready hook** – call `useGenkitAction` with any action path exposed by your Functions or
+  Genkit dev server.
+- 📅 **Fixture selector** – browse the included mock data and send the selected match to your action
+  payload in one click.
+- 🧪 **Environment-friendly** – no Tailwind or PostCSS dependencies required; the build works in
+  constrained environments.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+
+### Install dependencies
+
+```bash
 npm install
-2. Configure Environment VariablesThe application uses environment variables for connecting to Firebase and Google Authentication.Copy the example environment file:cp .env.example .env.local
-Open .env.local and add your Firebase project credentials and your Google OAuth Client ID.# Firebase configuration
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
-# ... and so on
+```
 
-# Google OAuth configuration
-VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
-Note: The app will run in a fully offline mode, using localStorage for all data, if these variables are not provided. This is useful for UI development without a backend setup.3. Run the Development ServerStart the local Vite development server.npm run dev
-The application will now be running on http://localhost:5173.Firebase IntegrationThis project is configured to work seamlessly with Firebase services.Firestore Data ModelThe app expects the following collections in your Firestore database. You can create these manually in the Firebase Console.matches: Stores the fixture list for the season.venues: Contains details about each stadium.users/{userId}: Each document is keyed by a user's authentication UID and contains user-specific data.attendedMatches: An array of match IDs that the user has attended.Security RulesFor a production environment, use the following Firestore security rules to protect user data while allowing public read access to matches and venues.rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Users can only read and write their own data
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
+### Development server
 
-    // Matches and venues are publically readable
-    match /matches/{document=**} {
-      allow read;
-    }
-    match /venues/{document=**} {
-      allow read;
-    }
+```bash
+npm run dev
+```
+
+The app boots on [http://localhost:5173](http://localhost:5173).
+
+### Production build
+
+```bash
+npm run build
+```
+
+## Configuring Genkit
+
+Set `VITE_GENKIT_BASE_URL` to the root where your Genkit actions are exposed. For example, when using
+the Firebase emulator suite you can add the following entry to `.env.local`:
+
+```bash
+VITE_GENKIT_BASE_URL=http://localhost:3400
+```
+
+The app defaults to `/genkit`, which matches the proxy path recommended by the Genkit documentation.
+If you are serving from Firebase Hosting, add a rewrite to forward `/genkit/**` to your Cloud
+Functions instance.
+
+### Triggering an action
+
+`useGenkitAction` wraps the REST call and normalises common response shapes (`{ output }` or
+`{ data }`). Update the action name in `App.tsx` and shape the request payload to suit your workflow.
+The hook exposes the following state:
+
+- `status`: `idle | loading | success | error`
+- `data`: parsed response payload
+- `error`: human-friendly message derived from the response body
+- `run(input)`: executes the HTTP request
+- `reset()`: cancels the active request (if any) and clears the state
+
+Example usage from `App.tsx`:
+
+```tsx
+const { status, data, error, run } = useGenkitAction<MatchInsightInput, MatchInsightResponse>(
+  'actions/matchInsights'
+);
+
+void run({
+  matchId: selectedMatch.id,
+  homeTeam: selectedMatch.homeTeam.name,
+  awayTeam: selectedMatch.awayTeam.name,
+  venue: selectedMatch.venue,
+  startTime: selectedMatch.startTime,
+});
+```
+
+## Firebase Hosting
+
+The existing Firebase Hosting configuration continues to serve `dist/index.html` for every route. To
+add a proxy for Genkit when deploying to Firebase, extend `firebase.json` with an additional rewrite
+pointing to your Cloud Functions region:
+
+```json
+{
+  "hosting": {
+    "rewrites": [
+      { "source": "/genkit/**", "function": "genkitHandler" }
+    ]
   }
 }
-DeploymentThe repository is pre-configured for deployment to Firebase Hosting and includes a GitHub Actions workflow for continuous deployment.Manual DeploymentLogin to Firebase:npm run firebase:login
-Build and Deploy:npm run firebase:deploy
-Continuous Deployment (CI/CD)The .github/workflows/firebase-hosting-merge.yml workflow automatically builds and deploys the application to Firebase Hosting whenever code is pushed to the main branch.To enable this, you need to add your Firebase project details as secrets in your GitHub repository settings:FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.FIREBASE_PROJECT_ID: Your Firebase project ID.Available ScriptsScriptDescriptionnpm run devStarts the local development server with HMR.npm run buildBundles the app for production into the dist/ folder.npm run previewServes the production build locally for testing.npm run firebase:serveRuns the local Firebase Hosting emulator.npm run firebase:deployBuilds and deploys the app to Firebase Hosting.
+```
+
+That way the same front-end works locally with the emulator suite and in production with your
+Genkit-backed Cloud Function.
