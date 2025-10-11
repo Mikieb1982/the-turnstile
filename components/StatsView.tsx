@@ -1,13 +1,15 @@
 import { ShareOutcome, getAppShareUrl, attemptShare } from '../utils/share';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { AttendedMatch, User } from '../types';
 import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
 import { ShareIcon, ShieldCheckIcon, UserCircleIcon } from './Icons';
+import { generateFanInsight, type FanInsightResult } from '../src/services/aiIntegrationService';
 
 interface StatsViewProps {
     attendedMatches: AttendedMatch[];
     user: User;
+    userId?: string;
 }
 
 const StatCard: React.FC<{ label: string; children: React.ReactNode; className?: string }> = ({ label, children, className }) => (
@@ -19,7 +21,7 @@ const StatCard: React.FC<{ label: string; children: React.ReactNode; className?:
     </div>
 );
 
-export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) => {
+export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user, userId }) => {
 
     const stats = useMemo(() => {
         if (attendedMatches.length === 0) {
@@ -71,6 +73,47 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         };
     }, [attendedMatches]);
 
+    const [fanInsight, setFanInsight] = useState<FanInsightResult | null>(null);
+    const [insightStatus, setInsightStatus] = useState<'idle' | 'loading' | 'error'>('idle');
+
+    const attendanceHash = useMemo(
+        () => attendedMatches.map(am => am.match.id).sort().join('|'),
+        [attendedMatches],
+    );
+
+    useEffect(() => {
+        if (!userId) {
+            setFanInsight(null);
+            setInsightStatus('idle');
+            return;
+        }
+
+        let cancelled = false;
+
+        const resolveInsight = async () => {
+            setInsightStatus('loading');
+            try {
+                const insight = await generateFanInsight(userId);
+                if (!cancelled) {
+                    setFanInsight(insight);
+                    setInsightStatus('idle');
+                }
+            } catch (error) {
+                console.warn('Failed to generate AI insight', error);
+                if (!cancelled) {
+                    setFanInsight(null);
+                    setInsightStatus('error');
+                }
+            }
+        };
+
+        resolveInsight();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [userId, attendanceHash]);
+
     if (!stats) {
         return (
             <div className="text-center py-20 bg-surface rounded-xl">
@@ -108,6 +151,24 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
                 <StatCard label="Total Points">{stats.totalPoints}</StatCard>
                 <StatCard label="Countries">{stats.countryCount}</StatCard>
             </div>
+
+            {userId && (
+                <div className="bg-surface p-4 rounded-xl shadow-card">
+                    <h3 className="text-xs font-semibold text-text-subtle uppercase mb-2">Personalised AI Spotlight</h3>
+                    {insightStatus === 'loading' && (
+                        <p className="text-sm text-text-subtle">Asking our rugby brain for your next big fan moment...</p>
+                    )}
+                    {insightStatus === 'error' && (
+                        <p className="text-sm text-red-500">We couldn't reach the AI assistant just now. Your stats are still safe offline.</p>
+                    )}
+                    {insightStatus === 'idle' && fanInsight && (
+                        <p className="text-sm text-text-strong leading-relaxed">{fanInsight.message}</p>
+                    )}
+                    {insightStatus === 'idle' && !fanInsight && (
+                        <p className="text-sm text-text-subtle">Log a few more matches to unlock personalised AI highlights.</p>
+                    )}
+                </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-surface p-4 rounded-xl shadow-card text-center">
