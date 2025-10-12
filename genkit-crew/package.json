@@ -1,0 +1,29 @@
+{
+  "name": "genkit-crew",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "genkit start",
+    "build": "tsc",
+    "dev": "node index.js",
+    "genkit": "cross-env GENKIT_ENV=dev genkit start -- npm run dev"
+  },
+  "dependencies": {
+    "@genkit-ai/core": "^1.21.0",
+    "@genkit-ai/flow": "^0.5.17",
+    "@genkit-ai/googleai": "^1.21.0",
+    "dotenv": "^17.2.3",
+    "genkit": "^1.21.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "typescript": "^5.4.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
