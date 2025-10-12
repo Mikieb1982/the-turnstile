@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@genkit-ai/ai": "^1.21.0",
+    "@genkit-ai/flow": "^1.21.0",
     "@genkit-ai/google-genai": "^1.21.0",
     "genkit": "^1.21.0"
   }
