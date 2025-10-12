@@ -12,7 +12,11 @@ const ai = genkit({
   enableTracingAndMetrics: true,
       "@genkit-ai/ai": "^1.21.0",
     "@genkit-ai/flow": "^1.21.0",
+    ],
+    logSinks: [process.env.NODE_ENV === 'dev' ? 'long' : 'short'],
+  enableTracingAndMetrics: true,
 });
+
 
 export const funFactFlow = defineFlow(
   ai.registry,
