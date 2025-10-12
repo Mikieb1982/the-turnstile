@@ -1,6 +1,6 @@
 // fixtures.ts
 
-import type { Match, LeagueStanding, Team, Venue } from '../types';
+import type { Match, LeagueStanding, Team, Venue } from '../src/types';
 
 // ---------- Teams ----------
 export const TEAMS = {
