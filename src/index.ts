@@ -1,7 +1,5 @@
-mkdir my-genkit-app
-cd my-genkit-app
-npm init -y
-mkdir src
-touch src/index.ts
-npm install -D typescript tsx
-npx tsc --init
+export { default as FixtureTile } from './components/FixtureTile'
+export { default as Header } from './components/Header'
+export { default as Hero } from './components/Hero'
+
+export * from './types'
