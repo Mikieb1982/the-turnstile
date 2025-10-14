@@ -4,16 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "genkit start",
+    "build": "tsc",
+    "dev": "npm run build && concurrently \"genkit start\" \"node --watch dist/server/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@genkit-ai/ai": "^1.21.0",
+    "@genkit-ai/core": "^1.21.0",
     "@genkit-ai/google-genai": "^1.21.0",
+    "@genkit-ai/googleai": "^1.21.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "firebase-admin": "^13.5.0",
-    "genkit": "^1.21.0"
+    "genkit": "^1.21.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/node": "^24.7.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
