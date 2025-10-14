@@ -1,29 +1,43 @@
 {
   "name": "the-scrum-book",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "firebase:login": "firebase login",
-    "firebase:serve": "firebase emulators:start --only hosting",
-    "firebase:deploy": "npm run build && firebase deploy --only hosting"
+    "agent:dev": "npx genkit start -o -- npx tsx --watch ai/index.ts",
+    "agent:run": "npx tsx ai/index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.14",
+    "@genkit-ai/firebase": "^1.21.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "handlebars": "^4.7.8",
+    "lucide-react": "^0.545.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@genkit-ai/googleai": "^1.21.0",
+    "@google/generative-ai": "^0.24.1",
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/handlebars": "^4.0.40",
     "@types/node": "^22.14.0",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.1",
-    "tsx": "^4.20.6",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  },
-  "dependencies": {
-    "@genkit-ai/google-genai": "^1.21.0",
+    "autoprefixer": "^10.4.21",
     "genkit": "^1.21.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14",
+    "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.16.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0",
+    "zod": "^3.23.8"
   }
 }

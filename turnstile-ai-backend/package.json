@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "@genkit-ai/google-genai": "^1.21.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.5.0",
     "genkit": "^1.21.0"
   }
 }

@@ -10,4 +10,5 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [react()],
   base: '/',
+  publicDir: false, // This tells Vite to not serve the public folder from the root
 });

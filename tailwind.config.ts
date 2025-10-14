@@ -1,49 +1,48 @@
-// tailwind.config.ts
-
-const config = {
-  content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-      },
       colors: {
-        brand: {
-          navy: '#080B16',
-          crimson: '#B91C1C',
-          ember: '#F97316',
+        background: 'rgb(var(--color-background) / <alpha-value>)',
+        foreground: 'rgb(var(--color-foreground) / <alpha-value>)',
+        card: {
+          DEFAULT: 'rgb(var(--color-card) / <alpha-value>)',
+          foreground: 'rgb(var(--color-card-foreground) / <alpha-value>)',
         },
-        background: { DEFAULT: '#06050E', muted: '#0B0F1C', accent: '#12172A' },
-        surface: {
-          DEFAULT: '#11182C',
-          alt: '#172138',
-          strong: '#0A0F1C',
+        primary: {
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+          foreground: 'rgb(var(--color-primary-foreground) / <alpha-value>)',
         },
-        text: {
-          DEFAULT: '#E2E8F0',
-          subtle: 'rgb(148 163 184 / <alpha-value>)',
-          strong: '#F8FAFC',
+        secondary: {
+          DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
+          foreground: 'rgb(var(--color-secondary-foreground) / <alpha-value>)',
         },
-        border: 'rgb(94 106 133 / <alpha-value>)',
-        primary: '#EF4444',
-        secondary: '#7C3AED',
-        accent: '#FACC15',
-        danger: '#DC2626',
-        warning: '#F97316',
-        info: '#38BDF8',
-        success: '#34D399',
-        field: { 600: '#15803D' },   // green
-        try: { 600: '#DC2626' },     // red
-        amber: { 500: '#FACC15' },
+        accent: {
+          DEFAULT: 'rgb(var(--color-accent) / <alpha-value>)',
+          foreground: 'rgb(var(--color-accent-foreground) / <alpha-value>)',
+        },
+        muted: {
+          DEFAULT: 'rgb(var(--color-muted) / <alpha-value>)',
+          foreground: 'rgb(var(--color-muted-foreground) / <alpha-value>)',
+        },
+        border: 'rgb(var(--color-border) / var(--color-border-opacity, 0.1))',
+        input: 'rgb(var(--color-input) / var(--color-input-opacity, 0.1))',
+        ring: 'rgb(var(--color-ring) / <alpha-value>)',
+        destructive: {
+          DEFAULT: 'rgb(var(--color-destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--color-destructive-foreground) / <alpha-value>)',
+        },
       },
-      boxShadow: {
-        soft: '0 6px 18px rgba(0,0,0,0.18)',
-        card: '0 30px 60px -35px rgba(11, 16, 32, 0.6)',
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'var(--radius-md)',
+        sm: 'var(--radius-sm)',
       },
-      borderRadius: { xl2: '1.25rem' },
     },
   },
   plugins: [],
 }
-
-export default config
