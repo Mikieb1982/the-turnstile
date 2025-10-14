@@ -9,7 +9,7 @@ export const GenerationPropSchema = z.object({
 export const CodeGenerationDetailsSchema = z.object({
   taskType: z.enum(['reactComponent', 'utilityFunction', 'plainText']).default('plainText'),
   fileName: z.string(),
-  directory: z.string().default('src/agents'),
+  directory: z.string(),
   description: z.string().optional(),
   componentName: z.string().optional(),
   props: z.array(GenerationPropSchema).optional(),
