@@ -6,6 +6,7 @@ import { DashboardPage } from './components/pages/DashboardPage';
 import { FixturesPage } from './components/pages/FixturesPage';
 import { LeagueTablePage } from './components/pages/LeagueTablePage';
 import { ProfilePage } from './components/pages/ProfilePage';
+import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
 
 // Mock Data
 const mockUserData = {
@@ -73,6 +74,8 @@ export default function App() {
         return <LeagueTablePage table={mockLeagueTable} />;
       case 'profile':
         return <ProfilePage />;
+      case 'agent':
+        return <AgentWorkshopPage />;
       default:
         return <DashboardPage user={mockUserData} nextMatch={mockNextMatch} />;
     }

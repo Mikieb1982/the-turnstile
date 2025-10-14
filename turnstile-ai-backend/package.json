@@ -1,12 +1,13 @@
 {
   "name": "turnstile-ai-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Turnstile AI backend server and agents",
+  "type": "module",
+  "main": "dist/server/index.js",
   "scripts": {
-    "start": "genkit start",
     "build": "tsc",
-    "dev": "npm run build && concurrently \"genkit start\" \"node --watch dist/server/index.js\""
+    "start": "node --enable-source-maps dist/server/index.js",
+    "dev": "tsx watch src/server/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,6 @@
   "dependencies": {
     "@genkit-ai/ai": "^1.21.0",
     "@genkit-ai/core": "^1.21.0",
-    "@genkit-ai/google-genai": "^1.21.0",
     "@genkit-ai/googleai": "^1.21.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
