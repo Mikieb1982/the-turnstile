@@ -5,7 +5,7 @@ import { CodeGenerationDetailsSchema, WorkOrderSchema, type CodeGenerationDetail
 const reactComponentRegex = /create\s+(?:a\s+)?react component(?:\s+(?:named|called))?\s+([A-Za-z0-9]+)/i;
 const fileNameRegex = /save(?:\s+it)?\s+as\s+([A-Za-z0-9_.\-/]+)/i;
 const directoryRegex = /(?:in|inside|within|under)\s+([A-Za-z0-9_./-]+\/?)/i;
-const propsRegex = /with\s+props?\s+([^\.]+)/i;
+const propsRegex = /with\s+props?\s+([\w\s:,;\'"<>{}\[\]]+)/i;
 
 function normaliseDirectory(directory: string | undefined): string | undefined {
   if (!directory) {
