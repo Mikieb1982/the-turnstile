@@ -34,6 +34,17 @@ const ProfileIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const AgentIcon = ({ className }: { className?: string }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+    <path d="M7 9h10"></path>
+    <path d="M7 13h6"></path>
+    <circle cx="9" cy="17" r="1"></circle>
+    <circle cx="12" cy="17" r="1"></circle>
+    <circle cx="15" cy="17" r="1"></circle>
+  </svg>
+);
+
 interface TabBarProps {
   activeView: string;
   setActiveView: (view: string) => void;
@@ -45,6 +56,7 @@ export const TabBar: React.FC<TabBarProps> = ({ activeView, setActiveView }) => 
     { id: 'fixtures', label: 'Fixtures', icon: FixturesIcon },
     { id: 'table', label: 'Table', icon: TableIcon },
     { id: 'profile', label: 'Profile', icon: ProfileIcon },
+    { id: 'agent', label: 'AI Builder', icon: AgentIcon },
   ];
 
   return (
