@@ -1,36 +1,12 @@
-import { Match, Team } from '../types';
+export type TableRow = { teamId: string; played: number; won: number; drawn: number; lost: number; pts: number }
 
-// The new base URL for your local backend server
-const API_BASE_URL = 'http://localhost:3001/api';
+export async function getLeagueTable(): Promise<TableRow[]> {
+  return [
+    { teamId: "WIG", played: 10, won: 8, drawn: 1, lost: 1, pts: 17 },
+    { teamId: "STH", played: 10, won: 7, drawn: 1, lost: 2, pts: 15 },
+    { teamId: "LEE", played: 10, won: 6, drawn: 0, lost: 4, pts: 12 },
+  ]
+}
 
-export const apiService = {
-  // Fetches matches from your new backend
-  getMatches: async (): Promise<Match[]> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/matches`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to fetch matches:", error);
-      // Return an empty array or handle the error as you see fit
-      return [];
-    }
-  },
-
-  // Fetches the league table from your new backend
-  getLeagueTable: async (): Promise<Team[]> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/league-table`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to fetch league table:", error);
-      // Return an empty array or handle the error as you see fit
-      return [];
-    }
-  },
-};
+/** some files import fetchLeagueTable */
+export const fetchLeagueTable = getLeagueTable
