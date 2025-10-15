@@ -10,6 +10,9 @@ export function haversineKm(a: Coords, b: Coords): number {
   return 2 * R * Math.asin(Math.sqrt(x))
 }
 
+/** alias used by components */
+export const getDistance = haversineKm
+
 export async function getUserLocation(): Promise<Coords> {
   return new Promise(resolve => {
     if (navigator.geolocation) {
