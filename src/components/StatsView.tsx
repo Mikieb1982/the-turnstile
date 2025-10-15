@@ -1,5 +1,5 @@
 import { ShareOutcome, getAppShareUrl, attemptShare } from '../utils/share';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { AttendedMatch, User } from '../types';
 import { TEAMS } from '../services/mockData';
 import { TeamLogo } from './TeamLogo';
@@ -20,6 +20,9 @@ const StatCard: React.FC<{ label: string; children: React.ReactNode; className?:
 );
 
 export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) => {
+
+    const [shareStatus, setShareStatus] = useState<ShareOutcome | null>(null);
+    const [isSharing, setIsSharing] = useState(false);
 
     const stats = useMemo(() => {
         if (attendedMatches.length === 0) {
@@ -71,6 +74,48 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         };
     }, [attendedMatches]);
 
+    const shareSummary = useMemo(() => {
+        if (!stats) {
+            return 'Check out my Turnstile rugby league season summary!';
+        }
+        const parts = [
+            `I've checked in to ${stats.totalMatches} matches`,
+            `seen ${stats.totalPoints} total points`,
+            `and visited ${stats.totalGrounds} different grounds`,
+        ];
+        return `${parts.join(', ')} on The Turnstile.`;
+    }, [stats]);
+
+    const handleShare = async () => {
+        if (!stats || isSharing) {
+            return;
+        }
+        setIsSharing(true);
+        try {
+            const outcome = await attemptShare(
+                `${user.name}'s season on The Turnstile`,
+                shareSummary,
+                getAppShareUrl()
+            );
+            setShareStatus(outcome);
+        } finally {
+            setIsSharing(false);
+        }
+    };
+
+    const shareFeedback = useMemo(() => {
+        if (shareStatus === ShareOutcome.Shared) {
+            return 'Thanks! Your season summary is on its way.';
+        }
+        if (shareStatus === ShareOutcome.Copied) {
+            return 'Link copied to your clipboard. Paste it anywhere to brag about your stats!';
+        }
+        if (shareStatus === ShareOutcome.Failed) {
+            return 'We could not share automatically. Try copying the link instead.';
+        }
+        return null;
+    }, [shareStatus]);
+
     if (!stats) {
         return (
             <div className="text-center py-20 bg-surface rounded-xl">
@@ -84,8 +129,13 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
         <div className="space-y-6 text-text-strong">
              <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold">The Turnstile</h1>
-                <button className="p-2 text-text-subtle hover:text-primary">
-                    <ShareIcon className="w-6 h-6"/>
+                <button
+                    className="flex items-center gap-2 rounded-full border border-border px-3 py-1 text-sm font-semibold text-text-subtle transition hover:border-primary hover:text-primary disabled:opacity-50"
+                    onClick={handleShare}
+                    disabled={isSharing}
+                >
+                    <ShareIcon className="w-4 h-4"/>
+                    {isSharing ? 'Sharing…' : 'Share season'}
                 </button>
             </div>
 
@@ -159,6 +209,12 @@ export const StatsView: React.FC<StatsViewProps> = ({ attendedMatches, user }) =
                 <StatCard label="Grounds">{stats.totalGrounds}</StatCard>
                 <StatCard label="New Grounds (2024)">{stats.newGroundsThisSeason}</StatCard>
             </div>
+
+            {shareFeedback && (
+                <div className="rounded-full border border-border bg-surface-alt px-4 py-2 text-center text-xs font-semibold text-text-subtle" role="status" aria-live="polite">
+                    {shareFeedback}
+                </div>
+            )}
         </div>
     );
 };
