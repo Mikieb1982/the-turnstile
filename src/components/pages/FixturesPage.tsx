@@ -16,8 +16,8 @@ interface FixturesPageProps {
 
 export const FixturesPage: React.FC<FixturesPageProps> = ({ fixtures }) => {
   return (
-    <div>
-      <h2 className="text-xl font-bold text-white mb-4">Upcoming Fixtures</h2>
+    <div className="space-y-4">
+      <h2 className="section-title mb-6 text-sm">Upcoming Fixtures</h2>
       {fixtures.map((fixture) => (
         <MatchCard
           key={fixture.id}

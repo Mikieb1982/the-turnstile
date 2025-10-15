@@ -8,15 +8,22 @@ interface BadgeIconProps {
 }
 
 export const BadgeIcon: React.FC<BadgeIconProps> = ({ name, icon, earned, onClick }) => (
-  <div
+  <button
+    type="button"
     onClick={onClick}
-    className={`flex flex-col items-center p-3 rounded-lg cursor-pointer transition-all ${
-      earned
-        ? 'bg-cyan-500/20 border-2 border-cyan-500'
-        : 'bg-gray-800/50 border-2 border-gray-700 opacity-50'
-    } hover:scale-105`}
+    className={`rugby-badge ${earned ? 'rugby-badge--earned' : 'rugby-badge--locked'}`}
+    aria-pressed={earned}
   >
-    <div className="text-4xl mb-2">{icon}</div>
-    <p className="text-xs text-center font-semibold">{name}</p>
-  </div>
+    <span className="text-4xl drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)]">{icon}</span>
+    <p className="text-[0.62rem] text-center leading-tight text-current">{name}</p>
+    <span
+      className={`rounded-full border px-2 py-0.5 text-[0.55rem] tracking-[0.35em] ${
+        earned
+          ? 'border-[#d4af37]/50 bg-[#d4af37]/15 text-[#f8f5e6]'
+          : 'border-transparent bg-[#121a13] text-[#8a998a]'
+      }`}
+    >
+      {earned ? 'Unlocked' : 'Locked'}
+    </span>
+  </button>
 );

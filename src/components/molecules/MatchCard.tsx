@@ -18,28 +18,57 @@ export const MatchCard: React.FC<MatchCardProps> = ({
   onClick,
 }) => {
   const gameDate = new Date(date);
-  const formattedDate = gameDate.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  const formattedDate = gameDate.toLocaleDateString(undefined, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
   const time = gameDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div 
-      className="bg-gray-800 rounded-xl overflow-hidden mb-4 border border-gray-700 hover:border-cyan-500 transition-all cursor-pointer"
+    <button
+      type="button"
       onClick={onClick}
+      className="rugby-card group w-full overflow-hidden text-left transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050d08]"
     >
-      <div className="p-4 flex justify-between items-center">
-        <div className="flex flex-col items-center text-center w-1/4">
-          <img className="w-12 h-12 rounded-full" src={homeLogo} alt={`${homeTeam} logo`} />
-          <h3 className="mt-2 font-semibold text-sm text-white">{homeTeam}</h3>
+      <div className="flex flex-col gap-6 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <TeamDetail logo={homeLogo} name={homeTeam} alignment="start" />
+        <div className="flex flex-col items-center justify-center gap-1 text-center">
+          <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[#90a590]">{formattedDate}</span>
+          <span className="text-xl font-bold tracking-[0.2em] text-[#f6f3e4]">{time}</span>
+          <div className="mt-2 h-px w-16 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
-        <div className="text-center">
-          <p className="font-bold text-base text-cyan-400">{time}</p>
-          <p className="text-xs text-gray-400">{formattedDate}</p>
-        </div>
-        <div className="flex flex-col items-center text-center w-1/4">
-          <img className="w-12 h-12 rounded-full" src={awayLogo} alt={`${awayTeam} logo`} />
-          <h3 className="mt-2 font-semibold text-sm text-white">{awayTeam}</h3>
-        </div>
+        <TeamDetail logo={awayLogo} name={awayTeam} alignment="end" />
       </div>
+    </button>
+  );
+};
+
+const TeamDetail = ({
+  logo,
+  name,
+  alignment,
+}: {
+  logo: string;
+  name: string;
+  alignment: 'start' | 'end';
+}) => {
+  const alignmentClasses =
+    alignment === 'start'
+      ? 'sm:items-start sm:text-left'
+      : 'sm:items-end sm:text-right';
+
+  return (
+    <div className={`flex flex-col items-center gap-3 text-center text-[#f6f3e4] ${alignmentClasses}`}>
+      <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-[#1a2a1f]/80 blur-lg opacity-50" />
+        <img
+          className="relative h-16 w-16 rounded-full border border-[#d4af37]/30 bg-[#101812]/80 p-1 shadow-[0_10px_22px_rgba(0,0,0,0.45)] transition-transform duration-300 group-hover:scale-105"
+          src={logo}
+          alt={`${name} logo`}
+        />
+      </div>
+      <span className="text-xs font-semibold uppercase tracking-[0.32em] text-[#cfd6cd] group-hover:text-[#f6f3e4]">{name}</span>
     </div>
   );
 };

@@ -21,55 +21,68 @@ export const NextMatchCard: React.FC<NextMatchCardProps> = ({
   onLogAttendance,
 }) => {
   const gameDate = new Date(date);
-  const formattedDate = gameDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  const formattedDate = gameDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', weekday: 'short' });
   const time = gameDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className="rounded-2xl shadow-2xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-black p-6 border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-cyan-500/20">
-      <div className="flex justify-around items-center text-white text-center mb-6">
-        <div className="flex flex-col items-center space-y-3 group">
-          <div className="relative">
-            <img 
-              className="w-20 h-20 rounded-full border-2 border-gray-600 group-hover:border-cyan-500 transition-all duration-300 group-hover:scale-110" 
-              src={homeLogo} 
-              alt={`${homeTeam} logo`} 
-            />
-            <div className="absolute inset-0 rounded-full bg-cyan-500/0 group-hover:bg-cyan-500/10 transition-all duration-300"></div>
-          </div>
-          <span className="font-bold text-sm">{homeTeam}</span>
-        </div>
-        
-        <div className="flex flex-col items-center px-4">
-          <div className="text-cyan-400 font-bold text-xl mb-1">{formattedDate}</div>
-          <div className="text-cyan-300 text-lg mb-2">{time}</div>
-          <span className="text-4xl font-light my-2 animate-pulse">VS</span>
-          <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
-            <span>📍</span>
-            <span>{stadium}</span>
-          </div>
-        </div>
-        
-        <div className="flex flex-col items-center space-y-3 group">
-          <div className="relative">
-            <img 
-              className="w-20 h-20 rounded-full border-2 border-gray-600 group-hover:border-cyan-500 transition-all duration-300 group-hover:scale-110" 
-              src={awayLogo} 
-              alt={`${awayTeam} logo`} 
-            />
-            <div className="absolute inset-0 rounded-full bg-cyan-500/0 group-hover:bg-cyan-500/10 transition-all duration-300"></div>
-          </div>
-          <span className="font-bold text-sm">{awayTeam}</span>
-        </div>
-      </div>
-      
-      <div className="mt-6">
-        <Button variant="primary" onClick={onLogAttendance}>
-          <span className="flex items-center justify-center gap-2">
-            <span>✓</span>
-            Log Attendance
+    <div className="rugby-card rugby-card--hero relative overflow-hidden p-6 sm:p-8">
+      <div className="flex flex-col items-center justify-between gap-8 text-center text-[#f6f3e4] sm:flex-row sm:text-left">
+        <TeamBlock logo={homeLogo} name={homeTeam} align="end" />
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="rounded-full border border-[#d4af37]/60 bg-[#132318]/80 px-4 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.38em] text-[#d4af37]">
+            Next Kick-Off
           </span>
+          <div className="text-4xl font-black tracking-[0.3em] text-[#f8f5e6] sm:text-5xl">VS</div>
+          <div className="flex flex-col items-center gap-1 text-sm uppercase tracking-[0.35em] text-[#9fb09c]">
+            <span>{formattedDate}</span>
+            <span className="text-[#f6f3e4]">{time}</span>
+            <span className="flex items-center gap-2 text-[0.6rem] text-[#b6c6b4]">
+              <span className="text-base">📍</span>
+              {stadium}
+            </span>
+          </div>
+        </div>
+        <TeamBlock logo={awayLogo} name={awayTeam} align="start" />
+      </div>
+
+      <div className="mt-8 flex flex-col gap-4 border-t border-[#2f4632]/70 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm uppercase tracking-[0.35em] text-[#98aa99]">
+          Log it. Wear it. Share the story.
+        </p>
+        <Button variant="primary" onClick={onLogAttendance} className="sm:w-auto">
+          <span className="text-base">✓</span>
+          Log Attendance
         </Button>
       </div>
+    </div>
+  );
+};
+
+const TeamBlock = ({
+  logo,
+  name,
+  align,
+}: {
+  logo: string;
+  name: string;
+  align: 'start' | 'end';
+}) => {
+  const alignmentClasses =
+    align === 'start'
+      ? 'sm:items-start sm:text-left'
+      : 'sm:items-end sm:text-right';
+
+  return (
+    <div className={`flex flex-col items-center gap-4 text-center ${alignmentClasses}`}>
+      <div className="group relative">
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#d4af37]/20 to-transparent opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-100" />
+        <img
+          className="relative h-24 w-24 rounded-full border border-[#d4af37]/40 bg-[#101812]/80 p-2 shadow-[0_12px_28px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover:scale-105"
+          src={logo}
+          alt={`${name} logo`}
+        />
+      </div>
+      <span className="text-sm font-semibold uppercase tracking-[0.3em] text-[#f6f3e4]">{name}</span>
     </div>
   );
 };

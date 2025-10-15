@@ -31,7 +31,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ stats }) => {
   };
 
   return (
-    <Button variant="outline" onClick={handleShare}>
+    <Button variant="secondary" onClick={handleShare} className="sm:w-auto">
       📤 Share My Stats
     </Button>
   );
