@@ -15,8 +15,11 @@ import {
   BuildingStadiumIcon,
   LocationMarkerIcon,
   CalendarIcon,
+  SunIcon,
+  MoonIcon,
 } from './Icons';
 import { allBadges } from '../badges';
+import { useTheme } from '../hooks/useTheme';
 
 type TileSize = 'small' | 'medium' | 'large';
 type TileType = 'high-emphasis' | 'cta' | 'user-input' | 'data-grid' | 'navigational' | 'progress' | 'icon-link';
@@ -241,6 +244,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [isCustomisingLayout, setIsCustomisingLayout] = useState(false);
   const [tileLayout, setTileLayout] = useState<TileLayoutItem[]>(() => readStoredLayout());
+  const { mode, toggleMode, setTeamId, teamId, theme } = useTheme();
+  const isDarkMode = mode === 'dark';
 
   useEffect(() => {
     const sanitised = sanitizeLayout(tileLayout);
@@ -261,6 +266,16 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   }, [tileLayout]);
 
   const layoutForRender = useMemo(() => sanitizeLayout(tileLayout), [tileLayout]);
+
+  useEffect(() => {
+    if (user.favoriteTeamId && user.favoriteTeamId !== teamId) {
+      setTeamId(user.favoriteTeamId);
+      return;
+    }
+    if (!user.favoriteTeamId && teamId) {
+      setTeamId(null);
+    }
+  }, [setTeamId, teamId, user.favoriteTeamId]);
 
   const favoriteTeam = useMemo(() => {
     if (!user.favoriteTeamId) return null;
@@ -316,6 +331,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
   const handleSelectTeam = (teamId: string) => {
     setUser({ favoriteTeamId: teamId });
+    setTeamId(teamId);
     setIsTeamModalOpen(false);
   };
 
@@ -396,10 +412,24 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               View Fixtures
             </button>
             <button
+              onClick={() => setIsTeamModalOpen(true)}
+              className="rounded-full border border-white/50 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Personalise Theme
+            </button>
+            <button
               onClick={() => setIsAvatarModalOpen(true)}
               className="rounded-full border border-white/50 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Update Avatar
+            </button>
+            <button
+              type="button"
+              onClick={toggleMode}
+              className="flex items-center gap-2 rounded-full border border-white/40 px-3 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/10"
+            >
+              {isDarkMode ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+              <span>{isDarkMode ? 'Light' : 'Dark'} mode</span>
             </button>
           </div>
         </div>
@@ -581,19 +611,35 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           {favoriteTeam && <TeamLogo teamId={favoriteTeam.id} teamName={favoriteTeam.name} size="small" />}
         </div>
         {favoriteTeam ? (
-          <div className="mt-5 space-y-3 text-sm text-text-subtle">
-            <p className="flex items-center gap-2 text-text-strong">
-              <BuildingStadiumIcon className="h-5 w-5 text-primary" />
-              {favoriteTeam.name}
-            </p>
-            <p className="flex items-center gap-2">
-              <LocationMarkerIcon className="h-4 w-4 text-primary" />
-              Home ground: {teamIdToVenue[favoriteTeam.id] || 'TBC'}
-            </p>
-            <p>
-              Matches seen with the {favoriteTeam.name}:{' '}
-              <span className="font-semibold text-text-strong">{favoriteTeamAppearances}</span>
-            </p>
+          <div className="mt-5 space-y-4 text-sm text-text-subtle">
+            <div className="space-y-3">
+              <p className="flex items-center gap-2 text-text-strong">
+                <BuildingStadiumIcon className="h-5 w-5 text-primary" />
+                {favoriteTeam.name}
+              </p>
+              <p className="flex items-center gap-2">
+                <LocationMarkerIcon className="h-4 w-4 text-primary" />
+                Home ground: {teamIdToVenue[favoriteTeam.id] || 'TBC'}
+              </p>
+              <p>
+                Matches seen with the {favoriteTeam.name}:{' '}
+                <span className="font-semibold text-text-strong">{favoriteTeamAppearances}</span>
+              </p>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-surface-alt p-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-text-subtle">Theme preview</p>
+              <div className="mt-3 h-14 w-full rounded-lg" style={{ background: theme.gradient1 }} aria-hidden />
+              <div className="mt-3 flex h-10 overflow-hidden rounded-lg border border-border/50">
+                <div className="flex-1" style={{ background: theme.primary }} aria-hidden />
+                <div className="flex-1" style={{ background: theme.secondary }} aria-hidden />
+                <div className="flex-1" style={{ background: theme.accent }} aria-hidden />
+              </div>
+              <p className="mt-3 text-xs leading-relaxed">
+                Currently using <span className="font-semibold text-text-strong">{isDarkMode ? 'dark' : 'light'} mode</span>{' '}
+                with <span className="font-semibold text-text-strong">{favoriteTeam.name}</span> colours across the
+                interface.
+              </p>
+            </div>
           </div>
         ) : (
           <div className="mt-5 rounded-xl border border-dashed border-border p-4 text-sm text-text-subtle">
@@ -612,6 +658,14 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             className="inline-flex items-center justify-center rounded-full border border-border px-4 py-2 text-sm font-semibold text-text-strong transition hover:border-primary/50 hover:text-primary"
           >
             Team stats
+          </button>
+          <button
+            type="button"
+            onClick={toggleMode}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-text-strong transition hover:border-primary/50 hover:text-primary"
+          >
+            {isDarkMode ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+            {isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           </button>
         </div>
       </div>
@@ -713,6 +767,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         onClose={() => setIsTeamModalOpen(false)}
         onSelectTeam={handleSelectTeam}
         currentTeamId={user.favoriteTeamId}
+        themeMode={mode}
       />
       <AvatarModal
         isOpen={isAvatarModalOpen}

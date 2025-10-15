@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import type { Badge } from '../types';
 import { TrophyIcon } from './Icons';
 
@@ -33,12 +33,26 @@ const BadgeCard: React.FC<{ badge: Badge; isEarned: boolean }> = ({ badge, isEar
 };
 
 export const BadgesView: React.FC<BadgesViewProps> = ({ allBadges, earnedBadgeIds }) => {
-    
+
     const earnedCount = earnedBadgeIds.length;
     const totalCount = allBadges.length;
 
-    const milestones = allBadges.filter(b => b.category === 'Milestone');
-    const tournaments = allBadges.filter(b => b.category === 'Tournament');
+    const [showLocked, setShowLocked] = useState(true);
+
+    const milestones = useMemo(() => allBadges.filter(b => b.category === 'Milestone'), [allBadges]);
+    const tournaments = useMemo(() => allBadges.filter(b => b.category === 'Tournament'), [allBadges]);
+
+    const filteredMilestones = useMemo(
+        () => milestones.filter(badge => showLocked || earnedBadgeIds.includes(badge.id)),
+        [earnedBadgeIds, milestones, showLocked]
+    );
+
+    const filteredTournaments = useMemo(
+        () => tournaments.filter(badge => showLocked || earnedBadgeIds.includes(badge.id)),
+        [earnedBadgeIds, showLocked, tournaments]
+    );
+
+    const nextLockedBadge = useMemo(() => allBadges.find(badge => !earnedBadgeIds.includes(badge.id)), [allBadges, earnedBadgeIds]);
 
     return (
         <div className="space-y-8">
@@ -50,32 +64,52 @@ export const BadgesView: React.FC<BadgesViewProps> = ({ allBadges, earnedBadgeId
                 </div>
             </div>
 
-            {milestones.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-text-subtle">
+                    {earnedCount === totalCount
+                        ? 'Every badge unlocked—what a season!'
+                        : `Only ${totalCount - earnedCount} to go until the full set.`}
+                </p>
+                <label className="flex items-center gap-2 text-sm font-semibold text-text-subtle">
+                    <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                        checked={showLocked}
+                        onChange={(event) => setShowLocked(event.target.checked)}
+                    />
+                    Show locked badges
+                </label>
+            </div>
+
+            {filteredMilestones.length > 0 && (
                 <section>
                     <h2 className="text-xl font-bold text-text-strong uppercase tracking-wider mb-4">Milestones</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        {milestones.map(badge => (
+                        {filteredMilestones.map(badge => (
                            <BadgeCard key={badge.id} badge={badge} isEarned={earnedBadgeIds.includes(badge.id)} />
                         ))}
                     </div>
                 </section>
             )}
 
-            {tournaments.length > 0 && (
+            {filteredTournaments.length > 0 && (
                  <section>
                     <h2 className="text-xl font-bold text-text-strong uppercase tracking-wider mb-4 mt-8">Tournaments</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        {tournaments.map(badge => (
+                        {filteredTournaments.map(badge => (
                            <BadgeCard key={badge.id} badge={badge} isEarned={earnedBadgeIds.includes(badge.id)} />
                         ))}
                     </div>
                 </section>
             )}
 
-             {earnedCount < totalCount && (
+            {earnedCount < totalCount && (
                 <div className="text-center py-10 bg-surface rounded-md mt-8 shadow-card">
                     <h2 className="text-xl font-bold text-text-strong">Keep Going!</h2>
-                    <p className="text-text-subtle mt-2">Attend more matches to unlock the remaining badges and complete your collection.</p>
+                    <p className="text-text-subtle mt-2">
+                        Attend more matches to unlock the remaining badges and complete your collection.
+                        {nextLockedBadge ? ` Next up: the ${nextLockedBadge.name} badge.` : ''}
+                    </p>
                 </div>
             )}
         </div>

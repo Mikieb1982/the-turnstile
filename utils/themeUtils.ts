@@ -1,8 +1,10 @@
 import { TEAM_BRANDING } from '../services/mockData';
-import type { TeamBranding } from '../services/mockData';
+
+type TeamBranding = (typeof TEAM_BRANDING)[string];
 
 export type ThemeMode = 'light' | 'dark';
-interface ThemeVariables {
+
+export interface ThemeVariables {
   primary: string;
   secondary: string;
   accent: string;
@@ -19,6 +21,11 @@ interface ThemeVariables {
   gradient1: string;
   gradient2: string;
   gradient3: string;
+}
+
+interface ThemeComputationOptions {
+  mode: ThemeMode;
+  teamBranding?: TeamBranding;
 }
 
 const DEFAULT_LIGHT_THEME: ThemeVariables = {
@@ -83,25 +90,17 @@ const clamp = (value: number, min: number, max: number) => Math.min(Math.max(val
 const hexToRgb = (hex: string): [number, number, number] | null => {
   const normalised = hex.replace('#', '');
   if (normalised.length === 3) {
-    const r = normalised[0];
-    const g = normalised[1];
-    const b = normalised[2];
-    return [parseInt(r.repeat(2), 16), parseInt(g.repeat(2), 16), parseInt(b.repeat(2), 16)];
+    const [r, g, b] = normalised.split('').map((component) => component.repeat(2));
+    return [parseInt(r, 16), parseInt(g, 16), parseInt(b, 16)];
   }
-
   if (normalised.length !== 6) {
     return null;
   }
+  const r = Number.parseInt(normalised.slice(0, 2), 16);
+  const g = Number.parseInt(normalised.slice(2, 4), 16);
+  const b = Number.parseInt(normalised.slice(4, 6), 16);
 
-  const r = parseInt(normalised.slice(0, 2), 16);
-  const g = parseInt(normalised.slice(2, 4), 16);
-  const b = parseInt(normalised.slice(4, 6), 16);
-
-  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
-    return null;
-  }
-
-  return [r, g, b];
+  return Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b) ? null : [r, g, b];
 };
 
 const rgbToHex = (r: number, g: number, b: number): string => {
@@ -128,33 +127,24 @@ const mixHexColors = (hexA: string, hexB: string, amount: number): string => {
   return rgbToHex(r, g, b);
 };
 
-const hexToRgba = (hex: string, alpha: number): string => {
-  const rgb = hexToRgb(hex);
-  if (!rgb) {
-    return `rgba(0, 0, 0, ${clamp(alpha, 0, 1)})`;
-  }
-  const [r, g, b] = rgb;
-  return `rgba(${r}, ${g}, ${b}, ${clamp(alpha, 0, 1)})`;
-};
-
 const hexToHsl = (hex: string): [number, number, number] | null => {
   const rgb = hexToRgb(hex);
   if (!rgb) {
     return null;
   }
 
-  const [r, g, b] = rgb.map(component => component / 255) as [number, number, number];
+  const [r, g, b] = rgb.map((component) => component / 255) as [number, number, number];
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0;
   let s = 0;
   const l = (max + min) / 2;
 
-  const delta = max - min;
-  if (delta === 0) {
+  if (max === min) {
     return [0, 0, l];
   }
 
+  const delta = max - min;
   s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
 
   switch (max) {
@@ -171,179 +161,168 @@ const hexToHsl = (hex: string): [number, number, number] | null => {
       h = 0;
   }
 
-  h /= 6;
-
-  return [h, s, l];
-};
-
-const hueToRgb = (p: number, q: number, t: number) => {
-  let temp = t;
-  if (temp < 0) {
-    temp += 1;
-  }
-  if (temp > 1) {
-    temp -= 1;
-  }
-  if (temp < 1 / 6) {
-    return p + (q - p) * 6 * temp;
-  }
-  if (temp < 1 / 2) {
-    return q;
-  }
-  if (temp < 2 / 3) {
-    return p + (q - p) * (2 / 3 - temp) * 6;
-  }
-  return p;
+  return [h / 6, s, l];
 };
 
 const hslToHex = (h: number, s: number, l: number): string => {
   const hue = ((h % 1) + 1) % 1;
-  const saturation = clamp(s, 0, 1);
-  const lightness = clamp(l, 0, 1);
 
-  if (saturation === 0) {
-    const gray = Math.round(lightness * 255);
-    return rgbToHex(gray, gray, gray);
+  const hueToRgb = (p: number, q: number, t: number) => {
+    let temp = t;
+    if (temp < 0) temp += 1;
+    if (temp > 1) temp -= 1;
+    if (temp < 1 / 6) return p + (q - p) * 6 * temp;
+    if (temp < 1 / 2) return q;
+    if (temp < 2 / 3) return p + (q - p) * (2 / 3 - temp) * 6;
+    return p;
+  };
+
+  let r: number;
+  let g: number;
+  let b: number;
+
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hueToRgb(p, q, hue + 1 / 3);
+    g = hueToRgb(p, q, hue);
+    b = hueToRgb(p, q, hue - 1 / 3);
   }
 
-  const q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-  const p = 2 * lightness - q;
-
-  const r = Math.round(hueToRgb(p, q, hue + 1 / 3) * 255);
-  const g = Math.round(hueToRgb(p, q, hue) * 255);
-  const b = Math.round(hueToRgb(p, q, hue - 1 / 3) * 255);
-
-  return rgbToHex(r, g, b);
+  return rgbToHex(r * 255, g * 255, b * 255);
 };
 
-const adjustColorIntensity = (
-  hex: string,
-  { saturationMultiplier = 1, lightnessMultiplier = 1, lightnessBias = 0 }: {
-    saturationMultiplier?: number;
-    lightnessMultiplier?: number;
-    lightnessBias?: number;
-  },
-): string => {
+const shiftLightness = (hex: string, amount: number): string => {
   const hsl = hexToHsl(hex);
   if (!hsl) {
     return hex;
   }
-
   const [h, s, l] = hsl;
-  const adjustedS = clamp(s * saturationMultiplier, 0, 1);
-  const adjustedL = clamp(l * lightnessMultiplier + lightnessBias, 0, 1);
-
-  return hslToHex(h, adjustedS, adjustedL);
+  return hslToHex(h, s, clamp(l + amount, 0, 1));
 };
 
-const emphasisePrimaryColor = (hex: string, mode: ThemeMode) =>
-  adjustColorIntensity(hex, {
-    saturationMultiplier: 1.12,
-    lightnessMultiplier: mode === 'dark' ? 1.08 : 1,
-  });
+const buildTeamOverride = ({ mode, teamBranding }: ThemeComputationOptions): Partial<ThemeVariables> | null => {
+  if (!teamBranding) {
+    return null;
+  }
 
-const createTeamOverrides = (
-  branding: TeamBranding,
-  mode: ThemeMode,
-  defaults: ThemeVariables,
-): Partial<ThemeVariables> => {
-  const palette = branding.palette && branding.palette.length > 0 ? branding.palette : [branding.bg, branding.text];
-  const [rawPrimary, rawSecondary, rawTertiary] = palette;
+  const basePrimary = teamBranding.primary;
+  const secondary = teamBranding.secondary ?? '#ffffff';
+  const accent = mixHexColors(teamBranding.primary, teamBranding.secondary ?? '#ffffff', 0.4);
+  const textStrong = teamBranding.text ?? (mode === 'dark' ? '#F8FAFC' : '#0F172A');
+  const surface = mode === 'dark' ? shiftLightness(teamBranding.primary, -0.6) : shiftLightness(teamBranding.secondary ?? '#ffffff', 0.55);
+  const surfaceAlt = mixHexColors(surface, mode === 'dark' ? '#000000' : '#ffffff', mode === 'dark' ? 0.25 : 0.15);
+  const border = mixHexColors(basePrimary, secondary, mode === 'dark' ? 0.65 : 0.25);
+  const text = mixHexColors(textStrong, mode === 'dark' ? '#CBD5E1' : '#1F2937', 0.25);
+  const textSubtle = mixHexColors(text, mode === 'dark' ? '#94A3B8' : '#64748B', 0.35);
 
-  const primary = emphasisePrimaryColor(rawPrimary ?? branding.bg, mode);
-
-  const secondaryBase = rawSecondary ?? mixHexColors(primary, defaults.surface, mode === 'dark' ? 0.2 : 0.24);
-  const accentBase = rawTertiary ?? rawSecondary ?? adjustColorIntensity(primary, {
-    saturationMultiplier: 0.95,
-    lightnessMultiplier: mode === 'dark' ? 1.22 : 0.88,
-  });
-
-  const secondary = adjustColorIntensity(secondaryBase, {
-    saturationMultiplier: 1.08,
-    lightnessMultiplier: mode === 'dark' ? 1.04 : 0.98,
-  });
-
-  const accent = adjustColorIntensity(accentBase, {
-    saturationMultiplier: 1.1,
-    lightnessMultiplier: mode === 'dark' ? 1.02 : 0.96,
-  });
-
-  const warning = adjustColorIntensity(rawSecondary ?? mixHexColors(primary, defaults.warning, 0.4), {
-    saturationMultiplier: 1.05,
-    lightnessMultiplier: mode === 'dark' ? 1 : 0.98,
-  });
-
-  const info = adjustColorIntensity(mixHexColors(accent, defaults.info, 0.35), {
-    saturationMultiplier: 1.05,
-    lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
-  });
-
-  const success = adjustColorIntensity(mixHexColors(accent, defaults.success, 0.4), {
-    saturationMultiplier: 1.08,
-    lightnessMultiplier: mode === 'dark' ? 1 : 0.97,
-  });
-
-  const border = adjustColorIntensity(mixHexColors(defaults.border, primary, mode === 'dark' ? 0.38 : 0.24), {
-    saturationMultiplier: 1.05,
-    lightnessMultiplier: mode === 'dark' ? 1 : 0.92,
-  });
-
-  const surface = mixHexColors(defaults.surface, primary, mode === 'dark' ? 0.12 : 0.04);
-  const surfaceAlt = mixHexColors(defaults.surfaceAlt, primary, mode === 'dark' ? 0.16 : 0.08);
-
-  const gradient1 = `linear-gradient(135deg, ${hexToRgba(primary, mode === 'dark' ? 0.65 : 0.5)}, ${hexToRgba(accent, mode === 'dark' ? 0.52 : 0.35)})`;
-  const gradient2 = `radial-gradient(circle at 18% 20%, ${hexToRgba(secondary, mode === 'dark' ? 0.5 : 0.32)}, transparent 56%)`;
-  const gradient3 = `radial-gradient(circle at 78% -10%, ${hexToRgba(primary, mode === 'dark' ? 0.5 : 0.28)}, transparent 48%)`;
+  const gradientBase = mixHexColors(basePrimary, secondary, 0.35);
+  const gradientAccent = mixHexColors(basePrimary, '#111827', mode === 'dark' ? 0.15 : 0.05);
 
   return {
-    primary,
+    primary: basePrimary,
     secondary,
     accent,
-    danger: defaults.danger,
-    warning,
-    info,
-    success,
-    border,
+    textStrong,
+    text,
+    textSubtle,
     surface,
     surfaceAlt,
-    gradient1,
-    gradient2,
-    gradient3,
+    border,
+    gradient1: `linear-gradient(140deg, ${mixHexColors(gradientBase, surface, 0.2)}55, ${gradientAccent}30)`,
+    gradient2: `radial-gradient(circle at 18% 20%, ${mixHexColors(basePrimary, '#ffffff', 0.25)}22, transparent 58%)`,
+    gradient3: `radial-gradient(circle at 78% -10%, ${mixHexColors(basePrimary, '#000000', 0.4)}24, transparent 48%)`,
   };
 };
 
-const getDefaultsForMode = (mode: ThemeMode) => (mode === 'dark' ? DEFAULT_DARK_THEME : DEFAULT_LIGHT_THEME);
-
-export const getThemeVariables = (teamId: string | undefined, mode: ThemeMode): ThemeVariables => {
-  const defaults = getDefaultsForMode(mode);
-
-  if (!teamId) {
-    return defaults;
+export const createThemeVariables = ({ mode, teamBranding }: ThemeComputationOptions): ThemeVariables => {
+  const base = mode === 'dark' ? DEFAULT_DARK_THEME : DEFAULT_LIGHT_THEME;
+  const override = buildTeamOverride({ mode, teamBranding });
+  if (!override) {
+    return { ...base };
   }
-
-  const branding = TEAM_BRANDING[teamId];
-  if (!branding) {
-    return defaults;
-  }
-
-  const overrides = createTeamOverrides(branding, mode, defaults);
-  return { ...defaults, ...overrides };
+  return { ...base, ...override };
 };
 
-const applyVariablesToRoot = (variables: ThemeVariables, mode: ThemeMode) => {
-  if (typeof document === 'undefined') {
+export const applyThemeToDocument = (theme: ThemeVariables, root?: HTMLElement) => {
+  const target = root ?? (typeof document !== 'undefined' ? document.documentElement : undefined);
+  if (!target) {
     return;
   }
-
-  const root = document.documentElement;
-  (Object.keys(VARIABLE_NAME_MAP) as Array<keyof ThemeVariables>).forEach(key => {
-    const cssVar = VARIABLE_NAME_MAP[key];
-    root.style.setProperty(cssVar, variables[key]);
+  Object.entries(VARIABLE_NAME_MAP).forEach(([key, cssVar]) => {
+    const property = key as keyof ThemeVariables;
+    target.style.setProperty(cssVar, theme[property]);
   });
-  root.style.setProperty('color-scheme', mode);
 };
 
-export const syncThemeWithFavouriteTeam = (teamId: string | undefined, mode: ThemeMode) => {
-  const variables = getThemeVariables(teamId, mode);
-  applyVariablesToRoot(variables, mode);
+export const getTeamBranding = (teamId?: string | null): TeamBranding | undefined => {
+  if (!teamId) {
+    return undefined;
+  }
+  return TEAM_BRANDING[teamId];
+};
+
+export const createTeamAwareTheme = (mode: ThemeMode, teamId?: string | null): ThemeVariables => {
+  const branding = getTeamBranding(teamId);
+  return createThemeVariables({ mode, teamBranding: branding });
+};
+
+export const getThemeSnapshot = (mode: ThemeMode, teamId?: string | null) => ({
+  mode,
+  teamId: teamId ?? null,
+  variables: createTeamAwareTheme(mode, teamId),
+});
+
+export const applyThemeFromSettings = (mode: ThemeMode, teamId?: string | null, root?: HTMLElement) => {
+  const theme = createTeamAwareTheme(mode, teamId);
+  const target = root ?? (typeof document !== 'undefined' ? document.documentElement : undefined);
+  applyThemeToDocument(theme, target);
+  if (target) {
+    target.dataset.themeMode = mode;
+    if (teamId) {
+      target.dataset.themeTeam = teamId;
+    } else {
+      delete target.dataset.themeTeam;
+    }
+  }
+};
+
+export const resolveInitialMode = (): ThemeMode => {
+  if (typeof window === 'undefined') {
+    return 'dark';
+  }
+  const stored = window.localStorage.getItem('theme-mode') as ThemeMode | null;
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+  const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
+};
+
+export const persistThemeMode = (mode: ThemeMode) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  window.localStorage.setItem('theme-mode', mode);
+};
+
+export const persistTeamPreference = (teamId: string | null) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  if (teamId) {
+    window.localStorage.setItem('theme-team', teamId);
+  } else {
+    window.localStorage.removeItem('theme-team');
+  }
+};
+
+export const readPersistedTeam = (): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  const stored = window.localStorage.getItem('theme-team');
+  return stored ?? null;
 };
