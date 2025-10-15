@@ -7,16 +7,22 @@ export type User = {
   photoURL?: string | null
 }
 
-type AuthContextValue = {
+export type AuthContextValue = {
   user: User | null
+  /** some components use currentUser instead of user */
+  currentUser: User | null
   signIn: () => Promise<void>
   signOut: () => Promise<void>
+  /** used in MyMatchesView */
+  addPhotoToMatch?: (matchId: string, file: File) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
+  currentUser: null,
   signIn: async () => {},
   signOut: async () => {},
+  addPhotoToMatch: async () => {},
 })
 
 export const useAuth = () => useContext(AuthContext)
