@@ -164,10 +164,20 @@ export const GroundsView: React.FC = () => {
 
     useEffect(() => {
         if (location) {
-            const venuesWithDistance = ALL_VENUES.map(venue => ({
-                ...venue,
-                distance: getDistance(location.lat, location.lon, venue.lat, venue.lon),
-            }));
+            const venuesWithDistance = ALL_VENUES
+                .filter((venue) => typeof venue.lat === 'number' && typeof venue.lon === 'number')
+                .map((venue) => {
+                    const distanceKm = getDistance(
+                        { lat: location.lat, lon: location.lon },
+                        { lat: venue.lat!, lon: venue.lon! }
+                    );
+                    const distanceMiles = distanceKm * 0.621371;
+
+                    return {
+                        ...venue,
+                        distance: distanceMiles,
+                    };
+                });
             venuesWithDistance.sort((a, b) => a.distance - b.distance);
             setSortedVenues(venuesWithDistance);
             setLoading(false);

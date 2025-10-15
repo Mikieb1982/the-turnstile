@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type { Match } from '../types';
 import MatchListItem from './MatchListItem';
 import { LoadingSpinner } from './LoadingSpinner';
 import { AlertTriangleIcon } from './Icons';
-import { useGeolocation } from '../hooks/useGeolocation';
+import useGeolocation from '../hooks/useGeolocation';
 import { getDistance } from '../utils/geolocation';
 import { ALL_VENUES } from '../services/mockData';
 
@@ -20,10 +20,6 @@ interface NearbyMatchesViewProps {
 export const NearbyMatchesView: React.FC<NearbyMatchesViewProps> = ({ matches, attendedMatchIds, onAttend }) => {
   const { position, isLoading, error, requestLocation } = useGeolocation();
 
-  useEffect(() => {
-    requestLocation();
-  }, [requestLocation]);
-
   const upcomingMatches = useMemo(
     () => matches.filter(match => new Date(match.startTime) > new Date() && match.status === 'SCHEDULED'),
     [matches],
@@ -37,12 +33,16 @@ export const NearbyMatchesView: React.FC<NearbyMatchesViewProps> = ({ matches, a
     return upcomingMatches
       .map(match => {
         const venue = ALL_VENUES.find(v => v.name === match.venue);
-        if (!venue) {
+        if (!venue || typeof venue.lat !== 'number' || typeof venue.lon !== 'number') {
           return null;
         }
 
-        const distance = getDistance(position.lat, position.lon, venue.lat, venue.lon);
-        return { ...match, distance };
+        const distanceKm = getDistance(
+          { lat: position.lat, lon: position.lon },
+          { lat: venue.lat, lon: venue.lon }
+        );
+        const distanceMiles = distanceKm * 0.621371;
+        return { ...match, distance: distanceMiles };
       })
       .filter((match): match is NearbyMatch => match !== null)
       .sort((a, b) => a.distance - b.distance);

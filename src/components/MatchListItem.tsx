@@ -120,13 +120,22 @@ const MatchListItem: React.FC<MatchListItemProps> = ({ match, isAttended, onAtte
         // Note: The original code uses miles (3959). Assuming the user is okay with the current implementation 
         // given the context of a UK-based league, but noting the general preference for metric.
         // For accurate metric (kilometers), R should be 6371. The existing utility uses miles.
-        const userDistance = getDistance(latitude, longitude, stadium.lat, stadium.lon);
+        if (typeof stadium.lat !== 'number' || typeof stadium.lon !== 'number') {
+          handleLocationError('Stadium location unknown', 'error_location');
+          return;
+        }
 
-        if (userDistance <= CHECKIN_RADIUS_MILES) {
+        const distanceKm = getDistance(
+          { lat: latitude, lon: longitude },
+          { lat: stadium.lat, lon: stadium.lon }
+        );
+        const distanceMiles = distanceKm * 0.621371;
+
+        if (distanceMiles <= CHECKIN_RADIUS_MILES) {
           onAttend(match);
           setCheckinState({ status: 'idle', message: '' });
         } else {
-          handleLocationError(`Too far away (${userDistance.toFixed(1)} mi)`, 'error_distance');
+          handleLocationError(`Too far away (${distanceMiles.toFixed(1)} mi)`, 'error_distance');
         }
       },
       error => {
