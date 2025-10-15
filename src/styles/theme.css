@@ -457,7 +457,18 @@ a:hover {
 .btn-row { @apply flex gap-2 flex-wrap; }
 .card-grid { @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3; }
 .form-row { @apply grid gap-3 sm:grid-cols-2; }
-.section { @apply container-app py-8; }
-.section-tight { @apply container-app py-4; }
+.section {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 2rem;
+}
+
+.section-tight {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 1rem;
+}
 
 /* End of theme.css */

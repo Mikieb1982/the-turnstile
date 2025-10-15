@@ -23,6 +23,11 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
     const { addPhotoToMatch } = useAuth();
 
     const handleUploadPhoto = async (matchId: string, file: File) => {
+        if (!addPhotoToMatch) {
+            console.warn('Photo upload is not available in the current auth context.');
+            return;
+        }
+
         setIsUploading(true);
         try {
             await addPhotoToMatch(matchId, file);

@@ -1,17 +1,49 @@
-import { useEffect, useState } from "react"
-import type { Coords } from "../utils/geolocation"
+import { useCallback, useEffect, useState } from 'react'
+import type { Coords } from '../utils/geolocation'
 
-export default function useGeolocation() {
-  const [coords, setCoords] = useState<Coords | null>(null)
+type GeoError = { code: number; message: string } | null
 
-  useEffect(() => {
-    if (!navigator.geolocation) return
-    const id = navigator.geolocation.watchPosition(
-      p => setCoords({ lat: p.coords.latitude, lon: p.coords.longitude }),
-      () => setCoords(null)
+type GeolocationState = {
+  position: Coords | null
+  error: GeoError
+  isLoading: boolean
+  requestLocation: () => void
+}
+
+const UNSUPPORTED_ERROR: GeoError = {
+  code: 0,
+  message: 'Geolocation is not supported by this browser.',
+}
+
+export default function useGeolocation(): GeolocationState {
+  const [position, setPosition] = useState<Coords | null>(null)
+  const [error, setError] = useState<GeoError>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const requestLocation = useCallback(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setError(UNSUPPORTED_ERROR)
+      return
+    }
+
+    setIsLoading(true)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setPosition({ lat: pos.coords.latitude, lon: pos.coords.longitude })
+        setError(null)
+        setIsLoading(false)
+      },
+      (err) => {
+        setError({ code: err.code, message: err.message })
+        setIsLoading(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
     )
-    return () => navigator.geolocation.clearWatch(id)
   }, [])
 
-  return coords
+  useEffect(() => {
+    requestLocation()
+  }, [requestLocation])
+
+  return { position, error, isLoading, requestLocation }
 }
