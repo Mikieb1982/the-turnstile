@@ -82,9 +82,9 @@ export default function App() {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen font-sans text-white flex flex-col">
+    <div className="relative min-h-screen flex flex-col text-white">
       <Navbar />
-      <main className="container mx-auto p-4 pb-20 flex-1">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pb-32 pt-8">
         {renderView()}
       </main>
       <Footer />

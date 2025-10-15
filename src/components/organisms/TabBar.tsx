@@ -9,39 +9,39 @@ const HomeIcon = ({ className }: { className?: string }) => (
 
 const FixturesIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-    <line x1="16" y1="2" x2="16" y2="6"></line>
-    <line x1="8" y1="2" x2="8" y2="6"></line>
-    <line x1="3" y1="10" x2="21" y2="10"></line>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
   </svg>
 );
 
 const TableIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="8" y1="6" x2="21" y2="6"></line>
-    <line x1="8" y1="12" x2="21" y2="12"></line>
-    <line x1="8" y1="18" x2="21" y2="18"></line>
-    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+    <line x1="8" y1="6" x2="21" y2="6" />
+    <line x1="8" y1="12" x2="21" y2="12" />
+    <line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="3" y1="6" x2="3.01" y2="6" />
+    <line x1="3" y1="12" x2="3.01" y2="12" />
+    <line x1="3" y1="18" x2="3.01" y2="18" />
   </svg>
 );
 
 const ProfileIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-    <circle cx="12" cy="7" r="4"></circle>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
   </svg>
 );
 
 const AgentIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
-    <path d="M7 9h10"></path>
-    <path d="M7 13h6"></path>
-    <circle cx="9" cy="17" r="1"></circle>
-    <circle cx="12" cy="17" r="1"></circle>
-    <circle cx="15" cy="17" r="1"></circle>
+    <rect x="3" y="4" width="18" height="16" rx="2" ry="2" />
+    <path d="M7 9h10" />
+    <path d="M7 13h6" />
+    <circle cx="9" cy="17" r="1" />
+    <circle cx="12" cy="17" r="1" />
+    <circle cx="15" cy="17" r="1" />
   </svg>
 );
 
@@ -60,20 +60,36 @@ export const TabBar: React.FC<TabBarProps> = ({ activeView, setActiveView }) => 
   ];
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-10">
-      <nav className="container mx-auto flex justify-around">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveView(item.id)}
-            className={`flex flex-col items-center justify-center w-full pt-2 pb-1 text-xs transition-colors duration-200 ${
-              activeView === item.id ? 'text-cyan-400' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <item.icon className="h-6 w-6 mb-1" />
-            {item.label}
-          </button>
-        ))}
+    <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#1f3424]/70 bg-[#050d08]/95 backdrop-blur">
+      <nav className="mx-auto flex w-full max-w-6xl" aria-label="Primary Navigation">
+        {navItems.map((item) => {
+          const isActive = activeView === item.id;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveView(item.id)}
+              className={`relative flex w-full flex-col items-center justify-center gap-1 py-3 text-[0.65rem] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
+                isActive ? 'text-[#f6f3e4]' : 'text-[#8ea18d] hover:text-[#d4af37]'
+              }`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <item.icon
+                className={`h-6 w-6 ${
+                  isActive
+                    ? 'text-[#d4af37] drop-shadow-[0_0_12px_rgba(212,175,55,0.45)]'
+                    : 'text-[#9fb09c]'
+                }`}
+              />
+              <span>{item.label}</span>
+              <span
+                className={`pointer-events-none absolute inset-x-6 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-transparent via-[#d4af37] to-transparent transition-opacity duration-300 ${
+                  isActive ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            </button>
+          );
+        })}
       </nav>
     </footer>
   );

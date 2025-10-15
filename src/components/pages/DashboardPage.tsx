@@ -24,9 +24,9 @@ interface DashboardPageProps {
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ user, nextMatch }) => {
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-white mb-3">My Next Match</h2>
+    <div className="space-y-10">
+      <div className="space-y-4">
+        <h2 className="section-title text-sm">My Next Match</h2>
         <NextMatchCard
           homeTeam={nextMatch.homeTeam}
           awayTeam={nextMatch.awayTeam}
@@ -38,16 +38,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, nextMatch })
         />
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-white mb-3">Quick Stats</h2>
-        <div className="grid grid-cols-3 gap-3">
+      <div className="space-y-4">
+        <h2 className="section-title text-sm">Quick Stats</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatDisplay label="Matches Attended" value={user.stats.matchesAttended} icon="🎫" />
           <StatDisplay label="Unique Grounds" value={user.stats.stadiumsVisited} icon="🏟️" />
           <StatDisplay label="Badges Earned" value={user.stats.badgesEarned} icon="🏆" />
         </div>
       </div>
 
-      <div>
+      <div className="max-w-md">
         <ShareButton stats={user.stats} />
       </div>
     </div>
