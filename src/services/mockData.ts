@@ -18,7 +18,7 @@ type Match = {
   date: string
 }
 
-type Fixture = {
+export type Fixture = {
   id: number
   homeTeam: string
   awayTeam: string
