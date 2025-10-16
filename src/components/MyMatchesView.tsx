@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import type { AttendedMatch } from '../types';
 import { TrashIcon, CalendarIcon, LocationMarkerIcon, RefreshIcon, CameraIcon } from './Icons';
 import { TeamLogo } from './TeamLogo';
-import { useAuth } from '../contexts/AuthContext';
 import { PhotoUploadModal } from './PhotoUploadModal';
 import { PhotoViewerModal } from './PhotoViewerModal';
 import { formatDateUK } from '../utils/date';
@@ -10,9 +9,10 @@ import { formatDateUK } from '../utils/date';
 interface MyMatchesViewProps {
     attendedMatches: AttendedMatch[];
     onRemove: (matchId: string) => void;
+    onAddPhoto?: (matchId: string, file: File) => Promise<void>;
 }
 
-export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, onRemove }) => {
+export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, onRemove, onAddPhoto }) => {
     const [yearFilter, setYearFilter] = useState('all');
     const [competitionFilter, setCompetitionFilter] = useState('all');
     const [sortBy, setSortBy] = useState('attendedDesc');
@@ -20,17 +20,16 @@ export const MyMatchesView: React.FC<MyMatchesViewProps> = ({ attendedMatches, o
     const [uploadModalMatch, setUploadModalMatch] = useState<AttendedMatch | null>(null);
     const [viewModalMatch, setViewModalMatch] = useState<AttendedMatch | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const { addPhotoToMatch } = useAuth();
 
     const handleUploadPhoto = async (matchId: string, file: File) => {
-        if (!addPhotoToMatch) {
-            console.warn('Photo upload is not available in the current auth context.');
+        if (!onAddPhoto) {
+            console.warn('Photo upload is not available. Provide an onAddPhoto handler to enable uploads.');
             return;
         }
 
         setIsUploading(true);
         try {
-            await addPhotoToMatch(matchId, file);
+            await onAddPhoto(matchId, file);
             setUploadModalMatch(null);
         } catch (error) {
             console.error("Upload failed in view:", error);
