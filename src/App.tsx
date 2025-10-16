@@ -8,17 +8,14 @@ import { FixturesPage } from './components/pages/FixturesPage';
 import { LeagueTablePage } from './components/pages/LeagueTablePage';
 import { ProfilePage } from './components/pages/ProfilePage';
 import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
-
-// Import all mock data from the service file
+import { LoginPage } from './components/pages/LoginPage';
+// CORRECTED PATH: Changed from './services' to '../services'
 import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from '../services/mockData';
 import { useAuth } from './contexts/AuthContext';
-import { LoginPage } from './components/pages/LoginPage';
-
 
 export default function App() {
   const [activeView, setActiveView] = useState('home');
-  const { currentUser, signInWithGoogle, signIn, signUp, passwordReset } = useAuth();
-
+  const { currentUser, signIn, signInWithGoogle, signUp, passwordReset, logOut } = useAuth();
 
   const renderView = () => {
     switch (activeView) {
@@ -44,6 +41,7 @@ export default function App() {
                 theme="dark"
                 onLogin={signInWithGoogle}
                 onEmailLogin={signIn}
+                // CORRECTED: This ensures the arguments are passed correctly
                 onSignup={({ name, email, password }) => signUp(name, email, password)}
                 onPasswordReset={passwordReset}
             />
