@@ -1,7 +1,8 @@
 // src/firebase.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { firebaseConfig } from '../../.firebase/config';
+// Corrected the path from ../../ to ../
+import { firebaseConfig } from '../.firebase/config';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
