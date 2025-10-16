@@ -30,3 +30,7 @@ service cloud.firestore {
 DeploymentThe repository is pre-configured for deployment to Firebase Hosting and includes a GitHub Actions workflow for continuous deployment.Manual DeploymentLogin to Firebase:npm run firebase:login
 Build and Deploy:npm run firebase:deploy
 Continuous Deployment (CI/CD)The .github/workflows/firebase-hosting-merge.yml workflow automatically builds and deploys the application to Firebase Hosting whenever code is pushed to the main branch.To enable this, you need to add your Firebase project details as secrets in your GitHub repository settings:FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.FIREBASE_PROJECT_ID: Your Firebase project ID.Available ScriptsScriptDescriptionnpm run devStarts the local development server with HMR.npm run buildBundles the app for production into the dist/ folder.npm run previewServes the production build locally for testing.npm run firebase:serveRuns the local Firebase Hosting emulator.npm run firebase:deployBuilds and deploys the app to Firebase Hosting.
+
+## AI DevOps Firebase Architecture
+
+For the AI Code Workshop, the recommended serverless workflow uses Firebase Hosting for the frontend and a Python Cloud Function to drive the GitHub-based DevOps automation. The full reference implementation, including deployment guidance and sequence diagrams, is available in [`docs/firebase-devops-architecture.md`](docs/firebase-devops-architecture.md).

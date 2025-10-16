@@ -1,0 +1,10 @@
+{
+  "name": "ai-devops-functions",
+  "engines": {
+    "python": "3.10"
+  },
+  "dependencies": {
+    "functions-framework": "^3.2.0",
+    "requests": "^2.31.0"
+  }
+}
