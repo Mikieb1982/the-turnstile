@@ -1,10 +1,7 @@
-// src/firebase/config.ts
+// .firebase/config.ts
 
 /**
  * Centralized Firebase configuration.
- * This module reads environment variables and exports a configuration object
- * for use throughout the application. It ensures that Firebase is only initialized
- * once and provides a single source of truth for configuration values.
  */
 
 interface FirebaseConfig {
@@ -18,7 +15,8 @@ interface FirebaseConfig {
   useEmulators: boolean;
 }
 
-const firebaseConfig: FirebaseConfig = {
+// This is the only change needed. "export" is added before "const".
+export const firebaseConfig: FirebaseConfig = {
   apiKey: (import.meta.env.VITE_FIREBASE_API_KEY || '').trim(),
   authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '').trim(),
   projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || '').trim(),
@@ -29,8 +27,6 @@ const firebaseConfig: FirebaseConfig = {
   useEmulators: import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true',
 };
 
-// A function to check if the core Firebase configuration is present.
-// This helps differentiate between a local-only setup and a Firebase-connected setup.
 export const isFirebaseConfigured = (): boolean => {
   return !!(
     firebaseConfig.apiKey &&
@@ -44,4 +40,4 @@ export const getGoogleClientId = (): string | undefined => {
     return clientId || undefined;
 }
 
-export firebaseConfig;
+// We no longer need a separate export statement at the end.
