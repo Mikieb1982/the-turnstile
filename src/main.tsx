@@ -1,18 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+// src/main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
 
-import App from './App'
-import './index.css'
-import './styles/theme.css'
-
-const rootElement = document.getElementById('root')
-
-if (!rootElement) {
-  throw new Error('Failed to find the root element')
-}
-
-ReactDOM.createRoot(rootElement).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+    <AuthProvider> {/* Wrap App with AuthProvider */}
+      <App />
+    </AuthProvider>
+  </React.StrictMode>,
+);
