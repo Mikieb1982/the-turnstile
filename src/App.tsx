@@ -1,5 +1,4 @@
 // src/App.tsx
-
 import React, { useState } from 'react';
 import { Navbar } from './components/organisms/Navbar';
 import { Footer } from './components/organisms/Footer';
@@ -9,14 +8,16 @@ import { FixturesPage } from './components/pages/FixturesPage';
 import { LeagueTablePage } from './components/pages/LeagueTablePage';
 import { ProfilePage } from './components/pages/ProfilePage';
 import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
-import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from './services/mockData';
+
+// Import all mock data from the service file
+import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from '../services/mockData';
 import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './components/pages/LoginPage';
 
 
 export default function App() {
   const [activeView, setActiveView] = useState('home');
-  const { currentUser, signIn, signInWithGoogle, signUp, passwordReset, logOut } = useAuth(); // Use the auth context
+  const { currentUser, signInWithGoogle, signIn, signUp, passwordReset } = useAuth();
 
 
   const renderView = () => {
@@ -43,13 +44,12 @@ export default function App() {
                 theme="dark"
                 onLogin={signInWithGoogle}
                 onEmailLogin={signIn}
-                onSignup={signUp}
+                onSignup={({ name, email, password }) => signUp(name, email, password)}
                 onPasswordReset={passwordReset}
             />
         </div>
     );
   }
-
 
   return (
     <div className="relative min-h-screen flex flex-col text-white">
