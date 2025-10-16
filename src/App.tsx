@@ -63,7 +63,7 @@ const mockLeagueTable = [
 ];
 
 export default function App() {
-  const [activeView, setActiveView] = useState('home');
+  const [activeView, setActiveView] = useState('login'); // Set the initial view to 'login'
 
   const renderView = () => {
     switch (activeView) {
@@ -77,12 +77,14 @@ export default function App() {
         return <ProfilePage />;
       case 'agent':
         return <AgentWorkshopPage />;
+      case 'login': // Add this case
+        return <LoginPage />;
       default:
         return <DashboardPage user={mockUserData} nextMatch={mockNextMatch} />;
     }
   };
 
-  return (
+return (
     <div className="relative min-h-screen flex flex-col text-white">
       <Navbar />
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pb-32 pt-8">
