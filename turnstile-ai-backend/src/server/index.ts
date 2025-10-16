@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { z } from 'zod';
+import admin from 'firebase-admin';
 
 import {
   getJob,
@@ -12,6 +13,30 @@ import {
   type GenerateCodeJobRequest,
   type GenerateFeatureJobRequest
 } from '../devops/orchestrator.js';
+import { jobStore } from '../devops/jobStore.js';
+
+// Initialize Firebase Admin if using Firestore
+if (process.env.USE_FIRESTORE === 'true') {
+  const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
+
+  if (serviceAccountPath) {
+    // Use service account file
+    const serviceAccount = await import(serviceAccountPath, {
+      assert: { type: 'json' }
+    });
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount.default)
+    });
+  } else {
+    // Use Application Default Credentials (for Cloud Run, etc.)
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault()
+    });
+  }
+
+  console.log('Firebase Admin initialized with Firestore support');
+}
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 3001);
@@ -23,89 +48,82 @@ app.get('/health', (_, res) => {
   res.json({ status: 'ok' });
 });
 
-const generateCodeSchema = z.object({
-  description: z.string().min(1),
-  context: z.string().optional(),
-  targets: z.array(z.string()).optional()
-});
+// ... existing endpoints ...
 
-app.post('/api/devops/generate-code', async (req, res) => {
+// New: Get job statistics
+app.get('/api/devops/stats', async (_, res) => {
   try {
-    const payload = generateCodeSchema.parse(req.body);
-    const job = await runGenerateCodeJob(payload as GenerateCodeJobRequest);
-    res.status(201).json(job);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.message, issues: error.issues });
+    if ('getStats' in jobStore && typeof jobStore.getStats === 'function') {
+      const stats = await jobStore.getStats();
+      res.json(stats);
+    } else {
+      // Fallback for in-memory store
+      const jobs = listJobs();
+      const stats = {
+        total: jobs.length,
+        byType: {} as Record<string, number>,
+        byStatus: {} as Record<string, number>
+      };
+
+      jobs.forEach((job) => {
+        stats.byType[job.type] = (stats.byType[job.type] ?? 0) + 1;
+        stats.byStatus[job.status] = (stats.byStatus[job.status] ?? 0) + 1;
+      });
+
+      res.json(stats);
     }
+  } catch (error) {
     const message = error instanceof Error ? error.message : 'Internal server error';
-    const job = (error as { job?: unknown }).job;
-    res.status(500).json({ error: message, job });
+    res.status(500).json({ error: message });
   }
 });
 
-const generateFeatureSchema = z.object({
-  featureName: z.string().min(1),
-  description: z.string().min(1),
-  acceptanceCriteria: z.array(z.string()).optional(),
-  context: z.string().optional(),
-  targets: z.array(z.string()).optional()
-});
-
-app.post('/api/devops/generate-feature', async (req, res) => {
+// New: Cleanup old jobs
+app.post('/api/devops/cleanup', async (req, res) => {
   try {
-    const payload = generateFeatureSchema.parse(req.body);
-    const job = await runGenerateFeatureJob(payload as GenerateFeatureJobRequest);
-    res.status(201).json(job);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.message, issues: error.issues });
+    const { olderThanDays = 30 } = req.body;
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
+
+    if ('cleanup' in jobStore && typeof jobStore.cleanup === 'function') {
+      const deleted = await jobStore.cleanup(cutoffDate);
+      res.json({ deleted, cutoffDate: cutoffDate.toISOString() });
+    } else {
+      res.status(501).json({ error: 'Cleanup not supported with in-memory store' });
     }
+  } catch (error) {
     const message = error instanceof Error ? error.message : 'Internal server error';
-    const job = (error as { job?: unknown }).job;
-    const statusCode = job ? 500 : 502;
-    res.status(statusCode).json({ error: message, job });
+    res.status(500).json({ error: message });
   }
 });
 
-const deploymentSchema = z.object({
-  target: z.string().min(1),
-  environment: z.string().min(1),
-  notes: z.string().optional(),
-  dryRun: z.boolean().optional()
-});
-
-app.post('/api/devops/deploy', async (req, res) => {
+// New: List jobs with filtering
+app.get('/api/devops/jobs', async (req, res) => {
   try {
-    const payload = deploymentSchema.parse(req.body);
-    const job = await runDeploymentJob(payload as DeploymentJobRequest);
-    res.status(201).json(job);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.message, issues: error.issues });
+    const { type, status, limit, startAfter } = req.query;
+
+    if ('list' in jobStore && typeof jobStore.list === 'function') {
+      const jobs = await jobStore.list({
+        type: type as string | undefined,
+        status: status as string | undefined,
+        limit: limit ? Number(limit) : undefined,
+        startAfter: startAfter as string | undefined
+      });
+      res.json(jobs);
+    } else {
+      // Fallback for in-memory store
+      res.json(listJobs());
     }
+  } catch (error) {
     const message = error instanceof Error ? error.message : 'Internal server error';
-    const job = (error as { job?: unknown }).job;
-    const statusCode = job ? 500 : 502;
-    res.status(statusCode).json({ error: message, job });
+    res.status(500).json({ error: message });
   }
-});
-
-app.get('/api/devops/jobs', (_, res) => {
-  res.json(listJobs());
-});
-
-app.get('/api/devops/jobs/:jobId', (req, res) => {
-  const job = getJob(req.params.jobId);
-  if (!job) {
-    return res.status(404).json({ error: 'Job not found' });
-  }
-  res.json(job);
 });
 
 export function startServer() {
   app.listen(PORT, () => {
     console.log(`Turnstile AI backend running on port ${PORT}`);
+    console.log(`Job store: ${process.env.USE_FIRESTORE === 'true' ? 'Firestore' : 'In-Memory'}`);
   });
 }
 
