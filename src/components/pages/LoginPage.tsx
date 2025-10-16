@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   EnvelopeIcon,
   LockClosedIcon,
   UsersIcon,
+  UserCircleIcon,
 } from '../Icons';
 
 const GOOGLE_CLIENT_ID = typeof import.meta.env.VITE_GOOGLE_CLIENT_ID === 'string'
@@ -13,10 +14,10 @@ type AuthMode = 'login' | 'signup' | 'forgot';
 
 interface LoginPromptViewProps {
   theme: 'light' | 'dark';
-  onLogin?: () => Promise<void>;
-  onEmailLogin: (identifier: string, password: string) => Promise<void>;
-  onSignup: (input: { name: string; email: string; password: string }) => Promise<void>;
-  onPasswordReset: (identifier: string) => Promise<void>;
+  onLogin?: () => Promise<unknown>;
+  onEmailLogin: (identifier: string, password: string) => Promise<unknown>;
+  onSignup: (input: { name: string; email: string; password: string }) => Promise<unknown>;
+  onPasswordReset: (identifier: string) => Promise<unknown>;
 }
 
 type ActiveRequest = AuthMode | 'google' | null;
@@ -217,7 +218,7 @@ export const LoginPage: React.FC<LoginPromptViewProps> = ({
                 Name
               </label>
               <div className="flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-base transition focus-within:border-white/60 focus-within:bg-white/10">
-                <UserIcon className="h-5 w-5 text-white/70" />
+                <UserCircleIcon className="h-5 w-5 text-white/70" />
                 <input
                   id="signup-name"
                   type="text"

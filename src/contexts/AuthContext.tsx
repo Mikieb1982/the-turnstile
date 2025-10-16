@@ -1,11 +1,10 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '../firebase';
+import type { AuthUser } from '../types';
 import * as authService from '../services/authService';
 
 interface AuthContextType {
-  currentUser: User | null;
+  currentUser: AuthUser | null;
   loading: boolean;
   signUp: typeof authService.signUp;
   signIn: typeof authService.signIn;
@@ -25,12 +24,12 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    // Listen for authentication state changes using the local auth service
+    const unsubscribe = authService.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(false);
     });
