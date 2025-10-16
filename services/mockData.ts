@@ -1,3 +1,5 @@
+// services/mockData.ts
+
 export type Team = { id: string; name: string; shortName?: string; logoUrl?: string }
 export type Venue = { id: string; name: string; lat?: number; lon?: number; city?: string }
 export type Match = { id: string; homeId: string; awayId: string; venueId: string; date: string }
@@ -45,3 +47,48 @@ export const mockLeagueTable: TableRow[] = [
 
 export function getTeamById(id: string): Team | undefined { return TEAMS[id] }
 export function getVenueById(id: string): Venue | undefined { return ALL_VENUES.find(v => v.id === id) }
+
+export const mockUserData = {
+  stats: {
+    matchesAttended: 12,
+    stadiumsVisited: 5,
+    badgesEarned: 3,
+  },
+};
+
+export const mockNextMatch = {
+  id: 1,
+  homeTeam: 'Team Phoenix',
+  awayTeam: 'Team Lion',
+  date: '2025-10-28T19:30:00',
+  stadium: 'National Stadium',
+  homeLogo: 'https://placehold.co/64x64/06b6d4/FFFFFF?text=P',
+  awayLogo: 'https://placehold.co/64x64/f43f5e/FFFFFF?text=L',
+};
+
+export const mockFixtures = [
+  {
+    id: 1,
+    homeTeam: 'St Helens',
+    awayTeam: 'Wigan Warriors',
+    date: '2025-11-18T19:45:00',
+    homeLogo: 'https://placehold.co/64x64/E63946/FFFFFF?text=SH',
+    awayLogo: 'https://placehold.co/64x64/A8202D/FFFFFF?text=WW'
+  },
+  {
+    id: 2,
+    homeTeam: 'Leeds Rhinos',
+    awayTeam: 'Castleford Tigers',
+    date: '2025-11-19T15:00:00',
+    homeLogo: 'https://placehold.co/64x64/005596/FFFFFF?text=LR',
+    awayLogo: 'https://placehold.co/64x64/F47C20/FFFFFF?text=CT'
+  },
+  {
+    id: 3,
+    homeTeam: 'Warrington Wolves',
+    awayTeam: 'Catalans Dragons',
+    date: '2025-11-19T17:30:00',
+    homeLogo: 'https://placehold.co/64x64/00539F/FFFFFF?text=WW',
+    awayLogo: 'https://placehold.co/64x64/F8E000/000000?text=CD'
+  },
+];
