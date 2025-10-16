@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ai } from '../genkit.conf.js';
 
-const DEFAULT_MODEL = (process.env.GOOGLE_MODEL_ID ?? 'googleai/gemini-2.5-pro') as any;
+const DEFAULT_MODEL = (process.env.GOOGLE_MODEL_ID ?? 'googleai/gemini-2.5-pro');
 
 function safeJsonParse<T>(value: string, fallback: T): T {
   try {
