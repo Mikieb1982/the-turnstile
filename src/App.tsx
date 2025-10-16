@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/App.tsx
+import React from 'react';
 import { Navbar } from './components/organisms/Navbar';
 import { Footer } from './components/organisms/Footer';
 import { TabBar } from './components/organisms/TabBar';
@@ -9,47 +10,13 @@ import { ProfilePage } from './components/pages/ProfilePage';
 import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
 import { LoginPage } from './components/pages/LoginPage';
 import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from './services/mockData';
+import { useAuth } from './contexts/AuthContext'; // Import the useAuth hook
 
 export default function App() {
-  const [activeView, setActiveView] = useState('login');
-  const [user, setUser] = useState(null); // Add user state
-
-  // Replace these with your actual Firebase authentication functions
-  const handleLogin = async () => {
-    console.log('Logging in with Google...');
-    // Example: const user = await signInWithGoogle(); setUser(user);
-    setActiveView('home');
-  };
-
-  const handleEmailLogin = async (email, password) => {
-    console.log('Logging in with email:', email, password);
-    // Example: const user = await signInWithEmail(email, password); setUser(user);
-    setActiveView('home');
-  };
-
-  const handleSignup = async ({ name, email, password }) => {
-    console.log('Signing up:', name, email, password);
-    // Example: await createUserWithEmail(email, password);
-  };
-
-  const handlePasswordReset = async (email) => {
-    console.log('Resetting password for:', email);
-    // Example: await sendPasswordResetEmail(email);
-  };
+  const [activeView, setActiveView] = React.useState('home');
+  const { currentUser, signIn, signInWithGoogle, signUp, passwordReset, logOut } = useAuth(); // Use the auth context
 
   const renderView = () => {
-    if (activeView === 'login') {
-      return (
-        <LoginPage
-          theme="dark"
-          onLogin={handleLogin}
-          onEmailLogin={handleEmailLogin}
-          onSignup={handleSignup}
-          onPasswordReset={handlePasswordReset}
-        />
-      );
-    }
-
     switch (activeView) {
       case 'home':
         return <DashboardPage user={mockUserData} nextMatch={mockNextMatch} />;
@@ -66,6 +33,22 @@ export default function App() {
     }
   };
 
+  // If there's no user, show the LoginPage
+  if (!currentUser) {
+    return (
+        <div className="relative min-h-screen flex flex-col justify-center items-center text-white">
+            <LoginPage
+                theme="dark"
+                onLogin={signInWithGoogle}
+                onEmailLogin={signIn}
+                onSignup={signUp}
+                onPasswordReset={passwordReset}
+            />
+        </div>
+    );
+  }
+
+  // If there is a user, show the main app
   return (
     <div className="relative min-h-screen flex flex-col text-white">
       <Navbar />
@@ -73,6 +56,7 @@ export default function App() {
         {renderView()}
       </main>
       <Footer />
+      {/* You may want to add a logout button to your Navbar or ProfilePage that calls the logOut function */}
       <TabBar activeView={activeView} setActiveView={setActiveView} />
     </div>
   );
