@@ -63,7 +63,33 @@ export const matches: Match[] = [
 ]
 
 /** for DataUploader.tsx */
-export const mockMatches: Match[] = matches
+export const mockUserData = {
+  stats: {
+    matchesAttended: 12,
+    stadiumsVisited: 5,
+    badgesEarned: 3,
+  },
+};
+
+export const mockNextMatch = {
+  id: 1,
+  homeTeam: 'Team Phoenix',
+  awayTeam: 'Team Lion',
+  date: '2025-10-28T19:30:00',
+  stadium: 'National Stadium',
+  homeLogo: 'https://placehold.co/64x64/06b6d4/FFFFFF?text=P',
+  awayLogo: 'https://placehold.co/64x64/f43f5e/FFFFFF?text=L',
+};
+
+export const mockFixtures = [
+  {
+    id: 1,
+    homeTeam: 'St Helens',
+    awayTeam: 'Wigan Warriors',
+    date: '2025-11-18T19:45:00',
+    homeLogo: 'https://placehold.co/64x64/E63946/FFFFFF?text=SH',
+    awayLogo: 'https://placehold.co/64x64/A8202D/FFFFFF?text=WW'
+  },
 
 export const mockLeagueTable: LeagueStanding[] = [
   {
