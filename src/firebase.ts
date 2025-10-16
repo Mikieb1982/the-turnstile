@@ -1,7 +1,7 @@
 // src/firebase.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-// Corrected the path from ../../ to ../
+// CORRECTED PATH: It should be one level up, not two.
 import { firebaseConfig } from '../.firebase/config';
 
 // Initialize Firebase
