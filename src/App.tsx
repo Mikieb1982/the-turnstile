@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LoginPage } from './components/pages/LoginPage';
 import { Navbar } from './components/organisms/Navbar';
 import { Footer } from './components/organisms/Footer';
 import { TabBar } from './components/organisms/TabBar';
