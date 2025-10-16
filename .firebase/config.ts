@@ -44,4 +44,4 @@ export const getGoogleClientId = (): string | undefined => {
     return clientId || undefined;
 }
 
-export default firebaseConfig;
+export firebaseConfig;
