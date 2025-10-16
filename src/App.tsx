@@ -1,5 +1,6 @@
 // src/App.tsx
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Navbar } from './components/organisms/Navbar';
 import { Footer } from './components/organisms/Footer';
 import { TabBar } from './components/organisms/TabBar';
@@ -8,13 +9,15 @@ import { FixturesPage } from './components/pages/FixturesPage';
 import { LeagueTablePage } from './components/pages/LeagueTablePage';
 import { ProfilePage } from './components/pages/ProfilePage';
 import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
-import { LoginPage } from './components/pages/LoginPage';
 import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from './services/mockData';
-import { useAuth } from './contexts/AuthContext'; // Import the useAuth hook
+import { useAuth } from './contexts/AuthContext';
+import { LoginPage } from './components/pages/LoginPage';
+
 
 export default function App() {
-  const [activeView, setActiveView] = React.useState('home');
+  const [activeView, setActiveView] = useState('home');
   const { currentUser, signIn, signInWithGoogle, signUp, passwordReset, logOut } = useAuth(); // Use the auth context
+
 
   const renderView = () => {
     switch (activeView) {
@@ -33,7 +36,6 @@ export default function App() {
     }
   };
 
-  // If there's no user, show the LoginPage
   if (!currentUser) {
     return (
         <div className="relative min-h-screen flex flex-col justify-center items-center text-white">
@@ -48,7 +50,7 @@ export default function App() {
     );
   }
 
-  // If there is a user, show the main app
+
   return (
     <div className="relative min-h-screen flex flex-col text-white">
       <Navbar />
@@ -56,7 +58,6 @@ export default function App() {
         {renderView()}
       </main>
       <Footer />
-      {/* You may want to add a logout button to your Navbar or ProfilePage that calls the logOut function */}
       <TabBar activeView={activeView} setActiveView={setActiveView} />
     </div>
   );
