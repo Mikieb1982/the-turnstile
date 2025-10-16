@@ -40,8 +40,7 @@ app.post('/api/devops/generate-code', async (req, res) => {
     }
     const message = error instanceof Error ? error.message : 'Internal server error';
     const job = (error as { job?: unknown }).job;
-    const statusCode = job ? 500 : 502;
-    res.status(statusCode).json({ error: message, job });
+    res.status(500).json({ error: message, job });
   }
 });
 
