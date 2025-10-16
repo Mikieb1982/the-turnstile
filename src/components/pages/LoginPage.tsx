@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   EnvelopeIcon,
   LockClosedIcon,
-  UserIcon,
+  UsersIcon,
 } from '../Icons';
 
 const GOOGLE_CLIENT_ID = typeof import.meta.env.VITE_GOOGLE_CLIENT_ID === 'string'
