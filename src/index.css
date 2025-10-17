@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import "./styles/theme.css"; /* IMPORTANT: Imports your custom classes like .bg-app */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 #root {
   min-height: 100vh;
-  /* Apply the dark background color defined in theme.css */
-  /* This prevents the white background on content overflow */
+  /* Now bg-app works because theme.css was imported above */
   @apply bg-app;
 }
