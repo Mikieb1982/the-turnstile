@@ -34,14 +34,18 @@ export const TeamLogo: React.FC<TeamLogoProps> = ({ teamId, teamName, size = 'me
     const branding = TEAM_BRANDING[teamId] || {
         bg: '#6B7280',
         text: '#FFFFFF',
-        palette: ['#6B7280', '#9CA3AF'],
+        palette: ['#6B7280', '#9CA3AF'] as [string, string?],
     }; // Default palette if no ID match
-    const palette = branding.palette ?? [branding.bg, branding.bg];
-    const background =
-        palette.length > 1
-            ? `linear-gradient(135deg, ${palette[0]}, ${palette[1]})`
-            : branding.bg;
-    const outline = palette.length > 2 ? palette[2] : 'rgba(255, 255, 255, 0.24)';
+    const palette = (branding.palette ? [...branding.palette] : [branding.bg]).filter(
+        (colour): colour is string => Boolean(colour)
+    );
+    const primary = palette[0] ?? branding.bg;
+    const secondary = palette[1];
+    const accent = palette[2];
+    const background = secondary
+        ? `linear-gradient(135deg, ${primary}, ${secondary})`
+        : primary;
+    const outline = accent ?? 'rgba(255, 255, 255, 0.24)';
 
     return (
         <div

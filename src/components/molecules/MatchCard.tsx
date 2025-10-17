@@ -1,20 +1,28 @@
 import React from 'react';
 
 interface MatchCardProps {
+  round: number;
   homeTeam: string;
   awayTeam: string;
   date: string;
   homeLogo: string;
   awayLogo: string;
+  score: string;
+  venue: string;
+  note?: string;
   onClick?: () => void;
 }
 
 export const MatchCard: React.FC<MatchCardProps> = ({
+  round,
   homeTeam,
   awayTeam,
   date,
   homeLogo,
   awayLogo,
+  score,
+  venue,
+  note,
   onClick,
 }) => {
   const gameDate = new Date(date);
@@ -22,8 +30,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({
     weekday: 'short',
     day: 'numeric',
     month: 'short',
+    year: 'numeric',
   });
-  const time = gameDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 
   return (
     <button
@@ -33,9 +41,12 @@ export const MatchCard: React.FC<MatchCardProps> = ({
     >
       <div className="flex flex-col gap-6 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <TeamDetail logo={homeLogo} name={homeTeam} alignment="start" />
-        <div className="flex flex-col items-center justify-center gap-1 text-center">
-          <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[#90a590]">{formattedDate}</span>
-          <span className="text-xl font-bold tracking-[0.2em] text-[#f6f3e4]">{time}</span>
+        <div className="flex flex-col items-center justify-center gap-2 text-center">
+          <span className="text-[0.65rem] uppercase tracking-[0.38em] text-[#90a590]">Round {round}</span>
+          <span className="text-xl font-black tracking-[0.2em] text-[#f6f3e4]">{score}</span>
+          <span className="text-xs uppercase tracking-[0.3em] text-[#b4c3b7]">{formattedDate}</span>
+          <span className="text-xs font-semibold tracking-[0.12em] text-[#d4af37]">{venue}</span>
+          {note && <span className="text-xs text-[#f6f3e4]/70">{note}</span>}
           <div className="mt-2 h-px w-16 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
         <TeamDetail logo={awayLogo} name={awayTeam} alignment="end" />
