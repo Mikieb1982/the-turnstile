@@ -1,4 +1,11 @@
-@import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+--- a/src/index.css
++++ b/src/index.css
+@@ -1,4 +1,8 @@
+ @import "tailwindcss";
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
++
++#root {
++  @apply min-h-screen bg-app; /* Sets the dark background theme color */
++}
