@@ -1,93 +1,54 @@
 --- a/src/styles/theme.css
 +++ b/src/styles/theme.css
-@@ -27,40 +27,79 @@
+@@ -27,33 +27,19 @@
  /* Page background and typography */
  body {
    min-height: 100vh;
--  /* New: Deep Navy Background with subtle blue gradients and the rugby ball watermark */
--  background-color: #071118; /* Deep Navy Blue */
--  background-image: url("/background.png"),
--    radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
--    radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
--    linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
--  background-blend-mode: normal, screen, screen, normal;
--  background-position: center bottom, center center, center center, center center;
--  background-size: 120% auto, auto, auto, auto;
--  background-attachment: fixed;
-+  /* Deep navy base with restrained color wash and vignette */
-+  background-color: #071118;
-+  background-image:
-+    /* cool spotlight */
-+    radial-gradient(1200px 800px at 20% 15%, rgba(42, 99, 160, 0.22), transparent 60%),
-+    /* warm counterbalance */
-+    radial-gradient(900px 700px at 82% -6%, rgba(160, 92, 52, 0.14), transparent 55%),
-+    /* base gradient */
-+    linear-gradient(135deg, rgba(7, 17, 24, 0.98), rgba(5, 12, 16, 1));
-+  background-blend-mode: screen, screen, normal;
-+  background-position: center center, center center, center center;
-+  background-size: cover, cover, cover;
+-  background-color: #050d08;
+-  background-image:
+-    radial-gradient(circle at 20% 20%, rgba(60, 104, 70, 0.28), transparent 55%),
+-    radial-gradient(circle at 80% 0%, rgba(129, 66, 24, 0.18), transparent 45%),
+-    linear-gradient(135deg, rgba(6, 14, 10, 0.95), rgba(3, 7, 10, 0.98)),
+-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 80h160M80 0v160' stroke='%230c1710' stroke-width='1' opacity='0.18'/%3E%3C/svg%3E");
+-  background-blend-mode: screen, screen, normal, overlay;
++  /* New: Deep Navy Background with subtle blue gradients and the rugby ball watermark */
++  background-color: #071118; /* Deep Navy Blue */
++  background-image: url("/background.png"),
++    radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
++    radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
++    linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
++  background-blend-mode: normal, screen, screen, normal;
++  background-position: center bottom, center center, center center, center center;
++  background-size: 120% auto, auto, auto, auto;
 +  background-attachment: fixed;
    color: rgb(var(--color-foreground));
    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-+  color-scheme: dark;
  }
  
  body::before {
    content: "";
    position: fixed;
    inset: 0;
--  /* Removing distracting static texture layer */
--  display: none;
-+  pointer-events: none;
-+  /* Watermark: subtle rugby graphic anchored low, independent opacity control */
-+  background-image: url("/background.png");
-+  background-repeat: no-repeat;
-+  background-position: center 85%;
-+  background-size: clamp(320px, 60vmin, 980px) auto;
-+  opacity: 0.06;                 /* tune between 0.04 and 0.09 */
-+  filter: saturate(0.8) blur(0.2px);
-+  z-index: -1;
+-  pointer-events: none;
+-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath fill='rgba(255,255,255,0.04)' d='M0 118h4v2H0zm60-60h4v2h-4zm56 58h4v2h-4zM0 0h2v4H0zm118 0h2v4h-2zM58 58h4v4h-4zm-56 0h4v4H2zm112 0h4v4h-4zm-54 56h4v4h-4z'/%3E%3C/svg%3E");
+-  opacity: 0.18;
+-  mix-blend-mode: soft-light;
+-  z-index: -1;
++  /* Removing distracting static texture layer */
++  display: none;
  }
  
  body::after {
    content: "";
    position: fixed;
    inset: 0;
--  /* Removing old yellow overlay */
--  display: none;
-+  pointer-events: none;
-+  /* Gentle vignette to frame content and add contrast without banding */
-+  background:
-+    radial-gradient(1200px 800px at 50% -10%, rgba(212, 175, 55, 0.10), transparent 60%),
-+    radial-gradient(120% 100% at 50% 120%, rgba(0, 0, 0, 0.35), transparent 60%);
-+  mix-blend-mode: normal;
-+  z-index: -2;
+-  pointer-events: none;
+-  background: radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.18), transparent 60%);
+-  z-index: -2;
++  /* Removing old yellow overlay */
++  display: none;
  }
  
  /* Headings */
-+
-+/* Prefer reduced motion: avoid fixed backgrounds that can feel floaty when scrolling */
-+@media (prefers-reduced-motion: reduce) {
-+  body {
-+    background-attachment: initial;
-+    background-image:
-+      radial-gradient(1000px 700px at 18% 18%, rgba(42, 99, 160, 0.18), transparent 60%),
-+      radial-gradient(800px 600px at 80% 0%, rgba(160, 92, 52, 0.12), transparent 55%),
-+      linear-gradient(135deg, rgba(7, 17, 24, 0.98), rgba(5, 12, 16, 1));
-+  }
-+  body::before {
-+    opacity: 0.05;
-+    filter: saturate(0.7);
-+  }
-+}
-+
-+/* High DPI tweak: ease off the vignette on dense displays to prevent crush */
-+@media (min-resolution: 2dppx) {
-+  body::after {
-+    background:
-+      radial-gradient(1200px 800px at 50% -10%, rgba(212, 175, 55, 0.08), transparent 60%),
-+      radial-gradient(120% 100% at 50% 120%, rgba(0, 0, 0, 0.28), transparent 60%);
-+  }
-+}
