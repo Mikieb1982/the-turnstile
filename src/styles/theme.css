@@ -1,55 +1,55 @@
---- a/src/styles/theme.css
-+++ b/src/styles/theme.css
-@@ -27,33 +27,19 @@
- /* Page background and typography */
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@utility bg-app { background-color: rgb(var(--color-background)); }
+@utility text-app { color: rgb(var(--color-foreground)); }
+@utility rounded-app { border-radius: var(--radius); }
+
 body {
-  /* --- Keep these existing styles --- */
   min-height: 100vh;
   color: rgb(var(--color-foreground));
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
-  /* --- New shorthand background styles --- */
+
   background:
-    /* Layer 1: Image */
+    /* Layer 1: background image */
     url("/background.png") center bottom / 120% auto no-repeat,
-    /* Layer 2: Blue Radial Gradient */
+    /* Layer 2: blue radial gradient */
     radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
-    /* Layer 3: Orange Radial Gradient */
+    /* Layer 3: orange radial gradient */
     radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
-    /* Layer 4: Dark Linear Gradient */
+    /* Layer 4: dark overlay gradient */
     linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
 
   background-color: #071118;
   background-blend-mode: normal, screen, screen, normal;
   background-attachment: fixed;
 }
- 
- body::before {
-   content: "";
-   position: fixed;
-   inset: 0;
--  pointer-events: none;
--  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath fill='rgba(255,255,255,0.04)' d='M0 118h4v2H0zm60-60h4v2h-4zm56 58h4v2h-4zM0 0h2v4H0zm118 0h2v4h-2zM58 58h4v4h-4zm-56 0h4v4H2zm112 0h4v4h-4zm-54 56h4v4h-4z'/%3E%3C/svg%3E");
--  opacity: 0.18;
--  mix-blend-mode: soft-light;
--  z-index: -1;
-+  /* Removing distracting static texture layer */
-+  display: none;
- }
- 
- body::after {
-   content: "";
-   position: fixed;
-   inset: 0;
--  pointer-events: none;
--  background: radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.18), transparent 60%);
--  z-index: -2;
-+  /* Removing old yellow overlay */
-+  display: none;
- }
-.bg-app { background-color: rgb(var(--color-background)); }
-.text-app { color: rgb(var(--color-foreground)); }
-.rounded-app { border-radius: var(--radius); }
- /* Headings */
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  display: none; /* overlays disabled */
+}
+
+@theme {
+  --radius: 1rem;
+
+  --color-background: 7 17 11;         /* #07110B */
+  --color-foreground: 244 245 240;     /* #F4F5F0 */
+
+  --color-card: 14 26 19;              /* #0E1A13 */
+  --color-card-foreground: 244 245 240;
+
+  --color-primary: 42 99 63;           /* #2A633F */
+  --color-primary-foreground: 244 245 240;
+
+  --color-secondary: 18 27 21;         /* #121B15 */
+  --color-secondary-foreground: 214 223 214;
+
+  --color-accent: 212 175 55;          /* #D4AF37 */
+  --color-accent-foreground: 7 17 11;
+}
