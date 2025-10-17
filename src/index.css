@@ -1,11 +1,11 @@
---- a/src/index.css
-+++ b/src/index.css
-@@ -1,4 +1,8 @@
- @import "tailwindcss";
- @tailwind base;
- @tailwind components;
- @tailwind utilities;
-+
-+#root {
-+  @apply min-h-screen bg-app; /* Sets the dark background theme color */
-+}
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  min-height: 100vh;
+  /* Apply the dark background color defined in theme.css */
+  /* This prevents the white background on content overflow */
+  @apply bg-app;
+}
