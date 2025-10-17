@@ -50,5 +50,7 @@
 +  /* Removing old yellow overlay */
 +  display: none;
  }
- 
+ .bg-app { background-color: rgb(var(--color-background)); }
+.text-app { color: rgb(var(--color-foreground)); }
+.rounded-app { border-radius: var(--radius); }
  /* Headings */
