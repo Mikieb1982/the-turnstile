@@ -15,6 +15,7 @@
     "@genkit-ai/firebase": "^1.21.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^10.14.1",
     "handlebars": "^4.7.8",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
