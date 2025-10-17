@@ -2,30 +2,29 @@
 +++ b/src/styles/theme.css
 @@ -27,33 +27,19 @@
  /* Page background and typography */
- body {
-   min-height: 100vh;
--  background-color: #050d08;
--  background-image:
--    radial-gradient(circle at 20% 20%, rgba(60, 104, 70, 0.28), transparent 55%),
--    radial-gradient(circle at 80% 0%, rgba(129, 66, 24, 0.18), transparent 45%),
--    linear-gradient(135deg, rgba(6, 14, 10, 0.95), rgba(3, 7, 10, 0.98)),
--    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 80h160M80 0v160' stroke='%230c1710' stroke-width='1' opacity='0.18'/%3E%3C/svg%3E");
--  background-blend-mode: screen, screen, normal, overlay;
-+  /* New: Deep Navy Background with subtle blue gradients and the rugby ball watermark */
-+  background-color: #071118; /* Deep Navy Blue */
-+  background-image: url("/background.png"),
-+    radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
-+    radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
-+    linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
-+  background-blend-mode: normal, screen, screen, normal;
-+  background-position: center bottom, center center, center center, center center;
-+  background-size: 120% auto, auto, auto, auto;
-+  background-attachment: fixed;
-   color: rgb(var(--color-foreground));
-   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
- }
+body {
+  /* --- Keep these existing styles --- */
+  min-height: 100vh;
+  color: rgb(var(--color-foreground));
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* --- New shorthand background styles --- */
+  background:
+    /* Layer 1: Image */
+    url("/background.png") center bottom / 120% auto no-repeat,
+    /* Layer 2: Blue Radial Gradient */
+    radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
+    /* Layer 3: Orange Radial Gradient */
+    radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
+    /* Layer 4: Dark Linear Gradient */
+    linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
+
+  background-color: #071118;
+  background-blend-mode: normal, screen, screen, normal;
+  background-attachment: fixed;
+}
  
  body::before {
    content: "";
