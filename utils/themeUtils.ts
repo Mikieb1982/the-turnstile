@@ -208,11 +208,15 @@ const buildTeamOverride = ({ mode, teamBranding }: ThemeComputationOptions): Par
     return null;
   }
 
-  const basePrimary = teamBranding.primary;
-  const secondary = teamBranding.secondary ?? '#ffffff';
-  const accent = mixHexColors(teamBranding.primary, teamBranding.secondary ?? '#ffffff', 0.4);
+  const palette = (teamBranding.palette ? [...teamBranding.palette] : [teamBranding.bg]).filter(
+    (colour): colour is string => Boolean(colour)
+  );
+  const basePrimary = palette[0] ?? teamBranding.bg;
+  const secondary = palette[1] ?? mixHexColors(basePrimary, '#ffffff', 0.35);
+  const accentSource = palette[2] ?? secondary;
+  const accent = mixHexColors(basePrimary, accentSource, 0.4);
   const textStrong = teamBranding.text ?? (mode === 'dark' ? '#F8FAFC' : '#0F172A');
-  const surface = mode === 'dark' ? shiftLightness(teamBranding.primary, -0.6) : shiftLightness(teamBranding.secondary ?? '#ffffff', 0.55);
+  const surface = mode === 'dark' ? shiftLightness(basePrimary, -0.6) : shiftLightness(secondary, 0.55);
   const surfaceAlt = mixHexColors(surface, mode === 'dark' ? '#000000' : '#ffffff', mode === 'dark' ? 0.25 : 0.15);
   const border = mixHexColors(basePrimary, secondary, mode === 'dark' ? 0.65 : 0.25);
   const text = mixHexColors(textStrong, mode === 'dark' ? '#CBD5E1' : '#1F2937', 0.25);
