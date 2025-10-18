@@ -39,7 +39,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
       onClick={onClick}
       className="rugby-card group w-full overflow-hidden text-left transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050d08]"
     >
-      <div className="flex flex-col gap-6 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex items-center justify-between gap-6 px-5 py-6 sm:px-6">
         <TeamDetail logo={homeLogo} name={homeTeam} alignment="start" />
         <div className="flex flex-col items-center justify-center gap-2 text-center">
           <span className="text-[0.65rem] uppercase tracking-[0.38em] text-[#90a590]">Round {round}</span>
@@ -66,11 +66,11 @@ const TeamDetail = ({
 }) => {
   const alignmentClasses =
     alignment === 'start'
-      ? 'sm:items-start sm:text-left'
-      : 'sm:items-end sm:text-right';
+      ? 'items-start text-left'
+      : 'items-end text-right';
 
   return (
-    <div className={`flex flex-col items-center gap-3 text-center text-[#f6f3e4] ${alignmentClasses}`}>
+    <div className={`flex flex-col gap-3 text-[#f6f3e4] ${alignmentClasses}`}>
       <div className="relative">
         <div className="absolute inset-0 rounded-full bg-[#1a2a1f]/80 blur-lg opacity-50" />
         <img
