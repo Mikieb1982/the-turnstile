@@ -12,91 +12,132 @@ interface LeagueTablePageProps {
   table: TableRow[];
 }
 
+const renderBadge = (text: string, tone: 'success' | 'info' | 'alert') => {
+  const toneClasses = {
+    success: 'bg-primary/10 text-primary',
+    info: 'bg-secondary/70 text-foreground',
+    alert: 'bg-accent/20 text-accent-foreground',
+  } as const;
+
+  return (
+    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium ${toneClasses[tone]}`}>
+      <span aria-hidden="true">{tone === 'success' ? '🏆' : tone === 'alert' ? '⚠️' : '🎯'}</span>
+      <span>{text}</span>
+    </span>
+  );
+};
+
 export const LeagueTablePage: React.FC<LeagueTablePageProps> = ({ table }) => {
   return (
-    <div className="space-y-8">
-      <section className="rugby-card grid gap-6 md:grid-cols-2">
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.34em] text-[#9fb09c]">Season Summary</h2>
-          <ul className="space-y-2 text-sm text-[#d9e0d6]">
-            <li><span className="font-semibold text-[#f6f3e4]">Season:</span> {superLeague2025Summary.Season}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Champions:</span> {superLeague2025Summary.Champion}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Runners-up:</span> {superLeague2025Summary.RunnersUp}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">League Leaders' Shield:</span> {superLeague2025Summary.LeagueLeadersShield}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Grand Final:</span> {superLeague2025Summary.GrandFinalScore}</li>
-          </ul>
-        </div>
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.34em] text-[#9fb09c]">Individual Honours</h2>
-          <ul className="space-y-2 text-sm text-[#d9e0d6]">
-            <li><span className="font-semibold text-[#f6f3e4]">Man of Steel:</span> {individualAwards.ManOfSteel}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Top Try Scorer:</span> {individualAwards.TopTryScorer}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Top Points Scorer:</span> {individualAwards.TopPointsScorer}</li>
-            <li><span className="font-semibold text-[#f6f3e4]">Young Player:</span> {individualAwards.YoungPlayerOfTheYear}</li>
-          </ul>
-        </div>
+    <div className="space-y-10">
+      <section className="grid gap-6 md:grid-cols-2">
+        <article className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-primary/10 sm:p-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">Season summary</h2>
+          <dl className="mt-4 grid gap-3 text-sm text-foreground/80">
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Season</dt>
+              <dd>{superLeague2025Summary.Season}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Champions</dt>
+              <dd>{superLeague2025Summary.Champion}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Runners-up</dt>
+              <dd>{superLeague2025Summary.RunnersUp}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">League Leaders' Shield</dt>
+              <dd>{superLeague2025Summary.LeagueLeadersShield}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Grand Final</dt>
+              <dd>{superLeague2025Summary.GrandFinalScore}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-primary/10 sm:p-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">Individual honours</h2>
+          <dl className="mt-4 grid gap-3 text-sm text-foreground/80">
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Man of Steel</dt>
+              <dd>{individualAwards.ManOfSteel}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Top try scorer</dt>
+              <dd>{individualAwards.TopTryScorer}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Top points scorer</dt>
+              <dd>{individualAwards.TopPointsScorer}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-4">
+              <dt className="font-medium text-foreground">Young player</dt>
+              <dd>{individualAwards.YoungPlayerOfTheYear}</dd>
+            </div>
+          </dl>
+        </article>
       </section>
 
       <section className="space-y-4">
-        <h2 className="section-title text-sm">Final League Table</h2>
-        <div className="rugby-card overflow-hidden">
-          <table className="min-w-full border-collapse text-left text-sm text-[#d9e0d6]">
-            <thead className="bg-gradient-to-r from-[#142319] via-[#1a2c20] to-[#142319] text-[0.65rem] uppercase tracking-[0.32em] text-[#9fb09c]">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="text-lg font-semibold text-foreground">Final league table</h2>
+          <p className="text-sm text-foreground/70">Wins, draws and losses now include simple icons and colour to improve accessibility.</p>
+        </div>
+        <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-primary/10">
+          <table className="min-w-full border-collapse text-left text-sm text-foreground/80">
+            <thead className="bg-secondary/60 text-xs font-semibold uppercase tracking-wide text-foreground">
               <tr>
-                <th scope="col" className="px-4 py-4">Pos</th>
-                <th scope="col" className="px-4 py-4">Team</th>
-                <th scope="col" className="px-4 py-4 text-center">P</th>
-                <th scope="col" className="px-4 py-4 text-center">W</th>
-                <th scope="col" className="px-4 py-4 text-center">D</th>
-                <th scope="col" className="px-4 py-4 text-center">L</th>
-                <th scope="col" className="px-4 py-4 text-center">PF</th>
-                <th scope="col" className="px-4 py-4 text-center">PA</th>
-                <th scope="col" className="px-4 py-4 text-center">PD</th>
-                <th scope="col" className="px-4 py-4 text-center">Pts</th>
-                <th scope="col" className="px-4 py-4">Notes</th>
+                <th scope="col" className="px-4 py-3 text-left">Pos</th>
+                <th scope="col" className="px-4 py-3 text-left">Team</th>
+                <th scope="col" className="px-3 py-3 text-center">P</th>
+                <th scope="col" className="px-3 py-3 text-center">W</th>
+                <th scope="col" className="px-3 py-3 text-center">D</th>
+                <th scope="col" className="px-3 py-3 text-center">L</th>
+                <th scope="col" className="px-3 py-3 text-center">PF</th>
+                <th scope="col" className="px-3 py-3 text-center">PA</th>
+                <th scope="col" className="px-3 py-3 text-center">PD</th>
+                <th scope="col" className="px-3 py-3 text-center">Pts</th>
+                <th scope="col" className="px-4 py-3 text-left">Notes</th>
               </tr>
             </thead>
             <tbody>
-              {table.map((row) => {
-                const isPlayoffPosition = row.qualification?.includes('Semi-finals');
-                const isEliminator = row.qualification?.includes('Eliminators');
-                const rowTone =
-                  row.position % 2 === 0 ? 'bg-[#0d150f]/80' : 'bg-[#101a12]/75';
+              {table.map((row, index) => {
+                const rowTone = index % 2 === 0 ? 'bg-card' : 'bg-secondary/40';
 
                 return (
                   <tr
                     key={row.teamId}
-                    className={`${rowTone} border-t border-[#243926]/60 transition-colors duration-200 hover:bg-[#253c2b]/85`}
+                    className={`${rowTone} transition-colors hover:bg-secondary/70`}
                   >
-                    <td className="px-4 py-4 text-base font-semibold tracking-[0.2em] text-[#f6f3e4]">{row.position}</td>
-                    <th scope="row" className="px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#dce3d8]">
+                    <td className="px-4 py-4 text-base font-semibold text-foreground">{row.position}</td>
+                    <th scope="row" className="px-4 py-4 text-sm font-semibold text-foreground">
                       {row.teamName}
                     </th>
-                    <td className="px-4 py-4 text-center text-[#b3c0b4]">{row.played}</td>
-                    <td className="px-4 py-4 text-center text-[#74dd9b]">{row.won}</td>
-                    <td className="px-4 py-4 text-center text-[#e7d37f]">{row.drawn}</td>
-                    <td className="px-4 py-4 text-center text-[#f47272]">{row.lost}</td>
-                    <td className="px-4 py-4 text-center text-[#b3c0b4]">{row.pointsFor}</td>
-                    <td className="px-4 py-4 text-center text-[#b3c0b4]">{row.pointsAgainst}</td>
-                    <td className="px-4 py-4 text-center font-semibold tracking-[0.12em] text-[#d4af37]">{row.pointsDifference}</td>
-                    <td className="px-4 py-4 text-center text-lg font-bold tracking-[0.18em] text-[#f6f3e4]">{row.points}</td>
-                    <td className="px-4 py-4">
-                      {row.qualification && (
-                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-[0.65rem] uppercase tracking-[0.24em] ${
-                          isPlayoffPosition
-                            ? 'bg-[#1f3a27] text-[#74dd9b]'
-                            : isEliminator
-                            ? 'bg-[#2d2c1a] text-[#e7d37f]'
-                            : 'bg-[#1a2220] text-[#9fb09c]'
-                        }`}>
-                          {row.qualification}
-                        </span>
-                      )}
-                      {row.relegation && (
-                        <span className="ml-2 inline-flex items-center rounded-full bg-[#3a1f1f] px-3 py-1 text-[0.65rem] uppercase tracking-[0.24em] text-[#f47272]">
-                          {row.relegation}
-                        </span>
-                      )}
+                    <td className="px-3 py-4 text-center text-foreground/70">{row.played}</td>
+                    <td className="px-3 py-4 text-center text-emerald-600">
+                      <span className="sr-only">Wins </span>
+                      <span aria-hidden="true" className="mr-1">▲</span>
+                      <span>{row.won}</span>
+                    </td>
+                    <td className="px-3 py-4 text-center text-slate-600">
+                      <span className="sr-only">Draws </span>
+                      <span aria-hidden="true" className="mr-1">–</span>
+                      <span>{row.drawn}</span>
+                    </td>
+                    <td className="px-3 py-4 text-center text-rose-600">
+                      <span className="sr-only">Losses </span>
+                      <span aria-hidden="true" className="mr-1">▼</span>
+                      <span>{row.lost}</span>
+                    </td>
+                    <td className="px-3 py-4 text-center text-foreground/70">{row.pointsFor}</td>
+                    <td className="px-3 py-4 text-center text-foreground/70">{row.pointsAgainst}</td>
+                    <td className="px-3 py-4 text-center text-primary font-semibold">{row.pointsDifference}</td>
+                    <td className="px-3 py-4 text-center text-base font-semibold text-foreground">{row.points}</td>
+                    <td className="px-4 py-4 space-x-2">
+                      {row.qualification && renderBadge(row.qualification, row.qualification.includes('Semi') ? 'success' : 'info')}
+                      {row.relegation && renderBadge(row.relegation, 'alert')}
                     </td>
                   </tr>
                 );
@@ -106,43 +147,44 @@ export const LeagueTablePage: React.FC<LeagueTablePageProps> = ({ table }) => {
         </div>
       </section>
 
-      <section className="rugby-card space-y-4">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.34em] text-[#9fb09c]">Play-off Results</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d4af37]">Eliminators</h3>
-            <ul className="space-y-2 text-xs text-[#d9e0d6]">
-              {playoffResults.Eliminators.map(match => (
-                <li key={match.Match} className="rounded-md bg-[#111a13]/80 p-3">
-                  <p className="font-semibold uppercase tracking-[0.2em] text-[#f6f3e4]">{match.Match}</p>
-                  <p>{match.HomeTeam} vs {match.AwayTeam}</p>
-                  <p className="text-[#d4af37]">{match.Score}</p>
-                  <p className="text-[#74dd9b]">Winner: {match.Winner}</p>
+      <section className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-primary/10 sm:p-8">
+        <h2 className="text-lg font-semibold text-foreground">Play-off results</h2>
+        <p className="mt-2 text-sm text-foreground/70">Recap the road to Old Trafford with clear, legible scorecards.</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-primary">Eliminators</h3>
+            <ul className="space-y-3 text-sm text-foreground/80">
+              {playoffResults.Eliminators.map((match) => (
+                <li key={match.Match} className="rounded-xl bg-secondary/60 p-4">
+                  <p className="font-semibold text-foreground">{match.Match}</p>
+                  <p className="text-sm text-foreground/70">{match.HomeTeam} vs {match.AwayTeam}</p>
+                  <p className="text-base font-semibold text-primary">{match.Score}</p>
+                  <p className="text-sm text-emerald-700">Winner: {match.Winner}</p>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="space-y-2">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d4af37]">Semi-finals</h3>
-            <ul className="space-y-2 text-xs text-[#d9e0d6]">
-              {playoffResults.SemiFinals.map(match => (
-                <li key={match.Match} className="rounded-md bg-[#111a13]/80 p-3">
-                  <p className="font-semibold uppercase tracking-[0.2em] text-[#f6f3e4]">{match.Match}</p>
-                  <p>{match.HomeTeam} vs {match.AwayTeam}</p>
-                  <p className="text-[#d4af37]">{match.Score}</p>
-                  <p className="text-[#74dd9b]">Winner: {match.Winner}</p>
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-primary">Semi-finals</h3>
+            <ul className="space-y-3 text-sm text-foreground/80">
+              {playoffResults.SemiFinals.map((match) => (
+                <li key={match.Match} className="rounded-xl bg-secondary/60 p-4">
+                  <p className="font-semibold text-foreground">{match.Match}</p>
+                  <p className="text-sm text-foreground/70">{match.HomeTeam} vs {match.AwayTeam}</p>
+                  <p className="text-base font-semibold text-primary">{match.Score}</p>
+                  <p className="text-sm text-emerald-700">Winner: {match.Winner}</p>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="space-y-2">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d4af37]">Grand Final</h3>
-            <div className="rounded-md bg-[#111a13]/80 p-3 text-xs text-[#d9e0d6]">
-              <p className="font-semibold uppercase tracking-[0.2em] text-[#f6f3e4]">{playoffResults.GrandFinal.Date}</p>
-              <p>{playoffResults.GrandFinal.HomeTeam} vs {playoffResults.GrandFinal.AwayTeam}</p>
-              <p className="text-[#d4af37]">{playoffResults.GrandFinal.Score}</p>
-              <p className="text-[#74dd9b]">Champion: {playoffResults.GrandFinal.Champion}</p>
-              <p className="text-[#9fb09c]">{playoffResults.GrandFinal.Venue}</p>
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-primary">Grand Final</h3>
+            <div className="rounded-xl bg-secondary/60 p-4 text-sm text-foreground/80">
+              <p className="font-semibold text-foreground">{playoffResults.GrandFinal.Date}</p>
+              <p className="text-foreground/70">{playoffResults.GrandFinal.HomeTeam} vs {playoffResults.GrandFinal.AwayTeam}</p>
+              <p className="text-base font-semibold text-primary">{playoffResults.GrandFinal.Score}</p>
+              <p className="text-sm text-emerald-700">Champion: {playoffResults.GrandFinal.Champion}</p>
+              <p className="text-sm text-foreground/60">{playoffResults.GrandFinal.Venue}</p>
             </div>
           </div>
         </div>
