@@ -2,28 +2,34 @@ import React from 'react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="relative mt-auto border-t border-[#213625]/70 bg-[#080f0b]/95">
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37]/60 to-transparent" />
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 text-sm text-[#aebcab] sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
-        <div>
-          <p className="font-semibold tracking-[0.25em] text-[#f1f0e7]">© {new Date().getFullYear()} The Turnstile</p>
-          <p className="mt-2 text-xs uppercase tracking-[0.35em] text-[#7e8d7f]">
-            Built for rugby league die-hards. Honour the badge, log every turnstile.
+    <footer className="mt-auto border-t border-primary/15 bg-card/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 text-sm text-foreground/70 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="space-y-2">
+          <p className="text-base font-semibold text-foreground">© {new Date().getFullYear()} The Turnstile</p>
+          <p className="max-w-lg text-sm text-foreground/70">
+            Built for rugby league fans worldwide. Keep a joyful record of every match you attend and every badge you earn.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.28em]">
-          <a href="/privacy" className="transition-colors duration-300 hover:text-[#d4af37]">
-            Privacy Policy
+        <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium" aria-label="Footer links">
+          <a
+            href="/privacy"
+            className="rounded-full bg-secondary/60 px-3 py-1 text-foreground transition-colors duration-200 hover:bg-secondary"
+          >
+            Privacy policy
           </a>
-          <span className="text-[#445442]">•</span>
-          <a href="/terms" className="transition-colors duration-300 hover:text-[#d4af37]">
-            Terms of Service
+          <a
+            href="/terms"
+            className="rounded-full bg-secondary/60 px-3 py-1 text-foreground transition-colors duration-200 hover:bg-secondary"
+          >
+            Terms of use
           </a>
-          <span className="text-[#445442]">•</span>
-          <a href="mailto:hello@turnstile.app" className="transition-colors duration-300 hover:text-[#d4af37]">
-            Contact
+          <a
+            href="mailto:hello@turnstile.app"
+            className="rounded-full bg-secondary/60 px-3 py-1 text-foreground transition-colors duration-200 hover:bg-secondary"
+          >
+            Contact support
           </a>
-        </div>
+        </nav>
       </div>
     </footer>
   );

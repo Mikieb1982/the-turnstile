@@ -1,33 +1,47 @@
 import React from 'react';
 
+const navHighlights = [
+  'Track every match you attend',
+  'Log fixtures even when you are offline',
+  'Celebrate your club loyalty badges',
+];
+
 export const Navbar: React.FC = () => {
   return (
-    <header className="relative sticky top-0 z-30 border-b border-[#203726]/70 bg-gradient-to-r from-[#08130d]/95 via-[#0a1310]/92 to-[#121b24]/95 backdrop-blur">
-      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37]/70 to-transparent" />
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
+    <header className="sticky top-0 z-30 border-b border-primary/15 bg-card/95 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-4">
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-[#d4af37]/50 bg-[#142319]/80 shadow-[0_14px_30px_rgba(0,0,0,0.55)]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <img
-              src="/logodark.png"
-              alt="The Turnstile Logo"
-              className="h-10 w-10 object-contain"
+              src="/logo.png"
+              alt="The Turnstile logo"
+              className="h-9 w-9 object-contain"
             />
-            <span className="absolute -bottom-3 rounded-full bg-[#1c2a1f] px-2 py-0.5 text-[0.6rem] font-semibold tracking-[0.22em] text-[#d4af37] uppercase shadow-[0_6px_14px_rgba(0,0,0,0.6)]">
-              Rugby
-            </span>
           </div>
-          <div>
-            <h1 className="text-2xl font-black tracking-[0.22em] text-[#f6f3e4]">The Turnstile</h1>
-            <p className="mt-1 text-[0.65rem] uppercase tracking-[0.5em] text-[#96b09a]">Rugby League Passport</p>
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold uppercase tracking-wide text-primary">The Turnstile</span>
+            <h1 className="text-xl font-semibold text-foreground">Rugby League Passport</h1>
+            <p className="mt-1 text-sm text-foreground/70">Support smarter. Remember every turnstile.</p>
           </div>
         </div>
+        <nav className="hidden items-center gap-4 text-sm font-medium text-foreground/70 lg:flex" aria-label="Highlighted features">
+          {navHighlights.map((highlight) => (
+            <div
+              key={highlight}
+              className="flex items-center gap-2 rounded-full bg-secondary/60 px-4 py-2 text-foreground shadow-sm"
+            >
+              <span aria-hidden="true" className="text-lg text-primary">★</span>
+              <span>{highlight}</span>
+            </div>
+          ))}
+        </nav>
         <button
           type="button"
-          className="group relative flex items-center gap-2 rounded-full border border-[#d4af37]/40 bg-[#0b150f]/80 px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-[#f8f5e6] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-[#d4af37]/80 hover:text-white"
+          className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+          aria-label="Open member profile"
         >
-          <span className="text-lg">👤</span>
-          <span className="hidden sm:inline">Member</span>
-          <span className="absolute inset-x-0 -bottom-3 mx-auto h-0.5 w-8 rounded-full bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <span aria-hidden="true" className="text-lg">👤</span>
+          <span className="hidden sm:inline">Member area</span>
         </button>
       </div>
     </header>
