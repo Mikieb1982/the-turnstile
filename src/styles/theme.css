@@ -13,43 +13,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   background:
-    /* Layer 1: background image */
-    url("/background.png") center bottom / 120% auto no-repeat,
-    /* Layer 2: blue radial gradient */
-    radial-gradient(circle at 20% 20%, rgba(30, 80, 150, 0.28), transparent 55%),
-    /* Layer 3: orange radial gradient */
-    radial-gradient(circle at 80% 0%, rgba(120, 50, 15, 0.18), transparent 45%),
-    /* Layer 4: dark overlay gradient */
-    linear-gradient(135deg, rgba(7, 17, 24, 0.95), rgba(5, 12, 16, 0.98));
+    /* Layer 1: soft glow highlights */
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.85), rgba(173, 216, 230, 0.25) 55%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.7), rgba(135, 206, 250, 0.18) 45%),
+    /* Layer 3: watermark logo */
+    url("/background.png") center 20% / 420px auto no-repeat,
+    /* Layer 4: foundational sky gradient */
+    linear-gradient(180deg, #cbe9ff 0%, #f0f9ff 100%);
 
-  background-color: #071118;
-  background-blend-mode: normal, screen, screen, normal;
+  background-color: #f0f9ff;
+  background-blend-mode: screen, screen, soft-light, normal;
   background-attachment: fixed;
-}
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  display: none; /* overlays disabled */
 }
 
 @theme {
   --radius: 1rem;
 
-  --color-background: 7 17 11;         /* #07110B */
-  --color-foreground: 244 245 240;     /* #F4F5F0 */
+  --color-background: 219 241 255;       /* #DBF1FF */
+  --color-foreground: 22 46 68;          /* #162E44 */
 
-  --color-card: 14 26 19;              /* #0E1A13 */
-  --color-card-foreground: 244 245 240;
+  --color-card: 255 255 255;             /* #FFFFFF */
+  --color-card-foreground: 26 50 72;     /* #1A3248 */
 
-  --color-primary: 42 99 63;           /* #2A633F */
-  --color-primary-foreground: 244 245 240;
+  --color-primary: 56 132 255;           /* #3884FF */
+  --color-primary-foreground: 255 255 255; /* #FFFFFF */
 
-  --color-secondary: 18 27 21;         /* #121B15 */
-  --color-secondary-foreground: 214 223 214;
+  --color-secondary: 205 229 246;        /* #CDE5F6 */
+  --color-secondary-foreground: 22 46 68;
 
-  --color-accent: 212 175 55;          /* #D4AF37 */
-  --color-accent-foreground: 7 17 11;
+  --color-accent: 255 214 102;           /* #FFD666 */
+  --color-accent-foreground: 22 46 68;
 }
