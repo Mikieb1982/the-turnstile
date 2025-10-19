@@ -59,3 +59,28 @@ body {
   background-attachment: fixed;
 }
 
+  min-height: 100vh;
+  background-color: rgb(var(--color-background));
+}
+
+body {
+  min-height: 100vh;
+  color: rgb(var(--color-foreground));
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-image:
+    /* Layer 1: top-left ethereal glow */
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.7), rgba(135, 206, 250, 0.18) 45%),
+    /* Layer 2: top-right soft light */
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.7), rgba(135, 206, 250, 0.18) 45%),
+    /* Layer 3: watermark logo */
+    url("/background.png") center 20% / 420px auto no-repeat,
+    linear-gradient(180deg, #CBE9FF 0%, #F0F9FF 100%);
+
+  background-color: #f0f9ff;
+  background-blend-mode: screen, screen, soft-light, normal;
+  background-attachment: fixed;
+}
+
