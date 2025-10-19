@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #root {
   min-height: 100vh;
@@ -26,15 +26,38 @@ body {
   background-attachment: fixed;
 }
 
-@theme {
-  --radius: 0.75rem;
-  --radius-md: 0.5rem;
-  --radius-sm: 0.25rem;
-  
-  --color-background: 240 249 255;
-  --color-foreground: 22 46 68;
-  
-  --color-card: 255 255 255;
+@layer base {
+  :root {
+    --radius: 0.75rem;
+    --radius-md: 0.5rem;
+    --radius-sm: 0.25rem;
+    
+    --color-background: 240 249 255;
+    --color-foreground: 22 46 68;
+    
+    --color-card: 255 255 255;
+    --color-card-foreground: 22 46 68;
+    
+    --color-primary: 56 132 255;
+    --color-primary-foreground: 255 255 255;
+    
+    --color-secondary: 205 229 246;
+    --color-secondary-foreground: 22 46 68;
+    
+    --color-accent: 255 214 102;
+    --color-accent-foreground: 22 46 68;
+    
+    --color-muted: 241 245 249;
+    --color-muted-foreground: 100 116 139;
+    
+    --color-border: 226 232 240;
+    --color-input: 226 232 240;
+    --color-ring: 30 58 138;
+    
+    --color-destructive: 239 68 68;
+    --color-destructive-foreground: 255 255 255;
+  }
+}  --color-card: 255 255 255;
   --color-card-foreground: 22 46 68;
   
   --color-primary: 56 132 255;
