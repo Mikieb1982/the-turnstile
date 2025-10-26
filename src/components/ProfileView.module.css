@@ -1,0 +1,474 @@
+.profilePage {
+  --hero-overlay: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(15, 23, 42, 0.9));
+  --hero-highlight: rgba(245, 158, 11, 0.85);
+  --card-bg: var(--clr-surface);
+  --card-border: rgba(51, 65, 85, 0.18);
+  --card-shadow: 0 32px 60px -30px rgba(11, 16, 32, 0.55);
+  --text-strong: var(--clr-text-strong);
+  --text-subtle: var(--clr-text-subtle);
+
+  min-height: 100%;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0) 30%), var(--clr-surface);
+  color: var(--text-strong);
+}
+
+.hero {
+  position: relative;
+  padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1.5rem, 5vw, 3rem) clamp(7rem, 12vw, 9rem);
+  overflow: hidden;
+  color: #F8FAFC;
+  background: var(--hero-overlay);
+  border-bottom-left-radius: clamp(3rem, 10vw, 5rem);
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  background-image: url('../background.png');
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: left top;
+  opacity: 0.25;
+}
+
+.heroContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.avatarWrap {
+  position: relative;
+  width: clamp(96px, 18vw, 120px);
+  height: clamp(96px, 18vw, 120px);
+  flex-shrink: 0;
+}
+
+.avatarImage,
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.55);
+  color: rgba(236, 245, 255, 0.7);
+}
+
+.avatarPlaceholder {
+  padding: 12px;
+}
+
+.avatarEdit {
+  position: absolute;
+  right: 4px;
+  bottom: 6px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hero-highlight);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 18px 30px -12px rgba(37, 99, 235, 0.6);
+  color: #F8FAFC;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatarEdit:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 24px 40px -16px rgba(37, 99, 235, 0.65);
+}
+
+.avatarEdit svg {
+  width: 18px;
+  height: 18px;
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.logoWrap {
+  width: clamp(96px, 18vw, 120px);
+  height: clamp(96px, 18vw, 120px);
+  flex-shrink: 0;
+}
+
+.logoImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
+}
+
+.nameForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nameForm input {
+  flex: 1;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+  padding: 0.65rem 1rem;
+  color: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.nameForm button {
+  border: none;
+  border-radius: 16px;
+  padding: 0.65rem 1.5rem;
+  font-weight: 700;
+  background: var(--clr-surface);
+  color: var(--clr-primary);
+  cursor: pointer;
+}
+
+.nameButton {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nameButton svg {
+  width: 22px;
+  height: 22px;
+  opacity: 0.65;
+}
+
+.nameButton:hover svg {
+  opacity: 1;
+}
+
+.tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(30, 58, 138, 0.55);
+  backdrop-filter: blur(4px);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.tagline svg {
+  width: 1rem;
+  height: 1rem;
+  color: #F59E0B;
+}
+
+.teamBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #F8FAFC;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.teamLogoBadge {
+  width: 34px !important;
+  height: 34px !important;
+  box-shadow: 0 12px 24px -18px rgba(0, 0, 0, 0.7) !important;
+}
+
+.statRow {
+  display: grid;
+  gap: clamp(1rem, 3vw, 1.75rem);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin: 0;
+  padding: 0;
+}
+
+.statCard {
+  position: relative;
+  display: grid;
+  gap: 0.4rem;
+  justify-items: center;
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  text-align: center;
+}
+
+.statCard svg {
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.statCard dt {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(236, 245, 255, 0.75);
+}
+
+.statCard dd {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 2.4rem);
+  font-weight: 800;
+  color: #F8FAFC;
+}
+
+.mainContent {
+  position: relative;
+  margin-top: clamp(-5.5rem, -9vw, -6.5rem);
+  padding: clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 3rem) 3.5rem;
+}
+
+.summaryGrid {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+}
+
+.detailCard {
+  background: var(--card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cardHeader h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.cardHeader button {
+  border: none;
+  background: transparent;
+  color: var(--clr-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cardBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cardBody p {
+  margin: 0;
+  color: var(--text-subtle);
+}
+
+.teamSummary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.teamLogoSummary {
+  width: 58px !important;
+  height: 58px !important;
+  box-shadow: 0 16px 32px -20px rgba(15, 23, 42, 0.6) !important;
+}
+
+.matchSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.matchSummary p {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.matchScore {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--clr-primary);
+}
+
+.matchMeta {
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+}
+
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.quickActions {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.quickActionsRail {
+  position: relative;
+}
+
+.quickActionsRail::-webkit-scrollbar {
+  display: none;
+}
+
+.quickActionsRail {
+  scrollbar-width: none;
+}
+
+.quickActions button {
+  border: none;
+  border-radius: 20px;
+  padding: 1.35rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 35px -25px rgba(15, 23, 42, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-strong);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.quickActions button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 40px -28px rgba(15, 23, 42, 0.75);
+}
+
+.quickActions svg {
+  width: 28px;
+  height: 28px;
+  color: var(--clr-primary);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    border-bottom-left-radius: 2.5rem;
+  }
+
+  .mainContent {
+    margin-top: -4.5rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'team team'
+      'match quick';
+    gap: 1.25rem;
+  }
+
+  .myTeamCard {
+    grid-area: team;
+  }
+
+  .lastMatchCard {
+    grid-area: match;
+  }
+
+  .actionCard {
+    grid-area: quick;
+  }
+
+  .detailCard {
+    padding: 1.25rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .cardBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .teamSummary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .teamLogoSummary {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .quickActions {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 1fr);
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    margin: 0 -0.35rem;
+    padding-left: 0.35rem;
+    scroll-snap-type: x mandatory;
+  }
+
+  .quickActions button {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    scroll-snap-align: start;
+  }
+
+  .quickActions svg {
+    width: 24px;
+    height: 24px;
+  }
+}

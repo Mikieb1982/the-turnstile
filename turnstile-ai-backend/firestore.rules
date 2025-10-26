@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // DevOps jobs collection
+    match /devops-jobs/{jobId} {
+      // For development: allow all access
+      // TODO: Implement proper authentication in production
+      allow read, write: if true;
+    }
+    
+    // Default: deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
