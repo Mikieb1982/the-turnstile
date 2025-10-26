@@ -1,0 +1,18 @@
+export const teams = [
+  { name: 'Brisbane Broncos', ladderPosition: 1, logo: '/logos/broncos.svg' },
+  { name: 'Canberra Raiders', ladderPosition: 2, logo: '/logos/raiders.svg' },
+  { name: 'Canterbury-Bankstown Bulldogs', ladderPosition: 3, logo: '/logos/bulldogs.svg' },
+  { name: 'Cronulla-Sutherland Sharks', ladderPosition: 4, logo: '/logos/sharks.svg' },
+  { name: 'Gold Coast Titans', ladderPosition: 5, logo: '/logos/titans.svg' },
+  { name: 'Manly Warringah Sea Eagles', ladderPosition: 6, logo: '/logos/sea-eagles.svg' },
+  { name: 'Melbourne Storm', ladderPosition: 7, logo: '/logos/storm.svg' },
+  { name: 'Newcastle Knights', ladderPosition: 8, logo: '/logos/knights.svg' },
+  { name: 'New Zealand Warriors', ladderPosition: 9, logo: '/logos/warriors.svg' },
+  { name: 'North Queensland Cowboys', ladderPosition: 10, logo: '/logos/cowboys.svg' },
+  { name: 'Parramatta Eels', ladderPosition: 11, logo: '/logos/eels.svg' },
+  { name: 'Penrith Panthers', ladderPosition: 12, logo: '/logos/panthers.svg' },
+  { name: 'South Sydney Rabbitohs', ladderPosition: 13, logo: '/logos/rabbitohs.svg' },
+  { name: 'St. George Illawarra Dragons', ladderPosition: 14, logo: '/logos/dragons.svg' },
+  { name: 'Sydney Roosters', ladderPosition: 15, logo: '/logos/roosters.svg' },
+  { name: 'Wests Tigers', ladderPosition: 16, logo: '/logos/tigers.svg' },
+];
