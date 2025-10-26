@@ -1,4 +1,8 @@
+'use client';
+
 import './globals.css';
+import { AuthProvider } from '../lib/auth';
+import Header from '../components/Header';
 
 export default function RootLayout({
   children,
@@ -6,8 +10,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body className="bg-gray-900 text-white">
+          <Header />
+          <main>{children}</main>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
