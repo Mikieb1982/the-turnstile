@@ -1,42 +1,50 @@
 import React from 'react';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
-  disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  children,
-  onClick,
-  variant = 'primary',
-  className = '',
-  disabled = false,
-  type = 'button',
-}) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((
+  { children, variant = 'primary', size = 'md', className = '', ...props },
+  ref
+) => {
   const baseStyles =
-    'inline-flex w-full items-center justify-center gap-2 rounded-xl border border-transparent px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] transition-all duration-300 shadow-[0_10px_24px_rgba(0,0,0,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050d08]';
+    'inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+
+  const sizeStyles: Record<NonNullable<ButtonProps['size']>, string> = {
+    sm: 'px-4 py-2 text-xs',
+    md: 'px-6 py-3 text-sm',
+    lg: 'px-8 py-4 text-base',
+  };
 
   const variantStyles: Record<NonNullable<ButtonProps['variant']>, string> = {
     primary:
-      'bg-gradient-to-r from-[#1f5d32] via-[#2f7d45] to-[#d4af37] text-[#0a130c] hover:from-[#27673a] hover:via-[#388752] hover:to-[#f0d886]',
+      'bg-indigo-500 text-white shadow-lg shadow-indigo-500/50 hover:bg-indigo-600 hover:shadow-indigo-600/50 focus-visible:ring-indigo-500',
     secondary:
-      'border border-[#2f4632] bg-[#142319]/90 text-[#f3f2e8] hover:border-[#d4af37]/70 hover:text-white',
+      'bg-gray-700 text-white shadow-lg shadow-gray-700/50 hover:bg-gray-800 hover:shadow-gray-800/50 focus-visible:ring-gray-700',
     outline:
-      'border border-[#d4af37]/70 bg-transparent text-[#d4af37] hover:bg-[#d4af37]/15 hover:text-[#f8f5e6]',
+      'border border-indigo-500 text-indigo-500 hover:bg-indigo-500/10 focus-visible:ring-indigo-500',
   };
+
+  const classes = `
+    ${baseStyles} 
+    ${sizeStyles[size]} 
+    ${variantStyles[variant]} 
+    ${className}
+  `;
 
   return (
     <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={`${baseStyles} ${variantStyles[variant]} ${className} ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.55)]'}`}
+      ref={ref}
+      className={classes}
+      {...props}
     >
       {children}
     </button>
   );
-};
+});
+
+Button.displayName = 'Button';

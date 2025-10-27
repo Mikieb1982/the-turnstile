@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Match } from '@/types';
 import * as htmlToImage from 'html-to-image';
 import Handlebars from 'handlebars';
@@ -56,3 +57,36 @@ export const generateShareImage = async (match: Match): Promise<string> => {
     });
     return dataUrl;
 };
+=======
+// utils/share.ts
+export type ShareOutcome = 'shared' | 'copied' | 'dismissed' | 'error';
+
+export const getAppShareUrl = (): string => {
+  const envBase = import.meta.env.VITE_PUBLIC_BASE_URL as string | undefined;
+  if (envBase) return envBase;
+  if (typeof window !== 'undefined') return window.location.origin;
+  return '';
+};
+
+export async function attemptShare(args: {
+  title: string;
+  text: string;
+  url: string;
+}): Promise<ShareOutcome> {
+  try {
+    if (typeof navigator !== 'undefined' && 'share' in navigator) {
+      await (navigator as any).share(args);
+      return 'shared';
+    }
+  } catch (e: any) {
+    if (e?.name === 'AbortError') return 'dismissed';
+  }
+  try {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      await navigator.clipboard.writeText(args.url);
+      return 'copied';
+    }
+  } catch {}
+  return 'error';
+}
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9

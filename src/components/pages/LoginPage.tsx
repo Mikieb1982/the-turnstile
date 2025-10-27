@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { useAuth } from '../contexts/AuthContext';
+import { Button } from './atoms/Button';
 import {
   AtSymbolIcon,
   CodeBracketIcon,
   LifebuoyIcon,
   ShieldCheckIcon,
   SparklesIcon,
-} from '@/components/Icons';
+} from './Icons';
 
 const features = [
   {
@@ -39,17 +38,15 @@ const features = [
 ];
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { signInWithGoogle } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     setIsLoading(true);
     try {
-      await login();
-      // On successful login, the user will be redirected via the AuthContext
+      await signInWithGoogle();
     } catch (error) {
       console.error("Login failed:", error);
-      // You might want to show an error message to the user here
       setIsLoading(false);
     }
   };
@@ -59,11 +56,9 @@ export const LoginPage: React.FC = () => {
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
         <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
         <div className="flex items-center gap-4 mb-8">
-            <Image
+            <img
                 src="/logo.png"
                 alt="The Turnstile Logo"
-                width={64}
-                height={64}
                 className="h-16 w-16"
             />
              <div>
@@ -96,11 +91,9 @@ export const LoginPage: React.FC = () => {
         </div>
         <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mt-0 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32">
           <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-            <Image
-              src="/app-screenshot.png"
+            <img
+              src="https://placehold.co/2432x1442/000000/FFFFFF/png?text=App+Screenshot"
               alt="App screenshot"
-              width={2432}
-              height={1442}
               className="w-[76rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10"
             />
           </div>

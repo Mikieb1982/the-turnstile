@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { genkit } from "genkit";
+=======
+﻿import { genkit } from "genkit";
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 import { googleAI } from "@genkit-ai/googleai";
 import { z } from "zod";
 
@@ -19,7 +23,11 @@ export const devopsCheck = ai.defineFlow(
   async ({ context }) => {
     const system =
       "Return MINIFIED JSON with keys: summary (string), checklist (string[]), patch (string unified diff or empty). Only JSON. No markdown. No backticks.";
+<<<<<<< HEAD
     const modelId = (process.env.GOOGLE_MODEL_ID || "googleai/gemini-1.5-flash-8b") as string;
+=======
+    const modelId = (process.env.GOOGLE_MODEL_ID || "googleai/gemini-1.5-flash-8b") as any;
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 
     const res = await ai.generate({
       model: modelId,

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import React from 'react';
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 import { BadgeIcon } from '../atoms/BadgeIcon';
 
 const mockBadges = [
@@ -9,7 +13,11 @@ const mockBadges = [
   { id: 6, name: 'Derby Day', icon: '⚔️', earned: false },
 ];
 
+<<<<<<< HEAD
 export const ProfilePage = () => {
+=======
+export const ProfilePage: React.FC = () => {
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
   return (
     <div className="space-y-8">
       <h2 className="section-title text-sm">My Profile</h2>

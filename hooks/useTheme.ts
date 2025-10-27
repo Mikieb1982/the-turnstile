@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useCallback, useEffect, useMemo, useState } from 'react';
+=======
+import { useEffect, useMemo, useState } from 'react';
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 import {
   applyThemeFromSettings,
   createTeamAwareTheme,
@@ -34,6 +38,7 @@ export const useTheme = (): UseThemeResult => {
     persistTeamPreference(teamId);
   }, [teamId]);
 
+<<<<<<< HEAD
   const refresh = useCallback(() => {
     applyThemeFromSettings(mode, teamId ?? undefined);
   }, [mode, teamId]);
@@ -41,6 +46,15 @@ export const useTheme = (): UseThemeResult => {
   useEffect(() => {
     refresh();
   }, [refresh]);
+=======
+  const refresh = () => {
+    applyThemeFromSettings(mode, teamId ?? undefined);
+  };
+
+  useEffect(() => {
+    refresh();
+  }, [mode, teamId]);
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 
   const toggleMode = () => setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
 

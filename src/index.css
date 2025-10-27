@@ -1,11 +1,9 @@
-@import "./styles/theme.css"; /* IMPORTANT: Imports your custom classes like .bg-app */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-#root {
-  min-height: 100vh;
-  /* Now bg-app works because theme.css was imported above */
-  @apply bg-app;
+body {
+  @apply bg-gray-900 text-white font-sans;
 }

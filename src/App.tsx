@@ -9,8 +9,7 @@ import { LeagueTablePage } from './components/pages/LeagueTablePage';
 import { ProfilePage } from './components/pages/ProfilePage';
 import { AgentWorkshopPage } from './components/pages/AgentWorkshopPage';
 import { LoginPage } from './components/pages/LoginPage';
-// CORRECTED PATH: Changed from './services' to '../services'
-import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from '../services/mockData';
+import { mockUserData, mockNextMatch, mockFixtures, mockLeagueTable } from './services/mockData';
 import { useAuth } from './contexts/AuthContext';
 
 export default function App() {
@@ -36,12 +35,11 @@ export default function App() {
 
   if (!currentUser) {
     return (
-        <div className="relative min-h-screen flex flex-col justify-center items-center text-white">
+        <div className="relative min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white">
             <LoginPage
                 theme="dark"
                 onLogin={signInWithGoogle}
                 onEmailLogin={signIn}
-                // CORRECTED: This ensures the arguments are passed correctly
                 onSignup={({ name, email, password }) => signUp(name, email, password)}
                 onPasswordReset={passwordReset}
             />
@@ -50,7 +48,7 @@ export default function App() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col text-foreground">
+    <div className="relative min-h-screen flex flex-col bg-gray-900 text-white">
       <Navbar onLogout={logOut} />
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pb-32 pt-8">
         {renderView()}

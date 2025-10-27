@@ -10,7 +10,11 @@ import {
   ShieldCheckIcon,
   Squares2X2Icon,
 } from './components/Icons'
+<<<<<<< HEAD
 import { teamIdToVenue } from './services/mockData'
+=======
+import { teamIdToVenue, TEAMS } from './services/mockData'
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
 
 export const allBadges: Badge[] = [
   {

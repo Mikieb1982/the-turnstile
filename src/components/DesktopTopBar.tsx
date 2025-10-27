@@ -6,9 +6,16 @@ import { ArrowLeftIcon } from './Icons';
 interface DesktopTopBarProps {
   currentView: View;
   setView: (view: View) => void;
+<<<<<<< HEAD
 }
 
 export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setView }) => {
+=======
+  theme: 'light' | 'dark';
+}
+
+export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setView, theme }) => {
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
   const handleBack = () => {
     if (window.history.length > 1) {
       window.history.back();
@@ -17,6 +24,14 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({ currentView, setVi
     }
   };
 
+<<<<<<< HEAD
+=======
+  const isDarkMode = theme === 'dark';
+  const inactiveNavClasses = isDarkMode
+    ? 'text-text hover:text-primary hover:bg-surface-alt/80 border border-transparent'
+    : 'text-brand-navy hover:text-primary hover:bg-surface-alt/80 border border-transparent';
+
+>>>>>>> 27e8a865d1dcb8be48c266b1dfcaa1f03b83bcb9
   return (
     <nav className="hidden md:flex fixed inset-x-0 top-0 z-30 border-b border-border/70 bg-surface shadow-md backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-6 py-3">
