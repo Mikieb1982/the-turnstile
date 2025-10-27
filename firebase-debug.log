@@ -793,3 +793,143 @@ You're about to initialize a Firebase project in this directory:
 [debug] [2025-10-27T07:18:37.973Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [omitted]
 [debug] [2025-10-27T07:18:37.990Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com 200
 [debug] [2025-10-27T07:18:37.993Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:22:37.372Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:22:37.378Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:23:36.755Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:23:36.758Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.670Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.671Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.671Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.673Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.674Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.674Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.679Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.679Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.680Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.681Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.681Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.681Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.690Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.695Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.695Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.696Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.697Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.697Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.701Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.701Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.701Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:24:39.702Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.702Z] No OAuth tokens found
+[debug] [2025-10-27T09:24:39.702Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:24:42.684Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:24:42.704Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:24:42.713Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:14.287Z] Running auto auth
+[debug] [2025-10-27T09:25:14.288Z] Running auto auth
+[debug] [2025-10-27T09:25:14.289Z] Running auto auth
+[debug] [2025-10-27T09:25:14.289Z] Running auto auth
+[debug] [2025-10-27T09:25:14.289Z] Running auto auth
+[debug] [2025-10-27T09:25:14.290Z] Running auto auth
+[debug] [2025-10-27T09:25:14.290Z] Running auto auth
+[debug] [2025-10-27T09:25:14.290Z] Running auto auth
+[debug] [2025-10-27T09:25:14.290Z] Running auto auth
+[debug] [2025-10-27T09:25:14.290Z] Running auto auth
+[debug] [2025-10-27T09:25:14.291Z] Running auto auth
+[debug] [2025-10-27T09:25:14.353Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-27T09:25:14.353Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.478Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [none]
+[debug] [2025-10-27T09:25:14.479Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.592Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-27T09:25:14.592Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.616Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [none]
+[debug] [2025-10-27T09:25:14.616Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.630Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-27T09:25:14.631Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.648Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [none]
+[debug] [2025-10-27T09:25:14.649Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.663Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-27T09:25:14.663Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/the-scrum-book
+[debug] [2025-10-27T09:25:14.678Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [none]
+[debug] [2025-10-27T09:25:14.678Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com x-goog-quota-user=projects/the-scrum-book
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:25:14.694Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:14.694Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:25:14.707Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:14.708Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-27T09:25:14.736Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:14.736Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.308Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com 401
+[debug] [2025-10-27T09:25:15.308Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [omitted]
+[debug] [2025-10-27T09:25:15.308Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.308Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.309Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.309Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.309Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.333Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com 401
+[debug] [2025-10-27T09:25:15.335Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-27T09:25:15.335Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.336Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.336Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.336Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.336Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.345Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com 401
+[debug] [2025-10-27T09:25:15.347Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-27T09:25:15.347Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.347Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.348Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.348Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.348Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.352Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com 401
+[debug] [2025-10-27T09:25:15.353Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [omitted]
+[debug] [2025-10-27T09:25:15.353Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.353Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.353Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.353Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.354Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.354Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com 401
+[debug] [2025-10-27T09:25:15.355Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [omitted]
+[debug] [2025-10-27T09:25:15.355Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.355Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.355Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.355Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.355Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.359Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com 401
+[debug] [2025-10-27T09:25:15.359Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-27T09:25:15.359Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.359Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.359Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.360Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.360Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.365Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com 401
+[debug] [2025-10-27T09:25:15.365Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseio.com [omitted]
+[debug] [2025-10-27T09:25:15.366Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.366Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.366Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.366Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.366Z] > authorizing via signed-in user (mikieburrow@gmail.com)
+[debug] [2025-10-27T09:25:15.370Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com 401
+[debug] [2025-10-27T09:25:15.370Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/the-scrum-book/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-27T09:25:15.370Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-27T09:25:15.371Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.371Z] No OAuth tokens found
+[debug] [2025-10-27T09:25:15.371Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-27T09:25:15.371Z] > authorizing via signed-in user (mikieburrow@gmail.com)

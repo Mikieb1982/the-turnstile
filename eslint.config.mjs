@@ -1,21 +1,31 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
-import next from 'eslint-config-next';
+import pluginReact from 'eslint-plugin-react';
+import hooksPlugin from 'eslint-plugin-react-hooks';
+import refreshPlugin from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
+    ignores: ["node_modules/**", "dist/**", "build/**"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    files: ['**/*.{ts,tsx}'],
     plugins: {
-      react,
+      'react': pluginReact,
+      'react-hooks': hooksPlugin,
+      'react-refresh': refreshPlugin,
     },
     rules: {
-      ...react.configs.recommended.rules,
+      ...pluginReact.configs.recommended.rules,
+      ...hooksPlugin.configs.recommended.rules,
+      'react-refresh/only-export-components': 'warn',
     },
-  },
-  next
+    settings: {
+        react: {
+            version: 'detect',
+        }
+    }
+  }
 );
