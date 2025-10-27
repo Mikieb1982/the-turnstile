@@ -2,12 +2,9 @@
 
 ## Overview
 
-This document provides a comprehensive overview of the project, including its purpose, features, and design.
-
-## Current State
-
-This section documents the current state of the application, including all implemented styles, designs, and features.
+This project is a Next.js application bootstrapped with `create-next-app`.
 
 ## Plan
 
-This section outlines the plan for the current requested change.
+1.  Create a `blueprint.md` file to document the project.
+2.  Run `npm run dev` to start the development server.
