@@ -1,39 +1,46 @@
 'use client';
 
-import Link from 'next/link';
-import { useAuth } from '../lib/auth';
-import { LogOut } from 'lucide-react';
+import { useState } from 'react';
 
-const Header = () => {
-  const { user, logout } = useAuth();
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gray-800 text-white p-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">
-          The Turnstile
-        </Link>
-        <nav>
-          {user ? (
-            <div className="flex items-center">
-              <span className="mr-4">Welcome, {user.displayName || user.email}</span>
-              <button
-                onClick={logout}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full flex items-center transition-colors duration-300"
-              >
-                <LogOut className="w-5 h-5 mr-2" />
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-              Login
-            </Link>
-          )}
-        </nav>
-      </div>
+    <header className="bg-gray-800 p-4">
+      <nav className="container mx-auto flex justify-between items-center">
+        <div className="text-xl font-bold">The Turnstile</div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-4">
+          <a href="#" className="px-4">Home</a>
+          <a href="#" className="px-4">Matches</a>
+          <a href="#" className="px-4">Profile</a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden mt-4 bg-gray-800 bg-opacity-90">
+          <a href="#" className="block px-4 py-2">Home</a>
+          <a href="#" className="block px-4 py-2">Matches</a>
+          <a href="#" className="block px-4 py-2">Profile</a>
+        </div>
+      )}
     </header>
   );
-};
-
-export default Header;
+}
