@@ -2,22 +2,29 @@
 
 ## Overview
 
-The Turnstile is a modern, interactive, and beautifully designed turnstile application built with Next.js and Firebase. It aims to provide a seamless and visually appealing user experience.
+This document outlines the plan for improving the codebase by addressing security vulnerabilities, cleaning up redundant code, and preparing for a transition to a real backend.
 
-## Design and Features (Initial Version)
+## Implemented Changes
 
-### Style and Design
+*   **Resolved Merge Conflicts:** Fixed the merge conflicts in the `.gitignore` file to ensure proper version control.
+*   **Enhanced Security:** Removed the hardcoded API key from `ai/devops-env.ps1` to prevent security vulnerabilities.
+*   **Cleaned Up Redundancies:**
+    *   Removed the deprecated `services/profileService.ts` file.
+    *   Removed the redundant `lib/teams.ts` file, which contained data for a different league.
+    *   Removed the empty `types.js` file.
 
-*   **Framework:** Next.js with Tailwind CSS for styling.
-*   **Typography:** The `Inter` font is used for a clean and modern look.
-*   **Color Palette:** A dark theme is used with a gray-900 background and white text. The primary accent color is blue-500.
-*   **Layout:** The main page features a centered layout with a hero section.
+## Future Plans: Backend Migration
 
-### Features
+The application currently relies on mock data. The next phase of development will focus on migrating to a real backend using Node.js/Express and Firestore.
 
-*   **Home Page:** A simple and elegant home page that introduces the application.
-*   **Call to Action:** A prominent "Enter" button with a right arrow icon to guide the user.
+### Action Plan:
 
-## Current Plan
-
-*   This is the initial setup of the project. The next steps will involve adding more features and refining the design based on user feedback.
+1.  **Set up Firebase:**
+    *   Create a new Firebase project.
+    *   Configure Firestore as the database.
+2.  **Backend Development:**
+    *   Create a new Node.js/Express server.
+    *   Implement API endpoints for fetching and updating data.
+3.  **Frontend Integration:**
+    *   Create a new service `services/firestoreService.ts` to interact with the new backend.
+    *   Replace the mock data with data from the new backend.
