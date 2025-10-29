@@ -9,7 +9,9 @@
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "baseUrl": ".",
-    "paths": {},
+    "paths": {
+      "@/*": ["./*"]
+    },
     "strict": true,
     "noImplicitAny": false,
     "useUnknownInCatchVariables": false,

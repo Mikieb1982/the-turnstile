@@ -1,9 +1,13 @@
-
 import { create } from 'zustand';
 
-const useStore = create((set) => ({
-  searchTerm: '',
-  setSearchTerm: (searchTerm) => set({ searchTerm }),
-}));
+interface TurnstileState {
+  locked: boolean;
+  insertCoin: () => void;
+  push: () => void;
+}
 
-export default useStore;
+export const useTurnstileStore = create<TurnstileState>((set) => ({
+  locked: true,
+  insertCoin: () => set((state) => ({ locked: !state.locked ? false : !state.locked })),
+  push: () => set((state) => ({ locked: state.locked ? true : !state.locked })),
+}));
