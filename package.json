@@ -5,15 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
+    "@firebase/app": "^0.14.4",
+    "@firebase/auth": "^1.11.0",
     "firebase": "^12.4.0",
     "lucide-react": "^0.395.0",
     "next": "latest",
     "react": "^18",
     "react-dom": "^18",
+    "rss-parser": "^3.13.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

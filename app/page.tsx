@@ -1,14 +1,9 @@
-import { BarChart, Badge, LifeBuoy, Plane } from 'lucide-react';
+import { BarChart, Badge, LifeBuoy, MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LandingPage() {
   return (
     <div className="bg-gray-900 text-white">
-      {/* Header */}
-      <header className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center text-green-400">The Turnstile</h1>
-        <p className="text-lg text-gray-400 text-center mt-2">Your Super League Companion</p>
-      </header>
-
       {/* Hero Section */}
       <section className="bg-gray-800 py-20">
         <div className="container mx-auto px-4 text-center">
@@ -23,7 +18,7 @@ export default function LandingPage() {
       <section className="container mx-auto px-4 py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Feature 1: Tracking Your Match History */}
-          <div className="bg-gray-800 p-8 rounded-lg text-center">
+          <div className="bg-gray-800 p-8 rounded-lg text-center card-lifted">
             <Badge className="w-12 h-12 text-green-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Track Your Match History</h3>
             <p className="text-gray-400">
@@ -32,7 +27,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 2: Personalized Dashboard */}
-          <div className="bg-gray-800 p-8 rounded-lg text-center">
+          <div className="bg-gray-800 p-8 rounded-lg text-center card-lifted">
             <BarChart className="w-12 h-12 text-green-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Personalized Dashboard</h3>
             <p className="text-gray-400">
@@ -40,17 +35,17 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Feature 3: Gamification and Social Sharing */}
-          <div className="bg-gray-800 p-8 rounded-lg text-center">
-            <Plane className="w-12 h-12 text-green-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Gamification & Social Sharing</h3>
+          {/* Feature 3: Geo-Gamification & Social Sharing */}
+          <div className="bg-gray-800 p-8 rounded-lg text-center card-lifted">
+            <MapPin className="w-12 h-12 text-green-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Explore, Compete & Share</h3>
             <p className="text-gray-400">
-              Earn digital badges for milestones and share your achievements with the community.
+              Unlock achievements for visiting new stadiums and share your journey with friends. Rise up the leaderboard and become a Super Fan!
             </p>
           </div>
 
           {/* Feature 4: User Support */}
-          <div className="bg-gray-800 p-8 rounded-lg text-center">
+          <div className="bg-gray-800 p-8 rounded-lg text-center card-lifted">
             <LifeBuoy className="w-12 h-12 text-green-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Dedicated User Support</h3>
             <p className="text-gray-400">
@@ -65,9 +60,11 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
           <p className="text-lg text-gray-400 mb-8">Sign up now and begin logging your support for your favorite Super League team!</p>
-          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full">
-            Sign Up Now
-          </button>
+          <Link href="/sign-up">
+            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-glow">
+              Sign Up Now
+            </button>
+          </Link>
         </div>
       </section>
 

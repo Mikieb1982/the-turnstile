@@ -1,14 +1,20 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "<your-api-key>",
-  authDomain: "<your-auth-domain>",
-  projectId: "<your-project-id>",
-  storageBucket: "<your-storage-bucket>",
-  messagingSenderId: "<your-messaging-sender-id>",
-  appId: "<your-app-id>"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
 };
 
-const app = initializeApp(firebaseConfig);
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} 
 
-export { app };
+const auth = getAuth(app);
+
+export { auth };
