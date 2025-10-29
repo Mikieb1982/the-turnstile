@@ -13,7 +13,8 @@
     "lucide-react": "^0.395.0",
     "next": "latest",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
