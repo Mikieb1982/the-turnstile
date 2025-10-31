@@ -1,44 +1,47 @@
-# Project Blueprint
+
+# The Turnstile Blueprint
 
 ## Overview
 
-This project is a Next.js application for Rugby League Super League fans. The goal is to integrate Firebase for backend services, including authentication and provide a rich user experience with a navigation bar.
+The Turnstile is a Next.js application designed for rugby league fans. It allows users to track their favorite teams, log matches they've attended, and view upcoming fixtures and recent results.
 
-## Existing Features
+## Implemented Features
 
-* Next.js application with App Router.
-* A `useLocalStorage` hook for client-side storage.
-* ESLint configured for TypeScript and React.
-* Firebase integration.
-* A visually appealing and informative landing page for "The Turnstile", specifically for Rugby League Super League fans.
-* Firebase Authentication with sign-in, sign-up, and sign-out functionality, including Google Sign-In.
-* A responsive navigation bar with links to the different features of the application.
-* Placeholder pages for the "Dashboard", "Match Log", and "Achievements" navigation links.
-* Multi-layered drop shadows on cards for a "lifted" effect.
-* A glow effect on the primary call-to-action button.
-* An improved "Gamification & Social Sharing" section with a more engaging title and description, and a more relevant icon.
-* A populated dashboard with relevant tiles for Lifetime Stats, Recent Activity, and Achievements.
-* A form on the "Match Log" page to enable users to submit match details.
-* An "Achievements" page that displays a gallery of achievements.
-* A "Super League News" component on the dashboard that fetches and displays the latest news from an RSS feed.
-* An improved `AuthButton` component with a more user-friendly design, including a welcome message, profile icon, and a dropdown menu with profile and sign-out links.
-* A "Profile" page that displays the user's profile information.
+### Core
 
-## Linting and Code Quality (Completed)
+*   **Framework**: Next.js with App Router
+*   **Styling**: Tailwind CSS
+*   **Authentication**: Firebase Authentication (Google Sign-In)
+*   **Database**: Firestore
+*   **Authentication UI**: Provides a clear sign-in/sign-out button (`AuthButton`) that reflects the user's current authentication state.
 
-* Resolved various `eslint` errors to improve code quality and maintainability.
-* Fixed `any` type errors in `app/actions.ts` by introducing a specific `AuthState` interface and using `unknown` for the catch block error type.
-* Removed an unused `Shield` import and fixed an unescaped apostrophe in `app/dashboard/page.tsx`.
-* Replaced the `<img>` tag with the `next/image` component in `app/profile/page.tsx` to resolve the `no-img-element` warning and improve performance.
-* Fixed an unescaped apostrophe in `app/sign-in/page.tsx`.
-* Resolved issues with the `lint` command by first attempting to modify the `package.json` script and then by running `eslint` directly.
+### "Match Log" Feature
 
-## Plan for Profile Page (Completed)
+*   **Log a New Match**: Users can log a new match they have attended by providing the home team, away team, date, and final score.
+*   **Data Persistence**: Match data is saved to a "match-logs" collection in Firestore.
+*   **Display Logged Matches**: Logged matches are displayed in a list on the "Match Log" page, showing the teams, date, and score.
+*   **Real-time Updates**: The list of logged matches is updated in real-time after a new match is logged, edited, or deleted.
+*   **Edit and Delete Matches**:
+    *   Users can now edit or delete their logged matches.
+    *   Each match entry has an "Edit" icon, which opens a modal pre-filled with the match details, allowing for easy updates.
+    *   A "Delete" icon is also present, which prompts the user for confirmation before permanently removing the match log.
+    *   Both editing and deleting are handled via server actions, ensuring data integrity and a smooth user experience.
+*   **Component Structure**: The "Match Log" page is built with a server component to fetch data and a client component to handle user interaction and display the data.
+*   **Server Actions**: Form submissions for creating, updating, and deleting matches are handled by Next.js server actions for a seamless user experience and improved performance.
+*   **User-specific Matches**: Users can only view and interact with matches they have logged under their own account.
 
-1.  **Create Profile Page:** Create a new page at `app/profile/page.tsx`.
-2.  **Display Profile Information:** Display the user's profile picture, display name, and email address.
-3.  **Add Edit Button:** Include an "Edit Profile" button to allow users to update their profile information.
+## Design
 
-## Security Vulnerabilities (Resolved)
+*   **Theme**: Dark theme with a modern, clean aesthetic.
+*   **Color Palette**: The primary color is cyan, used for highlights, buttons, and interactive elements. The background is a dark gray (`gray-900`), and the text is white.
+*   **Typography**: A clean, sans-serif font is used for readability.
+*   **Layout**: The layout is responsive and uses a two-column grid on larger screens to separate the "Log a New Match" form from the "Logged Matches" list.
+*   **Components**: Custom components are used for a consistent look and feel. The edit functionality utilizes a modal window for a focused user experience.
 
-* Updated the `firebase` package to the latest version to resolve all security vulnerabilities.
+## Next Steps
+
+*   [X] Add the ability to edit and delete logged matches.
+*   [X] Secure Firestore Rules: Implement Firestore security rules to restrict access to the `match-logs` collection, ensuring users can only read and write their own documents.
+*   [ ] Add form validation to the "Log a New Match" form.
+*   [ ] Add a loading state to the "Logged Matches" list while the data is being fetched.
+*   [ ] Add pagination to the "Logged Matches" list.

@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'The Turnstile',
   description: 'A modern, interactive, and beautifully designed turnstile application.',
+  icons: '/favicon.png',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
