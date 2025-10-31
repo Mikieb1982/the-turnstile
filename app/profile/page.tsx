@@ -2,10 +2,12 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
-import { auth, storage } from '@/lib/firebase';
+import { auth } from '@/lib/firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { onAuthStateChanged, updateProfile, User } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { UserCircle, X } from 'lucide-react';
+
+const storage = getStorage();
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);

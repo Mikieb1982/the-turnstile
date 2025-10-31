@@ -29,6 +29,14 @@ The Turnstile is a Next.js application designed for rugby league fans. It allows
 *   **Component Structure**: The "Match Log" page is built with a server component to fetch data and a client component to handle user interaction and display the data.
 *   **Server Actions**: Form submissions for creating, updating, and deleting matches are handled by Next.js server actions for a seamless user experience and improved performance.
 *   **User-specific Matches**: Users can only view and interact with matches they have logged under their own account.
+*   **Form Validation**: The "Log a New Match" form now includes form validation using the `zod` library to ensure data integrity.
+*   **Loading State**: A loading skeleton is displayed while the match data is being fetched, providing a better user experience.
+
+### User Profile
+
+*   **Profile Page**: A dedicated profile page where users can view and update their profile information.
+*   **Edit Profile**: Users can edit their display name and profile picture.
+*   **Profile Picture Uploads**: Users can upload a profile picture, which is stored in Firebase Storage.
 
 ## Design
 
@@ -42,6 +50,7 @@ The Turnstile is a Next.js application designed for rugby league fans. It allows
 
 *   [X] Add the ability to edit and delete logged matches.
 *   [X] Secure Firestore Rules: Implement Firestore security rules to restrict access to the `match-logs` collection, ensuring users can only read and write their own documents.
-*   [ ] Add form validation to the "Log a New Match" form.
-*   [ ] Add a loading state to the "Logged Matches" list while the data is being fetched.
+*   [X] Add form validation to the "Log a New Match" form.
+*   [X] Resolve build error related to Firebase Storage initialization.
+*   [X] Add a loading state to the "Logged Matches" list while the data is being fetched.
 *   [ ] Add pagination to the "Logged Matches" list.
