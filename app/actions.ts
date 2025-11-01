@@ -25,7 +25,7 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
 
   if (!emailValidation.success) {
     return {
-      errors: { email: emailValidation.error.flatten().fieldErrors.email },
+    errors: { email: emailValidation.error.flatten().fieldErrors.email },
     };
   }
 
