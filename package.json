@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "firebase:login": "firebase login --reauth --project=your-project-id"
   },
   "dependencies": {
     "@firebase/app": "^0.14.4",

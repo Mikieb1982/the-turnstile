@@ -27,9 +27,11 @@ service cloud.firestore {
     }
   }
 }
-DeploymentThe repository is pre-configured for deployment to Firebase Hosting and includes a GitHub Actions workflow for continuous deployment.Manual DeploymentLogin to Firebase:npm run firebase:login
-Build and Deploy:npm run firebase:deploy
-Continuous Deployment (CI/CD)The .github/workflows/firebase-hosting-merge.yml workflow automatically builds and deploys the application to Firebase Hosting whenever code is pushed to the main branch.To enable this, you need to add your Firebase project details as secrets in your GitHub repository settings:FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.FIREBASE_PROJECT_ID: Your Firebase project ID.Available ScriptsScriptDescriptionnpm run devStarts the local development server with HMR.npm run buildBundles the app for production into the dist/ folder.npm run previewServes the production build locally for testing.npm run firebase:serveRuns the local Firebase Hosting emulator.npm run firebase:deployBuilds and deploys the app to Firebase Hosting.
+DeploymentThe repository is pre-configured for deployment to Firebase App Hosting and includes a GitHub Actions workflow for continuous deployment.To deploy the application, you'll need to create a Firebase App Hosting backend and update the configuration files.1. Create a Firebase App Hosting BackendFollow the Firebase documentation to create a new App Hosting backend in your Firebase project. Once created, you will get a backend ID.2. Update Configuration Files- **firebase.json**: Replace `"your-backend-id"` with the backend ID you just created.
+- **package.json**: Replace `"your-project-id"` in the `firebase:login` script with your Firebase project ID.3. DeployManually DeploymentLogin to Firebase:npm run firebase:login
+Build and Deploy:npm run build
+firebase deploy
+Continuous Deployment (CI/CD)The .github/workflows/firebase-hosting-merge.yml workflow automatically builds and deploys the application to Firebase Hosting whenever code is pushed to the main branch.To enable this, you need to add your Firebase project details as secrets in your GitHub repository settings:FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.FIREBASE_PROJECT_ID: Your Firebase project ID.Available ScriptsScriptDescriptionnpm run devStarts the local development server with HMR.npm run buildBundles the app for production into the dist/ folder.npm run previewServes the production build locally for testing.npm run firebase:serveRuns the local Firebase Hosting emulator.
 
 ## AI DevOps Firebase Architecture
 
