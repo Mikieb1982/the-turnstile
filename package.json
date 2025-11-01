@@ -12,6 +12,7 @@
     "@firebase/app": "^0.14.4",
     "@firebase/auth": "^1.11.0",
     "@firebase/firestore": "^4.9.2",
+    "@playwright/test": "^1.56.1",
     "firebase": "^12.4.0",
     "lucide-react": "^0.395.0",
     "next": "latest",
