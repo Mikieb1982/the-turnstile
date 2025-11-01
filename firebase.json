@@ -1,5 +1,16 @@
 {
+  "$schema": "https://firebase.google.com/schema/firebase-schema.json",
   "firestore": {
     "rules": "firestore.rules"
-  }
+  },
+  "hosting": [
+    {
+      "target": "the-turnstile-next",
+      "source": ".",
+      "app": {
+        "backendId": "your-backend-id",
+        "region": "your-region"
+      }
+    }
+  ]
 }

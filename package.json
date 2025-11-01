@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "firebase:login": "firebase login --reauth --project=your-project-id"
   },
   "dependencies": {
     "@firebase/app": "^0.14.4",
