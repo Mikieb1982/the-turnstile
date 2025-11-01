@@ -1,3 +1,7 @@
+
+import Image from 'next/image';
+import { mockFixtures } from '@/services/mockData';
+
 export default function FixturesPage() {
   const fixtures = [
     {

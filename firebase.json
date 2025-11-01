@@ -1,14 +1,15 @@
 {
   "$schema": "https://firebase.google.com/schema/firebase-schema.json",
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": [
     {
-      "target": "the-turnstile-next",
-      "source": "."
-      // Add the following 'app' configuration after creating a Firebase App Hosting backend.
-      // "app": {
-      //   "backendId": "your-backend-id",
-      //   "region": "your-region"
-      // }
+      "source": ".",
+      "app": {
+        "backendId": "the-turnstile-89754200-c7f0b",
+        "region": "us-central1"
+      }
     }
   ]
 }

@@ -1,44 +1,40 @@
-# Project Blueprint
+# Project Blueprint: The Turnstile
 
 ## Overview
 
-This project is a Next.js application for Rugby League Super League fans. The goal is to integrate Firebase for backend services, including authentication and provide a rich user experience with a navigation bar.
+This project is a Next.js application integrated with Firebase. It provides user authentication (sign up and sign in) and displays a feed of articles from various sources.
 
-## Existing Features
+## Implemented Features
 
-* Next.js application with App Router.
-* A `useLocalStorage` hook for client-side storage.
-* ESLint configured for TypeScript and React.
-* Firebase integration.
-* A visually appealing and informative landing page for "The Turnstile", specifically for Rugby League Super League fans.
-* Firebase Authentication with sign-in, sign-up, and sign-out functionality, including Google Sign-In.
-* A responsive navigation bar with links to the different features of the application.
-* Placeholder pages for the "Dashboard", "Match Log", and "Achievements" navigation links.
-* Multi-layered drop shadows on cards for a "lifted" effect.
-* A glow effect on the primary call-to-action button.
-* An improved "Gamification & Social Sharing" section with a more engaging title and description, and a more relevant icon.
-* A populated dashboard with relevant tiles for Lifetime Stats, Recent Activity, and Achievements.
-* A form on the "Match Log" page to enable users to submit match details.
-* An "Achievements" page that displays a gallery of achievements.
-* A "Super League News" component on the dashboard that fetches and displays the latest news from an RSS feed.
-* An improved `AuthButton` component with a more user-friendly design, including a welcome message, profile icon, and a dropdown menu with profile and sign-out links.
-* A "Profile" page that displays the user's profile information.
+### Styling and Design
+*   **Layout:** A clean and modern layout with a responsive design that adapts to different screen sizes.
+*   **Colors:** A vibrant color palette to create an energetic look and feel.
+*   **Typography:** Expressive and relevant typography with a clear hierarchy for headings and text.
+*   **Iconography:** Modern and interactive icons to enhance user understanding and navigation.
+*   **Effects:** Subtle noise texture on the background and multi-layered drop shadows for a sense of depth.
 
-## Linting and Code Quality (Completed)
+### Authentication
+*   **Sign Up:** Users can create an account using their email and password.
+*   **Sign In:** Registered users can sign in to their accounts.
+*   **Server Actions:** User authentication is handled using Next.js Server Actions for secure and efficient data mutations.
+*   **Validation:** Input fields are validated using Zod to ensure data integrity.
 
-* Resolved various `eslint` errors to improve code quality and maintainability.
-* Fixed `any` type errors in `app/actions.ts` by introducing a specific `AuthState` interface and using `unknown` for the catch block error type.
-* Removed an unused `Shield` import and fixed an unescaped apostrophe in `app/dashboard/page.tsx`.
-* Replaced the `<img>` tag with the `next/image` component in `app/profile/page.tsx` to resolve the `no-img-element` warning and improve performance.
-* Fixed an unescaped apostrophe in `app/sign-in/page.tsx`.
-* Resolved issues with the `lint` command by first attempting to modify the `package.json` script and then by running `eslint` directly.
+### Content
+*   **Article Feed:** The application fetches and displays a feed of articles from various RSS feeds.
+*   **RSS Parser:** The `rss-parser` library is used to parse the RSS feeds.
 
-## Plan for Profile Page (Completed)
+### Firebase Integration
+*   **Project ID:** The Firebase project ID has been updated to `the-turnstile-89754200-c7f0b`.
+*   **Configuration:** The Firebase configuration has been updated in `lib/firebase.ts` and a `.env.local` file has been created to store the Firebase project details.
+*   **Dependencies:** The `firebase` package has been installed.
 
-1.  **Create Profile Page:** Create a new page at `app/profile/page.tsx`.
-2.  **Display Profile Information:** Display the user's profile picture, display name, and email address.
-3.  **Add Edit Button:** Include an "Edit Profile" button to allow users to update their profile information.
+## Current Request: Project ID Update & Firebase Configuration
 
-## Security Vulnerabilities (Resolved)
-
-* Updated the `firebase` package to the latest version to resolve all security vulnerabilities.
+**Completed Steps:**
+1.  **`package.json`:** Updated the `firebase:login` script with the correct project ID.
+2.  **`firebase.json`:** Updated `backendId` and set the `region`.
+3.  **`.firebaserc`:** Created the file and set the default project.
+4.  **Firebase Configuration:**
+    *   Created `.env.local` with the Firebase configuration.
+    *   Updated `lib/firebase.ts` with the new Firebase configuration.
+    *   Installed the `firebase` dependency.

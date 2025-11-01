@@ -6,18 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "next lint",
     "firebase:login": "firebase login --reauth --project=the-turnstile-89754200-c7f0b"
   },
   "dependencies": {
     "@firebase/app": "^0.14.4",
     "@firebase/auth": "^1.11.0",
+    "@firebase/firestore": "^4.9.2",
     "@playwright/test": "^1.56.1",
-    "firebase": "^12.4.0",
+    "firebase": "^12.5.0",
     "lucide-react": "^0.395.0",
     "next": "latest",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.5.0",
     "rss-parser": "^3.13.0",
+    "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

@@ -31,7 +31,7 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
 
   if (!passwordValidation.success) {
     return {
-      errors: { password: passwordValidation.error.flatten().fieldErrors.password },
+      errors: { password: passwordValidation.error.flatten().formErrors },
     };
   }
 
@@ -61,13 +61,13 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
 
   if (!emailValidation.success) {
     return {
-      errors: { email: emailValidation.error.flatten().fieldErrors.email },
+      errors: { email: emailValidation.error.flatten().formErrors },
     };
   }
 
   if (!passwordValidation.success) {
     return {
-      errors: { password: passwordValidation.error.flatten().fieldErrors.password },
+      errors: { password: passwordValidation.error.flatten().formErrors },
     };
   }
 

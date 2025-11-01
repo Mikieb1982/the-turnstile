@@ -6,8 +6,9 @@ import Navbar from '@/components/navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Rugby League Companion',
-  description: 'A modern, interactive, and beautifully designed rugby league companion application.',
+  title: 'The Turnstile',
+  description: 'A modern, interactive, and beautifully designed turnstile application.',
+  icons: '/favicon.png',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

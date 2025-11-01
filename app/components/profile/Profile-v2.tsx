@@ -1,144 +1,124 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, signOut, User } from 'firebase/auth';
-import Link from 'next/link';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { onAuthStateChanged, updateProfile, User } from 'firebase/auth';
+import { UserCircle, X } from 'lucide-react';
+
+const storage = getStorage();
 
 export default function ProfileV2() {
   const [user, setUser] = useState<User | null>(null);
+  const [displayName, setDisplayName] = useState('');
+  const [photoURL, setPhotoURL] = useState('/user-placeholder.png');
+  const [isEditing, setIsEditing] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setDisplayName(currentUser.displayName || '');
+        setPhotoURL(currentUser.photoURL || '/user-placeholder.png');
+      } else {
+        setUser(null);
+      }
     });
-
     return () => unsubscribe();
   }, []);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Error signing out:', error);
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0] && user) {
+      const file = event.target.files[0];
+      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+      setUploading(true);
+      try {
+        await uploadBytes(storageRef, file);
+        const newPhotoURL = await getDownloadURL(storageRef);
+        await updateProfile(user, { photoURL: newPhotoURL });
+        setPhotoURL(newPhotoURL);
+      } catch (error) {
+        console.error("Error uploading file: ", error);
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
+  const handleSave = async () => {
+    if (user && displayName) {
+      try {
+        await updateProfile(user, { displayName });
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Error updating profile: ", error);
+      }
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+        <h1 className="text-2xl font-bold mb-4">You are not logged in.</h1>
+        <p className="text-lg text-center mb-8">Please log in to view and edit your profile.</p>
+        <a href="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Go to Login
+        </a>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-background-dark font-body text-gray-200 antialiased">
-      <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between bg-background-dark/80 px-4 backdrop-blur-sm">
-          <button className="flex h-10 w-10 items-center justify-center">
-            <span className="material-symbols-outlined text-2xl text-white">menu</span>
-          </button>
-          <div className="flex-1"></div>
-          <div className="size-10 shrink-0"></div>
-        </header>
-        <main className="flex-grow px-4 pb-28">
-          <div className="mx-auto max-w-lg">
-            {user ? (
-              <>
-                <h1 className="font-display mb-5 text-4xl font-normal uppercase tracking-wide text-white">Profile</h1>
-                <div className="shadow-card mb-6 rounded-xl border border-white/10 bg-card-dark p-6 text-center">
-                  <div className="relative mx-auto h-28 w-28">
-                    <div
-                      className="h-28 w-28 rounded-full bg-cover bg-center bg-no-repeat ring-4 ring-primary/40"
-                      style={{
-                        backgroundImage:
-                          'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDl7UVtMFWI3gq5nPqyHPg7xspf8mPwJax7DcqDmVCaCNiNDicAPykXpVm26qnZO1IK6WxAUtXmERF-rvaIUBI-WvTYVqq9yjBZiFLhZqgnZUcYkwpgbso6w987ctHkA7GnRiBSLvpirDgO0mPkrdNR05OvjtHn9qP0ecIValp_KQ7UA4PxDBL32ihPJ6nHRK0BtpKyhCC7mfHB4aNegzsvSaU0gmZw3PsmjeWE4pDjgpKZ5r5R0sZUK8mj8JSnoespX31as0YMX0NV")',
-                      }}
-                    ></div>
-                    <button className="absolute bottom-0 right-0 flex h-9 w-9 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-secondary text-white transition-transform duration-200 hover:scale-110">
-                      <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'wght' 500" }}>
-                        edit
-                      </span>
-                    </button>
-                  </div>
-                  <p className="font-display mt-4 text-3xl font-normal leading-tight tracking-wide text-white">{user.displayName || user.email}</p>
-                </div>
-                <div className="shadow-card mb-6 rounded-xl border border-white/10 bg-card-dark">
-                  <div className="p-6">
-                    <h2 className="font-display mb-5 text-xl font-normal uppercase tracking-wide text-secondary">
-                      Personal Information
-                    </h2>
-                    <div className="grid grid-cols-1 gap-5">
-                      <label className="flex flex-col flex-1">
-                        <p className="pb-2 text-sm font-medium leading-snug text-gray-300">First Name</p>
-                        <input
-                          className="form-input h-12 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-2 border-[#3b5444] bg-[#111813] px-4 text-base leading-normal text-white placeholder:text-gray-500 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/40"
-                          value="John"
-                        />
-                      </label>
-                      <label className="flex flex-col flex-1">
-                        <p className="pb-2 text-sm font-medium leading-snug text-gray-300">Last Name</p>
-                        <input
-                          className="form-input h-12 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-2 border-[#3b5444] bg-[#111813] px-4 text-base leading-normal text-white placeholder:text-gray-500 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/40"
-                          value="Doe"
-                        />
-                      </label>
-                      <label className="flex flex-col flex-1">
-                        <p className="pb-2 text-sm font-medium leading-snug text-gray-300">Date of Birth</p>
-                        <input
-                          className="form-input h-12 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-2 border-[#3b5444] bg-[#111813] px-4 text-base leading-normal text-white placeholder:text-gray-500 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/40"
-                          type="date"
-                          value="1995-08-15"
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className="shadow-card mb-8 rounded-xl border border-white/10 bg-card-dark">
-                  <div className="p-6">
-                    <h2 className="font-display mb-5 text-xl font-normal uppercase tracking-wide text-secondary">
-                      Contact Information
-                    </h2>
-                    <div className="grid grid-cols-1 gap-5">
-                      <label className="flex flex-col flex-1">
-                        <p className="pb-2 text-sm font-medium leading-snug text-gray-300">Email Address</p>
-                        <input
-                          className="form-input h-12 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-2 border-[#3b5444] bg-[#111813] px-4 text-base leading-normal text-white placeholder:text-gray-500 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/40"
-                          type="email"
-                          value={user.email || ''}
-                        />
-                      </label>
-                      <label className="flex flex-col flex-1">
-                        <p className="pb-2 text-sm font-medium leading-snug text-gray-300">Phone Number</p>
-                        <input
-                          className="form-input h-12 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-2 border-[#3b5444] bg-[#111813] px-4 text-base leading-normal text-white placeholder:text-gray-500 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/40"
-                          type="tel"
-                          value="+1 (555) 123-4567"
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <button className="shadow-button font-display flex h-14 w-full min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl bg-primary px-4 text-lg font-normal uppercase leading-normal tracking-wider text-background-dark transition-transform duration-200 hover:scale-[1.02]">
-                  <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'wght' 600" }}>
-                    save
-                  </span>
-                  <span className="truncate">Save Changes</span>
-                </button>
-                <button
-                  onClick={handleSignOut}
-                  className="shadow-button font-display flex h-14 w-full min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl bg-red-500 mt-4 px-4 text-lg font-normal uppercase leading-normal tracking-wider text-white transition-transform duration-200 hover:scale-[1.02]">
-                  <span className="truncate">Log Out</span>
-                </button>
-              </>
-            ) : (
-                <div className="text-center py-20">
-                <h1 className="font-display mb-5 text-4xl font-normal uppercase tracking-wide text-white">Profile</h1>
-                <p className="text-lg mb-8">Please log in to view your profile.</p>
-                <Link href="/sign-in">
-                  <button
-                    className="shadow-button font-display flex h-14 w-full min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl bg-primary px-4 text-lg font-normal uppercase leading-normal tracking-wider text-background-dark transition-transform duration-200 hover:scale-[1.02]"
-                  >
-                    <span className="truncate">Log In</span>
-                  </button>
-                </Link>
-              </div>
-            )}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <div className="w-full max-w-md mx-auto bg-gray-800 rounded-2xl shadow-lg p-6 text-center">
+        <div className="relative w-32 h-32 mx-auto mb-4">
+          <Image
+            src={photoURL}
+            alt="Profile Picture"
+            width={128}
+            height={128}
+            className="rounded-full object-cover cursor-pointer"
+            onClick={handleImageClick}
+          />
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/*"
+          />
+          {uploading && <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full"><div className="loader"></div></div>}
+        </div>
+
+        {isEditing ? (
+          <div className="flex flex-col items-center">
+            <input
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              className="bg-gray-700 text-white text-center text-2xl font-bold rounded-lg px-2 py-1 mb-4 w-full"
+            />
+            <div className="flex justify-center gap-4">
+              <button onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Save</button>
+              <button onClick={() => setIsEditing(false)} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+            </div>
           </div>
-        </main>
+        ) : (
+          <div>
+            <h1 className="text-2xl font-bold">{displayName || 'No display name'}</h1>
+            <p className="text-gray-400">{user.email}</p>
+            <button onClick={() => setIsEditing(true)} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Edit Profile
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
