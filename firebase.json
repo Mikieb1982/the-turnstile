@@ -3,11 +3,12 @@
   "hosting": [
     {
       "target": "the-turnstile-next",
-      "source": ".",
-      "app": {
-        "backendId": "your-backend-id",
-        "region": "your-region"
-      }
+      "source": "."
+      // Add the following 'app' configuration after creating a Firebase App Hosting backend.
+      // "app": {
+      //   "backendId": "your-backend-id",
+      //   "region": "your-region"
+      // }
     }
   ]
 }
