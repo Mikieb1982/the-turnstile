@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "firebase:login": "firebase login --reauth --project=your-project-id"
+    "firebase:login": "firebase login --reauth --project=the-turnstile-89754200-c7f0b"
   },
   "dependencies": {
     "@firebase/app": "^0.14.4",

@@ -5,11 +5,10 @@
   },
   "hosting": [
     {
-      "target": "the-turnstile-next",
       "source": ".",
       "app": {
-        "backendId": "your-backend-id",
-        "region": "your-region"
+        "backendId": "the-turnstile-89754200-c7f0b",
+        "region": "us-central1"
       }
     }
   ]

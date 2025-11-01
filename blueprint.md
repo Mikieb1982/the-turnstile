@@ -1,43 +1,34 @@
-# The Turnstile Next
+# Project Blueprint: The Turnstile
 
 ## Overview
 
-The Turnstile Next is a web application for tracking and managing soccer match data. It allows users to view team information, log match results, and view their match history.
+This project is a Next.js application integrated with Firebase. It provides user authentication (sign up and sign in) and displays a feed of articles from various sources.
 
-## Project Status
+## Implemented Features
 
-The application is currently in development. The core features are in place, and the UI/UX of the landing page and dashboard have been significantly improved.
+### Styling and Design
+*   **Layout:** A clean and modern layout with a responsive design that adapts to different screen sizes.
+*   **Colors:** A vibrant color palette to create an energetic look and feel.
+*   **Typography:** Expressive and relevant typography with a clear hierarchy for headings and text.
+*   **Iconography:** Modern and interactive icons to enhance user understanding and navigation.
+*   **Effects:** Subtle noise texture on the background and multi-layered drop shadows for a sense of depth.
 
-## Design and Features
+### Authentication
+*   **Sign Up:** Users can create an account using their email and password.
+*   **Sign In:** Registered users can sign in to their accounts.
+*   **Server Actions:** User authentication is handled using Next.js Server Actions for secure and efficient data mutations.
+*   **Validation:** Input fields are validated using Zod to ensure data integrity.
 
-### Implemented
+### Content
+*   **Article Feed:** The application fetches and displays a feed of articles from various RSS feeds.
+*   **RSS Parser:** The `rss-parser` library is used to parse the RSS feeds.
 
-*   **User Authentication:** Users can sign up, log in, and manage their profiles.
-*   **Team Information:** Users can view a list of teams and their details.
-*   **Match Logging:** Users can log new match results.
-*   **Match History:** Users can view a history of their logged matches.
-*   **Redesigned Landing Page:**
-    *   Modern, dynamic, and visually engaging design.
-    *   Features a prominent hero section with clear calls-to-action ("Get Started", "Learn More").
-    *   A "Key Features" section highlights core functionalities with icons.
-    *   Includes a placeholder `/about` page.
-*   **Redesigned Dashboard:**
-    *   Modular, card-based layout for improved readability and user experience.
-    *   Personalized welcome message for the logged-in user.
-    *   Summary of key user statistics (Matches Attended, Achievements, Favorite Team) displayed in prominent cards.
-    *   Fetches and displays a table of the user's recent matches from Firestore.
-    *   Includes loading states and a clear message for users who are not logged in.
+## Current Request: Project ID Update
 
-### Planned
-
-*   **Advanced Statistics:** More detailed statistics for teams and players.
-*   **Social Features:** Users can follow other users and view their match history.
-*   **Complete "About" Page:** Flesh out the placeholder about page with more information.
-
-## Next Steps
-
-*   [X] Improve the UI/UX of the application. (Landing Page and Dashboard complete)
-*   [ ] Implement advanced statistics for teams and players.
-*   [ ] Build out the "About" page.
-*   [ ] Add social features.
-*   [ ] Continue to refine the UI/UX across the entire application.
+**Plan:**
+1.  **`package.json`:** Update the `firebase:login` script with the correct project ID: `the-turnstile-89754200-c7f0b`.
+2.  **`firebase.json`:**
+    *   Update `backendId` with the correct project ID.
+    *   Set the `region` to `us-central1`.
+    *   Remove the unnecessary `target` field.
+3.  **`.firebaserc`:** Create the file and set the default project to `the-turnstile-89754200-c7f0b`.
