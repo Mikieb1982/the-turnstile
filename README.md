@@ -9,6 +9,10 @@ VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
 
 # Google OAuth configuration
 VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+
+# Workspace Slug
+# This is required for the application to connect to the correct Firebase project.
+WORKSPACE_SLUG=your-workspace-slug
 Note: The app will run in a fully offline mode, using localStorage for all data, if these variables are not provided. This is useful for UI development without a backend setup.3. Run the Development ServerStart the local Vite development server.npm run dev
 The application will now be running on http://localhost:5173.Firebase IntegrationThis project is configured to work seamlessly with Firebase services.Firestore Data ModelThe app expects the following collections in your Firestore database. You can create these manually in the Firebase Console.matches: Stores the fixture list for the season.venues: Contains details about each stadium.users/{userId}: Each document is keyed by a user's authentication UID and contains user-specific data.attendedMatches: An array of match IDs that the user has attended.Security RulesFor a production environment, use the following Firestore security rules to protect user data while allowing public read access to matches and venues.rules_version = '2';
 service cloud.firestore {
