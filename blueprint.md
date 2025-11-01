@@ -23,12 +23,18 @@ This project is a Next.js application integrated with Firebase. It provides user
 *   **Article Feed:** The application fetches and displays a feed of articles from various RSS feeds.
 *   **RSS Parser:** The `rss-parser` library is used to parse the RSS feeds.
 
-## Current Request: Project ID Update
+### Firebase Integration
+*   **Project ID:** The Firebase project ID has been updated to `the-turnstile-89754200-c7f0b`.
+*   **Configuration:** The Firebase configuration has been updated in `lib/firebase.ts` and a `.env.local` file has been created to store the Firebase project details.
+*   **Dependencies:** The `firebase` package has been installed.
 
-**Plan:**
-1.  **`package.json`:** Update the `firebase:login` script with the correct project ID: `the-turnstile-89754200-c7f0b`.
-2.  **`firebase.json`:**
-    *   Update `backendId` with the correct project ID.
-    *   Set the `region` to `us-central1`.
-    *   Remove the unnecessary `target` field.
-3.  **`.firebaserc`:** Create the file and set the default project to `the-turnstile-89754200-c7f0b`.
+## Current Request: Project ID Update & Firebase Configuration
+
+**Completed Steps:**
+1.  **`package.json`:** Updated the `firebase:login` script with the correct project ID.
+2.  **`firebase.json`:** Updated `backendId` and set the `region`.
+3.  **`.firebaserc`:** Created the file and set the default project.
+4.  **Firebase Configuration:**
+    *   Created `.env.local` with the Firebase configuration.
+    *   Updated `lib/firebase.ts` with the new Firebase configuration.
+    *   Installed the `firebase` dependency.
