@@ -2,15 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('take screenshots of all pages', async ({ page }) => {
   const pages = [
-    { name: 'league-table-v1', path: '/league-table?version=1' },
-    { name: 'league-table-v2', path: '/league-table?version=2' },
-    { name: 'league-table-v3', path: '/league-table?version=3' },
-    { name: 'league-table-v4', path: '/league-table?version=4' },
+    { name: 'league-table', path: '/league-table' },
     { name: 'achievements', path: '/achievements' },
     { name: 'dashboard', path: '/dashboard' },
     { name: 'fixtures', path: '/fixtures' },
-    { name: 'profile-v1', path: '/profile?version=1' },
-    { name: 'profile-v2', path: '/profile?version=2' },
+    { name: 'profile', path: '/profile' },
     { name: 'match-log', path: '/match-log' },
     { name: 'teams', path: '/teams' },
   ];
