@@ -6,7 +6,7 @@
       "source": ".",
       "app": {
         "backendId": "your-backend-id",
-        "region": "us-central1"
+        "region": "your-region"
       }
     }
   ]
