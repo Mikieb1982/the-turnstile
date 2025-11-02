@@ -13,7 +13,6 @@
     "@firebase/app": "^0.14.4",
     "@firebase/auth": "^1.11.0",
     "@firebase/firestore": "^4.9.2",
-    "@playwright/test": "^1.56.1",
     "firebase": "^12.5.0",
     "lucide-react": "^0.395.0",
     "next": "latest",
@@ -25,6 +24,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^20",
