@@ -1,42 +1,46 @@
-The TurnstileThe Turnstile is a modern React application designed for rugby league fans to track match attendance, view fixtures, and log their support. It's built to work offline-first with local data and offers seamless integration with Firebase for cloud features like authentication and database persistence.FeaturesMatch Browser: Search and filter the full season fixture list.Attendance Logging: Mark games you've attended with a single click.Personalized Dashboards: Get tailored views for upcoming fixtures or matches near your location.Fan Profile: Track stats like total matches attended and unique venues visited.Offline-First: The app works out of the box with local data, no backend configuration required.Tech StackFramework: React 19 with ViteLanguage: TypeScriptStyling: Tailwind CSSBackend (Optional): Firebase (Authentication, Firestore, Hosting)Getting StartedPrerequisitesNode.js version 20.x or highernpm (usually comes with Node.js)1. Clone & Install DependenciesFirst, clone the repository to your local machine and install the required npm packages.git clone [https://github.com/mikieb1982/the-turnstile.git](https://github.com/mikieb1982/the-turnstile.git)
+The Turnstile (Next.js Edition)
+The Turnstile is a modern Next.js application designed for rugby league fans to track match attendance, view fixtures, and log their support. It's built with Next.js (App Router), TypeScript, and Tailwind CSS, and it integrates with Firebase for authentication and database persistence.
+This project also includes an ai/ directory with Genkit tools to assist in development and a functions/ directory for a Python-based AI DevOps agent.
+Tech Stack
+ * Framework: Next.js (App Router)
+ * Language: TypeScript
+ * Styling: Tailwind CSS
+ * Backend: Firebase
+   * Authentication
+   * Firestore
+   * Hosting
+   * Cloud Functions (Python)
+ * Dev Tools: Genkit (for AI-assisted development)
+Getting Started
+ * Clone the repository:
+   git clone [your-repo-url]
 cd the-turnstile
-npm install
-2. Configure Environment VariablesThe application uses environment variables for connecting to Firebase and Google Authentication.Copy the example environment file:cp .env.example .env.local
-Open .env.local and add your Firebase project credentials and your Google OAuth Client ID.# Firebase configuration
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
-# ... and so on
 
-# Google OAuth configuration
-VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+ * Install dependencies:
+   npm install
 
-# Workspace Slug
-# This is required for the application to connect to the correct Firebase project.
-WORKSPACE_SLUG=your-workspace-slug
-Note: The app will run in a fully offline mode, using localStorage for all data, if these variables are not provided. This is useful for UI development without a backend setup.3. Run the Development ServerStart the local Vite development server.npm run dev
-The application will now be running on http://localhost:5173.Firebase IntegrationThis project is configured to work seamlessly with Firebase services.Firestore Data ModelThe app expects the following collections in your Firestore database. You can create these manually in the Firebase Console.matches: Stores the fixture list for the season.venues: Contains details about each stadium.users/{userId}: Each document is keyed by a user's authentication UID and contains user-specific data.attendedMatches: An array of match IDs that the user has attended.Security RulesFor a production environment, use the following Firestore security rules to protect user data while allowing public read access to matches and venues.rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Users can only read and write their own data
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
+ * Configure Environment Variables:
+   Copy the example environment file:
+   cp .env.example .env.local
 
-    // Matches and venues are publically readable
-    match /matches/{document=**} {
-      allow read;
-    }
-    match /venues/{document=**} {
-      allow read;
-    }
-  }
-}
-DeploymentThe repository is pre-configured for deployment to Firebase App Hosting and includes a GitHub Actions workflow for continuous deployment.To deploy the application, you'll need to create a Firebase App Hosting backend and update the configuration files.1. Create a Firebase App Hosting BackendFollow the Firebase documentation to create a new App Hosting backend in your Firebase project. Once created, you will get a backend ID.2. Update Configuration Files- **firebase.json**: Replace `"your-backend-id"` with the backend ID you just created.
-- **package.json**: Replace `"your-project-id"` in the `firebase:login` script with your Firebase project ID.3. DeployManually DeploymentLogin to Firebase:npm run firebase:login
-Build and Deploy:npm run build
-firebase deploy
-Continuous Deployment (CI/CD)The .github/workflows/firebase-hosting-merge.yml workflow automatically builds and deploys the application to Firebase Hosting whenever code is pushed to the main branch.To enable this, you need to add your Firebase project details as secrets in your GitHub repository settings:FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.FIREBASE_PROJECT_ID: Your Firebase project ID.Available ScriptsScriptDescriptionnpm run devStarts the local development server with HMR.npm run buildBundles the app for production into the dist/ folder.npm run previewServes the production build locally for testing.npm run firebase:serveRuns the local Firebase Hosting emulator.
+   Open .env.local and add your Firebase project configuration. You can get this from your Firebase project settings.
+ * Run the Development Server:
+   npm run dev
 
-## AI DevOps Firebase Architecture
-
-For the AI Code Workshop, the recommended serverless workflow uses Firebase Hosting for the frontend and a Python Cloud Function to drive the GitHub-based DevOps automation. The full reference implementation, including deployment guidance and sequence diagrams, is available in [`docs/firebase-devops-architecture.md`](docs/firebase-devops-architecture.md).
+   The application will be running on http://localhost:3000.
+Environment Variables
+Your .env.local file should contain the following variables:
+ * NEXT_PUBLIC_FIREBASE_CONFIG: A JSON string containing your client-side Firebase config (apiKey, authDomain, etc.). See .env.example.
+ * GEMINI_API_KEY: (Optional) Your Google AI API key, required to run the local Genkit AI tools in the ai/ directory.
+Deployment
+This project is configured for deployment to Firebase Hosting and includes GitHub Actions workflows for continuous deployment (CI/CD).
+When pushing to main or creating a Pull Request, the workflows in .github/workflows/ will automatically build and deploy the application.
+GitHub Secrets
+For the GitHub Actions to work, you must set the following secrets in your repository settings:
+ * FIREBASE_SERVICE_ACCOUNT: The JSON service account key from your Firebase project.
+ * FIREBASE_PROJECT_ID: Your Firebase project ID.
+Available Scripts
+ * npm run dev: Starts the local development server.
+ * npm run build: Bundles the app for production.
+ * npm run start: Starts the production server.
+ * npm run lint: Runs ESLint to check for code quality issues.
