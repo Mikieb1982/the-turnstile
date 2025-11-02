@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useActionState, useFormStatus } from 'react';
 import { logMatch, updateMatch, deleteMatch } from './actions';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
@@ -15,6 +15,11 @@ interface Match {
 export default function MatchLogClient({ loggedMatches, userId }: { loggedMatches: Match[], userId: string | undefined }) {
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const initialState = {
+    errors: {},
+    message: '',
+  };
+  const [state, formAction] = useActionState(logMatch, initialState);
 
   const handleEditClick = (match: Match) => {
     setEditingMatch(match);
@@ -38,7 +43,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
             <h1 className="text-4xl font-bold text-cyan-400 mb-8">Log a New Match</h1>
-            <form action={logMatch} className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg mx-auto">
+            <form action={formAction} className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg mx-auto">
               <input type="hidden" name="userId" value={userId} />
               <div className="mb-4">
                 <label htmlFor="homeTeam" className="block text-gray-300 mb-2">Home Team</label>
@@ -49,6 +54,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   required
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
+                {state.errors?.homeTeam && <p className="text-red-500 text-sm mt-1">{state.errors.homeTeam}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="awayTeam" className="block text-gray-300 mb-2">Away Team</label>
@@ -59,6 +65,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   required
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
+                {state.errors?.awayTeam && <p className="text-red-500 text-sm mt-1">{state.errors.awayTeam}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="date" className="block text-gray-300 mb-2">Date</label>
@@ -69,6 +76,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   required
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
+                {state.errors?.date && <p className="text-red-500 text-sm mt-1">{state.errors.date}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="score" className="block text-gray-300 mb-2">Final Score</label>
@@ -80,6 +88,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   placeholder="e.g., 24-18"
                 />
+                {state.errors?.score && <p className="text-red-500 text-sm mt-1">{state.errors.score}</p>}
               </div>
               <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105">
                 Log Match

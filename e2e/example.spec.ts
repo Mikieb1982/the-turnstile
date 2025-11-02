@@ -13,7 +13,14 @@ test('take screenshots of all pages', async ({ page }) => {
 
   for (const { name, path } of pages) {
     await page.goto(`http://localhost:3000${path}`);
-    await page.waitForTimeout(1000); // Allow time for the page to render
+    try {
+      await page.waitForSelector('h1', { timeout: 5000 });
+    } catch (error) {
+      // If the h1 element is not found, it's likely a page that's still loading
+      // or a page that doesn't have an h1 element. In either case, we'll
+      // just wait for a fixed amount of time before taking the screenshot.
+      await page.waitForTimeout(1000);
+    }
     await page.screenshot({ path: `e2e/screenshots/${name}.png`, fullPage: true });
   }
 });
