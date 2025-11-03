@@ -24,6 +24,9 @@ export default function DashboardPage() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+        // Note: The query is looking for 'matches', but your firestore.rules
+        // and match-log actions refer to 'match-logs'. You may need
+        // to change this query to collection(db, 'match-logs')
         const q = query(collection(db, 'matches'), where('userId', '==', currentUser.uid));
         const querySnapshot = await getDocs(q);
         const userMatches = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
@@ -46,7 +49,7 @@ export default function DashboardPage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
         <h1 className="text-2xl font-bold mb-4">You are not logged in.</h1>
         <p className="text-lg text-center mb-8">Please log in to view your dashboard.</p>
-        <a href="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <a href="/sign-in" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Go to Login
         </a>
       </div>
