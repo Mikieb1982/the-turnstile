@@ -14,7 +14,8 @@ interface AuthState {
     password?: string[];
     _form?: string[];
   };
-  message?: string;
+  message: string;
+  success: boolean;
 }
 
 export async function signUp(prevState: AuthState, formData: FormData): Promise<AuthState> {
@@ -27,12 +28,16 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
   if (!emailValidation.success) {
     return {
       errors: { email: emailValidation.error.flatten().formErrors },
+      message: 'Invalid email address',
+      success: false,
     };
   }
 
   if (!passwordValidation.success) {
     return {
       errors: { password: passwordValidation.error.flatten().formErrors },
+      message: 'Password must be at least 6 characters',
+      success: false,
     };
   }
 
@@ -43,11 +48,15 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
     if (e instanceof Error && 'code' in e && e.code === 'auth/email-already-in-use') {
       return {
         errors: { email: ['Email already in use'] },
+        message: 'Email already in use',
+        success: false,
       };
     } else {
       console.error(e);
       return {
         errors: { _form: ['Something went wrong'] },
+        message: 'Something went wrong',
+        success: false,
       };
     }
   }
@@ -63,12 +72,16 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
   if (!emailValidation.success) {
     return {
       errors: { email: emailValidation.error.flatten().formErrors },
+      message: 'Invalid email address',
+      success: false,
     };
   }
 
   if (!passwordValidation.success) {
     return {
       errors: { password: passwordValidation.error.flatten().formErrors },
+      message: 'Password must be at least 6 characters',
+      success: false,
     };
   }
 
@@ -76,14 +89,18 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
     await signInWithEmailAndPassword(auth, email, password);
     redirect('/dashboard');
   } catch (e: unknown) {
-    if (e instanceof Error && 'code' in e && (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')) {
+    if (e instanceof Error && 'code' in e && (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential')) {
       return {
         errors: { _form: ['Invalid credentials'] },
+        message: 'Invalid credentials',
+        success: false,
       };
     } else {
       console.error(e);
       return {
         errors: { _form: ['Something went wrong'] },
+        message: 'Something went wrong',
+        success: false,
       };
     }
   }

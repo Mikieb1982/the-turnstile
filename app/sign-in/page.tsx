@@ -6,7 +6,9 @@ import { signIn } from '@/app/actions';
 import GoogleSignInButton from '@/components/google-signin-button';
 
 const initialState = {
+  message: '',
   errors: {},
+  success: false,
 };
 
 function SubmitButton() {
@@ -57,6 +59,7 @@ export default function SignInPage() {
             />
             {state.errors?.password && <p className="text-red-500 text-sm mt-1">{state.errors.password}</p>}
           </div>
+          {state.errors?._form && <p className="text-red-500 text-sm mt-1">{state.errors._form}</p>}
           <SubmitButton />
         </form>
         <div className="relative flex items-center justify-center my-6">
