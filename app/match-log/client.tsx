@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
 import { logMatch, updateMatch, deleteMatch } from './actions';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
@@ -13,8 +15,16 @@ interface Match {
 }
 
 export default function MatchLogClient({ loggedMatches, userId }: { loggedMatches: Match[], userId: string | undefined }) {
+  const router = useRouter();
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formState, formAction] = useActionState(logMatch, { message: '', success: false });
+
+  useEffect(() => {
+    if (formState.success) {
+      router.refresh();
+    }
+  }, [formState, router]);
 
   const handleEditClick = (match: Match) => {
     setEditingMatch(match);
@@ -38,7 +48,8 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
             <h1 className="text-4xl font-bold text-cyan-400 mb-8">Log a New Match</h1>
-            <form action={logMatch} className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg mx-auto">
+            <form action={formAction} className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg mx-auto">
+              {formState?.message && <p className="text-red-500 mb-4">{formState.message}</p>}
               <input type="hidden" name="userId" value={userId} />
               <div className="mb-4">
                 <label htmlFor="homeTeam" className="block text-gray-300 mb-2">Home Team</label>
@@ -114,21 +125,41 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
       </div>
 
       {isModalOpen && editingMatch && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg w-full">
-            <h2 className="text-2xl font-bold text-cyan-400 mb-4">Edit Match</h2>
-            <form action={async (formData) => {
-              await updateMatch(editingMatch.id, formData);
-              handleModalClose();
-            }}>
-              <div className="mb-4">
-                <label htmlFor="homeTeam" className="block text-gray-300 mb-2">Home Team</label>
+        <EditMatchModal
+          match={editingMatch}
+          onClose={handleModalClose}
+          router={router}
+        />
+      )}
+    </div>
+  );
+}
+
+function EditMatchModal({ match, onClose, router }: { match: Match, onClose: () => void, router: any }) {
+  const updateAction = updateMatch.bind(null, match.id);
+  const [formState, formAction] = useActionState(updateAction, { message: '', success: false });
+
+  useEffect(() => {
+    if (formState.success) {
+      onClose();
+      router.refresh();
+    }
+  }, [formState.success, onClose, router]);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-2xl max-w-lg w-full">
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">Edit Match</h2>
+        <form action={formAction}>
+          {formState?.message && <p className="text-red-500 mb-4">{formState.message}</p>}
+          <div className="mb-4">
+            <label htmlFor="homeTeam" className="block text-gray-300 mb-2">Home Team</label>
                 <input
                   type="text"
                   id="homeTeam"
                   name="homeTeam"
                   required
-                  defaultValue={editingMatch.homeTeam}
+                  defaultValue={match.homeTeam}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
@@ -139,7 +170,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   id="awayTeam"
                   name="awayTeam"
                   required
-                  defaultValue={editingMatch.awayTeam}
+                  defaultValue={match.awayTeam}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
@@ -150,7 +181,7 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   id="date"
                   name="date"
                   required
-                  defaultValue={editingMatch.date}
+                  defaultValue={match.date}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
@@ -161,13 +192,13 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
                   id="score"
                   name="score"
                   required
-                  defaultValue={editingMatch.score}
+                  defaultValue={match.score}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   placeholder="e.g., 24-18"
                 />
               </div>
               <div className="flex justify-end space-x-4">
-                <button type="button" onClick={handleModalClose} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                <button type="button" onClick={onClose} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
                   Cancel
                 </button>
                 <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg">
@@ -177,7 +208,5 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
             </form>
           </div>
         </div>
-      )}
-    </div>
   );
 }
