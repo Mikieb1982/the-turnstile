@@ -1,5 +1,0 @@
-﻿--- a/App.tsx
-+++ b/App.tsx
-@@ -1,2 +1,2 @@
--import { StatsView } from './components/StatsView';
-+import StatsView from './components/StatsView';
