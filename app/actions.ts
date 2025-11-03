@@ -1,6 +1,7 @@
 'use server'
 
 import { z } from 'zod';
+import { redirect } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -37,7 +38,7 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
 
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    return { message: 'Success!' };
+    redirect('/dashboard');
   } catch (e: unknown) {
     if (e instanceof Error && 'code' in e && e.code === 'auth/email-already-in-use') {
       return {
@@ -73,7 +74,7 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    return { message: 'Success!' };
+    redirect('/dashboard');
   } catch (e: unknown) {
     if (e instanceof Error && 'code' in e && (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')) {
       return {

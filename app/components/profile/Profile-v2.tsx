@@ -68,7 +68,7 @@ export default function ProfileV2() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
         <h1 className="text-2xl font-bold mb-4">You are not logged in.</h1>
         <p className="text-lg text-center mb-8">Please log in to view and edit your profile.</p>
-        <a href="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <a href="/sign-in" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Go to Login
         </a>
       </div>
