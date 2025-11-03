@@ -11,7 +11,8 @@ export default function GoogleSignInButton() {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithPopup(auth, provider);
-      router.push('/');
+      // FIX: Redirect to the dashboard for a consistent experience
+      router.push('/dashboard');
     } catch (error) {
       console.error('Error signing in with Google:', error);
     }
