@@ -6,14 +6,15 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'googleusercontent.com',
+             hostname: 'googleusercontent.com', // For user profile pictures
       },
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: 'picsum.photos', // For app/teams/page.tsx
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co', // For services/mockData.ts
       },
     ],
   },
-};
-
-export default nextConfig;
