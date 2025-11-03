@@ -17,8 +17,17 @@ function MatchLogData() {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
           if (currentUser) {
             setUser(currentUser);
-            const matchLogsCollection = collection(db, 'match-logs');
-            const q = query(matchLogsCollection, where("userId", "==", currentUser.uid), orderBy('createdAt', 'desc'));
+                  })) as any[]; // Cast to any[] or your Match[] type
+    return matches;
+  } catch (error) {
+    console.error("Error fetching match logs: ", error);
+    return [];
+  }
+}
+            
+         export default function MatchLogPage() {
+  const [matches, setMatches] = useState<any[]>([]); // Use your Match type
+
             const querySnapshot = await getDocs(q);
             const matches = querySnapshot.docs.map(doc => ({
               id: doc.id,
