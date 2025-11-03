@@ -20,7 +20,7 @@ const config: Config = {
       },
       fontFamily: {
         "display": ["Teko", "sans-serif"],
-        "body": ["Inter", "sans-serif"],
+        "body": ["Roboto", "Inter", "sans-serif"],
       },
       borderRadius: {
         "DEFAULT": "0.5rem",
