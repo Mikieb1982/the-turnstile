@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rugby League Companion Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#39ef7c",
+              "background-light": "#f6f8f7",
+              "background-dark": "#101828","card-dark": "#1D2939",},
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            boxShadow: {
+              'subtle': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-dark text-white">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-40 bg-background-dark/80 backdrop-blur-sm border-b border-white/10">
+<div class="flex items-center justify-between p-4">
+<button class="flex size-10 items-center justify-center rounded-full text-white">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<h2 class="flex-1 text-center text-lg font-bold">Dashboard</h2>
+<div class="size-10"></div>
+</div>
+</header>
+<main class="flex-grow p-4 pb-24">
+<h1 class="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
+<div class="grid grid-cols-1 gap-4 @md:grid-cols-2">
+<div class="bg-card-dark p-4 rounded-xl shadow-subtle flex flex-col gap-4 @md:col-span-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+</span>
+<p class="text-red-400 text-sm font-bold">LIVE</p>
+</div>
+<p class="text-white/60 text-sm font-medium">67' MIN</p>
+</div>
+<div class="flex justify-between items-center text-center">
+<div class="flex flex-col items-center gap-2 w-1/3">
+<img class="w-12 h-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKMh-MCHkvQlaFkwbFRu1CxKfkYNtmO5S8jykFfKxO8OiCL_o4ko8Bz2MOcMZe95nly4xNr0YTa_NT50wnX7Mlrc2QIx44BIdD0Ysp2rjq43RjjaFMFpuphybSHjxLb0PRkbT0Vp0H_eK3x82toSLmYAwx7GHa1Ryuq1M5Cnx2cKeshGrigc71iOL3KcV-2EWgv3HlqRoKGHaMVbNJWtLWYeJC68ypM_45Vr3G6DrjH0hA3IKt8gRd1yjGVbT0KnIdMxYfG-By-UYx"/>
+<p class="font-bold text-sm leading-tight">City<br/>Sentinels</p>
+</div>
+<div class="flex items-center gap-2">
+<p class="text-primary text-4xl font-bold">24</p>
+<p class="text-white/60 text-3xl font-bold">-</p>
+<p class="text-primary text-4xl font-bold">18</p>
+</div>
+<div class="flex flex-col items-center gap-2 w-1/3">
+<img class="w-12 h-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKMh-MCHkvQlaFkwbFRu1CxKfkYNtmO5S8jykFfKxO8OiCL_o4ko8Bz2MOcMZe95nly4xNr0YTa_NT50wnX7Mlrc2QIx44BIdD0Ysp2rjq43RjjaFMFpuphybSHjxLb0PRkbT0Vp0H_eK3x82toSLmYAwx7GHa1Ryuq1M5Cnx2cKeshGrigc71iOL3KcV-2EWgv3HlqRoKGHaMVbNJWtLWYeJC68ypM_45Vr3G6DrjH0hA3IKt8gRd1yjGVbT0KnIdMxYfG-By-UYx"/>
+<p class="font-bold text-sm leading-tight">Coastal<br/>Sharks</p>
+</div>
+</div>
+<div class="border-t border-white/10 pt-3">
+<p class="text-white/60 text-sm mb-2">Key Events:</p>
+<div class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-primary text-base">sports_rugby</span>
+<p>Try - J. Archer (62')</p>
+</div>
+</div>
+<a class="mt-2 flex items-center justify-center gap-2 text-primary text-sm font-bold w-full text-center" href="#">
+<span>View Full Match Details</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+<div class="bg-card-dark p-4 rounded-xl shadow-subtle @container">
+<div class="flex flex-col">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg mb-4" data-alt="Rugby pitch under stadium lights" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsnEJ5aoP7nzsPnPL-nc9-FvAE8tZ6T1fFb2Zr2KddoQ7TNU6m1g4apRDSS0tJMvDgGnL3CoEI0aZ4pVBEg6rcIm88_xaRM-ewhD_YPuH8o2m9ie_PDaAu572Zo4-Ou3wDfhuNz4U3GVSqdKsPtkbwm29O26MauVxBeur68rQcijV2KWKAYL9GOc6iQiqS6_G2NI_VQhkHRqqOZVExka3H-05sJvLFkAs_7n-dbvqH46be1yU9YVocQM2Gm_nrWlf4Jd7eABNoYPTF");'></div>
+<div class="flex w-full min-w-72 grow flex-col gap-1">
+<p class="text-white/60 text-sm font-medium">Next Match</p>
+<p class="text-white text-lg font-bold">vs. Valley Vikings</p>
+<div class="flex items-end justify-between mt-2">
+<div class="flex flex-col">
+<p class="text-white/60 text-sm">Oct 29, 3:00 PM</p>
+<p class="text-white/60 text-sm" data-location="City Stadium">City Stadium</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-dark p-4 rounded-xl shadow-subtle @container">
+<div class="flex flex-col">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg mb-4" data-alt="Rugby players in a scrum" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAaC48V8W4MeE7DVKffUFBR6Pclq7C2ir9XJIQbVk9HR6EDOPMGiXZ2Gg8DYNOGtB0DIzC91IiVuuvmC6rMHtNuxbN8nHoMdykRALtmN2SneVFXwuvVpdfF_DtZG37pv2khHJFCICp_Wb3fCO5vM6UiiOdnsYaaZSvaxYh9_xCdndFlqk1FxSF_zfOI0hteoVji8rH6-1WE3YJ2pjNlP7vLesp2TMqCplKbsvRwzG2JLWx_pJmGMDh6iZBe4RFlTXIRrv7R8VzkaOE1");'></div>
+<div class="flex w-full min-w-72 grow flex-col gap-1">
+<p class="text-white/60 text-sm font-medium">Last Result</p>
+<p class="text-white text-lg font-bold">28 - 12 (Win)</p>
+<div class="flex items-end justify-between mt-2">
+<div class="flex flex-col">
+<p class="text-white/60 text-sm">vs. Northern Knights</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-dark p-4 rounded-xl shadow-subtle flex flex-col gap-3">
+<p class="text-white/60 text-sm font-medium">Top Performer</p>
+<div class="flex items-center gap-4">
+<img class="size-14 rounded-full object-cover" data-alt="Portrait of a smiling athlete" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg0ZckbsEfS0Swq115L0ZRbsqfIgZT8knb0EuXXaHu9cAPE9rd6gfUz5_z7RdZMSxWCgV-tKn5AYD-8e_OxQZbJ7T70z-9OMJI626tP9SPPlG4RnX93yCLJTx-YbzwVmuHjVbbuzIfE3WRB5NtDn9q_IX3lXxu1ai6GrJKQGx5m2KxmPjBjA8EOKnqzaxXHgNyVzDsBdAkzU-O6WKBQExVQT6UxCXb0XoJfcNBkBIeqSubCLZOdeBLkQzNROcmYiZFRnrA7ylZLcka"/>
+<div class="flex-grow">
+<p class="text-white text-lg font-bold">Liam Johnson</p>
+<p class="text-primary text-2xl font-bold">8 Tries</p>
+</div>
+</div>
+</div>
+<div class="bg-card-dark p-4 rounded-xl shadow-subtle flex flex-col items-center justify-center text-center gap-3">
+<div class="flex items-center justify-center size-16 bg-primary/20 rounded-full">
+<span class="material-symbols-outlined text-primary text-4xl">emoji_events</span>
+</div>
+<div>
+<p class="text-white font-bold text-lg">Hat-Trick Hero</p>
+<p class="text-white/60 text-sm">Achievement Unlocked!</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 z-40 bg-background-dark/80 backdrop-blur-sm border-t border-white/10">
+<nav class="flex justify-around items-center h-20 px-2">
+<a class="flex flex-col items-center gap-1 text-primary w-1/5" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/60 w-1/5" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-xs font-medium">Match Log</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/60 w-1/5" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-xs font-medium">Fixtures</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/60 w-1/5" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-xs font-medium">Teams</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/60 w-1/5" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</nav>
+</footer>
+</div>
+</body></html>

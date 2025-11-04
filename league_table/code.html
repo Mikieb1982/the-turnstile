@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>League Table</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#39ef7c",
+              "background-light": "#f6f8f7",
+              "background-dark": "#102217",
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80 p-4 pb-2 backdrop-blur-sm">
+<button class="text-white flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-zinc-100">arrow_back</span>
+</button>
+<h1 class="text-zinc-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">League Table</h1>
+</div>
+<!-- Meta Text -->
+<p class="text-zinc-400 text-sm font-normal leading-normal pb-3 pt-1 px-4">Last updated: 2 mins ago</p>
+<div class="flex flex-col px-4 space-y-2 pb-6">
+<!-- Table Header Row -->
+<div class="flex items-center gap-4 min-h-14">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider w-8 text-center">Pos</p>
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider flex-1">Team</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4">
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider w-6">P</p>
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider w-6">W</p>
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider w-6">L</p>
+<p class="text-zinc-400 text-xs font-medium uppercase tracking-wider w-6">D</p>
+<p class="text-zinc-400 text-xs font-bold uppercase tracking-wider w-8">Pts</p>
+</div>
+</div>
+<!-- Team Rows -->
+<div class="flex flex-col rounded-xl bg-zinc-900/50">
+<!-- Team 1 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">1</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="St Helens team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8mm-l4ZoW8EnqbqMcE2dJ-KtVXjC4q0K_hF25fGfJ7ZA-3lFzXa8EjizDWMqGi96JeQzVmHOiBl0ecMVvGzfzbnSRIZqie-cHscHvMsbBsFdwwSr1eP1t75q3GFPf_fgblKozMK5HPmeES0EyVJ6n1XvrwcVopZ1w5M7hEPaUsv27-SPNV07ujXV5aLHtqdL_sWq3bqTbqGLnwWCZZfT2-fCazECEXDFVegdHJl0dqMwQjkfHxdGvv7BHwPEeDNmOMb92PPgP2GF7");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">St Helens</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">14</p>
+<p class="text-zinc-300 w-6">12</p>
+<p class="text-zinc-300 w-6">2</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">24</p>
+</div>
+</div>
+<!-- Team 2 - Highlighted (Favorite) -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2 bg-primary/10 rounded-lg ring-1 ring-primary/50">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">2</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Wigan Warriors team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWcHYEEq7-nxiK-ODhgm95IUE8WkGqgFDiWrzB9PG5sxDt_bn3t889dY9o3hfQyFYBn0Ms9GtKVbl4KYYemdJctYPa02QqIfuiDzfdkoj3eo1_aQ7RLWnoI_E529Dr60DWgvp5K0NlV4CuzGKNzWNFOlhKj3FHCWFmwzcPH5X3XTvVx_qlGprSfToroFICaaiNHCLOO3ec7BdAFPeUzScZXxN5TkPwcOv9y1RJ2ONzj2raEJTUmq3PMNZKDLZjIUr6g0wYeV2KUXMp");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Wigan Warriors</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">14</p>
+<p class="text-zinc-300 w-6">11</p>
+<p class="text-zinc-300 w-6">3</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">22</p>
+</div>
+</div>
+<!-- Team 3 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">3</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Catalans Dragons team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-CJsezTT11Oi8gETRIZDRk1D-JNoYEIaowo4kXiDbGRgCR1zxp65x_SXXCdYrKeWUeWJVez8r1FanmrNtoP6Aro-F8E4rTSnFmOPNLXVHmJF728beKpv9o4Cav3GyqqpZhB0TIIQ6gwG5Ik92AZrzfgz815mBRByoDTh6UTslCsj5fLitthYdYb8oRBi27FLScdOZnPtZJ4v9OzisM9miROEU0FMKCcOM_48LpdU58OlVq-Z2e7gdTCcQyy-8EDT7K3jk_vlPPxul");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Catalans Dragons</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">13</p>
+<p class="text-zinc-300 w-6">10</p>
+<p class="text-zinc-300 w-6">3</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">20</p>
+</div>
+</div>
+<!-- Team 4 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">4</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Hull KR team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRrgmbyrtaqULLyg6Djx0ZlRr9CNqVBNR3XCxp629MwS_5df-9hdMglo7-I8jRCwpa8lDBPazUD1OHsNH6n18nx5Q2exYEsIToX3lWhMyVhoWYDiOyhC1VkdSmYYSboG2-VSFicaXq3q47B_y6gN0y6d3APGhShGMLCIB1FrdFv5wZule0q0gPksqQFDpxgDP5bhSIE6DyfsGpsFcuG2MFNfbQ9rKxaEiMU6nG1gIf7cceB9g07ibdzy5jKijNJGl_blvC_kbWZGa5");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Hull KR</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">14</p>
+<p class="text-zinc-300 w-6">9</p>
+<p class="text-zinc-300 w-6">5</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">18</p>
+</div>
+</div>
+<!-- Team 5 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">5</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Warrington Wolves team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEfogFVqjLWyLw2yDfzM8jJOpocTlWab_aRC62HPRhJXPq3p4isO7vcoOb9WU5LQsr5tVIzF-69mhbX5MuSJProqTZFwKZMxUKrBkRAqKB_ke-VddPts61QjR6iFKt0im5LB6W5Z-ByZFRiS70QUKSn2EXWOVqKEsvUAgY7IwEqMJGvTuNt5c8-JI3YtjxO0zCvU83iE2da34XRIzWTDFF0KyIbw7uVS8TxZJ-axiFHsKJLnzGWHm3pjrNYC-f4r0WhKk5ScWPnO1P");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Warrington</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">14</p>
+<p class="text-zinc-300 w-6">8</p>
+<p class="text-zinc-300 w-6">6</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">16</p>
+</div>
+</div>
+<!-- Team 6 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">6</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Salford Red Devils team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBxZsdGrPPk9cQqrlhLM1jnNNUBm1E1rvO4xZMpQZ_M1CzavRSavzG-7yarjbpOYXEX1fN-lakcpa-3tBpGHMlFuime3SKpJUJNK7qB2yVDbHzGRt2WGD5jn5xV5-x66NB2v6YxHfyvDcly27WvH_Y8IcLme1NjAGUx9lrj8ECbbf4-fnkoAUjPFEGDYgoO1UaOpya1qA5GimV0C03exbQXxoSokZo8Ha3Pf_fPvryrieHafVUY0XdLI6ZTyxU1ivJfJ1T0JeaYbm_9");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Salford</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">13</p>
+<p class="text-zinc-300 w-6">7</p>
+<p class="text-zinc-300 w-6">6</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">14</p>
+</div>
+</div>
+<!-- Team 7 -->
+<div class="flex items-center gap-4 min-h-16 border-b border-zinc-800 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">7</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Leeds Rhinos team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0XDyUTeONHIVVnoKgO2LOqHybzCCsgp3EsOI9KmpVlKAAi46c-SFMHC28Q6QeZnQSe4lIVWI_QdZP-VnuIT_WPXnNmVK4hM3EKgCHbi6SW5Z8pCPa9LFtjnMDxRzWFVEwlX4cFoGd6rdbvrn0f3EcCWb5vgCY2YV122EolPSTRyUIZnMowoC6OjzzEQljsY8ivhDhsPw5mhivbfnldsLBqiiWVIpprtgbM-rvqmIM25puxThHiVftZBgD2cBkYdH1DAYiui9uAlmu");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Leeds Rhinos</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">13</p>
+<p class="text-zinc-300 w-6">6</p>
+<p class="text-zinc-300 w-6">7</p>
+<p class="text-zinc-300 w-6">0</p>
+<p class="text-primary font-bold w-8">12</p>
+</div>
+</div>
+<!-- Team 8 -->
+<div class="flex items-center gap-4 min-h-16 border-b-0 p-2">
+<div class="flex items-center gap-4 flex-1">
+<p class="text-white text-base font-semibold leading-normal w-8 text-center shrink-0">8</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Huddersfield Giants team crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDeRoFH5tM3u-OmHgweGmGdlhxrvXC4nRfH8Hd_yniAdPz1oqu4MJfv5POZxoP6JssEkxgWMCdHUHJZNgKi9KopwjUOt5xQTa5ub9wUOuEmkHHK3-BDCRBs0GBfzQKNz1_nX2D5ZzfS5ouqQxhJsOz_s0Vz1gzNV3zj0ltfAfHaTp89oC2j_gUhwg0dDu3YjYxj7A3FI-uMRXlytqMkNN52F3g2ayluH3U7NC6AbGEajSo_d2Mc_1-u-m0Q402GcXXSiFq0lU_OqOoF");'></div>
+<p class="text-white text-base font-medium leading-normal flex-1 truncate">Huddersfield</p>
+</div>
+<div class="flex shrink-0 text-center space-x-4 text-sm font-mono">
+<p class="text-zinc-300 w-6">13</p>
+<p class="text-zinc-300 w-6">5</p>
+<p class="text-zinc-300 w-6">7</p>
+<p class="text-zinc-300 w-6">1</p>
+<p class="text-primary font-bold w-8">11</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>
