@@ -11,7 +11,7 @@ interface CardProps {
     L: number;
     PF: number;
     PA: number;
-    PD: number;
+    PD: string; // <-- Change this from number to string
     Pts: number;
   };
   getTeamLogo: (teamName: string) => string;
