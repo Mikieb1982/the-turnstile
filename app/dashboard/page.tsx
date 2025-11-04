@@ -5,6 +5,7 @@ import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { BarChart, Trophy, Users, Star } from 'lucide-react';
+import Link from 'next/link'; // Import Link
 
 interface Match {
   id: string;
@@ -24,10 +25,8 @@ export default function DashboardPage() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        // Note: The query is looking for 'matches', but your firestore.rules
-        // and match-log actions refer to 'match-logs'. You may need
-        // to change this query to collection(db, 'match-logs')
-        const q = query(collection(db, 'matches'), where('userId', '==', currentUser.uid));
+        // FIX: Query 'match-logs' collection
+        const q = query(collection(db, 'match-logs'), where('userId', '==', currentUser.uid));
         const querySnapshot = await getDocs(q);
         const userMatches = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
         setMatches(userMatches);
@@ -96,28 +95,37 @@ export default function DashboardPage() {
         {/* Recent Matches */}
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-6">Recent Matches</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="p-4">Date</th>
-                  <th className="p-4">Home Team</th>
-                  <th className="p-4">Away Team</th>
-                  <th className="p-4">Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {matches.slice(0, 5).map(match => (
-                  <tr key={match.id} className="border-b border-gray-700 hover:bg-gray-700/50">
-                    <td className="p-4">{new Date(match.date).toLocaleDateString()}</td>
-                    <td className="p-4 font-medium">{match.homeTeam}</td>
-                    <td className="p-4 font-medium">{match.awayTeam}</td>
-                    <td className="p-4">{match.homeScore} - {match.awayScore}</td>
+          {matches.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="p-4">Date</th>
+                    <th className="p-4">Home Team</th>
+                    <th className="p-4">Away Team</th>
+                    <th className="p-4">Score</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {matches.slice(0, 5).map(match => (
+                    <tr key={match.id} className="border-b border-gray-700 hover:bg-gray-700/50">
+                      <td className="p-4">{new Date(match.date).toLocaleDateString()}</td>
+                      <td className="p-4 font-medium">{match.homeTeam}</td>
+                      <td className="p-4 font-medium">{match.awayTeam}</td>
+                      <td className="p-4">{match.homeScore} - {match.awayScore}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="text-center text-gray-400 py-8">
+              <p className="mb-4">You haven't logged any matches yet.</p>
+              <Link href="/match-log" className="bg-primary hover:bg-green-600 text-background-dark font-bold py-2 px-4 rounded-lg transition-colors">
+                Log Your First Match
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
