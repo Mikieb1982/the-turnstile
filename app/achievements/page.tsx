@@ -39,16 +39,8 @@ export default function AchievementsPage() {
   return (
     <div className="bg-background-dark font-body text-white antialiased">
       <div className="relative flex h-full min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/10 bg-background-dark/80 px-4 backdrop-blur-sm">
-          <a className="flex items-center gap-2" href="#">
-            <Trophy className="h-7 w-7 text-primary" />
-            <h2 className="font-display text-3xl font-semibold uppercase tracking-wider text-white">Achievements</h2>
-          </a>
-          <button className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background-dark">
-            <span className="material-symbols-outlined text-2xl">menu</span>
-          </button>
-        </header>
-        <main className="flex-1 px-4 pb-24">
+    
+       <main className="flex-1 px-4 pb-24">
           <h1 className="font-display text-5xl font-bold uppercase tracking-wider text-white pt-6 pb-2">Your Achievements</h1>
           <div className="space-y-4 pt-4">
             {achievements.map(({ Icon, ...achievement }, index) => (
