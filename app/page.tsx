@@ -1,5 +1,6 @@
 import { ArrowRight, BarChart, Badge, LifeBuoy, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image'; // Import Image
 
 export default function LandingPage() {
   return (
@@ -15,7 +16,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/sign-up">
-                  <button className="bg-primary hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                  <button className="bg-primary hover:bg-green-600 text-background-dark font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 flex items-center justify-center">
                     Get Started <ArrowRight className="ml-2" />
                   </button>
                 </Link>
@@ -28,7 +29,14 @@ export default function LandingPage() {
             </div>
             <div className="hidden lg:block relative">
               <div className="absolute inset-0 bg-primary rounded-full blur-3xl opacity-20"></div>
-              <img src="/images/rugby-player.png" alt="Rugby Player" className="relative z-10 max-w-full" />
+              {/* FIXED: Replaced broken img tag with a themed placeholder */}
+              <Image
+                src="https://placehold.co/600x400/102217/32FF84?text=The+Turnstile&font=teko"
+                alt="The Turnstile"
+                width={600}
+                height={400}
+                className="relative z-10 max-w-full rounded-lg"
+              />
             </div>
           </div>
         </div>
@@ -82,7 +90,7 @@ export default function LandingPage() {
             Join The Turnstile community today and start your journey as a dedicated Super League supporter. It's free to sign up!
           </p>
           <Link href="/sign-up">
-            <button className="bg-primary hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <button className="bg-primary hover:bg-green-600 text-background-dark font-bold py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300">
               Sign Up for Free
             </button>
           </Link>
