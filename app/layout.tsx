@@ -1,11 +1,20 @@
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+import { Roboto, Teko } from 'next/font/google'; // Import Teko as well
 import './globals.css';
 import Navbar from '@/components/navbar';
 
+// Initialize Roboto with a CSS variable
 const roboto = Roboto({
-  weight: '400',
+  weight: ['400', '500'], // Specify weights used in tailwind.config.ts
   subsets: ['latin'],
+  variable: '--font-roboto', // Define CSS variable
+});
+
+// Initialize Teko with a CSS variable
+const teko = Teko({
+  weight: ['400', '500', '600', '700'], // Specify weights used in tailwind.config.ts
+  subsets: ['latin'],
+  variable: '--font-teko', // Define CSS variable
 });
 
 export const metadata: Metadata = {
@@ -16,15 +25,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // Apply the font variables to the <html> tag
+    <html lang="en" className={`${roboto.variable} ${teko.variable}`}>
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
+        {/*
+          REMOVED the manual Google Fonts <link> for Roboto and Teko.
+          next/font handles this automatically.
+        */}
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       </head>
-      <body className={`${roboto.className} font-body bg-background-dark text-white`}>
+      {/*
+        The 'font-body' class from Tailwind will now work correctly
+        because we are updating tailwind.config.ts to use the CSS variable.
+      */}
+      <body className="font-body bg-background-dark text-white">
         <main className="min-h-screen">
           {children}
         </main>
