@@ -17,7 +17,7 @@ function SubmitButton() {
 
   return (
     <button
-      className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg"
+      className="w-full bg-primary hover:bg-green-600 text-background-dark font-bold py-3 rounded-lg transition-colors"
       type="submit"
       disabled={pending}
     >
@@ -36,14 +36,14 @@ export default function SignInPage() {
         <div className="flex justify-center mb-6">
           <Image src="/logo.png" alt="The Turnstile Logo" width={80} height={80} />
         </div>
-        <h2 className="text-3xl font-bold text-center text-green-400 mb-8">Sign In</h2>
+        <h2 className="text-3xl font-bold text-center text-primary mb-8">Sign In</h2>
         <form action={formAction} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="email">
               Email
             </label>
             <input
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
               type="email"
               id="email"
               name="email"
@@ -56,7 +56,7 @@ export default function SignInPage() {
               Password
             </label>
             <input
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
               type="password"
               id="password"
               name="password"
@@ -76,7 +76,7 @@ export default function SignInPage() {
         <GoogleSignInButton />
         <p className="text-center text-gray-400 mt-6">
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-green-400 hover:underline">
+          <Link href="/sign-up" className="text-primary hover:underline">
             Sign up
           </Link>
         </p>
