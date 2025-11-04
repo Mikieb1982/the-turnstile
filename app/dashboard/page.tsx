@@ -53,12 +53,11 @@ export default function DashboardPage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-background-dark text-white p-4">
         <h1 className="font-display text-4xl font-bold mb-4">You are not logged in.</h1>
         <p className="font-body text-lg text-center text-gray-400 mb-8">Please sign in to view your dashboard.</p>
-        {/* FIX: Remove <a> tag inside Link */}
-        <Link
-          href="/sign-in"
-          className="bg-primary hover:bg-green-600 text-background-dark font-bold py-3 px-6 rounded-lg transition-colors"
-        >
-          Sign In
+        {/* FIX: Added legacyBehavior prop */}
+        <Link href="/sign-in" legacyBehavior>
+          <a className="bg-primary hover:bg-green-600 text-background-dark font-bold py-3 px-6 rounded-lg transition-colors">
+            Sign In
+          </a>
         </Link>
       </div>
     );
