@@ -114,7 +114,10 @@ export default function ProfileV2() {
           <div>
             <h1 className="text-2xl font-bold">{displayName || 'No display name'}</h1>
             <p className="text-gray-400">{user.email}</p>
-            <button onClick={() => setIsEditing(true)} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="mt-4 bg-primary hover:bg-green-600 text-background-dark font-bold py-2 px-4 rounded-lg transition-colors"
+            >
               Edit Profile
             </button>
           </div>
