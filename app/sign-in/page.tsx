@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
 import { signIn } from '@/app/actions';
 import GoogleSignInButton from '@/components/google-signin-button';
+import Image from 'next/image'; // Import Image
 
 const initialState = {
   message: '',
@@ -31,6 +32,10 @@ export default function SignInPage() {
   return (
     <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        {/* Added Logo */}
+        <div className="flex justify-center mb-6">
+          <Image src="/logo.png" alt="The Turnstile Logo" width={80} height={80} />
+        </div>
         <h2 className="text-3xl font-bold text-center text-green-400 mb-8">Sign In</h2>
         <form action={formAction} className="space-y-6">
           <div>
