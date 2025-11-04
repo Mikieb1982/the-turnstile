@@ -48,14 +48,7 @@ export default function FixturesPage() {
   return (
     <div className="font-sans bg-background-dark text-white antialiased">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-        <header className="sticky top-0 z-40 bg-background-dark/80 backdrop-blur-md">
-          <div className="flex items-center p-4 justify-between max-w-7xl mx-auto h-16">
-            <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1"></h2>
-            <button aria-label="Open menu" className="text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-white/10 transition-colors">
-              <span className="material-symbols-outlined text-3xl">menu</span>
-            </button>
-          </div>
-        </header>
+    
         <main className="flex-grow pb-28">
           <div className="px-6 pt-6 pb-4">
             <h1 className="text-white tracking-[-0.02em] font-display uppercase text-4xl font-bold leading-tight">Upcoming Fixtures</h1>
