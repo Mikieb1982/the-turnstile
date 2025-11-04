@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { finalLeagueTable, selectedMatchResults, playoffResults, TEAMS } from '@/services/mockData';
 import Image from 'next/image';
+import Header from '@/components/Header';
+import Filters from '@/components/Filters';
+import Card from '@/components/Card';
 
 const ResultsPage = () => {
   const [activeTab, setActiveTab] = useState('table');
@@ -13,42 +16,14 @@ const ResultsPage = () => {
   };
 
   const renderLeagueTable = () => (
-    <div className="overflow-x-auto shadow-2xl rounded-lg">
-      <table className="min-w-full bg-gray-800">
-        <thead className="bg-gray-700">
-          <tr>
-            <th className="p-4 font-bold text-left">Pos</th>
-            <th className="p-4 font-bold text-left">Team</th>
-            <th className="p-4 font-bold text-center">Pld</th>
-            <th className="p-4 font-bold text-center">W</th>
-            <th className="p-4 font-bold text-center">D</th>
-            <th className="p-4 font-bold text-center">L</th>
-            <th className="p-4 font-bold text-center">PF</th>
-            <th className="p-4 font-bold text-center">PA</th>
-            <th className="p-4 font-bold text-center">PD</th>
-            <th className="p-4 font-bold text-center">Pts</th>
-          </tr>
-        </thead>
-        <tbody>
-          {finalLeagueTable.map((row, index) => (
-            <tr key={row.Position} className={`border-b border-gray-700 ${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-750'}`}>
-              <td className="p-4 font-semibold">{row.Position}</td>
-              <td className="p-4 flex items-center">
-                <Image src={getTeamLogo(row.Team)} alt={row.Team} width={24} height={24} className="mr-3 rounded-full" />
-                <span className="font-medium">{row.Team}</span>
-              </td>
-              <td className="p-4 text-center">{row.Pld}</td>
-              <td className="p-4 text-center">{row.W}</td>
-              <td className="p-4 text-center">{row.D}</td>
-              <td className="p-4 text-center">{row.L}</td>
-              <td className="p-4 text-center">{row.PF}</td>
-              <td className="p-4 text-center">{row.PA}</td>
-              <td className="p-4 text-center">{row.PD}</td>
-              <td className="p-4 text-center font-bold text-cyan-400">{row.Pts}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-6">
+      <Header />
+      <Filters />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {finalLeagueTable.map((row) => (
+          <Card key={row.Position} team={row} getTeamLogo={getTeamLogo} />
+        ))}
+      </div>
     </div>
   );
 
