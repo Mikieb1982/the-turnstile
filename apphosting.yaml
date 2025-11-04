@@ -1,0 +1,6 @@
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_CONFIG
+    value: '{"apiKey":"AIzaSyDj_7F_J5I4jMiDhK9mRpw9PRZ9OIA3g0E","authDomain":"the-turnstile-89754200-c7f0b.firebaseapp.com","projectId":"the-turnstile-89754200-c7f0b","storageBucket":"the-turnstile-89754200-c7f0b.firebasestorage.app","messagingSenderId":"966585000512","appId":"1:966585000512:web:1c15b084790bec3ac835a5"}'
+    availability:
+      - BUILD
+      - RUNTIME
