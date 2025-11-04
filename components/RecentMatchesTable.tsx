@@ -44,12 +44,11 @@ const RecentMatchesTable: React.FC<RecentMatchesTableProps> = ({ matches }) => {
       ) : (
         <div className="text-center text-gray-400 py-8">
           <p className="mb-4 font-body">You haven't logged any matches yet.</p>
-          {/* FIX: Remove <a> tag inside Link */}
-          <Link
-            href="/match-log"
-            className="bg-primary hover:bg-green-600 text-background-dark font-bold py-2 px-4 rounded-lg transition-colors"
-          >
-            Log Your First Match
+          {/* FIX: Added legacyBehavior prop */}
+          <Link href="/match-log" legacyBehavior>
+            <a className="bg-primary hover:bg-green-600 text-background-dark font-bold py-2 px-4 rounded-lg transition-colors">
+              Log Your First Match
+            </a>
           </Link>
         </div>
       )}
