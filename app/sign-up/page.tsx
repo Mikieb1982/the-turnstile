@@ -7,8 +7,11 @@ import { signUp } from '@/app/actions';
 import GoogleSignInButton from '@/components/google-signin-button';
 import Image from 'next/image'; // Import Image
 
+// FIX: Added message and success properties to match the AuthState type
 const initialState = {
   errors: {},
+  message: '',
+  success: false,
 };
 
 function SubmitButton() {
