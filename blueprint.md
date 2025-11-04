@@ -2,39 +2,46 @@
 
 ## Overview
 
-This project is a Next.js application integrated with Firebase. It provides user authentication (sign up and sign in) and displays a feed of articles from various sources.
+This project is a Next.js application integrated with Firebase. It provides user authentication (sign up and sign in) and allows users to track rugby league matches they've attended, view league tables, fixtures, and achievements.
 
 ## Implemented Features
 
 ### Styling and Design
-*   **Layout:** A clean and modern layout with a responsive design that adapts to different screen sizes.
-*   **Colors:** A vibrant color palette to create an energetic look and feel.
-*   **Typography:** Expressive and relevant typography with a clear hierarchy for headings and text.
-*   **Iconography:** Modern and interactive icons to enhance user understanding and navigation.
-*   **Effects:** Subtle noise texture on the background and multi-layered drop shadows for a sense of depth.
+* **Layout:** A clean, modern, dark-mode layout. Uses a responsive grid system and a fixed bottom navigation bar for mobile.
+* **Colors:** A dark theme with a vibrant green primary color (`#32FF84`) and purple secondary color (`#A768FF`).
+* **Typography:** Uses "Teko" for display fonts and "Roboto" for body text.
+* **Iconography:** Uses Material Symbols (via Google Fonts) and `lucide-react` for icons.
+* **Effects:** Custom `shadow-card-glow` utility for a green glow effect on interactive cards.
 
 ### Authentication
-*   **Sign Up:** Users can create an account using their email and password.
-*   **Sign In:** Registered users can sign in to their accounts.
-*   **Server Actions:** User authentication is handled using Next.js Server Actions for secure and efficient data mutations.
-*   **Validation:** Input fields are validated using Zod to ensure data integrity.
+* **Sign Up/Sign In:** Email/password sign-up and sign-in using Firebase Auth.
+* **Google Sign-In:** OAuth flow using Google as a provider.
+* **Server Actions:** Auth mutations (`signUp`, `signIn`) are handled securely via Next.js Server Actions.
+* **Validation:** Zod is used for schema validation on auth forms.
+* **UI:** Auth pages include the app logo for branding.
 
-### Content
-*   **Article Feed:** The application fetches and displays a feed of articles from various RSS feeds.
-*   **RSS Parser:** The `rss-parser` library is used to parse the RSS feeds.
+### Core Features
+* **Landing Page:** A static landing page (`app/page.tsx`) describing the app's features.
+* **Dashboard:** (`app/dashboard/page.tsx`) A protected route showing user stats (matches attended) and a list of recent matches from Firestore. Includes an empty state to guide users to log a match.
+* **Match Log:** (`app/match-log/*`) A protected page where users can log new matches via a form. Logged matches are displayed in a list with edit and delete functionality (using a modal for edits).
+* **League Table:** (`app/league-table/page.tsx`) Displays a sortable league table with team crests.
+* **Teams Page:** (`app/teams/page.tsx`) A grid display of all Super League teams and their stadium information, using consistent placeholder logos.
+* **Achievements:** (`app/achievements/page.tsx`) A list of achievements, visually distinguishing between locked, unlocked, and in-progress items.
+* **Profile Page:** (`app/profile/page.tsx`) A protected route allowing users to view their email, update their display name, and upload a custom profile picture to Firebase Storage.
 
 ### Firebase Integration
-*   **Project ID:** The Firebase project ID has been updated to `the-turnstile-89754200-c7f0b`.
-*   **Configuration:** The Firebase configuration has been updated in `lib/firebase.ts` and a `.env.local` file has been created to store the Firebase project details.
-*   **Dependencies:** The `firebase` package has been installed.
+* **Project ID:** `the-turnstile-89754200-c7f0b`.
+* **Authentication:** Firebase Auth is used for all user management.
+* **Firestore:** Used to store user-specific "match-logs" in a dedicated collection.
+* **Storage:** Firebase Storage is used to store user-uploaded profile pictures.
 
-## Current Request: Project ID Update & Firebase Configuration
+## Current Request: Improve the UI and UX
 
 **Completed Steps:**
-1.  **`package.json`:** Updated the `firebase:login` script with the correct project ID.
-2.  **`firebase.json`:** Updated `backendId` and set the `region`.
-3.  **`.firebaserc`:** Created the file and set the default project.
-4.  **Firebase Configuration:**
-    *   Created `.env.local` with the Firebase configuration.
-    *   Updated `lib/firebase.ts` with the new Firebase configuration.
-    *   Installed the `firebase` dependency.
+1.  **Fixed Dashboard Query:** Updated `app/dashboard/page.tsx` to query the correct `match-logs` Firestore collection instead of `matches`.
+2.  **Improved Dashboard Empty State:** Added a message and a "Log Your First Match" button to the dashboard's "Recent Matches" section when the user has no matches.
+3.  **Standardized Team Logos:** Modified `app/teams/page.tsx` to use the same `getTeamLogo` function from `app/results/page.tsx`, ensuring consistent team placeholders.
+4.  **Standardized Card Glow:** Replaced a hard-coded blue shadow on `app/teams/page.tsx` with the standard `shadow-card-glow` utility to match the primary green theme.
+5.  **Themed Profile Button:** Changed the "Edit Profile" button in `app/components/profile/Profile-v2.tsx` from blue to the primary green color.
+6.  **Branded Auth Pages:** Added the app logo to `app/sign-in/page.tsx` and `app/sign-up/page.tsx` to improve brand trust.
+7.  **Improved Match Log Empty State:** Added a "No matches logged yet" message to the `app/match-log/client.tsx` component when the match list is empty.
