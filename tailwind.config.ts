@@ -19,8 +19,9 @@ const config: Config = {
         "star-yellow": "#FFD700",
       },
       fontFamily: {
-        "display": ["Teko", "sans-serif"],
-        "body": ["Roboto", "Inter", "sans-serif"],
+        // UPDATED: Use the CSS variables from layout.tsx
+        "display": ["var(--font-teko)", "sans-serif"],
+        "body": ["var(--font-roboto)", "Inter", "sans-serif"],
       },
       borderRadius: {
         "DEFAULT": "0.5rem",
