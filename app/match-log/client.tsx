@@ -100,25 +100,31 @@ export default function MatchLogClient({ loggedMatches, userId }: { loggedMatche
           <div>
             <h1 className="text-4xl font-bold text-cyan-400 mb-8">Logged Matches</h1>
             <div className="space-y-4">
-              {loggedMatches.map((match: Match) => (
-                <div key={match.id} className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-cyan-500/50 transition-shadow">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-xl font-bold">{match.homeTeam} vs {match.awayTeam}</p>
-                      <p className="text-gray-400">{new Date(match.date).toLocaleDateString('en-GB', { timeZone: 'UTC' })}</p>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <p className="text-2xl font-bold text-cyan-400">{match.score}</p>
-                      <button onClick={() => handleEditClick(match)} className="text-gray-400 hover:text-white">
-                        <FiEdit size={20} />
-                      </button>
-                      <button onClick={() => handleDeleteClick(match.id)} className="text-gray-400 hover:text-white">
-                        <FiTrash2 size={20} />
-                      </button>
+              {loggedMatches.length > 0 ? (
+                loggedMatches.map((match: Match) => (
+                  <div key={match.id} className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-cyan-500/50 transition-shadow">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-xl font-bold">{match.homeTeam} vs {match.awayTeam}</p>
+                        <p className="text-gray-400">{new Date(match.date).toLocaleDateString('en-GB', { timeZone: 'UTC' })}</p>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <p className="text-2xl font-bold text-cyan-400">{match.score}</p>
+                        <button onClick={() => handleEditClick(match)} className="text-gray-400 hover:text-white">
+                          <FiEdit size={20} />
+                        </button>
+                        <button onClick={() => handleDeleteClick(match.id)} className="text-gray-400 hover:text-white">
+                          <FiTrash2 size={20} />
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center text-gray-400">
+                  <p>No matches logged yet.</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
