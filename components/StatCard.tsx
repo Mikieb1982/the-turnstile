@@ -10,11 +10,12 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ Icon, title, value, colorClassName }) => {
   return (
-    <div className="bg-card-dark p-6 rounded-lg shadow-card-glow flex items-center transform transition-transform duration-300 hover:-translate-y-1">
+    // Use bg-card, text-text-secondary, text-text-primary
+    <div className="bg-card p-6 rounded-lg shadow-card-glow flex items-center transform transition-transform duration-300 hover:-translate-y-1">
       <Icon className={`w-12 h-12 ${colorClassName} mr-6`} />
       <div>
-        <p className="text-gray-400 font-body text-lg">{title}</p>
-        <h3 className="font-display text-4xl font-bold text-white">{value}</h3>
+        <p className="text-text-secondary font-body text-lg">{title}</p>
+        <h3 className="font-display text-4xl font-bold text-text-primary">{value}</h3>
       </div>
     </div>
   );
