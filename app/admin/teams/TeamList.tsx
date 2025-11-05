@@ -1,64 +1,101 @@
 'use client';
 
-import { useState } from 'react';
-import { TeamInfo } from '@/types';
-import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
-import { deleteTeam } from './actions';
-import TeamForm from './TeamForm';
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
+import { createTeam, updateTeam } from '../actions';
+import { TeamDocument } from '../page'; // Import the type from the page
 
-interface TeamListProps {
-  teams: (TeamInfo & { id: string })[];
+interface TeamFormProps {
+  team?: TeamDocument;
+  onDone?: () => void; // Function to call when form is successfully submitted
 }
 
-export default function TeamList({ teams }: TeamListProps) {
-  const [editingTeam, setEditingTeam] = useState<(TeamInfo & { id: string }) | null>(null);
+function SubmitButton({ isUpdating }: { isUpdating: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full bg-primary hover:bg-green-600 text-background-dark font-bold py-3 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 disabled:bg-gray-600 disabled:opacity-50"
+    >
+      {pending ? 'Saving...' : (isUpdating ? 'Update Team' : 'Create Team')}
+    </button>
+  );
+}
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this team?')) {
-      await deleteTeam(id);
+export default function TeamForm({ team, onDone }: TeamFormProps) {
+  // Bind the teamId if we are in update mode
+  const action = team ? updateTeam.bind(null, team.id) : createTeam;
+  const [state, formAction] = useActionState(action, { message: '', success: false, errors: {} });
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    // If the action was successful, reset the form (if creating)
+    // or call onDone (if updating)
+    if (state.success) {
+      if (!team) {
+        formRef.current?.reset();
+      }
+      if (onDone) {
+        onDone();
+      }
     }
-  };
+  }, [state.success, onDone, team]);
 
-  if (editingTeam) {
-    return (
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-primary">Edit {editingTeam.name}</h3>
-          <button onClick={() => setEditingTeam(null)} className="text-gray-400 hover:text-white">
-            <FiX size={24} />
-          </button>
-        </div>
-        <TeamForm team={editingTeam} onDone={() => setEditingTeam(null)} />
-      </div>
-    );
-  }
+  const fieldWrapperClass = "space-y-1";
+  const labelClass = "block text-sm font-medium text-gray-300";
+  const inputClass = "w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary";
+  const errorClass = "text-red-400 text-sm";
 
   return (
-    <div className="space-y-4">
-      {teams.length > 0 ? (
-        teams.map((team) => (
-          <div key={team.id} className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-primary/30 transition-shadow">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-xl font-bold">{team.name}</p>
-                <p className="text-gray-400 text-sm">{team.stadium.name} | Est. {team.established}</p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <button onClick={() => setEditingTeam(team)} className="text-gray-400 hover:text-primary">
-                  <FiEdit size={20} />
-                </button>
-                <button onClick={() => handleDelete(team.id)} className="text-gray-400 hover:text-red-500">
-                  <FiTrash2 size={20} />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center text-gray-400">
-          <p>No teams found. Add one using the form.</p>
+    <form ref={formRef} action={formAction} className="bg-gray-800 p-6 rounded-lg shadow-lg space-y-4">
+      {state?.message && !state.success && <p className="text-red-400 mb-4">{state.message}</p>}
+      {state?.success && state.message && <p className="text-green-400 mb-4">{state.message}</p>}
+      
+      <div className={fieldWrapperClass}>
+        <label htmlFor="name" className={labelClass}>Team Name</label>
+        <input type="text" id="name" name="name" defaultValue={team?.name} className={inputClass} required />
+        {state.errors?.name && <p className={errorClass}>{state.errors.name.join(', ')}</p>}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className={fieldWrapperClass}>
+          <label htmlFor="established" className={labelClass}>Established (Year)</label>
+          <input type="number" id="established" name="established" defaultValue={team?.established} className={inputClass} required />
+          {state.errors?.established && <p className={errorClass}>{state.errors.established.join(', ')}</p>}
         </div>
-      )}
-    </div>
+        <div className={fieldWrapperClass}>
+          <label htmlFor="titles" className={labelClass}>Titles</label>
+          <input type="text" id="titles" name="titles" defaultValue={team?.titles} className={inputClass} required />
+          {state.errors?.titles && <p className={errorClass}>{state.errors.titles.join(', ')}</p>}
+        </div>
+      </div>
+      
+      <div className={fieldWrapperClass}>
+        <label htmlFor="location" className={labelClass}>Location</label>
+        <input type="text" id="location" name="location" defaultValue={team?.location} className={inputClass} required />
+        {state.errors?.location && <p className={errorClass}>{state.errors.location.join(', ')}</p>}
+      </div>
+
+      <div className="border-t border-gray-700 pt-4 space-y-4">
+        <h3 className="text-lg font-semibold text-primary">Stadium Details</h3>
+        <div className={fieldWrapperClass}>
+          <label htmlFor="stadiumName" className={labelClass}>Stadium Name</label>
+          <input type="text" id="stadiumName" name="stadiumName" defaultValue={team?.stadium.name} className={inputClass} required />
+          {state.errors?.stadiumName && <p className={errorClass}>{state.errors.stadiumName.join(', ')}</p>}
+        </div>
+        <div className={fieldWrapperClass}>
+          <label htmlFor="stadiumCapacity" className={labelClass}>Capacity</label>
+          <input type="text" id="stadiumCapacity" name="stadiumCapacity" defaultValue={team?.stadium.capacity} className={inputClass} required />
+          {state.errors?.stadiumCapacity && <p className={errorClass}>{state.errors.stadiumCapacity.join(', ')}</p>}
+        </div>
+        <div className={fieldWrapperClass}>
+          <label htmlFor="stadiumNotes" className={labelClass}>Notes</label>
+          <textarea id="stadiumNotes" name="stadiumNotes" defaultValue={team?.stadium.notes} className={inputClass} rows={2} />
+        </div>
+      </div>
+      
+      <SubmitButton isUpdating={!!team} />
+    </form>
   );
 }
