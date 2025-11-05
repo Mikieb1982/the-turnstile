@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Roboto, Teko } from 'next/font/google'; 
 import './globals.css';
 import Navbar from '@/components/navbar';
-import Header from '@/components/Header'; // 1. Import the new Header
+import Header from '@/components/Header';
 
 const roboto = Roboto({
   weight: ['400', '500'], 
@@ -24,13 +24,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${roboto.variable} ${teko.variable}`}>
+    // Add 'dark' class here for dark mode by default
+    <html lang="en" className={`dark ${roboto.variable} ${teko.variable}`}> 
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       </head>
-      <body className="font-body bg-background-dark text-white">
-        <Header /> {/* 2. Add the Header here */}
-        <main className="min-h-screen">
+      {/* Applied bg-background and text-text-primary from your new globals.css.
+        This ensures all pages (including auth) have the same base style.
+      */}
+      <body className="font-body bg-background text-text-primary">
+        <Header />
+        {/* This new <main> tag creates a consistent, centered content area 
+          with padding for all your pages.
+        */}
+        <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           {children}
         </main>
         <Navbar />
