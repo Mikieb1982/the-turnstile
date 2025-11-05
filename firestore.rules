@@ -2,8 +2,22 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // User-specific match logs
     match /match-logs/{matchId} {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // Public team data (read-only for public)
+    match /teams/{teamId} {
+      allow get, list: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Public fixture data (read-only for public)
+    match /fixtures/{fixtureId} {
+      allow get, list: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
     }
   }
 }
