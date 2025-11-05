@@ -3,8 +3,13 @@
 import { useState } from 'react';
 import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
 import { deleteTeam } from '../actions';
-import { TeamDocument } from '../page';
-import TeamForm from './TeamForm';
+import { TeamInfo } from '@/types'; // Assuming this is in types.ts
+import TeamForm from './TeamForm'; // This import will now work
+
+// Define the shape of the team data as it comes from Firestore
+export type TeamDocument = TeamInfo & {
+  id: string;
+};
 
 interface TeamListProps {
   teams: TeamDocument[];
