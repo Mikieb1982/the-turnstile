@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
-import { createTeam, updateTeam } from './actions';
+// FIX: Corrected import path from './actions' to '../actions'
+import { deleteTeam } from '../actions';
 import { TeamInfo } from '@/types'; // Assuming this is in types.ts
 import TeamForm from './TeamForm'; // This import will now work
 
@@ -28,8 +29,8 @@ export default function TeamList({ teams }: TeamListProps) {
   if (editingTeam) {
     return (
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg relative">
-        <button 
-          onClick={() => setEditingTeam(null)} 
+        <button
+          onClick={() => setEditingTeam(null)}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
           aria-label="Cancel editing"
         >
