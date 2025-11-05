@@ -1,9 +1,16 @@
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firestore';
-import { TeamInfo } from '@/types'; // Assuming types.ts is updated
-import TeamForm from './TeamForm'; // We will create this component
-import TeamList from './TeamList'; // We will create this component
+import { TeamInfo } from '@/types';
+import TeamForm from './_components/TeamForm';
+import TeamList from './_components/TeamList';
 
+// Define the shape of the team data as it comes from Firestore
+export type TeamDocument = TeamInfo & {
+  id: string;
+  // You can add Firestore-specific fields like createdAt if needed
+};
+
+// Fetch data on the server
 async function getTeams() {
   try {
     const teamsCollection = collection(db, 'teams');
@@ -12,7 +19,7 @@ async function getTeams() {
     const teams = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
-    })) as (TeamInfo & { id: string })[];
+    })) as TeamDocument[];
     return teams;
   } catch (error) {
     console.error("Error fetching teams: ", error);
