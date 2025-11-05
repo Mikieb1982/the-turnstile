@@ -5,10 +5,11 @@ import { collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from '
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
+// Schema based on services/stadiumData.ts and types.ts
 const TeamSchema = z.object({
   name: z.string().min(1, { message: 'Team name is required.' }),
-  established: z.coerce.number().min(1800, { message: 'Invalid year.' }),
-  titles: z.string().min(1, { message: 'Titles are required.' }),
+  established: z.coerce.number().min(1800, { message: 'Invalid year.' }).max(2100),
+  titles: z.string().min(1, { message: 'Titles info is required.' }),
   location: z.string().min(1, { message: 'Location is required.' }),
   stadiumName: z.string().min(1, { message: 'Stadium name is required.' }),
   stadiumCapacity: z.string().min(1, { message: 'Capacity is required.' }),
@@ -29,12 +30,14 @@ export async function createTeam(prevState: any, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Team.',
+      message: 'Missing or invalid fields. Failed to create team.',
+      success: false,
     };
   }
 
   const { stadiumName, stadiumCapacity, stadiumNotes, ...teamData } = validatedFields.data;
 
+  // Nest stadium data as per the 'TeamInfo' type
   const teamPayload = {
     ...teamData,
     stadium: {
@@ -42,13 +45,13 @@ export async function createTeam(prevState: any, formData: FormData) {
       capacity: stadiumCapacity,
       notes: stadiumNotes || '',
     },
-    createdAt: serverTimestamp(),
+    createdAt: serverTimestamp(), // Add a timestamp
   };
 
   try {
     await addDoc(collection(db, 'teams'), teamPayload);
-    revalidatePath('/admin/teams');
-    revalidatePath('/teams');
+    revalidatePath('/admin/teams'); // Refresh admin page
+    revalidatePath('/teams');      // Refresh public teams page
     return { success: true, message: 'Team created successfully!' };
   } catch (error) {
     console.error('Error adding document: ', error);
@@ -70,7 +73,8 @@ export async function updateTeam(teamId: string, prevState: any, formData: FormD
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Team.',
+      message: 'Missing or invalid fields. Failed to update team.',
+      success: false,
     };
   }
 
