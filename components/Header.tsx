@@ -30,16 +30,22 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/10 bg-background-dark/80 px-4 backdrop-blur-sm">
+      {/* FIX: 
+        - Replaced 'bg-background-dark/80' with 'bg-card/80'
+        - Replaced 'border-white/10' with 'border-surface'
+      */}
+      <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-surface bg-card/80 px-4 backdrop-blur-sm">
         <Link className="flex items-center gap-2" href="/dashboard">
           <Trophy className="h-7 w-7 text-primary" />
-          <h2 className="font-display text-3xl font-semibold uppercase tracking-wider text-white">
+          {/* FIX: Replaced 'text-white' with 'text-text-primary' */}
+          <h2 className="font-display text-3xl font-semibold uppercase tracking-wider text-text-primary">
             {title}
           </h2>
         </Link>
         <button
           onClick={() => setIsMenuOpen(true)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
+          // FIX: Replaced 'text-white' with 'text-text-primary' and 'hover:bg-white/10' with 'hover:bg-surface'
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-surface"
         >
           <Menu className="h-6 w-6" />
         </button>
