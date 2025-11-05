@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
-import { deleteTeam } from '../actions';
+import { createTeam, updateTeam } from './actions';
 import { TeamInfo } from '@/types'; // Assuming this is in types.ts
 import TeamForm from './TeamForm'; // This import will now work
 
