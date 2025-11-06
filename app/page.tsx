@@ -62,7 +62,8 @@ export default function LandingPage() {
               <h3 className="text-2xl font-bold mb-3">Personalized Dashboard</h3>
               <p className="text-text-secondary">
                 View lifetime stats, unique grounds visited, and total points witnessed.
-              </origin>
+              </p>
+              {/* FIX: Corrected closing tag below */}
             </div>
             <div className="bg-surface p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-card-glow">
               <MapPin className="w-16 h-16 text-primary mx-auto mb-6" />
