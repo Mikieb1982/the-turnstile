@@ -3,15 +3,61 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/lib/firebase/auth';
-import ProfileClientPage from './ProfileClientPage'; // Import the new client component
-import Loading from '../loading'; // Import the main loading component
+import ProfileClientPage from './ProfileClientPage';
+import Loading from '../loading';
+import { useEffect, useState } from 'react';
+import { collection, getDocs, doc, getDoc, orderBy, query } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { TeamInfo, User as FirestoreUser } from '@/types';
+
+// Define types for data fetching
+type Team = TeamInfo & { id: string };
+type UserProfile = Partial<FirestoreUser>;
 
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loadingData, setLoadingData] = useState(true);
 
-  // Show main loading spinner while auth is checking
-  if (authLoading) {
-    // Use the app-wide loading component
+  useEffect(() => {
+    if (user) {
+      const fetchData = async () => {
+        try {
+          // 1. Fetch Teams
+          const teamsCollection = collection(db, 'teams');
+          const q = query(teamsCollection, orderBy('name', 'asc'));
+          const teamsSnapshot = await getDocs(q);
+          const teamsData = teamsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Team[];
+          setTeams(teamsData);
+
+          // 2. Fetch User Profile from Firestore
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+          if (userDocSnap.exists()) {
+            setProfile(userDocSnap.data() as UserProfile);
+          } else {
+            setProfile({}); // No profile exists yet, pass empty object
+          }
+        } catch (error) {
+          console.error("Error fetching profile data:", error);
+          setProfile({}); // Set empty profile on error
+        } finally {
+          setLoadingData(false);
+        }
+      };
+      fetchData();
+    } else if (!authLoading) {
+      // Not logged in, no data to load
+      setLoadingData(false);
+    }
+  }, [user, authLoading]);
+
+  // Show main loading spinner while auth or data is loading
+  if (authLoading || (user && loadingData)) {
     return <Loading />;
   }
 
@@ -32,7 +78,6 @@ export default function ProfilePage() {
     );
   }
 
-  // If we are here, user is logged in
-  // Render the client component with the user data
-  return <ProfileClientPage user={user} />;
+  // If we are here, user is logged in and data is loaded
+  return <ProfileClientPage user={user} profile={profile} teams={teams} />;
 }
