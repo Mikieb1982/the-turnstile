@@ -1,14 +1,22 @@
 // components/MobileMenu.tsx
 'use client';
 
-import { Fragment } from 'react';
 import Link from 'next/link';
-import Image from 'next/image'; // Import Image
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { X, LogOut, User, LayoutDashboard, Trophy, Calendar, BarChart3, Shield } from 'lucide-react';
-import { Dialog, Transition } from '@headlessui/react';
+import { 
+  X, 
+  LogOut, 
+  UserCircle, 
+  LayoutDashboard, 
+  Trophy, 
+  CalendarDays, 
+  BarChart3,
+  Shield 
+} from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { useEffect } from 'react';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -17,15 +25,29 @@ interface MobileMenuProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Match Log', href: '/match-log', icon: Calendar },
   { name: 'League Table', href: '/league-table', icon: BarChart3 },
-  { name: 'Teams', href: '/teams', icon: Shield },
+  { name: 'Fixtures', href: '/fixtures', icon: CalendarDays },
   { name: 'Achievements', href: '/achievements', icon: Trophy },
-  { name: 'Profile', href: '/profile', icon: User },
+  { name: 'Profile', href: '/profile', icon: UserCircle },
+  { name: 'Match Log', href: '/match-log', icon: CalendarDays }, 
+  { name: 'Teams', href: '/teams', icon: Shield },
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+
+  // Add effect to prevent scrolling when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -33,91 +55,81 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   };
 
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-30" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-in-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in-out duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" />
-        </Transition.Child>
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-20 bg-black/50 backdrop-blur-sm transition-opacity ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={onClose}
+      />
 
-        <div className="fixed inset-0 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-              <Transition.Child
-                as={Fragment}
-                enter="transform transition ease-in-out duration-300"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transform transition ease-in-out duration-200"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
-              >
-                <Dialog.Panel className="pointer-events-auto w-screen max-w-sm">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-card shadow-xl">
-                    <div className="flex h-16 items-center justify-between border-b border-surface px-4">
-                      {/* UPDATE: Replaced "Menu" with logo and app name */}
-                      <div className="flex items-center gap-2">
-                        <Image
-                          src="/logo.png"
-                          alt="The Turnstile Logo"
-                          width={32}
-                          height={32}
-                          className="h-8 w-8"
-                        />
-                        <Dialog.Title className="font-display text-2xl font-semibold uppercase text-text-primary">
-                          The Turnstile
-                        </Dialog.Title>
-                      </div>
-                      <button
-                        type="button"
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-surface"
-                        onClick={onClose}
-                      >
-                        <X className="h-6 w-6" />
-                      </button>
-                    </div>
-                    <div className="flex-1 p-4">
-                      <nav className="flex flex-col gap-2">
-                        {navigation.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={onClose}
-                            className={`flex items-center gap-3 rounded-lg px-3 py-3 font-body text-lg font-medium transition-colors ${
-                              pathname === item.href
-                                ? 'bg-primary text-background'
-                                : 'text-text-primary hover:bg-surface'
-                            }`}
-                          >
-                            <item.icon className="h-6 w-6" />
-                            {item.name}
-                          </Link>
-                        ))}
-                      </nav>
-                    </div>
-                    <div className="border-t border-surface p-4">
-                      <button
-                        onClick={handleSignOut}
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-3 font-body text-lg font-medium text-red-500 transition-colors hover:bg-red-500/10"
-                      >
-                        <LogOut className="h-6 w-6" />
-                        Sign Out
-                      </button>
-                    </div>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
+      {/* Menu Panel */}
+      <div
+        className={`fixed inset-y-0 left-0 z-30 flex w-screen max-w-sm transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex h-full w-full flex-col overflow-y-scroll bg-card shadow-xl">
+          {/* Header */}
+          <div className="flex h-16 items-center justify-between border-b border-surface px-4">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="The Turnstile Logo"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
+              <h2 className="font-display text-2xl font-semibold uppercase text-text-primary">
+                The Turnstile
+              </h2>
             </div>
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-surface"
+              onClick={onClose}
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex-1 p-4">
+            <nav className="flex flex-col gap-2">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={onClose}
+                    className={`flex items-center gap-3 rounded-lg px-3 py-3 font-body text-lg font-medium transition-colors ${
+                      isActive
+                        ? 'bg-primary text-background'
+                        : 'text-text-primary hover:bg-surface'
+                    }`}
+                  >
+                    <item.icon className="h-6 w-6" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Footer / Sign Out */}
+          <div className="border-t border-surface p-4">
+            <button
+              onClick={handleSignOut}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-3 font-body text-lg font-medium text-red-500 transition-colors hover:bg-red-500/10"
+            >
+              <LogOut className="h-6 w-6" />
+              Sign Out
+            </button>
           </div>
         </div>
-      </Dialog>
-    </Transition.Root>
+      </div>
+    </>
   );
 }
