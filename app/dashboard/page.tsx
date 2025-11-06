@@ -1,13 +1,14 @@
+// app/dashboard/page.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
-import { auth, db } from '@/lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import { BarChart, Trophy, Star } from 'lucide-react';
 import StatCard from '@/components/StatCard';
 import RecentMatchesTable from '@/components/RecentMatchesTable';
 import Link from 'next/link';
+import { useAuth } from '@/lib/firebase/auth'; // <-- IMPORT THE HOOK
+import { useEffect, useState } from 'react'; // Keep useEffect/useState for match data
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface Match {
   id: string;
@@ -19,28 +20,29 @@ interface Match {
 }
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading: authLoading } = useAuth(); // <-- USE THE HOOK
   const [matches, setMatches] = useState<Match[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingMatches, setLoadingMatches] = useState(true);
 
+  // This hook now only fetches match data, not auth state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        const q = query(collection(db, 'match-logs'), where('userId', '==', currentUser.uid));
+    if (user) {
+      const fetchMatches = async () => {
+        const q = query(collection(db, 'match-logs'), where('userId', '==', user.uid));
         const querySnapshot = await getDocs(q);
         const userMatches = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
         setMatches(userMatches);
-      } else {
-        setUser(null);
-        setMatches([]);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+        setLoadingMatches(false);
+      };
+      fetchMatches();
+    } else if (!authLoading) {
+      // If auth is loaded and there's no user, stop loading
+      setLoadingMatches(false);
+    }
+  }, [user, authLoading]); // Re-run when user or authLoading changes
 
-  if (loading) {
+  // Show main loading spinner while auth is checking
+  if (authLoading || loadingMatches) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
@@ -48,12 +50,12 @@ export default function DashboardPage() {
     );
   }
 
+  // If auth is done and there is no user, show login prompt
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh]">
         <h1 className="font-display text-4xl font-bold mb-4">You are not logged in.</h1>
         <p className="font-body text-lg text-center text-text-secondary mb-8">Please sign in to view your dashboard.</p>
-        {/* FIX: Added legacyBehavior prop */}
         <Link href="/sign-in" legacyBehavior>
           <a className="bg-primary hover:bg-green-600 text-background font-bold py-3 px-6 rounded-lg transition-colors">
             Sign In
@@ -63,6 +65,7 @@ export default function DashboardPage() {
     );
   }
 
+  // If we are here, user is logged in
   const totalMatches = matches.length;
   const achievements = 5; // Placeholder
   const favoriteTeam = 'City Sentinels'; // Placeholder
