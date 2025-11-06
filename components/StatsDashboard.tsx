@@ -66,9 +66,10 @@ export default function StatsDashboard({
           </div>
           <div className="text-text-secondary text-sm font-medium uppercase tracking-wide">
             {stat.label}
-          </div>
+           </div>
         </div>
+     </div>
       ))}
-    </div>
+ </div>
   );
 }
