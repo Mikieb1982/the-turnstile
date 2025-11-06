@@ -3,7 +3,6 @@ import Image from 'next/image';
 
 export default function Loading() {
   return (
-    // UPDATE: Use a relative container to center the logo
     <div className="flex justify-center items-center h-[70vh]">
       <div className="relative flex justify-center items-center">
         {/* Spinner */}
