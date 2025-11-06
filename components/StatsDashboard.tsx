@@ -61,10 +61,8 @@ export default function StatsDashboard({
             </span>
           </div>
           
-          <div className="font-display text-4xl font-bold text-text-primary mb-1 animate-pulse-score">
-            {stat.value}
-          </div>
-          
+                    <div className="font-display text-4xl font-bold text-text-primary mb-1">
+          {stat.value}
           <div className="text-text-secondary text-sm font-medium uppercase tracking-wide">
             {stat.label}
           </div>
