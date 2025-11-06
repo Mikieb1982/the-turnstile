@@ -1,78 +1,69 @@
 // app/results/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // No need for useMemo here, it's part of React
 import { finalLeagueTable, selectedMatchResults, playoffResults, TEAMS } from '@/services/mockData';
 import Image from 'next/image';
 import Filters from '@/components/Filters';
 import { ArrowUp, ArrowDown } from 'lucide-react'; 
 
-// Define the keys we can sort the table by
-// FIX: Changed 'P' to 'Pld' and 'Points' to 'Pts'
 type SortableKeys = 'Position' | 'Team' | 'Pld' | 'W' | 'L' | 'D' | 'Pts';
 
 const ResultsPage = () => {
   const [activeTab, setActiveTab] = useState('table');
   
-  // State for sorting the league table
   const [sortConfig, setSortConfig] = useState<{ key: SortableKeys; direction: 'ascending' | 'descending' } | null>({
     key: 'Position',
     direction: 'ascending',
   });
+
+  // --- FIX: Move useMemo to the top level of the component ---
+  const sortedTeams = React.useMemo(() => {
+    let sortableItems = [...finalLeagueTable];
+    if (sortConfig !== null) {
+      sortableItems.sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [sortConfig]); // Keep the dependency on sortConfig
 
   const getTeamLogo = (teamName: string) => {
     const team = Object.values(TEAMS).find(t => t.name === teamName || t.shortName === teamName || t.id === teamName);
     return team?.logoUrl || 'https://placehold.co/64x64/1a2c20/FFFFFF?text=??';
   };
 
-  // --- NEW: Traditional Table Rendering ---
+  const requestSort = (key: SortableKeys) => {
+    let direction: 'ascending' | 'descending' = 'ascending';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (key: SortableKeys) => {
+    if (!sortConfig || sortConfig.key !== key) {
+      return <ArrowDown className="h-4 w-4 opacity-0 group-hover:opacity-50" />;
+    }
+    if (sortConfig.direction === 'ascending') {
+      return <ArrowUp className="h-4 w-4" />;
+    }
+    return <ArrowDown className="h-4 w-4" />;
+  };
+
+  // --- This function no longer calls hooks ---
   const renderLeagueTable = () => {
-    // Sorting logic for the table
-    const sortedTeams = React.useMemo(() => {
-      let sortableItems = [...finalLeagueTable];
-      if (sortConfig !== null) {
-        sortableItems.sort((a, b) => {
-          // Ensure keys exist on the objects before comparing
-          // FIX: Use Pld and Pts for sorting
-          const aValue = a[sortConfig.key];
-          const bValue = b[sortConfig.key];
-
-          if (aValue < bValue) {
-            return sortConfig.direction === 'ascending' ? -1 : 1;
-          }
-          if (aValue > bValue) {
-            return sortConfig.direction === 'ascending' ? 1 : -1;
-          }
-          return 0;
-        });
-      }
-      return sortableItems;
-    }, [sortConfig]);
-
-    // Function to handle click on column headers
-    const requestSort = (key: SortableKeys) => {
-      let direction: 'ascending' | 'descending' = 'ascending';
-      if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
-        direction = 'descending';
-      }
-      setSortConfig({ key, direction });
-    };
-
-    // Function to get the correct sort icon
-    const getSortIcon = (key: SortableKeys) => {
-      if (!sortConfig || sortConfig.key !== key) {
-        return <ArrowDown className="h-4 w-4 opacity-0 group-hover:opacity-50" />;
-      }
-      if (sortConfig.direction === 'ascending') {
-        return <ArrowUp className="h-4 w-4" />;
-      }
-      return <ArrowDown className="h-4 w-4" />;
-    };
-
     return (
       <div className="space-y-6">
         <Filters />
-        {/* New Table Container */}
         <div className="bg-card rounded-2xl shadow-card-glow overflow-hidden">
           <table className="w-full min-w-full font-body">
             {/* Table Head */}
@@ -88,7 +79,6 @@ const ResultsPage = () => {
                     Team {getSortIcon('Team')}
                   </div>
                 </th>
-                {/* FIX: Changed to 'Pld' */}
                 <th className="py-4 px-2 text-center group" onClick={() => requestSort('Pld')}>
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
                     P {getSortIcon('Pld')}
@@ -109,7 +99,6 @@ const ResultsPage = () => {
                     D {getSortIcon('D')}
                   </div>
                 </th>
-                {/* FIX: Changed to 'Pts' */}
                 <th className="py-4 px-2 text-center text-primary group" onClick={() => requestSort('Pts')}>
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
                     Pts {getSortIcon('Pts')}
@@ -119,11 +108,12 @@ const ResultsPage = () => {
             </thead>
             {/* Table Body */}
             <tbody className="divide-y divide-surface">
+              {/* Use the sortedTeams variable from the component's scope */}
               {sortedTeams.map((team) => (
                 <tr
                   key={team.Position}
                   className={`text-text-primary ${
-                    team.Team === 'Wigan Warriors' ? 'bg-primary/10' : 'hover:bg-surface' // Highlight example
+                    team.Team === 'Wigan Warriors' ? 'bg-primary/10' : 'hover:bg-surface'
                   }`}
                 >
                   <td className="py-3 px-2 text-center font-bold">{team.Position}</td>
@@ -139,12 +129,10 @@ const ResultsPage = () => {
                       <span className="font-medium whitespace-nowrap">{team.Team}</span>
                     </div>
                   </td>
-                  {/* FIX: Changed team.P to team.Pld */}
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.Pld}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.W}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.L}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.D}</td>
-                  {/* FIX: Changed team.Points to team.Pts */}
                   <td className="py-3 px-2 text-center font-mono font-bold text-primary">{team.Pts}</td>
                 </tr>
               ))}
@@ -154,9 +142,8 @@ const ResultsPage = () => {
       </div>
     );
   };
-  // --- End of new table rendering ---
 
-  // --- UPDATED: Match Results with Theme Colors ---
+  // --- Other functions remain the same ---
   const renderMatchResults = () => (
     <div className="space-y-6">
       {selectedMatchResults.map((result, index) => (
@@ -183,7 +170,6 @@ const ResultsPage = () => {
     </div>
   );
 
-  // --- UPDATED: Playoff Results with Theme Colors ---
   const renderPlayoffResults = () => (
     <div className="space-y-8">
       <div>
@@ -227,12 +213,9 @@ const ResultsPage = () => {
     </div>
   );
 
+  // --- Main component return ---
   return (
-    // --- UPDATED: Main Page with Theme Colors ---
     <div className="container mx-auto px-4 py-8">
-      {/* The main page title is handled by Header.tsx, so this "Results" h1 is likely redundant */}
-      {/* <h1 className="text-5xl font-extrabold mb-8 text-center text-text-primary">Results</h1> */}
-      
       <div className="flex justify-center mb-8">
         <div className="flex space-x-2 rounded-lg bg-surface p-2">
           <button onClick={() => setActiveTab('table')} className={`px-4 py-2 text-lg font-semibold rounded-md ${activeTab === 'table' ? 'bg-primary text-background' : 'text-text-secondary hover:bg-card'}`}>League Table</button>
