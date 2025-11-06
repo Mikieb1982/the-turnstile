@@ -2,41 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define all color values here as CSS variables.
-  The :root block defines light mode (the default).
-  The .dark block defines dark mode.
-*/
+/* Sports-focused color palette with navy, crimson, and gold accents */
 :root {
-  --color-background: 246 248 247; /* #f6f8f7 */
-  --color-card: 255 255 255; /* #ffffff */
-  --color-surface: 240 242 241; /* A light surface color */
-  --color-text-primary: 16 34 23; /* #102217 */
+  /* Light mode - Clean and energetic */
+  --color-background: 246 248 247; /* #f6f8f7 - Light neutral */
+  --color-card: 255 255 255; /* #ffffff - Pure white */
+  --color-surface: 240 242 241; /* Light surface */
+  --color-text-primary: 12 52 61; /* #0c343d - Navy blue */
   --color-text-secondary: 75 85 99; /* gray-500 */
+  
+  /* Brand colors */
+  --color-navy: 12 52 61; /* #0c343d - Primary navy */
+  --color-crimson: 76 17 48; /* #4c1130 - Passion red */
+  --color-gold: 255 227 116; /* #ffe374 - Vibrant accent */
+  --color-cream: 255 242 204; /* #fff2cc - Warm neutral */
 }
 
 .dark {
-  --color-background: 16 34 23; /* #102217 */
-  --color-card: 26 44 33; /* #1A2C21 */
-  --color-surface: 40 56 47; /* rgb(40, 56, 47) */
-  --color-text-primary: 255 255 255; /* #ffffff */
-  --color-text-secondary: 156 163 175; /* gray-400 */
+  /* Dark mode - Bold and atmospheric for matchday */
+  --color-background: 12 52 61; /* #0c343d - Navy background */
+  --color-card: 20 60 71; /* Slightly lighter navy */
+  --color-surface: 32 72 83; /* Mid-tone surface */
+  --color-text-primary: 255 242 204; /* #fff2cc - Cream text */
+  --color-text-secondary: 255 227 116; /* #ffe374 - Gold secondary */
+  
+  /* Brand colors remain the same */
+  --color-navy: 12 52 61;
+  --color-crimson: 76 17 48;
+  --color-gold: 255 227 116;
+  --color-cream: 255 242 204;
 }
 
-/* Remove old body styles, this is handled in layout.tsx now */
 body {
-  @apply bg-background text-text-primary;
+  @apply bg-background text-text-primary font-body antialiased;
 }
 
-/* You can keep your custom utilities */
 @layer utilities {
+  /* Enhanced card shadow with depth */
   .card-lifted {
     box-shadow:
-      0 1px 3px rgba(0,0,0,0.12),
-      0 5px 10px rgba(0,0,0,0.08),
-      0 15px 25px rgba(0,0,0,0.05);
+      0 2px 4px rgba(0,0,0,0.1),
+      0 8px 16px rgba(0,0,0,0.1),
+      0 16px 32px rgba(0,0,0,0.08);
   }
 
+  /* Gold glow for highlights and CTAs */
   .shadow-glow {
-    box-shadow: 0 0 15px rgba(4, 255, 0, 0.4), 0 0 5px rgba(4, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(255, 227, 116, 0.4), 0 0 8px rgba(255, 227, 116, 0.3);
+  }
+  
+  /* Crimson glow for important actions */
+  .shadow-crimson-glow {
+    box-shadow: 0 0 20px rgba(76, 17, 48, 0.5), 0 0 10px rgba(76, 17, 48, 0.4);
+  }
+
+  /* Text gradient for headings */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold via-yellow-300 to-gold bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-team {
+    @apply bg-gradient-to-r from-crimson via-red-500 to-crimson bg-clip-text text-transparent;
   }
 }
