@@ -19,18 +19,18 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ team, getTeamLogo }) => {
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-cyan-500/50">
+    <div className="bg-surface rounded-lg shadow-card p-4 transform transition duration-300 hover:scale-102 hover:shadow-card-hover">
       <div className="flex items-center mb-4">
-        <span className="text-2xl font-bold mr-4">{team.Position}</span>
-        <Image src={getTeamLogo(team.Team)} alt={team.Team} width={48} height={48} className="rounded-full" />
-        <span className="text-xl font-bold ml-4">{team.Team}</span>
+        <span className="text-xl font-bold mr-3">{team.Position}</span>
+        <Image src={getTeamLogo(team.Team)} alt={team.Team} width={40} height={40} className="rounded-full" />
+        <span className="text-lg font-bold ml-3">{team.Team}</span>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <span className="font-bold">Played:</span> {team.Pld}
+          <span className="font-semibold text-text-secondary">Played:</span> {team.Pld}
         </div>
         <div>
-          <span className="font-bold">Won:</span> {team.W}
+          <span className="font-semibold text-text-secondary">Won:</span> {team.W}
         </div>
         <div>
           <span className="font-bold">Drawn:</span> {team.D}

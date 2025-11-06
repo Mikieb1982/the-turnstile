@@ -49,16 +49,16 @@ const config: Config = {
         'display-sm': ['1.5rem', { lineHeight: '1.3', letterSpacing: '0.01em', fontWeight: '600' }],
       },
       borderRadius: {
-        DEFAULT: "0.5rem",
-        lg: "1rem",
-        xl: "1.5rem",
+        DEFAULT: "0.375rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
         full: "9999px"
       },
       boxShadow: {
-        'card': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-        'card-hover': '0 10px 20px -5px rgb(0 0 0 / 0.15), 0 4px 8px -4px rgb(0 0 0 / 0.1)',
-        'card-glow-gold': '0 0 25px -5px rgba(255, 227, 116, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
-        'card-glow-crimson': '0 0 25px -5px rgba(76, 17, 48, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+        'card': '0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
+        'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        'card-glow-gold': '0 0 20px -5px rgba(255, 227, 116, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+        'card-glow-crimson': '0 0 20px -5px rgba(76, 17, 48, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         pulseScore: {
