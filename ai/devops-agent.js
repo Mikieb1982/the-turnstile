@@ -14,7 +14,7 @@ export const devopsCheck = ai.defineFlow({
     }),
 }, async ({ context }) => {
     const system = "Return MINIFIED JSON with keys: summary (string), checklist (string[]), patch (string unified diff or empty). Only JSON. No markdown. No backticks.";
-    const modelId = (process.env.GOOGLE_MODEL_ID || "googleai/gemini-1.5-flash-8b");
+const modelId = (process.env.GOOGLE_MODEL_ID || "googleai/gemini-2.5-flash");
     const res = await ai.generate({
         model: modelId,
         prompt: system + "\n\nContext:\n" + context,
