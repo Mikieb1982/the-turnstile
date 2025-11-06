@@ -1,3 +1,4 @@
+// app/sign-up/page.tsx
 'use client'
 
 import Link from 'next/link';
@@ -5,7 +6,7 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { signUp } from '@/app/actions';
 import GoogleSignInButton from '@/components/google-signin-button';
-import Image from 'next/image'; // Import Image
+import Image from 'next/image'; 
 
 const initialState = {
   errors: {},
@@ -18,7 +19,8 @@ function SubmitButton() {
 
   return (
     <button
-      className="w-full bg-primary hover:bg-green-600 text-background-dark font-bold py-3 rounded-lg transition-colors"
+      // UPDATE: Use semantic color
+      className="w-full bg-primary hover:bg-green-600 text-background font-bold py-3 rounded-lg transition-colors"
       type="submit"
       disabled={pending}
     >
@@ -31,20 +33,22 @@ export default function SignUpPage() {
   const [state, formAction] = useActionState(signUp, initialState);
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-        {/* Added Logo */}
+    // UPDATE: Use semantic colors
+    <div className="bg-background text-text-primary min-h-screen flex items-center justify-center">
+      <div className="bg-card p-8 rounded-lg shadow-card-glow w-full max-w-md">
         <div className="flex justify-center mb-6">
           <Image src="/logo.png" alt="The Turnstile Logo" width={80} height={80} />
         </div>
-        <h2 className="text-3xl font-bold text-center text-primary mb-8">Sign Up</h2>
+        {/* UPDATE: Added app name to title */}
+        <h2 className="text-3xl font-bold text-center text-primary mb-8">Create your Turnstile Account</h2>
         <form action={formAction} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="email">
+            <label className="block text-sm font-medium text-text-secondary mb-2" htmlFor="email">
               Email
             </label>
             <input
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              // UPDATE: Use semantic colors
+              className="w-full bg-surface border border-surface rounded-lg px-4 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               type="email"
               id="email"
               name="email"
@@ -53,11 +57,12 @@ export default function SignUpPage() {
             {state.errors?.email && <p className="text-red-500 text-sm mt-1">{state.errors.email}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="password">
+            <label className="block text-sm font-medium text-text-secondary mb-2" htmlFor="password">
               Password
             </label>
             <input
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+              // UPDATE: Use semantic colors
+              className="w-full bg-surface border border-surface rounded-lg px-4 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               type="password"
               id="password"
               name="password"
@@ -69,12 +74,14 @@ export default function SignUpPage() {
         </form>
         <div className="relative flex items-center justify-center my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-600"></div>
+            {/* UPDATE: Use semantic colors */}
+            <div className="w-full border-t border-surface"></div>
           </div>
-          <div className="relative px-2 bg-gray-800 text-gray-400">OR</div>
+          {/* UPDATE: Use semantic colors */}
+          <div className="relative px-2 bg-card text-text-secondary">OR</div>
         </div>
         <GoogleSignInButton />
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-text-secondary mt-6">
           Already have an account?{" "}
           <Link href="/sign-in" className="text-primary hover:underline">
             Sign in
