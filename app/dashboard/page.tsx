@@ -1,89 +1,112 @@
 // app/dashboard/page.tsx
-'use client';
-
-import { BarChart, Trophy, Star } from 'lucide-react';
-import StatCard from '@/components/StatCard';
-import RecentMatchesTable from '@/components/RecentMatchesTable';
-import Link from 'next/link';
-import { useAuth } from '@/lib/firebase/auth'; // <-- IMPORT THE HOOK
-import { useEffect, useState } from 'react'; // Keep useEffect/useState for match data
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-
-interface Match {
-  id: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeScore: number;
-  awayScore: number;
-  date: string;
-}
+import WelcomeCard from '@/components/WelcomeCard';
+import StatsDashboard from '@/components/StatsDashboard';
+import MatchCard from '@/components/MatchCard';
+import SeasonProgress from '@/components/SeasonProgress';
+import ActionButton from '@/components/ActionButton';
+import TeamBadge from '@/components/TeamBadge';
 
 export default function DashboardPage() {
-  const { user, loading: authLoading } = useAuth(); // <-- USE THE HOOK
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [loadingMatches, setLoadingMatches] = useState(true);
+  // Mock data - replace with real data
+  const userData = {
+    name: 'Mike',
+    matchesAttended: 24,
+    teamsVisited: 8,
+    venuesVisited: 12,
+    consecutiveWeeks: 5,
+    currentWeek: 18,
+    totalWeeks: 27
+  };
 
-  // This hook now only fetches match data, not auth state
-  useEffect(() => {
-    if (user) {
-      const fetchMatches = async () => {
-        const q = query(collection(db, 'match-logs'), where('userId', '==', user.uid));
-        const querySnapshot = await getDocs(q);
-        const userMatches = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
-        setMatches(userMatches);
-        setLoadingMatches(false);
-      };
-      fetchMatches();
-    } else if (!authLoading) {
-      // If auth is loaded and there's no user, stop loading
-      setLoadingMatches(false);
+  const recentMatches = [
+    {
+      homeTeam: 'Wigan Warriors',
+      awayTeam: 'St Helens',
+      homeScore: 24,
+      awayScore: 18,
+      date: '15 Oct 2024',
+      venue: 'DW Stadium',
+      attended: true
+    },
+    {
+      homeTeam: 'Leeds Rhinos',
+      awayTeam: 'Hull FC',
+      homeScore: 32,
+      awayScore: 16,
+      date: '08 Oct 2024',
+      venue: 'Headingley Stadium',
+      attended: true
     }
-  }, [user, authLoading]); // Re-run when user or authLoading changes
+  ];
 
-  // Show main loading spinner while auth is checking
-  if (authLoading || loadingMatches) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  // If auth is done and there is no user, show login prompt
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh]">
-        <h1 className="font-display text-4xl font-bold mb-4">You are not logged in.</h1>
-        <p className="font-body text-lg text-center text-text-secondary mb-8">Please sign in to view your dashboard.</p>
-        <Link href="/sign-in" legacyBehavior>
-          <a className="bg-primary hover:bg-green-600 text-background font-bold py-3 px-6 rounded-lg transition-colors">
-            Sign In
-          </a>
-        </Link>
-      </div>
-    );
-  }
-
-  // If we are here, user is logged in
-  const totalMatches = matches.length;
-  const achievements = 5; // Placeholder
-  const favoriteTeam = 'City Sentinels'; // Placeholder
+  const teams = [
+    { name: 'Wigan', visited: true },
+    { name: 'St Helens', visited: true },
+    { name: 'Leeds', visited: true },
+    { name: 'Hull FC', visited: false },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <header className="mb-10">
-        <h1 className="font-display text-5xl font-bold text-text-primary">Welcome, {user.displayName || 'Fan'}!</h1>
-        <p className="font-body text-text-secondary mt-2 text-xl">Here's a summary of your fan journey.</p>
-      </header>
+    <div className="space-y-8">
+      {/* Welcome Section */}
+      <WelcomeCard userName={userData.name} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        <StatCard Icon={BarChart} title="Matches Attended" value={totalMatches} colorClassName="text-primary" />
-        <StatCard Icon={Trophy} title="Achievements Unlocked" value={achievements} colorClassName="text-accent" />
-        <StatCard Icon={Star} title="Favorite Team" value={favoriteTeam} colorClassName="text-secondary" />
-      </div>
+      {/* Stats Grid */}
+      <StatsDashboard
+        matchesAttended={userData.matchesAttended}
+        teamsVisited={userData.teamsVisited}
+        venuesVisited={userData.venuesVisited}
+        consecutiveWeeks={userData.consecutiveWeeks}
+      />
 
-      <RecentMatchesTable matches={matches} />
+      {/* Season Progress */}
+      <SeasonProgress
+        currentWeek={userData.currentWeek}
+        totalWeeks={userData.totalWeeks}
+        matchesAttended={userData.matchesAttended}
+      />
+
+      {/* Recent Matches Section */}
+      <section>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-display text-display-md text-text-primary uppercase tracking-wide">
+            Recent Matches
+          </h2>
+          <ActionButton variant="accent" size="sm" icon="add">
+            Log Match
+          </ActionButton>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-4">
+          {recentMatches.map((match, index) => (
+            <MatchCard key={index} {...match} />
+          ))}
+        </div>
+      </section>
+
+      {/* Teams Collection */}
+      <section className="bg-card rounded-lg p-6 shadow-card">
+        <h2 className="font-display text-display-md text-text-primary uppercase tracking-wide mb-6">
+          Your Team Collection
+        </h2>
+        
+        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
+          {teams.map((team, index) => (
+            <TeamBadge
+              key={index}
+              teamName={team.name}
+              visited={team.visited}
+              size="md"
+            />
+          ))}
+        </div>
+
+        <div className="mt-6 text-center">
+          <ActionButton variant="ghost" size="sm">
+            View All Teams
+          </ActionButton>
+        </div>
+      </section>
     </div>
   );
 }
