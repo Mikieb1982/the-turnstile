@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import GoogleSignInButton from '@/components/google-signin-button';
 import { useAuth } from '@/lib/firebase/auth'; 
 import Image from 'next/image';
-import Loading from '../loading'; // Import the new loading component
+import Loading from '../loading';
 
 export default function SignInPage() {
   const { user, loading } = useAuth(); 
@@ -19,11 +19,9 @@ export default function SignInPage() {
   }, [user, loading, router]); 
 
   if (loading) {
-    // UPDATE: Use the branded loading component
     return <Loading />;
   }
-
-  // Prevent sign-in page flicker if user is already logged in
+  
   if (user) {
     return <Loading />;
   }
@@ -39,7 +37,6 @@ export default function SignInPage() {
             height={100} 
             className="h-24 w-auto" 
           />
-          {/* UPDATE: Added app name to title */}
           <h1 className="font-display text-5xl font-bold text-text-primary mt-4">Welcome to The Turnstile</h1>
           <p className="font-body text-xl text-text-secondary mt-2">Sign in to access your dashboard</p>
         </div>
