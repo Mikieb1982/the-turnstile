@@ -4,13 +4,12 @@
 import React, { useState } from 'react';
 import { finalLeagueTable, selectedMatchResults, playoffResults, TEAMS } from '@/services/mockData';
 import Image from 'next/image';
-import Filters from '@/components/Filters'; // Removed unused Header import
-// import Card from '@/components/Card'; // No longer needed for the table
-import { ArrowUp, ArrowDown } from 'lucide-react'; // Import sorting icons
+import Filters from '@/components/Filters';
+import { ArrowUp, ArrowDown } from 'lucide-react'; 
 
 // Define the keys we can sort the table by
-// FIX: Changed 'P' to 'Pld'
-type SortableKeys = 'Position' | 'Team' | 'Pld' | 'W' | 'L' | 'D' | 'Points';
+// FIX: Changed 'P' to 'Pld' and 'Points' to 'Pts'
+type SortableKeys = 'Position' | 'Team' | 'Pld' | 'W' | 'L' | 'D' | 'Pts';
 
 const ResultsPage = () => {
   const [activeTab, setActiveTab] = useState('table');
@@ -34,9 +33,9 @@ const ResultsPage = () => {
       if (sortConfig !== null) {
         sortableItems.sort((a, b) => {
           // Ensure keys exist on the objects before comparing
-          // FIX: Use Pld for sorting
-          const aValue = sortConfig.key === 'Pld' ? a.Pld : a[sortConfig.key];
-          const bValue = sortConfig.key === 'Pld' ? b.Pld : b[sortConfig.key];
+          // FIX: Use Pld and Pts for sorting
+          const aValue = a[sortConfig.key];
+          const bValue = b[sortConfig.key];
 
           if (aValue < bValue) {
             return sortConfig.direction === 'ascending' ? -1 : 1;
@@ -89,7 +88,7 @@ const ResultsPage = () => {
                     Team {getSortIcon('Team')}
                   </div>
                 </th>
-                {/* FIX: Changed 'P' to 'Pld' */}
+                {/* FIX: Changed to 'Pld' */}
                 <th className="py-4 px-2 text-center group" onClick={() => requestSort('Pld')}>
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
                     P {getSortIcon('Pld')}
@@ -110,9 +109,10 @@ const ResultsPage = () => {
                     D {getSortIcon('D')}
                   </div>
                 </th>
-                <th className="py-4 px-2 text-center text-primary group" onClick={() => requestSort('Points')}>
+                {/* FIX: Changed to 'Pts' */}
+                <th className="py-4 px-2 text-center text-primary group" onClick={() => requestSort('Pts')}>
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
-                    Pts {getSortIcon('Points')}
+                    Pts {getSortIcon('Pts')}
                   </div>
                 </th>
               </tr>
@@ -144,7 +144,8 @@ const ResultsPage = () => {
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.W}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.L}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.D}</td>
-                  <td className="py-3 px-2 text-center font-mono font-bold text-primary">{team.Points}</td>
+                  {/* FIX: Changed team.Points to team.Pts */}
+                  <td className="py-3 px-2 text-center font-mono font-bold text-primary">{team.Pts}</td>
                 </tr>
               ))}
             </tbody>
