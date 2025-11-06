@@ -7,34 +7,34 @@ export default function LandingPage() {
   return (
     <div className="bg-background text-text-primary">
       {/* Hero Section */}
-      <section className="relative bg-surface overflow-hidden">
-        <div className="container mx-auto px-4 py-20 lg:py-32">
+      <section className="relative bg-surface overflow-hidden rounded-lg shadow-card">
+        <div className="container mx-auto px-4 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
-              <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-6">Welcome to The Turnstile</h1>
-              <p className="text-lg md:text-xl text-text-secondary mb-8 max-w-lg mx-auto lg:mx-0">
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">Welcome to The Turnstile</h1>
+              <p className="text-md md:text-lg text-text-secondary mb-6 max-w-lg mx-auto lg:mx-0">
                 Your ultimate companion for tracking every Super League match you attend. Create a personalized history, unlock achievements, and share your journey.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/sign-up">
-                  <button className="bg-primary hover:bg-green-600 text-background font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                  <button className="bg-primary hover:bg-green-600 text-background font-semibold py-2 px-6 rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300 flex items-center justify-center">
                     Get Started <ArrowRight className="ml-2" />
                   </button>
                 </Link>
                 <Link href="/about">
-                  <button className="bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-background font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                  <button className="bg-transparent border border-primary text-primary hover:bg-primary hover:text-background font-semibold py-2 px-6 rounded-lg shadow-md transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
                     Learn More
                   </button>
                 </Link>
               </div>
             </div>
             <div className="hidden lg:flex justify-center items-center relative">
-              <div className="absolute inset-0 bg-primary rounded-full blur-3xl opacity-20"></div>
+              <div className="absolute inset-0 bg-primary rounded-full blur-3xl opacity-10"></div>
               <Image
                 src="/logo.png"
                 alt="The Turnstile Logo"
-                width={400}
-                height={400}
+                width={350}
+                height={350}
                 className="relative z-10"
               />
             </div>
@@ -43,39 +43,38 @@ export default function LandingPage() {
       </section>
 
       {/* Key Features Section */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold">Key Features</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold">Key Features</h2>
             <p className="text-text-secondary mt-2">Everything you need to enhance your fan experience.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-surface p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-card-glow">
-              <Badge className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-3">Track Match History</h3>
-              <p className="text-text-secondary">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-surface p-6 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 shadow-card hover:shadow-card-hover">
+              <Badge className="w-12 h-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Track Match History</h3>
+              <p className="text-text-secondary text-sm">
                 Log every match you attend to build a personalized record of your support.
               </p>
             </div>
-            <div className="bg-surface p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-card-glow">
-              <BarChart className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-3">Personalized Dashboard</h3>
-              <p className="text-text-secondary">
+            <div className="bg-surface p-6 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 shadow-card hover:shadow-card-hover">
+              <BarChart className="w-12 h-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Personalized Dashboard</h3>
+              <p className="text-text-secondary text-sm">
                 View lifetime stats, unique grounds visited, and total points witnessed.
               </p>
-              {/* FIX: Corrected closing tag below */}
             </div>
-            <div className="bg-surface p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-card-glow">
-              <MapPin className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-3">Explore & Compete</h3>
-              <p className="text-text-secondary">
+            <div className="bg-surface p-6 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 shadow-card hover:shadow-card-hover">
+              <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Explore & Compete</h3>
+              <p className="text-text-secondary text-sm">
                 Unlock achievements for visiting new stadiums and climb the leaderboard.
               </p>
             </div>
-            <div className="bg-surface p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 shadow-card-glow">
-              <LifeBuoy className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-3">Dedicated Support</h3>
-              <p className="text-text-secondary">
+            <div className="bg-surface p-6 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 shadow-card hover:shadow-card-hover">
+              <LifeBuoy className="w-12 h-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Dedicated Support</h3>
+              <p className="text-text-secondary text-sm">
                 Get rapid acknowledgment and resolution for your inquiries and feedback.
               </p>
             </div>
