@@ -9,7 +9,8 @@ import Filters from '@/components/Filters'; // Removed unused Header import
 import { ArrowUp, ArrowDown } from 'lucide-react'; // Import sorting icons
 
 // Define the keys we can sort the table by
-type SortableKeys = 'Position' | 'Team' | 'P' | 'W' | 'L' | 'D' | 'Points';
+// FIX: Changed 'P' to 'Pld'
+type SortableKeys = 'Position' | 'Team' | 'Pld' | 'W' | 'L' | 'D' | 'Points';
 
 const ResultsPage = () => {
   const [activeTab, setActiveTab] = useState('table');
@@ -33,8 +34,9 @@ const ResultsPage = () => {
       if (sortConfig !== null) {
         sortableItems.sort((a, b) => {
           // Ensure keys exist on the objects before comparing
-          const aValue = a[sortConfig.key];
-          const bValue = b[sortConfig.key];
+          // FIX: Use Pld for sorting
+          const aValue = sortConfig.key === 'Pld' ? a.Pld : a[sortConfig.key];
+          const bValue = sortConfig.key === 'Pld' ? b.Pld : b[sortConfig.key];
 
           if (aValue < bValue) {
             return sortConfig.direction === 'ascending' ? -1 : 1;
@@ -87,9 +89,10 @@ const ResultsPage = () => {
                     Team {getSortIcon('Team')}
                   </div>
                 </th>
-                <th className="py-4 px-2 text-center group" onClick={() => requestSort('P')}>
+                {/* FIX: Changed 'P' to 'Pld' */}
+                <th className="py-4 px-2 text-center group" onClick={() => requestSort('Pld')}>
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
-                    P {getSortIcon('P')}
+                    P {getSortIcon('Pld')}
                   </div>
                 </th>
                 <th className="py-4 px-2 text-center group" onClick={() => requestSort('W')}>
@@ -136,7 +139,8 @@ const ResultsPage = () => {
                       <span className="font-medium whitespace-nowrap">{team.Team}</span>
                     </div>
                   </td>
-                  <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.P}</td>
+                  {/* FIX: Changed team.P to team.Pld */}
+                  <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.Pld}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.W}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.L}</td>
                   <td className="py-3 px-2 text-center font-mono text-text-secondary">{team.D}</td>
