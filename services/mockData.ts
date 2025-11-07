@@ -1,5 +1,11 @@
-{
-  "teams": [
+// services/mockData.ts
+
+// Fix: Converted JSON to a TypeScript export.
+// The file was previously invalid JSON-like syntax in a .ts file.
+// Also transformed the `teams` array into an object `TEAMS` as expected
+// by app/teams/page.tsx and app/results/page.tsx.
+
+const teamsData = [
     {
       "id": "HKR",
       "name": "Hull Kingston Rovers",
@@ -248,5 +254,22 @@
       },
       "players": []
     }
-  ]
-}
+  ];
+
+// Create the TEAMS object as expected by the components
+export const TEAMS: { [key: string]: any } = teamsData.reduce((acc, team) => {
+  acc[team.id] = { ...team, logoUrl: `https://placehold.co/64x64/1a2c20/FFFFFF?text=${team.id}` };
+  return acc;
+}, {} as { [key: string]: any });
+
+
+// Add dummy exports for other variables imported in app/results/page.tsx
+// to prevent subsequent build failures.
+export const finalLeagueTable: any[] = [];
+export const selectedMatchResults: any[] = [];
+export const playoffResults = {
+  Eliminators: [],
+  SemiFinals: [],
+  GrandFinal: {}
+};
+export const mockFixtures: any[] = [];
