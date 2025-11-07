@@ -29,13 +29,7 @@ This project is a Next.js application integrated with Firebase. It provides user
 * **Achievements:** (`app/achievements/page.tsx`) A list of achievements, visually distinguishing between locked, unlocked, and in-progress items.
 * **Profile Page:** (`app/profile/page.tsx`) A protected route allowing users to view their email, update their display name, and upload a custom profile picture to Firebase Storage.
 
-### Firebase Integration
-* **Project ID:** `the-turnstile-89754200-c7f0b`.
-* **Authentication:** Firebase Auth is used for all user management.
-* **Firestore:** Used to store user-specific "match-logs" in a dedicated collection.
-* **Storage:** Firebase Storage is used to store user-uploaded profile pictures.
-
-## Current Request: Improve the UI and UX
+## Current Request: Fix Build Error
 
 **Completed Steps:**
 1.  **Fixed Dashboard Query:** Updated `app/dashboard/page.tsx` to query the correct `match-logs` Firestore collection instead of `matches`.
@@ -45,3 +39,4 @@ This project is a Next.js application integrated with Firebase. It provides user
 5.  **Themed Profile Button:** Changed the "Edit Profile" button in `app/components/profile/Profile-v2.tsx` from blue to the primary green color.
 6.  **Branded Auth Pages:** Added the app logo to `app/sign-in/page.tsx` and `app/sign-up/page.tsx` to improve brand trust.
 7.  **Improved Match Log Empty State:** Added a "No matches logged yet" message to the `app/match-log/client.tsx` component when the match list is empty.
+8.  **Fixed Build Error:** Resolved a `Module not found` error by renaming `lib/firebase/auth.tsx` to `lib/firebase/AuthContext.tsx` to prevent a name collision with the `auth` export from `lib/firebase.ts`. Updated imports in `app/layout.tsx`, `app/dashboard/page.tsx`, `app/sign-in/page.tsx`, and `app/profile/page.tsx`.
