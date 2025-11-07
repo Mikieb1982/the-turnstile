@@ -21,5 +21,9 @@
         "test-results/**"
       ]
     }
-  ]
+  ],
+  "functions": {
+    "source": "functions",
+    "runtime": "python310"
+  }
 }
