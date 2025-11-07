@@ -1,5 +1,5 @@
 // app/dashboard/page.tsx
-'use client'; // <-- ADDED 'use client'
+'use client';
 
 import WelcomeCard from '@/components/WelcomeCard';
 import StatsDashboard from '@/components/StatsDashboard';
@@ -9,20 +9,36 @@ import ActionButton from '@/components/ActionButton';
 import TeamBadge from '@/components/TeamBadge';
 import RecentMatchesTable from '@/components/RecentMatchesTable';
 import Link from 'next/link';
-import { useAuth } from '@/lib/firebase/AuthContext'; // <-- IMPORT THE HOOK
-import { useEffect, useState } from 'react'; // Keep useEffect/useState for match data
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { useAuth } from '@/lib/firebase/AuthContext';
+import { useEffect, useState } from 'react';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Match } from '@/types'; // Import your Match type
+// No longer importing Match from '@/types' to avoid conflict
+
+// Define the shape of the data expected by RecentMatchesTable
+interface LoggedMatch {
+  id: string;
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number;
+  awayScore: number;
+  date: string;
+}
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth(); // Use the auth hook
-  const [matches, setMatches] = useState<Match[]>([]);
+  const { user, loading } = useAuth();
+  const [matches, setMatches] = useState<LoggedMatch[]>([]); // Use the correct local type
   const [isLoadingMatches, setIsLoadingMatches] = useState(true);
 
-  // Mock data - replace with real data
+  // Mock data for stats (replace with real data later)
   const userData = {
-    name: user?.displayName || 'Fan', // Use user's name
+    name: user?.displayName || 'Fan',
     matchesAttended: 24,
     teamsVisited: 8,
     venuesVisited: 12,
@@ -38,14 +54,28 @@ export default function DashboardPage() {
         setIsLoadingMatches(true);
         try {
           const q = query(
-            collection(db, 'match-logs'), // Query the correct collection
+            collection(db, 'match-logs'),
             where('userId', '==', user.uid),
+            orderBy('date', 'desc'), // Order by date
           );
           const querySnapshot = await getDocs(q);
-          const fetchedMatches = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Match[];
+
+          // Transform Firestore data to match what RecentMatchesTable expects
+          const fetchedMatches: LoggedMatch[] = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            const [homeScoreStr, awayScoreStr] = (data.score || '0-0').split(
+              '-',
+            );
+            return {
+              id: doc.id,
+              homeTeam: data.homeTeam,
+              awayTeam: data.awayTeam,
+              date: data.date, // This is already a string
+              homeScore: parseInt(homeScoreStr, 10) || 0,
+              awayScore: parseInt(awayScoreStr, 10) || 0,
+            };
+          });
+
           setMatches(fetchedMatches);
         } catch (error) {
           console.error('Error fetching matches: ', error);
@@ -54,10 +84,9 @@ export default function DashboardPage() {
       };
       fetchMatches();
     } else if (!loading) {
-      // User is not logged in and auth is not loading
       setIsLoadingMatches(false);
     }
-  }, [user, loading]); // Rerun when user or loading state changes
+  }, [user, loading]);
 
   // Mock data for display components
   const recentMatchesMock = [
@@ -88,21 +117,20 @@ export default function DashboardPage() {
     { name: 'Hull FC', visited: false },
   ];
 
-  // Show a loading state while auth is resolving
   if (loading) {
-    return <div>Loading user...</div>; // Or return your <Loading /> component
+    return <div>Loading user...</div>; // You can replace this with your main Loading component
   }
 
-  // If no user, you could redirect or show a login prompt
   if (!user) {
     return (
-      <div>
-        Please <Link href="/sign-in">sign in</Link> to see your dashboard.
+      <div className="text-center">
+        <p>
+          Please <Link href="/sign-in">sign in</Link> to see your dashboard.
+        </p>
       </div>
     );
   }
 
-  // User is loaded
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
