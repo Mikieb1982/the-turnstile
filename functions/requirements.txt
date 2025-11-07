@@ -1,0 +1,8 @@
+# Required by Firebase for Python functions
+functions-framework==3.*
+
+# Required to make HTTP requests (to GitHub API)
+requests==2.*
+
+# Required to call the Gemini API via Vertex AI
+google-cloud-aiplatform==1.*
