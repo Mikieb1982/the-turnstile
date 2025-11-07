@@ -1,34 +1,42 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
-import { Roboto, Teko } from 'next/font/google'; 
+import { Roboto, Teko } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/navbar';
 import Header from '@/components/Header';
-import { AuthProvider } from '@/lib/firebase/auth';
+import { AuthProvider } from '@/lib/firebase/AuthContext';
 
 const roboto = Roboto({
-  weight: ['400', '500'], 
+  weight: ['400', '500'],
   subsets: ['latin'],
-  variable: '--font-roboto', 
+  variable: '--font-roboto',
 });
 
 const teko = Teko({
-  weight: ['400', '500', '600', '700'], 
+  weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-teko', 
+  variable: '--font-teko',
 });
 
 export const metadata: Metadata = {
   title: 'The Turnstile',
-  description: 'Your ultimate companion for tracking every Super League match you attend. Log your history, unlock achievements, and view your stats.',
+  description:
+    'Your ultimate companion for tracking every Super League match you attend. Log your history, unlock achievements, and view your stats.',
   icons: '/favicon.png',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`dark ${roboto.variable} ${teko.variable}`}> 
+    <html lang="en" className={`dark ${roboto.variable} ${teko.variable}`}>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          rel="stylesheet"
+        />
       </head>
       <body className="font-body bg-background text-text-primary">
         <AuthProvider>
