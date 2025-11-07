@@ -267,7 +267,9 @@ export const TEAMS: { [key: string]: any } = teamsData.reduce((acc, team) => {
 // to prevent subsequent build failures.
 export const finalLeagueTable: any[] = [];
 export const selectedMatchResults: any[] = [];
-export const playoffResults = {
+
+// FIX: Added explicit type to prevent TypeScript from inferring 'never[]'
+export const playoffResults: { Eliminators: any[]; SemiFinals: any[]; GrandFinal: any } = {
   Eliminators: [],
   SemiFinals: [],
   GrandFinal: {}
