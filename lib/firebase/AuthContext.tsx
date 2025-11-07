@@ -1,11 +1,11 @@
 'use client';
 
-import { 
-  createContext, 
-  useContext, 
-  useEffect, 
-  useState, 
-  ReactNode 
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
 } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase'; // Import from your main firebase.ts
@@ -17,9 +17,9 @@ interface AuthContextType {
 }
 
 // Create the context
-const AuthContext = createContext<AuthContextType>({ 
-  user: null, 
-  loading: true 
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
 });
 
 // Create the Provider component
@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // This is the central listener
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       setUser(user);
       setLoading(false);
     });
