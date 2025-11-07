@@ -7,57 +7,76 @@ from typing import Dict
 
 import functions_framework
 import requests
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part
 
 # --- Firebase Environment Configuration ---
-# These values should be configured via Firebase environment configuration or
-# Google Secret Manager and exposed as environment variables when the function
-# runs in production.
 GITHUB_API_TOKEN = os.environ.get("GITHUB_TOKEN")
 GITHUB_REPO_OWNER = os.environ.get("GITHUB_REPO_OWNER")
 GITHUB_REPO_NAME = os.environ.get("GITHUB_REPO_NAME")
 GITHUB_DEFAULT_BRANCH = os.environ.get("GITHUB_DEFAULT_BRANCH", "main")
+GCP_PROJECT = os.environ.get("GCP_PROJECT")
+GCP_REGION = os.environ.get("GCP_REGION", "us-central1")
 
 
-# --- External AI Service (Conceptual) ---
-def call_external_ai_for_code(natural_language_command: str) -> Dict[str, str]:
-    """Simulates a call to an external AI model that returns generated code."""
-    print(f"Calling external AI for command: '{natural_language_command}'")
-
-    simulated_ai_output = {
-        "src/new_feature_firebase.py": f"""
-# AI-generated Python code for Firebase environment
-def calculate_firebase_value(data):
-    # Logic based on AI command: {natural_language_command}
-    print("Calculating Firebase value for:", data)
-    return len(data) * 20 # A different calculation for Firebase!
-
-def greet_from_firebase():
-    return "Hello from Firebase AI-generated code!"
-""",
-        "src/main.py": f"""
-import new_feature_firebase
-
-def run_firebase_app():
-    print("Firebase application starting...")
-    sample_data = [10, 20]
-    result = new_feature_firebase.calculate_firebase_value(sample_data)
-    print(f"Firebase AI feature calculated result: {{result}}")
-    print(new_feature_firebase.greet_from_firebase())
-
-# This would typically not be executed directly in a Cloud Function context
-# but shown for clarity of AI-generated content.
-if __name__ == "__main__":
-    run_firebase_app()
-""",
+# --- Vertex AI Gemini API ---
+def call_gemini_for_code(natural_language_command: str) -> Dict[str, str]:
+    """Calls Gemini 2.5 Pro to generate file content based on a command."""
+    print(f"Initializing Vertex AI for project {GCP_PROJECT} in {GCP_REGION}...")
+    vertexai.init(project=GCP_PROJECT, location=GCP_REGION)
+    
+    # Use gemini-2.5-pro as specified in the strategy document
+    model = GenerativeModel("gemini-2.5-pro-preview-09-2025")
+    
+    # This prompt is engineered to get code back in a structured JSON format.
+    system_prompt = """
+    You are an expert full-stack developer for a Next.js 14 (App Router) / Firebase / TailwindCSS project.
+    The user will give you a command to modify the codebase.
+    You MUST respond with only a single, valid JSON object.
+    The JSON object must have a single key, "files", which is an object.
+    Each key in the "files" object is the full relative filepath (e.g., "app/page.tsx" or "components/Badge.tsx").
+    The value for each key is the complete, new source code for that file as a single string.
+    Do not use markdown, backticks, or any other formatting.
+    Only output the raw JSON.
+    
+    Example for "add a new about page":
+    {
+      "files": {
+        "app/about/page.tsx": "export default function AboutPage() {\\n  return (\\n    <div>\\n      <h1>About Us</h1>\\n    </div>\\n  );\\n}"
+      }
     }
-    return simulated_ai_output
+    """
+    
+    print(f"Calling Gemini with command: '{natural_language_command}'")
+    
+    response = model.generate_content(
+        [
+            Part.from_text(system_prompt),
+            Part.from_text(f"User command: {natural_language_command}")
+        ]
+    )
+    
+    text_response = response.candidates[0].content.parts[0].text
+    print(f"Raw Gemini response: {text_response}")
+    
+    try:
+        # Parse the JSON response
+        data = json.loads(text_response)
+        if "files" in data and isinstance(data["files"], dict):
+            return data["files"]
+        else:
+            print("Error: AI response was valid JSON but lacked the 'files' object.")
+            return {"error.txt": f"AI response was valid JSON but lacked the 'files' object: {text_response}"}
+    except json.JSONDecodeError:
+        print(f"Error: AI response was not valid JSON: {text_response}")
+        return {"error.txt": f"AI response was not valid JSON: {text_response}"}
 
 
 # --- GitHub API Interactions ---
 def github_api_request(method: str, path: str, data: Dict | None = None) -> Dict:
     """Helper to make authenticated GitHub API requests."""
     if not (GITHUB_API_TOKEN and GITHUB_REPO_OWNER and GITHUB_REPO_NAME):
-        raise ValueError("GitHub repository configuration is missing.")
+        raise ValueError("GitHub repository configuration is missing. Set GITHUB_TOKEN, GITHUB_REPO_OWNER, and GITHUB_REPO_NAME secrets.")
 
     url = f"https://api.github.com/repos/{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}{path}"
     headers = {
@@ -142,17 +161,39 @@ def ai_devops_agent(request):
     """Entry point for the AI-driven DevOps workflow."""
     print("AI DevOps Agent Cloud Function triggered.")
 
+    # --- ADDED: CORS headers to allow requests from your website ---
+    if request.method == 'OPTIONS':
+        # Allows GET, POST, and OPTIONS methods from any origin.
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '3600'
+        }
+        return ('', 204, headers)
+
+    # Set CORS headers for the main request
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    # --- END ADDITION ---
+
     request_json = request.get_json(silent=True)
     if not request_json or "command" not in request_json:
-        return {"error": "Invalid request: 'command' not found in JSON body."}, 400
+        # Pass headers to the error response
+        return ({"error": "Invalid request: 'command' not found in JSON body."}, 400, headers)
 
     natural_language_command = request_json["command"]
     print(f"Received command: '{natural_language_command}'")
 
     try:
-        ai_generated_files = call_external_ai_for_code(natural_language_command)
+        # --- MODIFIED: Call the REAL Gemini function ---
+        ai_generated_files = call_gemini_for_code(natural_language_command)
+        # --- END MODIFICATION ---
+        
         if not ai_generated_files:
-            return {"message": "AI did not generate any files."}, 200
+            # Pass headers to the success response
+            return ({"message": "AI did not generate any files."}, 200, headers)
 
         new_branch_name = f"ai-feat-{uuid.uuid4().hex[:8]}"
         commit_message = f"feat(ai): {natural_language_command[:70]}..."
@@ -185,19 +226,24 @@ def ai_devops_agent(request):
         print("GitHub Actions (or similar CI) will automatically run tests/builds on the new Pull Request.")
         print(f"Review the PR at: {pr_url}")
 
-        return {
+        response_data = {
             "message": "AI DevOps workflow initiated successfully.",
             "pull_request_url": pr_url,
             "generated_files_on_branch": file_urls,
             "new_branch": new_branch_name,
-        }, 200
+        }
+        # Pass headers to the final success response
+        return (response_data, 200, headers)
 
     except requests.exceptions.HTTPError as exc:
         print(f"GitHub API Error: {exc.response.status_code} - {exc.response.text}")
-        return {"error": f"Failed to interact with GitHub API: {exc.response.text}"}, exc.response.status_code
+        # Pass headers to the error response
+        return ({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, exc.response.status_code, headers)
     except ValueError as exc:
         print(f"Configuration Error: {exc}")
-        return {"error": str(exc)}, 500
+         # Pass headers to the error response
+        return ({"error": str(exc)}, 500, headers)
     except Exception as exc:  # pragma: no cover - defensive
         print(f"An unexpected error occurred: {exc}")
-        return {"error": f"An unexpected error occurred: {exc}"}, 500
+         # Pass headers to the error response
+        return ({"error": f"An unexpected error occurred: {exc}"}, 500, headers)
