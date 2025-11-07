@@ -22,8 +22,16 @@
       ]
     }
   ],
-  "functions": {
-    "source": "functions",
-    "runtime": "python312"
-  }
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "python312",
+      "ignore": [
+        "venv",
+        ".git",
+        "__pycache__"
+      ]
+    }
+  ]
 }
