@@ -2,11 +2,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useAuth } from '@/lib/firebase/auth';
+import { useAuth } from '@/lib/firebase/AuthContext';
 import ProfileClientPage from './ProfileClientPage';
 import Loading from '../loading';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, doc, getDoc, orderBy, query } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { TeamInfo, User as FirestoreUser } from '@/types';
 
@@ -43,7 +50,7 @@ export default function ProfilePage() {
             setProfile({}); // No profile exists yet, pass empty object
           }
         } catch (error) {
-          console.error("Error fetching profile data:", error);
+          console.error('Error fetching profile data:', error);
           setProfile({}); // Set empty profile on error
         } finally {
           setLoadingData(false);
@@ -65,7 +72,9 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-text-primary">
-        <h1 className="font-display text-4xl font-bold mb-4">You are not logged in.</h1>
+        <h1 className="font-display text-4xl font-bold mb-4">
+          You are not logged in.
+        </h1>
         <p className="font-body text-lg text-center text-text-secondary mb-8">
           Please sign in to view and edit your profile.
         </p>
