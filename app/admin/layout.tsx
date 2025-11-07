@@ -69,6 +69,7 @@ export default function AdminLayout({
             <Link href="/admin" className="font-body text-lg text-gray-300 hover:text-primary transition-colors">Dashboard</Link>
             <Link href="/admin/teams" className="font-body text-lg text-gray-300 hover:text-primary transition-colors">Teams</Link>
             <Link href="/admin/fixtures" className="font-body text-lg text-gray-300 hover:text-primary transition-colors">Fixtures & Results</Link>
+            <Link href="/admin/agent" className="font-body text-lg text-gray-300 hover:text-primary transition-colors">Agent</Link>
         </nav>
         <div>
             {children}
