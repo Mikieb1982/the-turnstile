@@ -26,12 +26,15 @@
     {
       "source": "functions",
       "codebase": "default",
-      "runtime": "nodejs18",
+      "runtime": "python312",
       "ignore": [
         "venv",
         ".git",
         "__pycache__"
-      ]
+      ],
+      "runWith": {
+        "gen": 2
+      }
     }
   ]
 }
