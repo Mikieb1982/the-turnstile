@@ -4,15 +4,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { 
-  X, 
-  LogOut, 
-  UserCircle, 
-  LayoutDashboard, 
-  Trophy, 
-  CalendarDays, 
+import {
+  X,
+  LogOut,
+  UserCircle,
+  LayoutDashboard,
+  Trophy,
+  CalendarDays,
   BarChart3,
-  Shield 
+  Shield,
+  Info, // <-- 1. Import the icon
 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -29,8 +30,9 @@ const navigation = [
   { name: 'Fixtures', href: '/fixtures', icon: CalendarDays },
   { name: 'Achievements', href: '/achievements', icon: Trophy },
   { name: 'Profile', href: '/profile', icon: UserCircle },
-  { name: 'Match Log', href: '/match-log', icon: CalendarDays }, 
+  { name: 'Match Log', href: '/match-log', icon: CalendarDays },
   { name: 'Teams', href: '/teams', icon: Shield },
+  { name: 'About Us', href: '/about', icon: Info }, // <-- 2. Add the link here
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
@@ -97,7 +99,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           {/* Navigation */}
           <div className="flex-1 p-4">
             <nav className="flex flex-col gap-2">
-              {navigation.map((item) => {
+              {navigation.map(item => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
@@ -112,7 +114,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   >
                     <item.icon className="h-6 w-6" />
                     {item.name}
-                  </Link>
+                  </SameSite-Strict-Lax>
                 );
               })}
             </nav>
