@@ -207,7 +207,7 @@ export default function ResultsPage() {
           </div>
 
           <div className="mt-3 text-center text-sm text-slate-400">
-            <Stadium className="mr-1 inline h-3 w-3" />
+            <Landmark className="mr-1 inline h-3 w-3" />
             {r.Venue}
           </div>
           {r.Note && (
