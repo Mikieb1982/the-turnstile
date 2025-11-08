@@ -180,7 +180,7 @@ def ai_devops_agent(request):
     request_json = request.get_json(silent=True)
     if not request_json or "command" not in request_json:
         # Pass headers to the error response
-        return ({"error": "Invalid request: 'command' not found in JSON body."}, 400, headers)
+        return ({"error": "Invalid request: 'command' not found in JSON body."}, 400)
 
     natural_language_command = request_json["command"]
     print(f"Received command: '{natural_language_command}'")
@@ -192,7 +192,7 @@ def ai_devops_agent(request):
         
         if not ai_generated_files:
             # Pass headers to the success response
-            return ({"message": "AI did not generate any files."}, 200, headers)
+            return ({"message": "AI did not generate any files."}, 200)
 
         new_branch_name = f"ai-feat-{uuid.uuid4().hex[:8]}"
         commit_message = f"feat(ai): {natural_language_command[:70]}..."
@@ -232,17 +232,17 @@ def ai_devops_agent(request):
             "new_branch": new_branch_name,
         }
         # Pass headers to the final success response
-        return (response_data, 200, headers)
+        return (response_data, 200)
 
     except requests.exceptions.HTTPError as exc:
         print(f"GitHub API Error: {exc.response.status_code} - {exc.response.text}")
         # Pass headers to the error response
-        return ({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, exc.response.status_code, headers)
+        return ({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, exc.response.status_code)
     except ValueError as exc:
         print(f"Configuration Error: {exc}")
          # Pass headers to the error response
-        return ({"error": str(exc)}, 500, headers)
+        return ({"error": str(exc)}, 500)
     except Exception as exc:  # pragma: no cover - defensive
         print(f"An unexpected error occurred: {exc}")
          # Pass headers to the error response
-        return ({"error": f"An unexpected error occurred: {exc}"}, 500, headers)
+        return ({"error": f"An unexpected error occurred: {exc}"}, 500)
