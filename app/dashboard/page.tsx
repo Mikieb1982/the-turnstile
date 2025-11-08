@@ -1,16 +1,8 @@
 // app/dashboard/page.tsx
 'use client';
 
-import WelcomeCard from '@/components/WelcomeCard';
-import StatsDashboard from '@/components/StatsDashboard';
-import MatchCard from '@/components/MatchCard';
-import SeasonProgress from '@/components/SeasonProgress';
-import ActionButton from '@/components/ActionButton';
-import TeamBadge from '@/components/TeamBadge';
-import RecentMatchesTable from '@/components/RecentMatchesTable';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/lib/firebase/AuthContext';
-import { useEffect, useState } from 'react';
 import {
   collection,
   query,
@@ -19,9 +11,18 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-// No longer importing Match from '@/types' to avoid conflict
+import { useAuth } from '@/lib/firebase/AuthContext';
+import Loading from '@/app/loading';
 
-// Define the shape of the data expected by RecentMatchesTable
+/* --- components --- */
+import WelcomeCard from '@/components/WelcomeCard';
+import StatsDashboard from '@/components/StatsDashboard';
+import SeasonProgress from '@/components/SeasonProgress';
+import RecentMatchesTable from '@/components/RecentMatchesTable';
+import TeamBadge from '@/components/TeamBadge';
+import ActionButton from '@/components/ActionButton';
+
+/* ---------- types ---------- */
 interface LoggedMatch {
   id: string;
   homeTeam: string;
@@ -31,12 +32,13 @@ interface LoggedMatch {
   date: string;
 }
 
+/* ---------- page ---------- */
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
-  const [matches, setMatches] = useState<LoggedMatch[]>([]); // Use the correct local type
+  const { user, loading: authLoading } = useAuth();
+  const [matches, setMatches] = useState<LoggedMatch[]>([]);
   const [isLoadingMatches, setIsLoadingMatches] = useState(true);
 
-  // Mock data for stats (replace with real data later)
+  /* ---- mock stats ---- */
   const userData = {
     name: user?.displayName || 'Fan',
     matchesAttended: 24,
@@ -47,152 +49,153 @@ export default function DashboardPage() {
     totalWeeks: 27,
   };
 
-  // Fetch matches from Firestore
+  /* ---- fetch matches ---- */
   useEffect(() => {
-    if (user) {
-      const fetchMatches = async () => {
-        setIsLoadingMatches(true);
-        try {
-          const q = query(
-            collection(db, 'match-logs'),
-            where('userId', '==', user.uid),
-            orderBy('date', 'desc'), // Order by date
-          );
-          const querySnapshot = await getDocs(q);
-
-          // Transform Firestore data to match what RecentMatchesTable expects
-          const fetchedMatches: LoggedMatch[] = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            const [homeScoreStr, awayScoreStr] = (data.score || '0-0').split(
-              '-',
-            );
-            return {
-              id: doc.id,
-              homeTeam: data.homeTeam,
-              awayTeam: data.awayTeam,
-              date: data.date, // This is already a string
-              homeScore: parseInt(homeScoreStr, 10) || 0,
-              awayScore: parseInt(awayScoreStr, 10) || 0,
-            };
-          });
-
-          setMatches(fetchedMatches);
-        } catch (error) {
-          console.error('Error fetching matches: ', error);
-        }
-        setIsLoadingMatches(false);
-      };
-      fetchMatches();
-    } else if (!loading) {
-      setIsLoadingMatches(false);
+    if (!user) {
+      if (!authLoading) setIsLoadingMatches(false);
+      return;
     }
-  }, [user, loading]);
 
-  // Mock data for display components
-  const recentMatchesMock = [
-    {
-      homeTeam: 'Wigan Warriors',
-      awayTeam: 'St Helens',
-      homeScore: 24,
-      awayScore: 18,
-      date: '15 Oct 2024',
-      venue: 'DW Stadium',
-      attended: true,
-    },
-    {
-      homeTeam: 'Leeds Rhinos',
-      awayTeam: 'Hull FC',
-      homeScore: 32,
-      awayScore: 16,
-      date: '08 Oct 2024',
-      venue: 'Headingley Stadium',
-      attended: true,
-    },
-  ];
+    (async () => {
+      setIsLoadingMatches(true);
+      try {
+        const q = query(
+          collection(db, 'match-logs'),
+          where('userId', '==', user.uid),
+          orderBy('date', 'desc')
+        );
+        const snap = await getDocs(q);
+        const fetched: LoggedMatch[] = snap.docs.map((doc) => {
+          const d = doc.data();
+          const [homeScoreStr, awayScoreStr] = (d.score || '0-0').split('-');
+          return {
+            id: doc.id,
+            homeTeam: d.homeTeam,
+            awayTeam: d.awayTeam,
+            date: d.date,
+            homeScore: parseInt(homeScoreStr, 10) || 0,
+            awayScore: parseInt(awayScoreStr, 10) || 0,
+          };
+        });
+        setMatches(fetched);
+      } catch (e) {
+        console.error('Fetch matches error:', e);
+      } finally {
+        setIsLoadingMatches(false);
+      }
+    })();
+  }, [user, authLoading]);
 
-  const teams = [
-    { name: 'Wigan', visited: true },
-    { name: 'St Helens', visited: true },
-    { name: 'Leeds', visited: true },
-    { name: 'Hull FC', visited: false },
-  ];
-
-  if (loading) {
-    return <div>Loading user...</div>; // You can replace this with your main Loading component
-  }
-
-  if (!user) {
+  /* ---- auth guards ---- */
+  if (authLoading) return <Loading />;
+  if (!user)
     return (
       <div className="text-center">
-        <p>
-          Please <Link href="/sign-in">sign in</Link> to see your dashboard.
-        </p>
+        Please{' '}
+        <Link href="/sign-in" className="text-emerald-400 hover:underline">
+          sign in
+        </Link>{' '}
+        to see your dashboard.
       </div>
     );
-  }
 
+  /* ---- render ---- */
   return (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <WelcomeCard userName={userData.name} />
-
-      {/* Stats Grid */}
-      <StatsDashboard
-        matchesAttended={userData.matchesAttended}
-        teamsVisited={userData.teamsVisited}
-        venuesVisited={userData.venuesVisited}
-        consecutiveWeeks={userData.consecutiveWeeks}
+    <main className="relative isolate min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-6 py-16 sm:py-24">
+      {/* subtle glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 left-1/2 -z-10
+                        h-[30rem] w-[60rem] -translate-x-1/2 rounded-full
+                        bg-emerald-500/10 blur-3xl dark:bg-emerald-500/20"
       />
 
-      {/* Season Progress */}
-      <SeasonProgress
-        currentWeek={userData.currentWeek}
-        totalWeeks={userData.totalWeeks}
-        matchesAttended={userData.matchesAttended}
-      />
+      <div className="mx-auto max-w-7xl space-y-10">
+        {/* welcome */}
+        <WelcomeCard userName={userData.name} />
 
-      {/* Recent Matches Section - Now uses real data */}
-      <section>
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="font-display text-display-md text-text-primary uppercase tracking-wide">
-            Recent Matches
+        {/* stats */}
+        <StatsDashboard
+          matchesAttended={userData.matchesAttended}
+          teamsVisited={userData.teamsVisited}
+          venuesVisited={userData.venuesVisited}
+          consecutiveWeeks={userData.consecutiveWeeks}
+        />
+
+        {/* season progress */}
+        <SeasonProgress
+          currentWeek={userData.currentWeek}
+          totalWeeks={userData.totalWeeks}
+          matchesAttended={userData.matchesAttended}
+        />
+
+        {/* recent matches */}
+        <section>
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              Recent Matches
+            </h2>
+            <Link href="/match-log">
+              <ActionButton variant="accent" size="sm">
+                Log Match
+              </ActionButton>
+            </Link>
+          </div>
+
+          <Suspense fallback={<MatchesSkeleton />}>
+            <RecentMatchesTable matches={matches} />
+          </Suspense>
+        </section>
+
+        {/* team collection */}
+        <section className="rounded-2xl bg-white/60 p-6 shadow-lg ring-1
+                             ring-slate-900/5 backdrop-blur dark:bg-slate-800/60
+                             dark:ring-white/10">
+          <h2 className="font-display text-2xl font-semibold tracking-tight
+                         text-slate-900 dark:text-white">
+            Your Team Collection
           </h2>
-          <Link href="/match-log" legacyBehavior>
-            <ActionButton variant="accent" size="sm" icon="add">
-              Log Match
-            </ActionButton>
-          </Link>
-        </div>
 
-        {/* Use the RecentMatchesTable component */}
-        <RecentMatchesTable matches={matches} />
-      </section>
+          <div className="mt-6 grid grid-cols-4 gap-6 sm:grid-cols-6 lg:grid-cols-8">
+            {/* mock badges – replace with real data */}
+            {[
+              { name: 'Wigan', visited: true },
+              { name: 'St Helens', visited: true },
+              { name: 'Leeds', visited: true },
+              { name: 'Hull FC', visited: false },
+            ].map((t) => (
+              <TeamBadge
+                key={t.name}
+                teamName={t.name}
+                visited={t.visited}
+                size="md"
+              />
+            ))}
+          </div>
 
-      {/* Teams Collection */}
-      <section className="bg-card rounded-lg p-6 shadow-card">
-        <h2 className="font-display text-display-md text-text-primary uppercase tracking-wide mb-6">
-          Your Team Collection
-        </h2>
+          <div className="mt-6 text-center">
+            <Link href="/teams">
+              <ActionButton variant="ghost" size="sm">
+                View All Teams
+              </ActionButton>
+            </Link>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}
 
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
-          {teams.map((team, index) => (
-            <TeamBadge
-              key={index}
-              teamName={team.name}
-              visited={team.visited}
-              size="md"
-            />
-          ))}
-        </div>
-
-        <div className="mt-6 text-center">
-          <Link href="/teams" legacyBehavior>
-            <ActionButton variant="ghost" size="sm">
-              View All Teams
-            </ActionButton>
-          </Link>
-        </div>
-      </section>
+/* ---------- skeleton ---------- */
+function MatchesSkeleton() {
+  return (
+    <div className="space-y-3">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="h-20 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-700"
+        />
+      ))}
     </div>
   );
 }
