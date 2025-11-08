@@ -3,12 +3,8 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/firebase/AuthContext';
 import Loading from '@/app/loading';
-import { Send, GitPullRequest } from 'lucide-react';
+import { Send, GitPullRequest, Bot, Sparkles } from 'lucide-react';
 
-// --- IMPORTANT ---
-// 1. Deploy your 'ai_devops_agent' function from the `functions/` directory:
-//    firebase deploy --only functions
-// 2. Get the URL from the Firebase console and paste it here.
 const CLOUD_FUNCTION_URL =
   'https://your-function-url.a.run.app/ai_devops_agent';
 
@@ -46,17 +42,13 @@ export default function AgentCockpitPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`, // Pass auth token
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({ command }),
       });
 
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'The agent failed to execute the command.');
-      }
-
+      if (!response.ok) throw new Error(data.error || 'Agent failed.');
       setResult(data);
     } catch (err: any) {
       setResult({ error: err.message });
@@ -65,76 +57,118 @@ export default function AgentCockpitPage() {
     }
   };
 
-  if (authLoading) {
-    return <Loading />;
-  }
+  if (authLoading) return <Loading />;
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h2 className="text-3xl font-bold text-text-primary mb-4">
-        DevOps Agent Cockpit
-      </h2>
-      <p className="text-text-secondary mb-6">
-        Issue commands to the AI DevOps agent. The agent will get instructions
-        from Gemini 2.5 Pro, write code, and open a Pull Request on GitHub.
-      </p>
+    <main className="relative isolate min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black px-6 py-16 sm:py-24">
+      {/* animated background grid */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10
+                        bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),
+                             linear-gradient(to_bottom,#8080800a_1px,transparent_1px)]
+                        bg-[size:14px_24px]"
+      />
 
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4">
-          <textarea
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
-            placeholder="e.g., 'Create a new badge for attending 5 matches'"
-            className="w-full h-32 bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary text-white"
-            disabled={isLoading}
-          />
+      <div className="mx-auto max-w-3xl">
+        <header className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30">
+            <Bot className="h-8 w-8" />
+          </div>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            DevOps Agent Cockpit
+          </h1>
+          <p className="mt-3 text-lg leading-8 text-slate-400">
+            Issue a single sentence and watch AI write, commit and open a PR.
+          </p>
+        </header>
+
+        <form onSubmit={handleSubmit} className="mt-12">
+          <div className="group relative">
+            <Sparkles className="pointer-events-none absolute left-4 top-4 h-5 w-5 text-slate-500 group-focus-within:text-emerald-400" />
+            <textarea
+              value={command}
+              onChange={(e) => setCommand(e.target.value)}
+              placeholder="e.g. Create a new badge for attending 5 matches"
+              required
+              rows={4}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-800/60
+                         py-4 pl-12 pr-4 text-white placeholder-slate-400
+                         ring-1 ring-transparent transition
+                         focus:outline-none focus:ring-emerald-400
+                         dark:bg-slate-800/60 dark:border-slate-700"
+              disabled={isLoading}
+            />
+          </div>
+
           <button
             type="submit"
             disabled={isLoading || !command}
-            className="flex items-center justify-center w-full bg-primary hover:bg-green-600 text-background-dark font-bold py-3 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 disabled:bg-gray-600 disabled:opacity-50"
+            className="mt-4 flex w-full items-center justify-center
+                       rounded-2xl bg-emerald-500 px-4 py-3 font-semibold
+                       text-slate-900 shadow-lg shadow-emerald-500/20
+                       transition-transform hover:scale-[1.02]
+                       disabled:scale-100 disabled:cursor-not-allowed
+                       disabled:bg-slate-700 disabled:text-slate-400
+                       disabled:shadow-none"
           >
             {isLoading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-background-dark"></div>
+              <>
+                <div className="mr-2 h-5 w-5 animate-spin rounded-full
+                                border-2 border-slate-900 border-t-transparent" />
+                Agent is working…
+              </>
             ) : (
               <>
-                <Send className="w-5 h-5 mr-2" />
-                Execute Command
+                <Send className="mr-2 h-5 w-5" />
+                Send Command
               </>
             )}
           </button>
-        </div>
-      </form>
+        </form>
 
-      {result && (
-        <div className="mt-8 bg-gray-800 p-6 rounded-lg shadow-lg">
-          <h3 className="text-xl font-bold text-white mb-4">Agent Response</h3>
-          {result.pull_request_url && (
-            <div className="space-y-3">
-              <p className="text-green-400">
-                Success! The agent has created a new branch:
-                <strong className="ml-2">{result.new_branch}</strong>
-              </p>
-              <a
-                href={result.pull_request_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
-              >
-                <GitPullRequest className="w-5 h-5 mr-2" />
-                Review Pull Request on GitHub
-              </a>
-            </div>
-          )}
-          {result.error && (
-            <div>
-              <p className="text-red-400 font-bold">An error occurred:</p>
-              <pre className="text-red-300 bg-gray-900 p-3 rounded-md mt-2 overflow-x-auto">
-                {result.error}
-              </pre>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+        {result && (
+          <section className="mt-10 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+            <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-white">
+              <GitPullRequest className="h-5 w-5 text-emerald-400" />
+              Agent Response
+            </h2>
+
+            {result.pull_request_url && (
+              <div className="mt-4 space-y-3">
+                <p className="text-sm text-slate-300">
+                  ✅ Branch{" "}
+                  <code className="rounded bg-slate-800 px-2 py-1 text-emerald-300">
+                    {result.new_branch}
+                  </code>{" "}
+                  created and pull request opened.
+                </p>
+                <a
+                  href={result.pull_request_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl
+                             bg-slate-800 px-4 py-2 text-sm font-medium
+                             text-white ring-1 ring-white/10
+                             hover:bg-slate-700 transition"
+                >
+                  Review on GitHub
+                  <Send className="h-4 w-4" />
+                </a>
+              </div>
+            )}
+
+            {result.error && (
+              <div className="mt-4 rounded-xl bg-red-500/10 p-4 ring-1 ring-red-500/20">
+                <p className="text-sm font-semibold text-red-300">Error</p>
+                <pre className="mt-2 whitespace-pre-wrap text-sm text-red-200">
+                  {result.error}
+                </pre>
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+    </main>
   );
 }
