@@ -1,4 +1,4 @@
-# Required by Firebase for Python functions
+# Required by Firebase for Python functions (2nd Gen)
 firebase-functions>=0.2.0
 
 # Required to make HTTP requests (to GitHub API)
