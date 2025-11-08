@@ -6,12 +6,9 @@ import Image from 'next/image';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile, User as AuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { updateUserProfile, ProfileFormState } from './actions';
-import { TeamInfo, User as FirestoreUser } from '@/types';
-
-const storage = getStorage();
+import { TeamInfo, User as FirestoreUser } from '@//types';
 
 type Team = TeamInfo & { id: string };
 
@@ -21,166 +18,190 @@ interface ProfileClientPageProps {
   teams: Team[];
 }
 
+/* ---------- submit button ---------- */
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
       disabled={pending}
-      className="bg-primary hover:bg-green-600 text-background font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
+      className="w-full rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold
+                 text-slate-900 shadow-lg shadow-emerald-500/20 transition
+                 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
     >
-      {pending ? 'Saving...' : 'Save Profile'}
+      {pending ? 'Saving…' : 'Save Profile'}
     </button>
   );
 }
 
+/* ---------- component ---------- */
 export default function ProfileClientPage({
   user,
   profile,
   teams,
 }: ProfileClientPageProps) {
-  // State for image URL and upload status
   const [photoURL, setPhotoURL] = useState(
-    user.photoURL || '/user-placeholder.png',
+    user.photoURL || '/user-placeholder.png'
   );
   const [uploading, setUploading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Form action state
-  const initialState: ProfileFormState = { message: '', success: false };
-  const [state, formAction] = useActionState(updateUserProfile, initialState);
+  /* ---- image upload ---- */
+  const handleImageClick = () => fileInputRef.current?.click();
 
-  // State to show a success message temporarily
-  const [showSuccess, setShowSuccess] = useState(false);
-  useEffect(() => {
-    if (state.success) {
-      setShowSuccess(true);
-      const timer = setTimeout(() => setShowSuccess(false), 3000);
-      return () => clearTimeout(timer);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploading(true);
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+      await uploadBytes(storageRef, file);
+      const newURL = await getDownloadURL(storageRef);
+      await updateProfile(user, { photoURL: newURL });
+      setPhotoURL(newURL);
+    } catch (err) {
+      console.error('Upload error:', err);
+    } finally {
+      setUploading(false);
     }
-  }, [state.success]);
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (event.target.files && event.target.files[0] && user) {
-      const file = event.target.files[0];
-      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
-      setUploading(true);
-      try {
-        await uploadBytes(storageRef, file);
-        const newPhotoURL = await getDownloadURL(storageRef);
-
-        if (auth.currentUser) {
-          await updateProfile(auth.currentUser, { photoURL: newPhotoURL });
-        }
-        setPhotoURL(newPhotoURL);
-      } catch (error) {
-        console.error('Error uploading file: ', error);
-        // You could set an error state here
-      } finally {
-        setUploading(false);
-      }
+  /* ---- success toast ---- */
+  useEffect(() => {
+    if (success) {
+      const t = setTimeout(() => setSuccess(false), 3000);
+      return () => clearTimeout(t);
     }
+  }, [success]);
+
+  /* ---- form wrapper ---- */
+  const handleAction = async (fd: FormData) => {
+    const res = await updateUserProfile({ message: '', success: false }, fd);
+    if (res.success) setSuccess(true);
+    return res;
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[50vh] text-text-primary p-4">
-      <div className="w-full max-w-md mx-auto bg-card rounded-2xl shadow-card-glow p-6 text-center">
-        {/* Image Upload */}
-        <div className="relative w-32 h-32 mx-auto mb-4">
-          <Image
-            src={photoURL}
-            alt="Profile Picture"
-            width={128}
-            height={128}
-            className="rounded-full object-cover cursor-pointer"
-            onClick={handleImageClick}
-          />
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            className="hidden"
-            accept="image/*"
-          />
-          {uploading && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+    <main className="relative isolate min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black px-6 py-16 sm:py-24">
+      {/* ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 left-1/2 -z-10
+                        h-[30rem] w-[60rem] -translate-x-1/2 rounded-full
+                        bg-emerald-500/10 blur-3xl"
+      />
+
+      <div className="mx-auto max-w-2xl">
+        <header className="text-center">
+          <h1 className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            My Profile
+          </h1>
+          <p className="mt-3 text-lg leading-8 text-slate-400">
+            Update your display name and favourite team.
+          </p>
+        </header>
+
+        <form
+          action={handleAction}
+          className="mt-12 grid gap-6 rounded-2xl border border-slate-800 bg-slate-800/40
+                     p-6 shadow-lg shadow-black/20 ring-1 ring-white/5"
+        >
+          {/* avatar */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative h-24 w-24">
+              <Image
+                src={photoURL}
+                alt="Avatar"
+                width={96}
+                height={96}
+                className="h-24 w-24 rounded-full object-cover ring-2 ring-slate-700"
+              />
+              {uploading && (
+                <div className="absolute inset-0 grid place-items-center rounded-full bg-black/60">
+                  <div className="h-6 w-6 animate-spin rounded-full border-t-2 border-emerald-400" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <p className="text-text-secondary mb-4">{user.email}</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="sr-only"
+            />
+            <button
+              type="button"
+              onClick={handleImageClick}
+              className="rounded-lg px-3 py-2 text-sm text-slate-300 ring-1 ring-slate-700
+                         hover:bg-slate-700/50"
+            >
+              Change photo
+            </button>
+          </div>
 
-        {/* Profile Form */}
-        <form action={formAction} className="space-y-4">
-          {/* Display Name */}
+          {/* display name */}
           <div>
             <label
               htmlFor="displayName"
-              className="block text-sm font-medium text-text-secondary mb-1 text-left"
+              className="block text-sm font-medium text-slate-300"
             >
-              Display Name
+              Display name
             </label>
             <input
-              type="text"
               id="displayName"
               name="displayName"
+              type="text"
               defaultValue={user.displayName || ''}
-              className="bg-surface text-text-primary text-lg font-bold rounded-lg px-3 py-2 w-full"
               required
+              className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-900/60
+                         px-4 py-3 text-white placeholder-slate-400
+                         ring-1 ring-transparent transition
+                         focus:border-emerald-400 focus:outline-none
+                         focus:ring-emerald-400"
             />
-            {state.errors?.displayName && (
-              <p className="text-red-500 text-sm mt-1 text-left">
-                {state.errors.displayName[0]}
-              </p>
-            )}
           </div>
 
-          {/* Favorite Team */}
+          {/* favourite team */}
           <div>
             <label
               htmlFor="favoriteTeamId"
-              className="block text-sm font-medium text-text-secondary mb-1 text-left"
+              className="block text-sm font-medium text-slate-300"
             >
-              Favorite Team
+              Favourite team
             </label>
             <select
               id="favoriteTeamId"
               name="favoriteTeamId"
               defaultValue={profile?.favoriteTeamId || ''}
-              className="bg-surface text-text-primary text-lg font-bold rounded-lg px-3 py-2 w-full appearance-none"
+              className="mt-2 w-full appearance-none rounded-lg border border-slate-700
+                         bg-slate-900/60 px-4 py-3 text-white
+                         ring-1 ring-transparent transition
+                         focus:border-emerald-400 focus:outline-none
+                         focus:ring-emerald-400"
             >
-              <option value="">-- Select your team --</option>
-              {teams.map(team => (
-                <option key={team.id} value={team.id}>
-                  {team.name}
+              <option value="">-- Select team --</option>
+              {teams.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Form Messages */}
-          {showSuccess && state.message && (
-            <p className="text-green-400 text-sm">{state.message}</p>
-          )}
-          {!state.success && state.message && (
-            <p className="text-red-500 text-sm">{state.message}</p>
-          )}
-          {state.errors?._form && (
-            <p className="text-red-500 text-sm">{state.errors._form[0]}</p>
+          {/* messages */}
+          {success && (
+            <p className="text-center text-sm text-emerald-400">
+              Profile updated successfully!
+            </p>
           )}
 
-          <div className="pt-2">
-            <SubmitButton />
-          </div>
+          <SubmitButton />
         </form>
       </div>
-    </div>
+    </main>
   );
 }
