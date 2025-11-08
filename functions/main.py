@@ -163,23 +163,17 @@ def ai_devops_agent(request: https_fn.Request) -> https_fn.Response:
     """Entry point for the AI-driven DevOps workflow."""
     print("AI DevOps Agent Cloud Function triggered.")
 
-    # REMOVED: All manual CORS header logic
-
     request_json = request.get_json(silent=True)
     if not request_json or "command" not in request_json:
-        # REMOVED: `headers` from return
         return https_fn.Response({"error": "Invalid request: 'command' not found in JSON body."}, status=400)
 
     natural_language_command = request_json["command"]
     print(f"Received command: '{natural_language_command}'")
 
     try:
-        # --- MODIFIED: Call the REAL Gemini function ---
         ai_generated_files = call_gemini_for_code(natural_language_command)
-        # --- END MODIFICATION ---
 
         if not ai_generated_files:
-            # REMOVED: `headers` from return
             return https_fn.Response({"message": "AI did not generate any files."}, status=200)
 
         new_branch_name = f"ai-feat-{uuid.uuid4().hex[:8]}"
@@ -219,18 +213,14 @@ def ai_devops_agent(request: https_fn.Request) -> https_fn.Response:
             "generated_files_on_branch": file_urls,
             "new_branch": new_branch_name,
         }
-        # REMOVED: `headers` from return
         return https_fn.Response(response_data, status=200)
 
     except requests.exceptions.HTTPError as exc:
         print(f"GitHub API Error: {exc.response.status_code} - {exc.response.text}")
-        # REMOVED: `headers` from return
         return https_fn.Response({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, status=exc.response.status_code)
     except ValueError as exc:
         print(f"Configuration Error: {exc}")
-         # REMOVED: `headers` from return
         return https_fn.Response({"error": str(exc)}, status=500)
     except Exception as exc:  # pragma: no cover - defensive
         print(f"An unexpected error occurred: {exc}")
-         # REMOVED: `headers` from return
         return https_fn.Response({"error": f"An unexpected error occurred: {exc}"}, status=500)
