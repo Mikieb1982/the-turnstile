@@ -1,5 +1,6 @@
 // app/achievements/page.tsx
 import { Milestone, CalendarCheck, Target, Shield, Trophy } from 'lucide-react';
+import React from 'react'; // Import React
 
 const achievements = [
   {
@@ -52,8 +53,10 @@ export default function AchievementsPage() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2
-                        h-[30rem] w-[60rem] rounded-full bg-emerald-500/20 blur-3xl" />
+        <div
+          className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2
+                      h-[30rem] w-[60rem] rounded-full bg-emerald-500/20 blur-3xl"
+        />
       </div>
 
       <div className="mx-auto max-w-3xl">
@@ -95,9 +98,11 @@ function Card({
   return (
     <div
       className={`group relative flex gap-4 rounded-2xl p-5 ring-1 transition
-                  ${locked
+                ${
+                  locked
                     ? 'bg-slate-800/40 ring-white/10'
-                    : 'bg-emerald-900/30 ring-emerald-400/50'}`}
+                    : 'bg-emerald-900/30 ring-emerald-400/50'
+                }`}
     >
       {/* left accent bar */}
       <div
@@ -109,9 +114,11 @@ function Card({
       <div
         className={`flex h-14 w-14 shrink-0 items-center justify-center
                     rounded-xl backdrop-blur
-                    ${locked
-                      ? 'bg-slate-700/50 text-slate-400'
-                      : 'bg-emerald-500/20 text-emerald-300'}`}
+                    ${
+                      locked
+                        ? 'bg-slate-700/50 text-slate-400'
+                        : 'bg-emerald-500/20 text-emerald-300'
+                    }`}
       >
         <Icon className="h-7 w-7" />
       </div>
@@ -120,16 +127,14 @@ function Card({
       <div className="flex-1">
         <p
           className={`text-xs font-semibold uppercase tracking-widest
-                      ${locked ? 'text-slate-400' : 'text-emerald-400'}`}
+                          ${locked ? 'text-slate-400' : 'text-emerald-400'}`}
         >
           {category}
         </p>
         <h3 className="mt-1 font-display text-xl font-semibold text-white">
           {title}
         </h3>
-        <p className="mt-1 text-sm leading-6 text-slate-300">
-          {description}
-        </p>
+        <p className="mt-1 text-sm leading-6 text-slate-300">{description}</p>
 
         {unlocked && (
           <p className="mt-3 text-xs text-slate-400">
@@ -148,7 +153,7 @@ function Card({
             <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-700/50">
               <div
                 className="h-full rounded-full bg-emerald-400 transition-all
-                           duration-500"
+                                duration-500"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
