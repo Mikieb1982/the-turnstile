@@ -1,6 +1,6 @@
 // app/teams/page.tsx
 import Image from 'next/image';
-import { Stadium, MapPin, CalendarDays } from 'lucide-react';
+import { Landmark, MapPin, CalendarDays } from 'lucide-react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firestore';
 import { TeamInfo } from '@/types';
