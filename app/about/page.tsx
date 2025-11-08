@@ -1,4 +1,4 @@
-// app/about us/aboutus.tsx
+// app/about/page.tsx
 import React from 'react';
 
 // I've renamed the component to AboutUsContent to be clear
