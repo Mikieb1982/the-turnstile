@@ -1,5 +1,5 @@
 # Required by Firebase for Python functions
-functions-framework==3.*
+firebase-functions>=0.2.0
 
 # Required to make HTTP requests (to GitHub API)
 requests==2.*
