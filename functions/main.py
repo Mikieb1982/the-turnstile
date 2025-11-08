@@ -5,6 +5,7 @@ import os
 import uuid
 from typing import Dict
 
+# NEW: Import 2nd Gen libraries
 from firebase_functions import https_fn, options
 import requests
 import vertexai
@@ -24,10 +25,10 @@ def call_gemini_for_code(natural_language_command: str) -> Dict[str, str]:
     """Calls Gemini 2.5 Pro to generate file content based on a command."""
     print(f"Initializing Vertex AI for project {GCP_PROJECT} in {GCP_REGION}...")
     vertexai.init(project=GCP_PROJECT, location=GCP_REGION)
-    
+
     # Use gemini-2.5-pro as specified in the strategy document
     model = GenerativeModel("gemini-2.5-pro-preview-09-2025")
-    
+
     # This prompt is engineered to get code back in a structured JSON format.
     system_prompt = """
     You are an expert full-stack developer for a Next.js 14 (App Router) / Firebase / TailwindCSS project.
@@ -38,7 +39,7 @@ def call_gemini_for_code(natural_language_command: str) -> Dict[str, str]:
     The value for each key is the complete, new source code for that file as a single string.
     Do not use markdown, backticks, or any other formatting.
     Only output the raw JSON.
-    
+
     Example for "add a new about page":
     {
       "files": {
@@ -46,19 +47,19 @@ def call_gemini_for_code(natural_language_command: str) -> Dict[str, str]:
       }
     }
     """
-    
+
     print(f"Calling Gemini with command: '{natural_language_command}'")
-    
+
     response = model.generate_content(
         [
             Part.from_text(system_prompt),
             Part.from_text(f"User command: {natural_language_command}")
         ]
     )
-    
+
     text_response = response.candidates[0].content.parts[0].text
     print(f"Raw Gemini response: {text_response}")
-    
+
     try:
         # Parse the JSON response
         data = json.loads(text_response)
@@ -156,31 +157,18 @@ def create_pull_request(
     return pr_info.get("html_url")
 
 
+# NEW: 2nd Gen decorator that also handles CORS
 @https_fn.on_request(cors=options.CorsOptions(cors_origins="*", cors_methods=["get", "post", "options"]))
-def ai_devops_agent(request):
+def ai_devops_agent(request: https_fn.Request) -> https_fn.Response:
     """Entry point for the AI-driven DevOps workflow."""
     print("AI DevOps Agent Cloud Function triggered.")
 
-
-    if request.method == 'OPTIONS':
-      
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '3600'
-        }
-        return ('', 204, headers)
-
-   
-    headers = {
-        'Access-Control-Allow-Origin': '*'
-    }
-    
+    # REMOVED: All manual CORS header logic
 
     request_json = request.get_json(silent=True)
     if not request_json or "command" not in request_json:
-        # Pass headers to the error response
-        return ({"error": "Invalid request: 'command' not found in JSON body."}, 400)
+        # REMOVED: `headers` from return
+        return https_fn.Response({"error": "Invalid request: 'command' not found in JSON body."}, status=400)
 
     natural_language_command = request_json["command"]
     print(f"Received command: '{natural_language_command}'")
@@ -189,10 +177,10 @@ def ai_devops_agent(request):
         # --- MODIFIED: Call the REAL Gemini function ---
         ai_generated_files = call_gemini_for_code(natural_language_command)
         # --- END MODIFICATION ---
-        
+
         if not ai_generated_files:
-            # Pass headers to the success response
-            return ({"message": "AI did not generate any files."}, 200)
+            # REMOVED: `headers` from return
+            return https_fn.Response({"message": "AI did not generate any files."}, status=200)
 
         new_branch_name = f"ai-feat-{uuid.uuid4().hex[:8]}"
         commit_message = f"feat(ai): {natural_language_command[:70]}..."
@@ -231,18 +219,18 @@ def ai_devops_agent(request):
             "generated_files_on_branch": file_urls,
             "new_branch": new_branch_name,
         }
-        # Pass headers to the final success response
-        return (response_data, 200)
+        # REMOVED: `headers` from return
+        return https_fn.Response(response_data, status=200)
 
     except requests.exceptions.HTTPError as exc:
         print(f"GitHub API Error: {exc.response.status_code} - {exc.response.text}")
-        # Pass headers to the error response
-        return ({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, exc.response.status_code)
+        # REMOVED: `headers` from return
+        return https_fn.Response({"error": f"Failed to interact with GitHub API: {exc.response.text}"}, status=exc.response.status_code)
     except ValueError as exc:
         print(f"Configuration Error: {exc}")
-         # Pass headers to the error response
-        return ({"error": str(exc)}, 500)
+         # REMOVED: `headers` from return
+        return https_fn.Response({"error": str(exc)}, status=500)
     except Exception as exc:  # pragma: no cover - defensive
         print(f"An unexpected error occurred: {exc}")
-         # Pass headers to the error response
-        return ({"error": f"An unexpected error occurred: {exc}"}, 500)
+         # REMOVED: `headers` from return
+        return https_fn.Response({"error": f"An unexpected error occurred: {exc}"}, status=500)
