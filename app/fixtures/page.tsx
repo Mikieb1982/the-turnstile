@@ -1,6 +1,7 @@
 // app/fixtures/page.tsx
 import Image from 'next/image';
-import { Stadium, Star, Clock, Search, SlidersHorizontal } from 'lucide-react';
+// FIX: Removed 'Stadium' from this import as it doesn't exist in lucide-react
+import { Star, Clock, Search, SlidersHorizontal } from 'lucide-react';
 
 // Replace with real data source later
 const fixtures = [
