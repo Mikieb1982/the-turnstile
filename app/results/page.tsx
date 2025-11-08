@@ -16,7 +16,7 @@ import {
   Trophy,
   Calendar,
   Medal,
-  Stadium,
+  Landmark,
 } from 'lucide-react';
 
 type SortableKeys = 'Position' | 'Team' | 'Pld' | 'W' | 'L' | 'D' | 'Pts';
