@@ -161,10 +161,9 @@ def ai_devops_agent(request):
     """Entry point for the AI-driven DevOps workflow."""
     print("AI DevOps Agent Cloud Function triggered.")
 
-    # --- ADDED: CORS headers to allow requests from your website ---
+
     if request.method == 'OPTIONS':
-        # Allows GET, POST, and OPTIONS methods from any origin.
-        headers = {
+      
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -172,11 +171,11 @@ def ai_devops_agent(request):
         }
         return ('', 204, headers)
 
-    # Set CORS headers for the main request
+   
     headers = {
         'Access-Control-Allow-Origin': '*'
     }
-    # --- END ADDITION ---
+    
 
     request_json = request.get_json(silent=True)
     if not request_json or "command" not in request_json:
