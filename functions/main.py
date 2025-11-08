@@ -156,7 +156,7 @@ def create_pull_request(
     return pr_info.get("html_url")
 
 
-@functions_framework.http
+@https_fn.on_request(cors=options.CorsOptions(cors_origins="*", cors_methods=["get", "post", "options"]))
 def ai_devops_agent(request):
     """Entry point for the AI-driven DevOps workflow."""
     print("AI DevOps Agent Cloud Function triggered.")
