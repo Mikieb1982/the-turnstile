@@ -5,7 +5,7 @@ import os
 import uuid
 from typing import Dict
 
-import functions_framework
+from firebase_functions import https_fn, options
 import requests
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
