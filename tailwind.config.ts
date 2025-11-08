@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -37,9 +38,9 @@ const config: Config = {
       },
       fontFamily: {
         // Display font for headings - bold and impactful
-        display: ["var(--font-teko)", "Impact", "sans-serif"],
+        display: ["var(--font-bebas-neue)", "sans-serif"], // Updated
         // Body font for readability
-        body: ["var(--font-roboto)", "Inter", "system-ui", "sans-serif"],
+        body: ["var(--font-inter)", "system-ui", "sans-serif"], // Updated
       },
       fontSize: {
         // Responsive, energetic sizing for sports content
