@@ -13,7 +13,7 @@ import {
   CalendarDays,
   BarChart3,
   Shield,
-  Info, // <-- 1. Import the icon
+  Info, // <-- Icon is correctly imported
 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -32,7 +32,7 @@ const navigation = [
   { name: 'Profile', href: '/profile', icon: UserCircle },
   { name: 'Match Log', href: '/match-log', icon: CalendarDays },
   { name: 'Teams', href: '/teams', icon: Shield },
-  { name: 'About Us', href: '/about', icon: Info }, // <-- 2. Add the link here
+  { name: 'About Us', href: '/about', icon: Info }, // <-- Link is correctly added
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
@@ -114,7 +114,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   >
                     <item.icon className="h-6 w-6" />
                     {item.name}
-                  </SameSite-Strict-Lax>
+                  </Link> // <-- THIS IS THE FIX
                 );
               })}
             </nav>
