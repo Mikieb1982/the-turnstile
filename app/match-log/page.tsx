@@ -1,54 +1,44 @@
-'use client'; // <-- Add this
+// app/league-table/page.tsx
+'use client';
 
-import { Suspense, useState, useEffect } from 'react'; // <-- Add hooks
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import { db, auth } from '@/lib/firebase'; // <-- Import auth
-import { onAuthStateChanged, User } from 'firebase/auth'; // <-- Add
-import MatchLogClient from './client';
-import Loading from './loading';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { Trophy } from 'lucide-react';
 
-// Move this function inside the new component or keep it outside
-async function getLoggedMatches(userId: string) {
-  try {
-    const matchLogsCollection = collection(db, 'match-logs');
-    const q = query(matchLogsCollection, where("userId", "==", userId), orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
-    const matches = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt.toDate().toISOString(),
-    })) as any[]; // Cast to any[] or your Match[] type
-    return matches;
-  } catch (error) {
-    console.error("Error fetching match logs: ", error);
-    return [];
-  }
-}
-
-export default function MatchLogPage() {
-  const [matches, setMatches] = useState<any[]>([]); // Use your Match type
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function LeagueTablePage() {
+  const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        const userMatches = await getLoggedMatches(currentUser.uid);
-        setMatches(userMatches);
-      } else {
-        setUser(null);
-        setMatches([]);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    router.replace('/results');
+  }, [router]);
 
-  if (loading) {
-    return <Loading />;
-  }
+  /*----------------  aesthetic loader  ----------------*/
+  return (
+    <main className="relative isolate flex min-h-screen items-center justify-center
+                     bg-gradient-to-br from-slate-950 via-slate-900 to-black">
+      {/* ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 left-1/2 -z-10
+                        h-[30rem] w-[60rem] -translate-x-1/2 rounded-full
+                        bg-emerald-500/10 blur-3xl"
+      />
 
-  // Pass the correctly fetched matches and user ID
-  return <MatchLogClient loggedMatches={matches} userId={user?.uid} />;
+      <div className="text-center">
+        <div
+          className="mx-auto mb-5 flex h-16 w-16 items-center justify-center
+                     rounded-full bg-emerald-500/20 text-emerald-300 ring-1
+                     ring-emerald-500/30"
+        >
+          <Trophy className="h-8 w-8 animate-pulse" />
+        </div>
+        <h1 className="font-display text-2xl font-semibold text-white">
+          League Table
+        </h1>
+        <p className="mt-2 text-sm text-slate-400">
+          Redirecting to results…
+        </p>
+      </div>
+    </main>
+  );
 }
