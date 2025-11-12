@@ -32,10 +32,10 @@ const RecentMatchesTable: React.FC<RecentMatchesTableProps> = ({ matches }) => {
             <tbody>
               {matches.slice(0, 5).map((match) => (
                 <tr key={match.id} className="border-b border-surface-dark hover:bg-surface-dark/50">
-                  <td className="p-4 font-body text-white">{new Date(match.date).toLocaleDateString()}</td>
-                  <td className="p-4 font-body font-medium text-white">{match.homeTeam}</td>
-                  <td className="p-4 font-body font-medium text-white">{match.awayTeam}</td>
-                  <td className="p-4 font-body text-white">{match.homeScore} - {match.awayScore}</td>
+                  <td className="p-4 font-body text-white break-words">{new Date(match.date).toLocaleDateString()}</td>
+                  <td className="p-4 font-body font-medium text-white break-words">{match.homeTeam}</td>
+                  <td className="p-4 font-body font-medium text-white break-words">{match.awayTeam}</td>
+                  <td className="p-4 font-body text-white break-words">{match.homeScore} - {match.awayScore}</td>
                 </tr>
               ))}
             </tbody>

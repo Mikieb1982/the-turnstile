@@ -42,6 +42,10 @@ body {
     @apply md:hidden;
   }
 
+  .break-words {
+    word-break: break-word;
+  }
+
   /* Enhanced card shadow with depth */
   .card-lifted {
     box-shadow:
