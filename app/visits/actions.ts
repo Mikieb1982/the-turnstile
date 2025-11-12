@@ -1,10 +1,10 @@
+// app/visits/actions.ts
 'use server';
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { addDoc, collection, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Visit } from '@/types';
 
 const VisitSchema = z.object({
   stadium: z.string().min(1, 'Stadium is required'),
@@ -18,7 +18,8 @@ export async function addVisit(prevState: any, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      message: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing fields. Failed to add visit.', // Fixed: Now a string
       success: false,
     };
   }
@@ -38,7 +39,8 @@ export async function updateVisit(id: string, prevState: any, formData: FormData
 
   if (!validatedFields.success) {
     return {
-      message: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing fields. Failed to update visit.', // Fixed: Now a string
       success: false,
     };
   }
