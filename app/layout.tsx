@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/navbar';
 import Header from '@/components/Header';
 import { AuthProvider } from '@/lib/firebase/AuthContext';
 import Image from 'next/image'; // <-- Import Image
@@ -57,7 +56,6 @@ export default function RootLayout({
             <main className="mx-auto w-full max-w-7xl flex-grow px-4 py-6 sm:px-6 lg:px-8">
               {children}
             </main>
-            <Navbar />
           </div>
         </AuthProvider>
       </body>

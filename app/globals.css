@@ -38,6 +38,10 @@ body {
 }
 
 @layer utilities {
+  .md-hidden {
+    @apply md:hidden;
+  }
+
   /* Enhanced card shadow with depth */
   .card-lifted {
     box-shadow:

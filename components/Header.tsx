@@ -32,7 +32,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-surface bg-card/80 px-4 backdrop-blur-sm">
+      <header className="fixed bottom-0 left-0 right-0 z-20 flex h-16 items-center justify-between border-t border-surface bg-card/80 px-4 backdrop-blur-sm md:hidden">
         <Link className="flex items-center gap-2" href="/dashboard">
           <Image
             src="/logo.png"
