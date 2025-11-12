@@ -21,9 +21,16 @@ export type View =
   | 'COMMUNITY';
 
 export interface Team {
-  id: string;
+  id:string;
   name: string;
   logoUrl: string;
+}
+
+export interface Visit {
+  id: string;
+  stadium: string;
+  date: string;
+  notes?: string;
 }
 
 export interface MatchStats {
