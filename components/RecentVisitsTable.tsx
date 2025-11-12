@@ -24,7 +24,7 @@ export default function RecentVisitsTable({ visits }: { visits: Visit[] }) {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xl font-bold">{visit.stadium}</p>
+              <p className="text-xl font-bold break-words">{visit.stadium}</p>
               <p className="text-gray-400">
                 {new Date(visit.date).toLocaleDateString('en-GB', { timeZone: 'UTC' })}
               </p>
