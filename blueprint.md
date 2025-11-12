@@ -1,3 +1,4 @@
+// blueprint.md
 # Project Blueprint: The Turnstile
 
 ## Overview
@@ -28,6 +29,7 @@ This project is a Next.js application integrated with Firebase. It provides user
 * **Teams Page:** (`app/teams/page.tsx`) A grid display of all Super League teams and their stadium information, using consistent placeholder logos.
 * **Achievements:** (`app/achievements/page.tsx`) A list of achievements, visually distinguishing between locked, unlocked, and in-progress items.
 * **Profile Page:** (`app/profile/page.tsx`) A protected route allowing users to view their email, update their display name, and upload a custom profile picture to Firebase Storage.
+* **Visits Page:** (`app/visits/page.tsx`) Allows users to track stadium visits manually.
 
 ## Current Request: Fix Build Error
 
@@ -39,5 +41,6 @@ This project is a Next.js application integrated with Firebase. It provides user
 5.  **Themed Profile Button:** Changed the "Edit Profile" button in `app/components/profile/Profile-v2.tsx` from blue to the primary green color.
 6.  **Branded Auth Pages:** Added the app logo to `app/sign-in/page.tsx` and `app/sign-up/page.tsx` to improve brand trust.
 7.  **Improved Match Log Empty State:** Added a "No matches logged yet" message to the `app/match-log/client.tsx` component when the match list is empty.
-8.  **Fixed Auth Import Error:** Resolved a `Module not found` error by renaming `lib/firebase/auth.tsx` to `lib/firebase/AuthContext.tsx` to prevent a name collision with the `auth` export from `lib/firebase.ts`. Updated imports in `app/layout.tsx`, `app/dashboard/page.tsx`, `app/sign-in/page.tsx`, and `app/profile/page.tsx`.
-9.  **Fixed Dashboard Type Error:** Resolved a TypeScript error in `app/dashboard/page.tsx` by adding logic to parse the `score` string (e.g., "24-18") from Firestore into `homeScore` and `awayScore` numbers, which is the format expected by the `RecentMatchesTable` component.
+8.  **Fixed Auth Import Error:** Resolved a `Module not found` error by renaming `lib/firebase/auth.tsx` to `lib/firebase/AuthContext.tsx`.
+9.  **Fixed Dashboard Type Error:** Resolved a TypeScript error in `app/dashboard/page.tsx` related to score parsing.
+10. **Fixed Visits Build Error:** Resolved a `Type 'object' is not assignable to type 'ReactNode'` error in `app/visits/actions.ts` by ensuring the returned `message` property is always a string, while moving validation errors to a separate `errors` property.
