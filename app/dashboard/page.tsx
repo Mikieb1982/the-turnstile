@@ -21,6 +21,8 @@ import SeasonProgress from '@/components/SeasonProgress';
 import RecentMatchesTable from '@/components/RecentMatchesTable';
 import TeamBadge from '@/components/TeamBadge';
 import ActionButton from '@/components/ActionButton';
+import RecentVisitsTable from '@/components/RecentVisitsTable';
+import { Visit } from '@/types';
 
 /* ---------- types ---------- */
 interface LoggedMatch {
@@ -36,7 +38,8 @@ interface LoggedMatch {
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const [matches, setMatches] = useState<LoggedMatch[]>([]);
-  const [isLoadingMatches, setIsLoadingMatches] = useState(true);
+  const [visits, setVisits] = useState<Visit[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   /* ---- mock stats ---- */
   const userData = {
@@ -49,23 +52,33 @@ export default function DashboardPage() {
     totalWeeks: 27,
   };
 
-  /* ---- fetch matches ---- */
+  /* ---- fetch data ---- */
   useEffect(() => {
     if (!user) {
-      if (!authLoading) setIsLoadingMatches(false);
+      if (!authLoading) setIsLoading(false);
       return;
     }
 
     (async () => {
-      setIsLoadingMatches(true);
+      setIsLoading(true);
       try {
-        const q = query(
+        const matchesQuery = query(
           collection(db, 'match-logs'),
           where('userId', '==', user.uid),
           orderBy('date', 'desc')
         );
-        const snap = await getDocs(q);
-        const fetched: LoggedMatch[] = snap.docs.map((doc) => {
+        const visitsQuery = query(
+          collection(db, 'visits'),
+          where('userId', '==', user.uid),
+          orderBy('date', 'desc')
+        );
+
+        const [matchesSnap, visitsSnap] = await Promise.all([
+          getDocs(matchesQuery),
+          getDocs(visitsQuery),
+        ]);
+
+        const fetchedMatches: LoggedMatch[] = matchesSnap.docs.map((doc) => {
           const d = doc.data();
           const [homeScoreStr, awayScoreStr] = (d.score || '0-0').split('-');
           return {
@@ -77,11 +90,18 @@ export default function DashboardPage() {
             awayScore: parseInt(awayScoreStr, 10) || 0,
           };
         });
-        setMatches(fetched);
+
+        const fetchedVisits: Visit[] = visitsSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        } as Visit));
+
+        setMatches(fetchedMatches);
+        setVisits(fetchedVisits);
       } catch (e) {
-        console.error('Fetch matches error:', e);
+        console.error('Fetch data error:', e);
       } finally {
-        setIsLoadingMatches(false);
+        setIsLoading(false);
       }
     })();
   }, [user, authLoading]);
@@ -147,6 +167,24 @@ export default function DashboardPage() {
           </Suspense>
         </section>
 
+        {/* recent visits */}
+        <section>
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              Recent Visits
+            </h2>
+            <Link href="/visits">
+              <ActionButton variant="accent" size="sm">
+                Add Visit
+              </ActionButton>
+            </Link>
+          </div>
+
+          <Suspense fallback={<VisitsSkeleton />}>
+            <RecentVisitsTable visits={visits} />
+          </Suspense>
+        </section>
+
         {/* team collection */}
         <section className="rounded-2xl bg-white/60 p-6 shadow-lg ring-1
                              ring-slate-900/5 backdrop-blur dark:bg-slate-800/60
@@ -188,6 +226,19 @@ export default function DashboardPage() {
 
 /* ---------- skeleton ---------- */
 function MatchesSkeleton() {
+  return (
+    <div className="space-y-3">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="h-20 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-700"
+        />
+      ))}
+    </div>
+  );
+}
+
+function VisitsSkeleton() {
   return (
     <div className="space-y-3">
       {[...Array(3)].map((_, i) => (
