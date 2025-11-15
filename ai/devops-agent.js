@@ -35,3 +35,15 @@ const modelId = (process.env.GOOGLE_MODEL_ID || "googleai/gemini-2.5-flash");
         return { summary: "Non-JSON output.", checklist: [], patch: "" };
     }
 });
+
+export const fileSearch = ai.defineFlow(
+    {
+        name: "file.search",
+        inputSchema: z.object({ query: z.string(), files: z.array(z.string()) }),
+        outputSchema: z.string(),
+    },
+    async ({ query, files }) => {
+        const { search_files } = require("./file-search.js");
+        return await search_files(query, files);
+    }
+)
