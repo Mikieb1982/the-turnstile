@@ -1,107 +1,78 @@
+// app/actions.ts
 'use server'
 
 import { z } from 'zod';
-import { redirect } from 'next/navigation';
-import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+// ... other imports
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string().min(6);
 
-interface AuthState {
-  errors?: {
-    email?: string[];
-    password?: string[];
-    _form?: string[];
-  };
-  message: string;
-  success: boolean;
-}
+// ... AuthState interface ...
 
-export async function signUp(prevState: AuthState, formData: FormData): Promise<AuthState> {
+// 1. Create a reusable validation function
+async function validateCredentials(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   const emailValidation = emailSchema.safeParse(email);
-  const passwordValidation = passwordSchema.safeParse(password);
-
   if (!emailValidation.success) {
     return {
-      errors: { email: emailValidation.error.flatten().formErrors },
-      message: 'Invalid email address',
       success: false,
+      data: null,
+      state: {
+        errors: { email: emailValidation.error.flatten().formErrors },
+        message: 'Invalid email address',
+        success: false,
+      },
     };
   }
 
+  const passwordValidation = passwordSchema.safeParse(password);
   if (!passwordValidation.success) {
     return {
-      errors: { password: passwordValidation.error.flatten().formErrors },
-      message: 'Password must be at least 6 characters',
       success: false,
+      data: null,
+      state: {
+        errors: { password: passwordValidation.error.flatten().formErrors },
+        message: 'Password must be at least 6 characters',
+        success: false,
+      },
     };
   }
+  
+  return { success: true, data: { email, password }, state: null };
+}
+
+export async function signUp(prevState: AuthState, formData: FormData): Promise<AuthState> {
+  // 2. Call the helper function
+  const validation = await validateCredentials(formData);
+  if (!validation.success) {
+    return validation.state!;
+  }
+  
+  const { email, password } = validation.data!;
 
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     redirect('/dashboard');
   } catch (e: unknown) {
-    if (e instanceof Error && 'code' in e && e.code === 'auth/email-already-in-use') {
-      return {
-        errors: { email: ['Email already in use'] },
-        message: 'Email already in use',
-        success: false,
-      };
-    } else {
-      console.error(e);
-      return {
-        errors: { _form: ['Something went wrong'] },
-        message: 'Something went wrong',
-        success: false,
-      };
-    }
+    // ... error handling ...
   }
 }
 
 export async function signIn(prevState: AuthState, formData: FormData): Promise<AuthState> {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-
-  const emailValidation = emailSchema.safeParse(email);
-  const passwordValidation = passwordSchema.safeParse(password);
-
-  if (!emailValidation.success) {
-    return {
-      errors: { email: emailValidation.error.flatten().formErrors },
-      message: 'Invalid email address',
-      success: false,
-    };
+  // 3. Call the helper function
+  const validation = await validateCredentials(formData);
+  if (!validation.success) {
+    return validation.state!;
   }
 
-  if (!passwordValidation.success) {
-    return {
-      errors: { password: passwordValidation.error.flatten().formErrors },
-      message: 'Password must be at least 6 characters',
-      success: false,
-    };
-  }
+  const { email, password } = validation.data!;
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
     redirect('/dashboard');
   } catch (e: unknown) {
-    if (e instanceof Error && 'code' in e && (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential')) {
-      return {
-        errors: { _form: ['Invalid credentials'] },
-        message: 'Invalid credentials',
-        success: false,
-      };
-    } else {
-      console.error(e);
-      return {
-        errors: { _form: ['Something went wrong'] },
-        message: 'Something went wrong',
-        success: false,
-      };
-    }
+    // ... error handling ...
   }
 }
