@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation';
 const getTitle = (path: string) => {
   if (path.startsWith('/achievements')) return 'Achievements';
   if (path.startsWith('/fixtures')) return 'Fixtures';
-  if (path.startsWith('/dashboard')) return 'The Turnstile'; 
+  if (path.startsWith('/dashboard')) return 'The Turnstile';
   if (path.startsWith('/league-table')) return 'League Table';
   if (path.startsWith('/profile')) return 'Profile';
   if (path.startsWith('/match-log')) return 'Match Log';
@@ -32,7 +32,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed bottom-0 left-0 right-0 z-20 flex h-16 items-center justify-between border-t border-surface bg-card/80 px-4 backdrop-blur-sm md:hidden">
+      {/* MODIFICATION:
+        - Changed 'fixed bottom-0' to 'sticky top-0' to pin it to the top.
+        - Changed 'border-t' to 'border-b' for a top bar.
+      */}
+      <header className="sticky top-0 left-0 right-0 z-20 flex h-16 items-center justify-between border-b border-surface bg-card/80 px-4 backdrop-blur-sm md:hidden">
         <Link className="flex items-center gap-2" href="/dashboard">
           <Image
             src="/logo.png"
