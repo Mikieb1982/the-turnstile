@@ -16,10 +16,10 @@
 }
 
 .dark {
-  /* Dark Mode */
-  --color-background: 26, 32, 44; /* Your 'primary-dark' #1a202c */
-  --color-card: 45, 55, 72; /* Your 'secondary-dark' #2d3748 */
-  --color-surface: 55, 65, 81; /* gray-700 */
+  /* Dark Mode - Updated for a cohesive deep sporty navy/slate theme */
+  --color-background: 15, 23, 42; /* New 'primary-dark' #0F172A */
+  --color-card: 30, 41, 59; /* New 'secondary-dark' #1E293B */
+  --color-surface: 51, 65, 85; /* Darker Slate for dividers/borders */
   --color-text-primary: 247, 250, 252; /* almost white */
   --color-text-secondary: 203, 213, 225; /* gray-300 */
 }
