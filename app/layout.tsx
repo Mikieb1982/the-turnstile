@@ -4,7 +4,7 @@ import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/firebase/AuthContext';
 import BottomNav from '@/components/BottomNav';
-import Header from '@/components/Header'; // <-- 1. IMPORT THE HEADER
+import Header from '@/components/Header'; // We imported this in the last step
 
 const inter = Inter({
   weight: ['400', '500', '600', '700', '900'],
@@ -31,17 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${bebas_neue.variable}`}>
+    // MODIFICATION: Added 'dark' class to html
+    <html lang="en" className={`${inter.variable} ${bebas_neue.variable} dark`}>
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          href="https.googleapis.com/css2?family=Material+Symbols+Outlined"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-primary-dark font-body text-text-primary">
+      {/* MODIFICATION: 
+        - Changed 'bg-primary-dark' to 'bg-background'
+        - 'text-text-primary' will now correctly use our dark-theme variable (white text)
+      */}
+      <body className="bg-background font-body text-text-primary">
         <AuthProvider>
           <div className="relative z-10 flex min-h-screen flex-col">
-            <Header /> {/* <-- 2. ADD THE HEADER HERE */}
+            <Header />
             <main className="mx-auto w-full max-w-7xl flex-grow px-4 py-6 sm:px-6 lg:px-8">
               {children}
             </main>
