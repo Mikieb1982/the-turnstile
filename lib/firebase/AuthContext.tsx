@@ -1,18 +1,19 @@
 'use client';
 
-import {
+import React, {
   createContext,
   useContext,
   useEffect,
   useState,
   ReactNode,
 } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase'; // Import from your main firebase.ts
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth'; // <-- This is the User type
+import { auth } from './config'; // This is Firebase auth instance
+import Loading from '../../app/loading';
 
-// Define the shape of the context
+// Define the context shape
 interface AuthContextType {
-  user: User | null;
+  user: User | null; // <-- CHANGED: Was Partial<User>
   loading: boolean;
 }
 
@@ -22,30 +23,32 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
 });
 
-// Create the Provider component
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+// Auth provider component
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null); // <-- CHANGED: Was Partial<User>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // This is the central listener
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user); // user is of type User from 'firebase/auth'
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
-    // Clean up the listener on unmount
     return () => unsubscribe();
   }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
-      {children}
+      {loading ? <Loading /> : children}
     </AuthContext.Provider>
   );
-}
+};
 
-// Create the custom hook to access the context
+// Custom hook to use the auth context
 export const useAuth = () => {
   return useContext(AuthContext);
 };
