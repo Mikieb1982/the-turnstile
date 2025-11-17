@@ -4,6 +4,7 @@ import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/firebase/AuthContext';
 import BottomNav from '@/components/BottomNav';
+import Header from '@/components/Header'; // <-- 1. IMPORT THE HEADER
 
 const inter = Inter({
   weight: ['400', '500', '600', '700', '900'],
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="bg-primary-dark font-body text-text-primary">
         <AuthProvider>
           <div className="relative z-10 flex min-h-screen flex-col">
+            <Header /> {/* <-- 2. ADD THE HEADER HERE */}
             <main className="mx-auto w-full max-w-7xl flex-grow px-4 py-6 sm:px-6 lg:px-8">
               {children}
             </main>
