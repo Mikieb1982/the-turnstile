@@ -8,14 +8,23 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/firestore';
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string().min(6);
+const profileSchema = z.object({
+  displayName: z.string().min(1, 'Display name is required'),
+  bio: z.string().optional(),
+});
+
 
 export interface AuthState {
   errors?: {
     email?: string[];
     password?: string[];
+    displayName?: string[];
+    bio?: string[];
   };
   message?: string;
   success: boolean;
@@ -65,7 +74,14 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
   const { email, password } = validation.data!;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.email, // default display name
+      photoURL: ''
+    });
     redirect('/dashboard');
   } catch (e: unknown) {
     if (e instanceof Error) {
@@ -109,5 +125,35 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
       message: 'An unknown error occurred',
       success: false,
     };
+  }
+}
+
+export async function updateUserProfile(prevState: any, formData: FormData): Promise<any> {
+  const user = auth.currentUser;
+  if (!user) {
+    return {
+      message: 'Not authenticated',
+      success: false,
+    };
+  }
+
+  const validatedFields = profileSchema.safeParse({
+    displayName: formData.get('displayName'),
+    bio: formData.get('bio'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const userDocRef = doc(db, 'users', user.uid);
+    await setDoc(userDocRef, validatedFields.data, { merge: true });
+
+    return { message: 'Profile updated successfully', success: true };
+  } catch (error) {
+    return { message: 'Failed to update profile', success: false };
   }
 }

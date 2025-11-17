@@ -1,4 +1,5 @@
-import { db } from '@/lib/firebase/config'; // Corrected import path
+import { getFirestore } from 'firebase/firestore';
+import { app } from '@/lib/firebase/config';
 
 export interface UserProfile {
   uid: string;
@@ -15,5 +16,8 @@ export interface Team {
   ownerId: string;
   members: string[];
 }
+
+// Initialize Firestore
+const db = getFirestore(app);
 
 export { db };
