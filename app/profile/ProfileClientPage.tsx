@@ -5,16 +5,26 @@ import { useState, useRef, useActionState } from 'react';
 import Image from 'next/image';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile, User as AuthUser } from 'firebase/auth';
-import { auth, storage } from '@/lib/firebase/config'; // Corrected import path
+import { auth, storage } from '@/lib/firebase/config';
 import { updateUserProfile } from '@/app/actions';
-import { UserProfile, Team } from '@/lib/firebase/firestore';
 import SubmitButton from '@/components/SubmitButton';
+
+// --- START OF FIX ---
+
+// Import the correct User type for the profile document
+import { User as UserProfile, TeamInfo } from '@/types';
+
+// Define the Team type locally, just like in page.tsx
+type Team = TeamInfo & { id: string };
 
 interface ProfileClientPageProps {
   user: AuthUser;
-  profile: UserProfile | null;
+  // The profile prop should be the (Partial) Firestore document,
+  // which is the 'User' type from types.ts (aliased as UserProfile here)
+  profile: Partial<UserProfile> | null;
   teams: Team[] | null;
 }
+// --- END OF FIX ---
 
 const initialState: any = {};
 
@@ -26,30 +36,7 @@ export default function ProfileClientPage({
   const [photoURL, setPhotoURL] = useState(
     user.photoURL || '/user-placeholder.png'
   );
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [state, formAction] = useActionState(updateUserProfile, initialState);
-
-  const handleImageClick = () => fileInputRef.current?.click();
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
-
-    setUploading(true);
-
-    try {
-      const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      await updateProfile(auth.currentUser!, { photoURL: downloadURL });
-      setPhotoURL(downloadURL);
-    } catch (error) {
-      console.error("Error uploading image: ", error);
-    } finally {
-      setUploading(false);
-    }
-  };
+  // ... rest of your component ...
   
   return (
     <main className="p-4 md:p-10 mx-auto max-w-4xl">
