@@ -1,61 +1,39 @@
 // app/visits/page.tsx
-'use client';
-
-import { Suspense, useEffect, useState } from 'react';
-import { db } from '@/lib/firebase';
-import { useAuth } from '@/lib/firebase/AuthContext';
+import { Suspense } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { auth } from '@/lib/firebase'; // Direct auth import
 import VisitsClient from './client';
 import Loading from './loading';
 import { Visit } from '@/types';
+import { redirect } from 'next/navigation';
 
-export default function VisitsPage() {
-  const { user, loading: authLoading } = useAuth();
-  const [visits, setVisits] = useState<Visit[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!user) {
-      if (!authLoading) setIsLoading(false);
-      return;
-    }
-
-    (async () => {
-      setIsLoading(true);
-      try {
-        const visitsQuery = query(
-          collection(db, 'visits'),
-          where('userId', '==', user.uid),
-        );
-
-        const visitsSnap = await getDocs(visitsQuery);
-
-        const fetchedVisits: Visit[] = visitsSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        } as Visit));
-
-        setVisits(fetchedVisits);
-      } catch (e) {
-        console.error('Fetch data error:', e);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [user, authLoading]);
-
-  if (authLoading || isLoading) {
-    return <Loading />;
-  }
-
+// 1. Make the page an async function
+export default async function VisitsPage() {
+  // 2. Get user on the server
+  const user = auth.currentUser; // Or use a server-side session method
+  
   if (!user) {
-    return (
-      <div className="text-center">
-        Please sign in to view your visits.
-      </div>
-    );
+    redirect('/sign-in');
   }
 
+  // 3. Fetch data directly
+  let visits: Visit[] = [];
+  try {
+    const visitsQuery = query(
+      collection(db, 'visits'),
+      where('userId', '==', user.uid),
+    );
+    const visitsSnap = await getDocs(visitsQuery);
+    visits = visitsSnap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    } as Visit));
+  } catch (e) {
+    console.error('Fetch data error:', e);
+  }
+
+  // 4. Pass data as props. The <Suspense> handles loading.
   return (
     <Suspense fallback={<Loading />}>
       <VisitsClient visits={visits} userId={user.uid} />

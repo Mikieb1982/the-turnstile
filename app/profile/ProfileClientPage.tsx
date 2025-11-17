@@ -1,50 +1,15 @@
+// app/profile/ProfileClientPage.tsx
 'use client';
 
-import { useState, useRef, useActionState } from 'react'; // <-- Make sure useActionState is imported
+import { useState, useRef, useActionState } from 'react';
 import Image from 'next/image';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import storage functions
 import { updateProfile, User as AuthUser } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { useFormStatus } from 'react-dom';
-import { updateUserProfile, ProfileFormState } from './actions';
-import { TeamInfo, User as FirestoreUser } from '@//types';
+import { auth, storage } from '@/lib/firebase'; // Import storage
+// ... other imports
 
-type Team = TeamInfo & { id: string };
+// ...
 
-interface ProfileClientPageProps {
-  user: AuthUser;
-  profile: Partial<FirestoreUser> | null;
-  teams: Team[];
-}
-
-const initialState: ProfileFormState = {
-  message: '',
-  success: false,
-};
-
-// 1.
-// VVVV THIS FUNCTION MUST BE HERE, AT THE TOP LEVEL VVVV
-//
-/* ---------- submit button ---------- */
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold
-                 text-slate-900 shadow-lg shadow-emerald-500/20 transition
-                 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
-    >
-      {pending ? 'Saving…' : 'Save Profile'}
-    </button>
-  );
-}
-//
-// ^^^^ THIS FUNCTION MUST BE HERE, AT THE TOP LEVEL ^^^^
-//
-
-/* ---------- component ---------- */
 export default function ProfileClientPage({
   user,
   profile,
@@ -57,47 +22,75 @@ export default function ProfileClientPage({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [state, formAction] = useActionState(updateUserProfile, initialState);
 
-  //
-  // !!! DO NOT DEFINE SubmitButton() HERE !!!
-  //
-
-  /* ---- image upload ---- */
   const handleImageClick = () => fileInputRef.current?.click();
 
+  // --- This is the new implementation ---
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // ... (rest of this function is fine)
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploading(true);
+
+    try {
+      // 1. Create a reference
+      const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
+      
+      // 2. Upload the file
+      const snapshot = await uploadBytes(storageRef, file);
+      
+      // 3. Get the download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      // 4. Update the Firebase Auth user profile
+      await updateProfile(user, { photoURL: downloadURL });
+
+      // 5. Update the local state to show the new image
+      setPhotoURL(downloadURL);
+
+    } catch (error) {
+      console.error("Error uploading image: ", error);
+      // You could set an error message in the 'state' here
+    } finally {
+      setUploading(false);
+    }
   };
-
+  
   return (
-    <main className="relative isolate min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black px-6 py-16 sm:py-24">
-      <div className="mx-auto max-w-2xl">
-        <header className="text-center">
-          {/* ... (header content is fine) ... */}
-        </header>
-
-        <form
-          action={formAction} // This is correct
-          className="mt-12 grid gap-6 rounded-2xl border border-slate-800 bg-slate-800/40
-                     p-6 shadow-lg shadow-black/20 ring-1 ring-white/5"
-        >
-          {/* ... (avatar, inputs, etc. are fine) ... */}
-          
-          {/* messages */}
-          {state.success && (
-            <p className="text-center text-sm text-emerald-400">
-              {state.message || 'Profile updated successfully!'}
-            </p>
-          )}
-          {!state.success && state.message && (
-             <p className="text-center text-sm text-red-400">
-              {state.message}
-            </p>
-          )}
-
-          {/* 2. This will now work correctly */}
-          <SubmitButton />
-        </form>
-      </div>
+    <main /* ... */ >
+      {/* ... */}
+      <form /* ... */ >
+        {/* Add the file input element */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          hidden
+          accept="image/png, image/jpeg"
+        />
+        
+        {/* Make the avatar clickable */}
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={handleImageClick}
+            disabled={uploading}
+            className="relative mx-auto h-24 w-24 rounded-full"
+          >
+            <Image
+              src={photoURL}
+              alt="Profile"
+              width={96}
+              height={96}
+              className={`rounded-full object-cover ${uploading ? 'opacity-50' : ''}`}
+            />
+            {/* You can add a loading spinner here based on 'uploading' state */}
+          </button>
+        </div>
+        
+        {/* ... rest of the form ... */}
+        
+        <SubmitButton />
+      </form>
     </main>
   );
 }
