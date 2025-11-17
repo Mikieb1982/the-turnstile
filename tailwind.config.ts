@@ -11,15 +11,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "primary-dark": "#1a202c",
+        "secondary-dark": "#2d3748",
+        "accent-blue": "#00bcd4",
+        "light-gray": "#cbd5e0",
         // Sports brand colors - energetic and bold
         primary: "#32FF84", // Keep your existing primary
         secondary: "#A768FF", // Keep your existing secondary
-        
-        // Rugby League inspired palette
-        navy: "rgb(var(--color-navy) / <alpha-value>)",
-        crimson: "rgb(var(--color-crimson) / <alpha-value>)",
-        gold: "rgb(var(--color-gold) / <alpha-value>)",
-        cream: "rgb(var(--color-cream) / <alpha-value>)",
         
         // Semantic colors using CSS variables
         background: "rgb(var(--color-background) / <alpha-value>)",

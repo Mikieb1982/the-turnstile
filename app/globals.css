@@ -2,74 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Sports-focused color palette with navy, crimson, and gold accents */
 :root {
-  /* Light mode - Clean and energetic */
-  --color-background: 246 248 247; /* #f6f8f7 - Light neutral */
-  --color-card: 255 255 255; /* #ffffff - Pure white */
-  --color-surface: 240 242 241; /* Light surface */
-  --color-text-primary: 12 52 61; /* #0c343d - Navy blue */
-  --color-text-secondary: 75 85 99; /* gray-500 */
-  
-  /* Brand colors */
-  --color-navy: 12 52 61; /* #0c343d - Primary navy */
-  --color-crimson: 76 17 48; /* #4c1130 - Passion red */
-  --color-gold: 255 227 116; /* #ffe374 - Vibrant accent */
-  --color-cream: 255 242 204; /* #fff2cc - Warm neutral */
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
-.dark {
-  /* Dark mode - Bold and atmospheric for matchday */
-  --color-background: 12 52 61; /* #0c343d - Navy background */
-  --color-card: 20 60 71; /* Slightly lighter navy */
-  --color-surface: 32 72 83; /* Mid-tone surface */
-  --color-text-primary: 255 242 204; /* #fff2cc - Cream text */
-  --color-text-secondary: 255 227 116; /* #ffe374 - Gold secondary */
-  
-  /* Brand colors remain the same */
-  --color-navy: 12 52 61;
-  --color-crimson: 76 17 48;
-  --color-gold: 255 227 116;
-  --color-cream: 255 242 204;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }
 
 body {
-  @apply bg-background text-text-primary font-body antialiased;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
-  .md-hidden {
-    @apply md:hidden;
-  }
-
-  .break-words {
-    word-break: break-word;
-  }
-
-  /* Enhanced card shadow with depth */
-  .card-lifted {
-    box-shadow:
-      0 2px 4px rgba(0,0,0,0.1),
-      0 8px 16px rgba(0,0,0,0.1),
-      0 16px 32px rgba(0,0,0,0.08);
-  }
-
-  /* Gold glow for highlights and CTAs */
-  .shadow-glow {
-    box-shadow: 0 0 20px rgba(255, 227, 116, 0.4), 0 0 8px rgba(255, 227, 116, 0.3);
-  }
-  
-  /* Crimson glow for important actions */
-  .shadow-crimson-glow {
-    box-shadow: 0 0 20px rgba(76, 17, 48, 0.5), 0 0 10px rgba(76, 17, 48, 0.4);
-  }
-
-  /* Text gradient for headings */
-  .text-gradient-gold {
-    @apply bg-gradient-to-r from-gold via-yellow-300 to-gold bg-clip-text text-transparent;
-  }
-  
-  .text-gradient-team {
-    @apply bg-gradient-to-r from-crimson via-red-500 to-crimson bg-clip-text text-transparent;
+  .text-balance {
+    text-wrap: balance;
   }
 }

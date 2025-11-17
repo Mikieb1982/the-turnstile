@@ -1,46 +1,51 @@
-// blueprint.md
 # Project Blueprint: The Turnstile
 
 ## Overview
 
-This project is a Next.js application integrated with Firebase. It provides user authentication (sign up and sign in) and allows users to track rugby league matches they've attended, view league tables, fixtures, and achievements.
+This document outlines the plan for updating the visual design of "The Turnstile" application to match the provided mockups. The goal is to create a modern, mobile-first, and visually appealing user interface.
 
-## Implemented Features
+## Current State Analysis
 
-### Styling and Design
-* **Layout:** A clean, modern, dark-mode layout. Uses a responsive grid system and a fixed bottom navigation bar for mobile.
-* **Colors:** A dark theme with a vibrant green primary color (`#32FF84`) and purple secondary color (`#A768FF`).
-* **Typography:** Uses "Teko" for display fonts and "Roboto" for body text.
-* **Iconography:** Uses Material Symbols (via Google Fonts) and `lucide-react` for icons.
-* **Effects:** Custom `shadow-card-glow` utility for a green glow effect on interactive cards.
+The existing application has a basic structure with a dark theme, but it does not fully align with the design vision presented in the mockups. Key areas for improvement include layout, color scheme, typography, and component styling.
 
-### Authentication
-* **Sign Up/Sign In:** Email/password sign-up and sign-in using Firebase Auth.
-* **Google Sign-In:** OAuth flow using Google as a provider.
-* **Server Actions:** Auth mutations (`signUp`, `signIn`) are handled securely via Next.js Server Actions.
-* **Validation:** Zod is used for schema validation on auth forms.
-* **UI:** Auth pages include the app logo for branding.
+## Design Plan
 
-### Core Features
-* **Landing Page:** A static landing page (`app/page.tsx`) describing the app's features.
-* **Dashboard:** (`app/dashboard/page.tsx`) A protected route showing user stats (matches attended) and a list of recent matches from Firestore. Includes an empty state to guide users to log a match.
-* **Match Log:** (`app/match-log/*`) A protected page where users can log new matches via a form. Logged matches are displayed in a list with edit and delete functionality (using a modal for edits).
-* **League Table:** (`app/league-table/page.tsx`) Displays a sortable league table with team crests.
-* **Teams Page:** (`app/teams/page.tsx`) A grid display of all Super League teams and their stadium information, using consistent placeholder logos.
-* **Achievements:** (`app/achievements/page.tsx`) A list of achievements, visually distinguishing between locked, unlocked, and in-progress items.
-* **Profile Page:** (`app/profile/page.tsx`) A protected route allowing users to view their email, update their display name, and upload a custom profile picture to Firebase Storage.
-* **Visits Page:** (`app/visits/page.tsx`) Allows users to track stadium visits manually.
+The following changes will be implemented to align the application with the mockups.
 
-## Current Request: Fix Build Error
+### 1. Color Palette & Theme
 
-**Completed Steps:**
-1.  **Fixed Dashboard Query:** Updated `app/dashboard/page.tsx` to query the correct `match-logs` Firestore collection instead of `matches`.
-2.  **Improved Dashboard Empty State:** Added a message and a "Log Your First Match" button to the dashboard's "Recent Matches" section when the user has no matches.
-3.  **Standardized Team Logos:** Modified `app/teams/page.tsx` to use the same `getTeamLogo` function from `app/results/page.tsx`, ensuring consistent team placeholders.
-4.  **Standardized Card Glow:** Replaced a hard-coded blue shadow on `app/teams/page.tsx` with the standard `shadow-card-glow` utility to match the primary green theme.
-5.  **Themed Profile Button:** Changed the "Edit Profile" button in `app/components/profile/Profile-v2.tsx` from blue to the primary green color.
-6.  **Branded Auth Pages:** Added the app logo to `app/sign-in/page.tsx` and `app/sign-up/page.tsx` to improve brand trust.
-7.  **Improved Match Log Empty State:** Added a "No matches logged yet" message to the `app/match-log/client.tsx` component when the match list is empty.
-8.  **Fixed Auth Import Error:** Resolved a `Module not found` error by renaming `lib/firebase/auth.tsx` to `lib/firebase/AuthContext.tsx`.
-9.  **Fixed Dashboard Type Error:** Resolved a TypeScript error in `app/dashboard/page.tsx` related to score parsing.
-10. **Fixed Visits Build Error:** Resolved a `Type 'object' is not assignable to type 'ReactNode'` error in `app/visits/actions.ts` by ensuring the returned `message` property is always a string, while moving validation errors to a separate `errors` property.
+- **Primary Background:** A dark navy/charcoal color (`#1a202c`).
+- **Card/Secondary Background:** A slightly lighter shade of the primary background (`#2d3748`).
+- **Accent Color:** A bright cyan/blue for interactive elements and highlights.
+- **Text Color:** White or a light gray for readability.
+
+### 2. Typography
+
+- Review and update the font stack to use a clean, modern sans-serif font that matches the mockups.
+
+### 3. Layout and Structure
+
+- **`app/layout.tsx`**: Update the root layout to include the main background color.
+- **Header (`components/Header.tsx`)**: Redesign the header to feature the "The Turnstile" logo, the page title, and the user's profile information.
+- **Bottom Navigation**: Replace the existing footer with a mobile-friendly bottom navigation bar containing links to "Dashboard", "Fixtures", "Table", and "Profile".
+
+### 4. Component Redesign
+
+- **Dashboard (`app/page.tsx`)**:
+    - "Your Next Match" Card: Create a prominent card to display the user's next upcoming match.
+    - "Nearby Matches": Implement a horizontally scrolling section for nearby matches.
+    - "My Stats Snapshot": Display key statistics like "Total Matches" and "Grounds Visited".
+- **Profile Page (`app/profile/page.tsx`)**:
+    - Redesign the profile page to showcase user stats, badges/achievements, and photos in a visually engaging way.
+- **Cards**: Update the general card styles to have rounded corners and subtle shadows as seen in the mockups.
+
+### 5. Implementation Steps
+
+1. **Update `tailwind.config.ts`** with the new color palette.
+2. **Update `app/globals.css`** to apply the base background styles.
+3. **Create a new `components/BottomNav.tsx`** component for the bottom navigation bar.
+4. **Modify `app/layout.tsx`** to use the new `BottomNav` component instead of the existing `Footer`.
+5. **Redesign `components/Header.tsx`**.
+6. **Rebuild the `app/page.tsx` (Dashboard)** using the new design and components.
+7. **Rebuild the `app/profile/page.tsx`** to match the mockup.
+8. **Run `npm run lint -- --fix`** to ensure code quality after the changes.
