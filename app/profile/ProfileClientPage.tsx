@@ -3,12 +3,20 @@
 
 import { useState, useRef, useActionState } from 'react';
 import Image from 'next/image';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import storage functions
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile, User as AuthUser } from 'firebase/auth';
-import { auth, storage } from '@/lib/firebase'; // Import storage
-// ... other imports
+import { auth, storage } from '@/lib/firebase/config'; // Corrected import path
+import { updateUserProfile } from '@/app/actions';
+import { UserProfile, Team } from '@/lib/firebase/firestore';
+import SubmitButton from '@/components/SubmitButton';
 
-// ...
+interface ProfileClientPageProps {
+  user: AuthUser;
+  profile: UserProfile | null;
+  teams: Team[] | null;
+}
+
+const initialState: any = {};
 
 export default function ProfileClientPage({
   user,
@@ -24,7 +32,6 @@ export default function ProfileClientPage({
 
   const handleImageClick = () => fileInputRef.current?.click();
 
-  // --- This is the new implementation ---
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
@@ -32,34 +39,22 @@ export default function ProfileClientPage({
     setUploading(true);
 
     try {
-      // 1. Create a reference
       const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
-      
-      // 2. Upload the file
       const snapshot = await uploadBytes(storageRef, file);
-      
-      // 3. Get the download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
-      
-      // 4. Update the Firebase Auth user profile
-      await updateProfile(user, { photoURL: downloadURL });
-
-      // 5. Update the local state to show the new image
+      await updateProfile(auth.currentUser!, { photoURL: downloadURL });
       setPhotoURL(downloadURL);
-
     } catch (error) {
       console.error("Error uploading image: ", error);
-      // You could set an error message in the 'state' here
     } finally {
       setUploading(false);
     }
   };
   
   return (
-    <main /* ... */ >
-      {/* ... */}
-      <form /* ... */ >
-        {/* Add the file input element */}
+    <main className="p-4 md:p-10 mx-auto max-w-4xl">
+      <h1 className="text-4xl font-bold mb-8">Profile</h1>
+      <form action={formAction}>
         <input
           type="file"
           ref={fileInputRef}
@@ -68,8 +63,7 @@ export default function ProfileClientPage({
           accept="image/png, image/jpeg"
         />
         
-        {/* Make the avatar clickable */}
-        <div className="text-center">
+        <div className="text-center mb-8">
           <button
             type="button"
             onClick={handleImageClick}
@@ -83,11 +77,12 @@ export default function ProfileClientPage({
               height={96}
               className={`rounded-full object-cover ${uploading ? 'opacity-50' : ''}`}
             />
-            {/* You can add a loading spinner here based on 'uploading' state */}
           </button>
         </div>
         
-        {/* ... rest of the form ... */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ... Other form fields ... */}
+        </div>
         
         <SubmitButton />
       </form>
