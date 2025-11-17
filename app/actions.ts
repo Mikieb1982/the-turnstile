@@ -2,12 +2,24 @@
 'use server'
 
 import { z } from 'zod';
-// ... other imports
+import { redirect } from 'next/navigation';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string().min(6);
 
-// ... AuthState interface ...
+export interface AuthState {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  message?: string;
+  success: boolean;
+}
 
 // 1. Create a reusable validation function
 async function validateCredentials(formData: FormData) {
@@ -56,7 +68,19 @@ export async function signUp(prevState: AuthState, formData: FormData): Promise<
     await createUserWithEmailAndPassword(auth, email, password);
     redirect('/dashboard');
   } catch (e: unknown) {
-    // ... error handling ...
+    if (e instanceof Error) {
+        if (e.message.includes('auth/email-already-in-use')) {
+            return {
+                errors: { email: ['Email already in use'] },
+                message: 'Email already in use',
+                success: false,
+            };
+        }
+    }
+    return {
+      message: 'An unknown error occurred',
+      success: false,
+    };
   }
 }
 
@@ -73,6 +97,17 @@ export async function signIn(prevState: AuthState, formData: FormData): Promise<
     await signInWithEmailAndPassword(auth, email, password);
     redirect('/dashboard');
   } catch (e: unknown) {
-    // ... error handling ...
+    if (e instanceof Error) {
+        if (e.message.includes('auth/invalid-credential')) {
+            return {
+                message: 'Invalid credentials',
+                success: false,
+            };
+        }
+    }
+    return {
+      message: 'An unknown error occurred',
+      success: false,
+    };
   }
 }
