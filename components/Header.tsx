@@ -33,10 +33,9 @@ export default function Header() {
   return (
     <>
       {/* MODIFICATION:
-        - Changed 'fixed bottom-0' to 'sticky top-0' to pin it to the top.
-        - Changed 'border-t' to 'border-b' for a top bar.
+        - Removed 'md:hidden' class to make the header always visible.
       */}
-      <header className="sticky top-0 left-0 right-0 z-20 flex h-16 items-center justify-between border-b border-surface bg-card/80 px-4 backdrop-blur-sm md:hidden">
+      <header className="sticky top-0 left-0 right-0 z-20 flex h-16 items-center justify-between border-b border-surface bg-card/80 px-4 backdrop-blur-sm">
         <Link className="flex items-center gap-2" href="/dashboard">
           <Image
             src="/logo.png"
