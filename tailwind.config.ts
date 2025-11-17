@@ -11,13 +11,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "primary-dark": "#1a202c",
-        "secondary-dark": "#2d3748",
-        "accent-blue": "#00bcd4",
-        "light-gray": "#cbd5e0",
-        // Sports brand colors - energetic and bold
-        primary: "#32FF84", // Keep your existing primary
-        secondary: "#A768FF", // Keep your existing secondary
+        // --- New Rugby League Colors ---
+        // Dark Mode Base (Deep Navy/Slate)
+        "primary-dark": "#0F172A", // Deep Navy Slate
+        "secondary-dark": "#1E293B", // Darker Card Background
+        
+        // Old colors being repurposed or removed
+        "accent-blue": "#00bcd4", // Keeping for potential legacy use, but updating its theme in accents
+        "light-gray": "#cbd5e0", 
+        
+        // Sports Brand Colors - Energetic Blue and Gold!
+        primary: "#FDCF00", // Bright Gold/Yellow - Action/Accent
+        secondary: "#004F9F", // Deep Sporty Blue - Main Brand Color
         
         // Semantic colors using CSS variables
         background: "rgb(var(--color-background) / <alpha-value>)",
@@ -26,10 +31,10 @@ const config: Config = {
         "text-primary": "rgb(var(--color-text-primary) / <alpha-value>)",
         "text-secondary": "rgb(var(--color-text-secondary) / <alpha-value>)",
         
-        // Additional accent colors for variety
+        // Additional accent colors for variety (Updated for the new theme)
         accent: {
-          gold: "#ffe374",
-          crimson: "#4c1130",
+          gold: "#FDCF00", // Matches new primary
+          crimson: "#FF4081", // Bright Red/Pink for contrast/score
           navy: "#0c343d",
           cream: "#fff2cc",
         }
@@ -56,8 +61,9 @@ const config: Config = {
       boxShadow: {
         'card': '0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
         'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-        'card-glow-gold': '0 0 20px -5px rgba(255, 227, 116, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
-        'card-glow-crimson': '0 0 20px -5px rgba(76, 17, 48, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+        // Updated glow colors for Gold (#FDCF00) and Crimson (#FF4081)
+        'card-glow-gold': '0 0 20px -5px rgba(253, 207, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+        'card-glow-crimson': '0 0 20px -5px rgba(255, 64, 129, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         pulseScore: {
@@ -80,7 +86,8 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-matchday': 'linear-gradient(135deg, var(--color-navy), var(--color-crimson))',
+        // Updated matchday gradient to use the new Deep Blue and Crimson accent
+        'gradient-matchday': 'linear-gradient(135deg, #004F9F, #FF4081)',
       }
     },
   },
